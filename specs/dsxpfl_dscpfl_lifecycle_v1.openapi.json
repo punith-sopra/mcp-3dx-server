@@ -1,0 +1,1101 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "Web services to manage 3DPortfolio objects lifecycle including Maturity, Versioning, Duplication, Ownership and Sharing",
+    "version": "1.0.0",
+    "title": "3DPortfolio Lifecycle Web Services",
+    "x-ds-service": [
+      "3DPortfolio"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DPortfolio}/3drdfpersist/resources/v1/modeler/dslc",
+      "variables": {
+        "3DPortfolio": {
+          "default": "https://3DEXPERIENCE_3DPortfolio"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsxpfllc/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/maturity/getNextStates": {
+      "post": {
+        "summary": "Get next maturity states",
+        "description": "Get the next possible maturity states for a list of objects.<br/>The request will be rejected if the total number of objects exceeds 100.",
+        "operationId": "dslc:getNextStates",
+        "tags": [
+          "Maturity"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "data"
+                ],
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "id"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                            "description": "The object identifier"
+                          },
+                          "nextStates": {
+                            "description": "The next possible maturity states for the object",
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "dslc:MaturityStateInWork"
+                            }
+                          },
+                          "maturityState": {
+                            "type": "string",
+                            "example": "dslc:MaturityStatePrivate",
+                            "description": "The current maturity state of the object"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/maturity/changeState": {
+      "post": {
+        "summary": "Change maturity states",
+        "description": "Change maturity state for a list of objects.  You can change maturity to a state only along a single valid transition on the Maturity graph. To find the list of valid next states, use the web service getNextStates.<br/>The request will be rejected if the total number of objects exceeds 100.",
+        "operationId": "dslc:changeState",
+        "tags": [
+          "Maturity"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "$ref": "#/components/parameters/securityContextHeader"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "data"
+                ],
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "id",
+                        "nextState"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7"
+                        },
+                        "nextState": {
+                          "type": "string",
+                          "example": "dslc:MaturityStateInWork"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                            "description": "The object identifier"
+                          },
+                          "maturityState": {
+                            "description": "The resulting maturity state for the object",
+                            "type": "string",
+                            "example": "dslc:MaturityStateInWork"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request:The format of the request is not correct.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@code": {
+                      "type": "string",
+                      "description": "Error code : Can be http code or custom app code.",
+                      "example": "400"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "Maturity state dslc:MaturityStateInWork not allowed for object  uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/sharing/getSharing": {
+      "post": {
+        "summary": "Get sharings",
+        "description": "Get sharing profiles of a list of objects.<br/>The request will be rejected if the total number of objects exceeds 100.",
+        "operationId": "dslc:getSharing",
+        "tags": [
+          "Sharing"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "data"
+                ],
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "objectID"
+                      ],
+                      "properties": {
+                        "objectID": {
+                          "type": "string",
+                          "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "objectID": {
+                            "type": "string",
+                            "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7"
+                          },
+                          "sharings": {
+                            "type": "object",
+                            "properties": {
+                              "users": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "userID": {
+                                      "type": "string",
+                                      "example": "iam:user1"
+                                    },
+                                    "access": {
+                                      "type": "string",
+                                      "example": "dsxpfl:Responsibility.Manager"
+                                    }
+                                  }
+                                }
+                              },
+                              "userGroups": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "userGroupID": {
+                                      "type": "string",
+                                      "example": "&lt;uuid:04fdc808-5698-4c0d-a7bc-09a9232e0c5d&gt;"
+                                    },
+                                    "access": {
+                                      "type": "string",
+                                      "example": "dsxpfl:Responsibility.Manager"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/sharing/setSharing": {
+      "post": {
+        "summary": "Share objects",
+        "description": "Share a list of objects with a limit of 1500, with a list of users or user groups.<br/>If access is \"None\", all access is revoked",
+        "operationId": "dslc:setSharing",
+        "tags": [
+          "Sharing"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "data"
+                ],
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "objectID": {
+                          "type": "string",
+                          "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7"
+                        },
+                        "sharings": {
+                          "type": "object",
+                          "properties": {
+                            "users": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "userID": {
+                                    "type": "string",
+                                    "example": "iam:user1"
+                                  },
+                                  "access": {
+                                    "type": "string",
+                                    "example": "dsxpfl:Responsibility.Manager"
+                                  }
+                                },
+                                "required": [
+                                  "userID",
+                                  "access"
+                                ]
+                              }
+                            },
+                            "userGroups": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "userGroupID": {
+                                    "type": "string",
+                                    "example": "&lt;uuid:04fdc808-5698-4c0d-a7bc-09a9232e0c5d&gt;"
+                                  },
+                                  "access": {
+                                    "type": "string",
+                                    "example": "None"
+                                  }
+                                },
+                                "required": [
+                                  "userGroupID",
+                                  "access"
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "errorCode": {
+                      "type": "string",
+                      "example": "0"
+                    },
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Success"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/ownership/transfer": {
+      "post": {
+        "summary": "Transfer ownership",
+        "description": "Transfer the ownership for a list of objects. Operation is limited to 1000 objects at a time.",
+        "operationId": "dslc:transfer",
+        "tags": [
+          "Ownership"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "data"
+                ],
+                "properties": {
+                  "owner": {
+                    "type": "string",
+                    "example": "user2"
+                  },
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "id"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "uuid:04fdc808-5698-4c0d-a7bc-09a9232e0c5d"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "owner": {
+                            "type": "string",
+                            "example": "user2",
+                            "description": "The user id of the object transferred. "
+                          },
+                          "id": {
+                            "type": "string",
+                            "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                            "description": "The object identifier"
+                          },
+                          "Status": {
+                            "description": "The status of the transfer on the object",
+                            "type": "integer",
+                            "example": 200
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "207": {
+            "description": "Operation Partially succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": [
+                    {
+                      "owner": "user2",
+                      "id": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                      "Status": 200
+                    },
+                    {
+                      "owner": "user2",
+                      "id": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef8",
+                      "Status": 400,
+                      "ErrorReport": {
+                        "errorMessage": "Insufficient rights to transfer."
+                      }
+                    }
+                  ],
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "owner": {
+                            "type": "string",
+                            "example": "user2",
+                            "description": "The user id of the object transferred. "
+                          },
+                          "id": {
+                            "type": "string",
+                            "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                            "description": "The object identifier"
+                          },
+                          "Status": {
+                            "description": "The status of the transfer on the object",
+                            "type": "integer",
+                            "example": 400
+                          },
+                          "ErrorReport": {
+                            "type": "object",
+                            "properties": {
+                              "errorMessage": {
+                                "type": "string",
+                                "example": "Insufficient rights to transfer",
+                                "description": "Error message"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          }
+        }
+      }
+    },
+    "/duplicate": {
+      "post": {
+        "summary": "Duplicate objects",
+        "description": "Duplicate a list of objects. The request will be rejected if the total number of objects exceeds 100.",
+        "operationId": "dslc:duplicate",
+        "tags": [
+          "Duplicate"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "$ref": "#/components/parameters/securityContextHeader"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "data"
+                ],
+                "properties": {
+                  "affix": {
+                    "type": "string",
+                    "example": "CopyOf"
+                  },
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/objectReference"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation completed successfully. Note that the identifier, type, source, and relativePath properties will only be present if they were optionally passed in the request body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/version/create": {
+      "post": {
+        "summary": "Revise objects",
+        "description": "Create new versions for a list of objects. <br/> 1. Versions to create are revisions :  'edgeType' keyword is missing or set to 'Revision' (default value). 'affix' keyword is optional (not used if added). <br/> 2. Versions to create are branches : 'edgeType' keyword is set to 'Branch'. 'affix' keyword is optional (used if added). <br/> The request will be rejected if the total number of objects exceeds 100.",
+        "operationId": "dslc:version",
+        "tags": [
+          "Versioning"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "$ref": "#/components/parameters/securityContextHeader"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "data"
+                ],
+                "properties": {
+                  "edgeType": {
+                    "description": "To revise : do not use or set to 'Revise' (default).<br/>To branch : set to 'Branch'.",
+                    "type": "string",
+                    "example": "Revision"
+                  },
+                  "affix": {
+                    "description": "To revise : do not use or set to any value (not taken into account).<br/> To branch : do not use or set to desired value (taken into account).",
+                    "type": "string",
+                    "example": "_FIX_A"
+                  },
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/objectReference"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation completed successfully. Note that the identifier, type, source, and relativePath properties will only be present if they were optionally passed in the request body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/version/getGraph": {
+      "post": {
+        "summary": "Get version graphs of objects",
+        "description": "Get the version graphs for a list of objects. The request will be rejected if the total number of objects exceeds 50.",
+        "operationId": "dslc:getGraph",
+        "tags": [
+          "Versioning"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "data"
+                ],
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/objectReference"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation completed successfully. Note that the identifier, type, source, and relativePath properties will only be present if they were optionally passed in the request body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": [
+                    {
+                      "id": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                      "identifier": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                      "type": "dsxpfl:PortfolioVersion",
+                      "source": "https://devopseti1z13x71739-euw1-23dsw11202-3dportfolio.3dx-staging.3ds.com",
+                      "relativePath": "/3drdfpersist/resources/v1/modeler/dsxpfl/dsxpfl:PortfolioVersion/uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                      "versions": [
+                        {
+                          "maturityState": "dslc:MaturityStateInWork",
+                          "id": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef8",
+                          "identifier": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef8",
+                          "type": "dsxpfl:PortfolioVersion",
+                          "source": "https://devopseti1z13x71739-euw1-23dsw11202-3dportfolio.3dx-staging.3ds.com",
+                          "relativePath": "/3drdfpersist/resources/v1/modeler/dsxpfl/dsxpfl:PortfolioVersion/uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef8",
+                          "ancestors": [
+                            {
+                              "edgeType": "Revision",
+                              "id": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                              "identifier": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                              "type": "dsxpfl:PortfolioVersion",
+                              "source": "https://devopseti1z13x71739-euw1-23dsw11202-3dportfolio.3dx-staging.3ds.com",
+                              "relativePath": "/3drdfpersist/resources/v1/modeler/dsxpfl/dsxpfl:PortfolioVersion/uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7"
+                            }
+                          ],
+                          "revision": "1_B"
+                        },
+                        {
+                          "maturityState": "dslc:MaturityStateInWork",
+                          "id": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                          "identifier": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                          "type": "dsxpfl:PortfolioVersion",
+                          "source": "https://devopseti1z13x71739-euw1-23dsw11202-3dportfolio.3dx-staging.3ds.com",
+                          "relativePath": "/3drdfpersist/resources/v1/modeler/dsxpfl/dsxpfl:PortfolioVersion/uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                          "revision": "1_A"
+                        }
+                      ]
+                    }
+                  ],
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                            "description": "The identifier of the origin object"
+                          },
+                          "identifier": {
+                            "type": "string",
+                            "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                            "description": "The identifier of the origin object."
+                          },
+                          "source": {
+                            "type": "string",
+                            "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dportfolio.3dx-staging.3ds.com",
+                            "description": "The source of the origin object."
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "dsxpfl:PortfolioVersion",
+                            "description": "The type of the origin object."
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "example": "/3drdfpersist/resources/v1/modeler/dsxpfl/dsxpfl:PortfolioVersion/uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                            "description": "The relative path of the origin object."
+                          },
+                          "versions": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef8",
+                                  "description": "The identifier of the object"
+                                },
+                                "identifier": {
+                                  "type": "string",
+                                  "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef8",
+                                  "description": "The identifier of the object."
+                                },
+                                "source": {
+                                  "type": "string",
+                                  "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dportfolio.3dx-staging.3ds.com",
+                                  "description": "The source of the object."
+                                },
+                                "type": {
+                                  "type": "string",
+                                  "example": "dsxpfl:PortfolioVersion",
+                                  "description": "The type of the object."
+                                },
+                                "relativePath": {
+                                  "type": "string",
+                                  "example": "/3drdfpersist/resources/v1/modeler/dsxpfl/dsxpfl:PortfolioVersion/uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef8",
+                                  "description": "The relative path of the object."
+                                },
+                                "maturityState": {
+                                  "type": "string",
+                                  "example": "dslc:MaturityStateInWork",
+                                  "description": "The maturity state of the version."
+                                },
+                                "revision": {
+                                  "type": "string",
+                                  "example": "1_B",
+                                  "description": "Revision name"
+                                },
+                                "ancestors": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "edgeType": {
+                                        "type": "string",
+                                        "example": "Revision",
+                                        "description": "The operation used to create the version. May be Revision or Branch."
+                                      },
+                                      "id": {
+                                        "type": "string",
+                                        "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                                        "description": "The identifier of the ancestor"
+                                      },
+                                      "identifier": {
+                                        "type": "string",
+                                        "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                                        "description": "The identifier of the ancestor."
+                                      },
+                                      "source": {
+                                        "type": "string",
+                                        "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dportfolio.3dx-staging.3ds.com",
+                                        "description": "The source of the ancestor."
+                                      },
+                                      "type": {
+                                        "type": "string",
+                                        "example": "dsxpfl:PortfolioVersion",
+                                        "description": "The type of the ancestor."
+                                      },
+                                      "relativePath": {
+                                        "type": "string",
+                                        "example": "/3drdfpersist/resources/v1/modeler/dsxpfl/dsxpfl:PortfolioVersion/uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                                        "description": "The relative path of the ancestor."
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "400": {
+        "description": "Bad request:The format of the request is not correct.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "@code": {
+                  "type": "string",
+                  "description": "Error code : Can be http code or custom app code.",
+                  "example": "400"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Error message",
+                  "example": "The limit of objects allowed is exceeded."
+                }
+              }
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden:This request is not authorized.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "@code": {
+                  "type": "string",
+                  "description": "Error code : Can be http code or custom app code.",
+                  "example": "403"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Error message",
+                  "example": "Operation cannot be done as the Portfolio is not in Private/In work State."
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized:Access not allowed.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "@code": {
+                  "type": "string",
+                  "description": "Error code : Can be http code or custom app code.",
+                  "example": "401"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Error message",
+                  "example": "Access not allowed to object 'uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7'."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "objectReference": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7"
+          },
+          "identifier": {
+            "type": "string",
+            "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7"
+          },
+          "type": {
+            "type": "string",
+            "example": "dsxpfl:PortfolioVersion"
+          },
+          "source": {
+            "type": "string",
+            "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dportfolio.3dx-staging.3ds.com"
+          },
+          "relativePath": {
+            "type": "string",
+            "example": "/3drdfpersist/resources/v1/modeler/dsxpfl/dsxpfl:PortfolioVersion/uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7"
+          }
+        }
+      },
+      "createOutput": {
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "uuid:04fdc808-5698-4c0d-a7bc-09a9232e0c5d",
+                  "description": "The identifier of the new object."
+                },
+                "identifier": {
+                  "type": "string",
+                  "example": "uuid:04fdc808-5698-4c0d-a7bc-09a9232e0c5d",
+                  "description": "The identifier of the new object."
+                },
+                "source": {
+                  "type": "string",
+                  "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dportfolio.3dx-staging.3ds.com",
+                  "description": "The source of the new object."
+                },
+                "type": {
+                  "type": "string",
+                  "example": "dsxpfl:PortfolioVersion",
+                  "description": "The type of the new object."
+                },
+                "relativePath": {
+                  "type": "string",
+                  "example": "/3drdfpersist/resources/v1/modeler/dsxpfl/dsxpfl:PortfolioVersion/uuid:04fdc808-5698-4c0d-a7bc-09a9232e0c5d",
+                  "description": "The relative path of the new object."
+                },
+                "derivedFrom": {
+                  "type": "string",
+                  "example": "uuid:ce1a623b-a83c-4622-91b0-6b6872a48ef7",
+                  "description": "The identifier of the origin object."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "xmlHttpRequestHeader": {
+        "name": "X-Requested-With",
+        "in": "header",
+        "description": "Required header. The value is XMLHttpRequest.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "XMLHttpRequest"
+        }
+      },
+      "securityContextHeader": {
+        "name": "SecurityContext ",
+        "in": "header",
+        "description": "Required header. Security context of the logged in user.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "VPLMProjectLeader.Company Name.Common Space"
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

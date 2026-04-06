@@ -1,0 +1,1465 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "x-ds-copyright": "3DEXPERIENCE R2022x (c) 2021 Dassault Systemes.",
+    "description": "Public Web Services for IP Export Control (dsipec).",
+    "version": "1.0.0",
+    "title": "IP Export Control Public Web Services"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_3DSpace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/resources/v1/modeler/dsipec/dsipec:RegulationCategory/locate": {
+      "post": {
+        "summary": "Fetches the Regulation Category where the input items are protected.",
+        "description": "Retrieve protected Technical Data's Regulation Category. Maximum 50 items are allowed in a service call.",
+        "operationId": "dsipec:RegulationCategory_LOCATE",
+        "tags": [
+          "dsipec:RegulationCategory"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/getRegulationCategoryFromClassifiedItems"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseLocateRegulationCategories"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resources/v1/modeler/dsipec/dsipec:RegulationCategory/{ID}/attach": {
+      "post": {
+        "summary": "Attaches the list of items to given Regulation Category.",
+        "description": "Attaches multiple external items to a given Regulation Category. Maximum 50 items are allowed in a service call.",
+        "operationId": "dsipec:RegulationCategory_ID_ATTACH",
+        "tags": [
+          "dsipec:RegulationCategory"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsipec:RegulationCategory object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addClassifiedItems"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsipec_IpecMask.RegulationCategory.Common"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resources/v1/modeler/dsipec/dsipec:RegulationCategory/{ID}/detach": {
+      "post": {
+        "summary": "Detaches the list of items from the given Regulation Category.",
+        "description": "Detaches multiple external items from a given Regulation Category. Maximum 50 items are allowed in a service call.",
+        "operationId": "dsipec:RegulationCategory_ID_detach",
+        "tags": [
+          "dsipec:RegulationCategory"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsipec:RegulationCategory object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/removeClassifiedItems"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsipec_IpecMask.RegulationCategory.Common"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resources/v1/modeler/dsipec/dsipec:RegulationCategory/{ID}": {
+      "get": {
+        "summary": "Gets a Regulation Category",
+        "description": "Gets a Regulation Category",
+        "operationId": "GET_dsipec:RegulationCategory_ID",
+        "tags": [
+          "dsipec:RegulationCategory"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsipec:RegulationCategory object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsipec:IpecMask.RegulationCategory.Common",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsipec:IpecMask.RegulationCategory.Common"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsipec_IpecMask.RegulationCategory.Common"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resources/v1/modeler/dsipec/dsipec:RegulationCategory/search": {
+      "get": {
+        "summary": "Gets a list of Regulation Categories from indexed search ",
+        "description": "Gets a list of Regulation Categories. By default, returns a total of up to 50 items, can be optionally increased up to 1000 items using $top query parameter. Recommendation: Use $searchStr query parameter for better performances",
+        "operationId": "GETSearch_dsipec:RegulationCategory_Search",
+        "tags": [
+          "dsipec:RegulationCategory"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$searchStr",
+            "in": "query",
+            "description": "A search text to find one or more items.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsipec:IpecMask.RegulationCategory.Common",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsipec:IpecMask.RegulationCategory.Common"
+              ]
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 1000.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsipec_IpecMask.RegulationCategory.Common"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resources/v1/modeler/dsipec/dsipec:ProtectedItem/{ID}": {
+      "get": {
+        "summary": "Read Export Control attributes associated with Protected Item.",
+        "description": "Read Export Control attributes associated with Protected Item. ProtectedItem ID is same as Foreign Corpus item ID",
+        "operationId": "GET_dsipec:ProtectedItem_ID",
+        "tags": [
+          "dsipec:ProtectedItem"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsipec:ProtectedItem object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is dsipec:IpecMask.ProtectedItem.ExportControlAttributes",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsipec:IpecMask.ProtectedItem.ExportControlAttributes"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsipec_IpecMask.ProtectedItem.ExportControlAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update Export Control Attributes associated with a Protected Item",
+        "description": "Export Control Attributes are the attributes defined in Attributes Group. Only Attributes of string type can be updated. ProtectedItem ID is same as Foreign Corpus item ID",
+        "operationId": "dsipec:ProtectedItem_patch",
+        "tags": [
+          "dsipec:ProtectedItem"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsipec:ProtectedItem object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is dsipec:IpecMask.ProtectedItem.ExportControlAttributes",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsipec:IpecMask.ProtectedItem.ExportControlAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateOneProtectedItem"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsipec_IpecMask.ProtectedItem.ExportControlAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resources/v1/modeler/dsipec/dsipec:ProtectedItem/bulkupdate": {
+      "post": {
+        "summary": "Update Export Control Attributes associated with Protected Item",
+        "description": "Export Control Attributes are the attributes defined in Attributes Group. Maximum 50 items are allowed in a service call. Only Attributes of string type can be updated. ProtectedItem ID is same as Foreign Corpus item ID",
+        "operationId": "dsipec:ProtectedItem_bulkupdate",
+        "tags": [
+          "dsipec:ProtectedItem"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is dsipec:IpecMask.ProtectedItem.ExportControlAttributes",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsipec:IpecMask.ProtectedItem.ExportControlAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/bulkUpdateProtectedItems"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsipec_IpecMask.ProtectedItem.ExportControlAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "responseLocateRegulationCategories": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "referencedObject": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "description": "Entity physical id",
+                          "type": "string",
+                          "example": "F6AF82561E5700005EB123650003C100"
+                        },
+                        "relativePath": {
+                          "description": "Uri of the item",
+                          "type": "string",
+                          "example": "/resources/v1/modeler/dseng/dseng:EngItem/F6AF82561E5700005EB123650003C100"
+                        },
+                        "type": {
+                          "description": "Entity type",
+                          "type": "string",
+                          "example": "VPMReference"
+                        },
+                        "source": {
+                          "description": "Source of the item",
+                          "type": "string",
+                          "example": "https://vdevpril881dsy.com/3DSpace"
+                        }
+                      }
+                    },
+                    "RegulationCategory": {
+                      "type": "object",
+                      "properties": {
+                        "totalItems": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "member": {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "referencedObject": {
+                                    "type": "object",
+                                    "properties": {
+                                      "identifier": {
+                                        "description": "Entity physical id",
+                                        "type": "string",
+                                        "example": "F6AF82561E5700005EB123650003C100"
+                                      },
+                                      "relativePath": {
+                                        "description": "Uri of the item",
+                                        "type": "string",
+                                        "example": "/resources/v1/modeler/dseng/dseng:EngItem/F6AF82561E5700005EB123650003C100"
+                                      },
+                                      "type": {
+                                        "description": "Entity type",
+                                        "type": "string",
+                                        "example": "VPMReference"
+                                      },
+                                      "source": {
+                                        "description": "Source of the item",
+                                        "type": "string",
+                                        "example": "https://vdevpril881dsy.com/3DSpace"
+                                      }
+                                    }
+                                  },
+                                  "title": {
+                                    "type": "string",
+                                    "example": "IPC_01"
+                                  },
+                                  "description": {
+                                    "type": "string",
+                                    "example": "test class"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "addClassifiedItems": {
+        "description": "list of items",
+        "type": "array",
+        "items": {
+          "description": "Linked item information",
+          "type": "object",
+          "properties": {
+            "identifier": {
+              "description": "Entity physical id",
+              "type": "string",
+              "example": "F6AF82561E5700005EB123650003C100"
+            },
+            "relativePath": {
+              "description": "Uri of the item",
+              "type": "string",
+              "example": "/resources/v1/modeler/dseng/dseng:EngItem/F6AF82561E5700005EB123650003C100"
+            },
+            "type": {
+              "description": "Entity type",
+              "type": "string",
+              "example": "VPMReference"
+            },
+            "source": {
+              "description": "Source of the item",
+              "type": "string",
+              "example": "https://vdevpril881dsy.com/3DSpace"
+            }
+          }
+        }
+      },
+      "removeClassifiedItems": {
+        "description": "list of items",
+        "type": "array",
+        "items": {
+          "description": "Linked item information",
+          "type": "object",
+          "properties": {
+            "identifier": {
+              "description": "Entity physical id",
+              "type": "string",
+              "example": "F6AF82561E5700005EB123650003C100"
+            },
+            "relativePath": {
+              "description": "Uri of the item",
+              "type": "string",
+              "example": "/resources/v1/modeler/dseng/dseng:EngItem/F6AF82561E5700005EB123650003C100"
+            },
+            "type": {
+              "description": "Entity type",
+              "type": "string",
+              "example": "VPMReference"
+            },
+            "source": {
+              "description": "Source of the item",
+              "type": "string",
+              "example": "https://vdevpril881dsy.com/3DSpace"
+            }
+          }
+        }
+      },
+      "getRegulationCategoryFromClassifiedItems": {
+        "description": "items to locate",
+        "type": "array",
+        "items": {
+          "description": "Linked item information",
+          "type": "object",
+          "properties": {
+            "identifier": {
+              "description": "Entity physical id",
+              "type": "string",
+              "example": "F6AF82561E5700005EB123650003C100"
+            },
+            "relativePath": {
+              "description": "Uri of the item",
+              "type": "string",
+              "example": "/resources/v1/modeler/dseng/dseng:EngItem/F6AF82561E5700005EB123650003C100"
+            },
+            "type": {
+              "description": "Entity type",
+              "type": "string",
+              "example": "VPMReference"
+            },
+            "source": {
+              "description": "Source of the item",
+              "type": "string",
+              "example": "https://vdevpril881dsy.com/3DSpace"
+            }
+          }
+        }
+      },
+      "bulkUpdateProtectedItems": {
+        "description": "list of protected item ids and attributes",
+        "type": "array",
+        "items": {
+          "description": "Linked item information",
+          "type": "object",
+          "properties": {
+            "id": {
+              "description": "physical id of protected item",
+              "type": "string",
+              "example": "F6AF82561E5700005EB123650003C100"
+            },
+            "cestamp": {
+              "description": "cestamp which can be obtained with GET request",
+              "type": "string",
+              "example": "909F8256296C2A006790DBC800000196"
+            },
+            "Test EC Attribute 1": {
+              "description": "Example attribute",
+              "type": "string",
+              "example": "blue"
+            },
+            "Test EC Attribute 2": {
+              "description": "Example attribute",
+              "type": "string",
+              "example": "yellow"
+            }
+          }
+        }
+      },
+      "updateOneProtectedItem": {
+        "description": "attributes",
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "cestamp which can be obtained with GET request",
+            "type": "string",
+            "example": "909F8256296C2A006790DBC800000369"
+          },
+          "Test EC Attribute 1": {
+            "description": "Example attribute",
+            "type": "string",
+            "example": "blue"
+          },
+          "Test EC Attribute 2": {
+            "description": "Example attribute",
+            "type": "string",
+            "example": "yellow"
+          }
+        }
+      },
+      "dsipec_IpecMask.RegulationCategory.Common": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "created": {
+                  "description": "Object created date",
+                  "type": "string",
+                  "example": "2022-03-14T13:14:26Z"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "name": {
+                  "description": "object name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "description": {
+                  "description": "Object description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "modified": {
+                  "description": "Basic modified date",
+                  "type": "string",
+                  "example": "2022-03-22T13:00:49Z"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "In Work"
+                },
+                "title": {
+                  "description": "object Title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "My Type"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "organization": {
+                "description": "Object organization value",
+                "type": "string",
+                "example": "MyCompany"
+              },
+              "name": {
+                "type": "string",
+                "example": "My Name translated value"
+              },
+              "description": {
+                "type": "string",
+                "example": "My Description translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "title": {
+                "type": "string",
+                "example": "My Title translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsipec_IpecMask.ProtectedItem.ExportControlAttributes": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Protected Item id",
+                  "example": "909F825642933E006784D6AC0000000F"
+                },
+                "cestamp": {
+                  "type": "string",
+                  "example": "909F8256296C2A006790DBC800000384"
+                },
+                "ExportControlAttributes": {
+                  "type": "object",
+                  "properties": {
+                    "Test EC Attribute 1": {
+                      "type": "string",
+                      "example": "blue"
+                    },
+                    "Test EC Attribute 2": {
+                      "type": "string",
+                      "example": "yellow"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "Id"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

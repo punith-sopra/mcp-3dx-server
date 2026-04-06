@@ -1,0 +1,2329 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SupplyChainData REST Services",
+    "description": "APIs for managing Plans and related entities",
+    "version": "1.0.0",
+    "summary": "SupplyChainData REST Services",
+    "x-ds-service": [
+      "supplychaindata"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:8444/resources/v1/dsscp",
+      "description": "Generated server url"
+    },
+    {
+      "url": "{SupplyChainData}/resources/v1/dsscp",
+      "variables": {
+        "SupplyChainData": {
+          "description": "URL of the SupplyChainData service",
+          "default": "https://3DEXPERIENCE_SupplyChainData"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsscp/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Plan Registry ",
+      "description": "Plan Registry web services"
+    },
+    {
+      "name": "Supply Chain Collaborative Space ",
+      "description": "Supply Chain Collaborative Space web services"
+    }
+  ],
+  "paths": {
+    "/supplyChainCollabSpaces/{sccsid}/plans": {
+      "get": {
+        "tags": [
+          "Plan Registry "
+        ],
+        "summary": "Get all plans",
+        "operationId": "GET_BulkReadPlan",
+        "parameters": [
+          {
+            "name": "sccsid",
+            "in": "path",
+            "description": "ID of the Supply Chain Collaborative Space the entity belongs to",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the Supply Chain Collaborative Space the entity belongs to"
+            }
+          },
+          {
+            "name": "planType",
+            "in": "query",
+            "description": "Plan type to filter on",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Plan type to filter on",
+              "example": "SUPPLY_PLAN"
+            },
+            "example": "SUPPLY_PLAN"
+          },
+          {
+            "name": "planningScopeId",
+            "in": "query",
+            "description": "Planning scope ID to filter on",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Planning scope ID to filter on",
+              "example": 1
+            },
+            "example": 1
+          },
+          {
+            "name": "statuses",
+            "in": "query",
+            "description": "Plan statuses to filter on, the plan will be included in the result if it has one of these statuses",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "description": "Plan statuses to filter on, the plan will be included in the result if it has one of these statuses",
+              "example": "DRAFT,RELEASED",
+              "items": {
+                "type": "string",
+                "description": "Plan statuses to filter on, the plan will be included in the result if it has one of these statuses",
+                "example": "DRAFT,RELEASED"
+              }
+            },
+            "example": "DRAFT,RELEASED"
+          },
+          {
+            "name": "validationStatuses",
+            "in": "query",
+            "description": "Plan validation statuses to filter on, the plan will be included in the result if it has one of these statuses",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Plan validation statuses to filter on, the plan will be included in the result if it has one of these statuses",
+              "enum": [
+                "TO_BE_UPLOADED",
+                "COMMITTED",
+                "UPLOADED",
+                "UPLOAD_FAILED",
+                "VALIDATION_FAILED",
+                "VALIDATED"
+              ],
+              "example": "TO_BE_UPLOADED,VALIDATED"
+            },
+            "example": "TO_BE_UPLOADED,VALIDATED"
+          },
+          {
+            "name": "createdDateRangeStart",
+            "in": "query",
+            "description": "Used in combination with createdDateRangeEnd to define a range of dates to filter plans by created date. If createdDateRangeEnd is not set, the end is MAX_VALUE.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "Used in combination with createdDateRangeEnd to define a range of dates to filter plans by created date. If createdDateRangeEnd is not set, the end is MAX_VALUE.",
+              "example": "2024-01-01"
+            },
+            "example": "2024-01-01"
+          },
+          {
+            "name": "createdDateRangeEnd",
+            "in": "query",
+            "description": "Used in combination with createdDateRangeStart to define a range of dates to filter plans by created date. If createdDateRangeStart is not set, the start is MIN_VALUE.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "Used in combination with createdDateRangeStart to define a range of dates to filter plans by created date. If createdDateRangeStart is not set, the start is MIN_VALUE.",
+              "example": "2024-01-01"
+            },
+            "example": "2024-01-01"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to be skipped from the beginning of the result",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "default": 0,
+              "description": "The number of items to be skipped from the beginning of the result"
+            }
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "description": "The maximum number of items to be returned per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50,
+              "description": "The maximum number of items to be returned per page"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageExternalPlanResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND. The server has not found anything matching the Request-URI, or required entity record.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Plan Registry "
+        ],
+        "summary": "Create plan",
+        "description": "Creates a plan. Only <b>1 plan</b> can be created per request.",
+        "operationId": "POST_CreatePlan",
+        "parameters": [
+          {
+            "name": "sccsid",
+            "in": "path",
+            "description": "ID of the Supply Chain Collaborative Space the entity belongs to",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the Supply Chain Collaborative Space the entity belongs to"
+            }
+          },
+          {
+            "name": "X-Requested-With",
+            "in": "header",
+            "description": "Mandatory header for CSRF protection",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "XMLHttpRequest"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExternalCreatePlanRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "CREATED. The request has been fulfilled and resulted in a new resource being created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageExternalCreatePlanResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND. The server has not found anything matching the Request-URI, or required entity record.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. ACCESS DENIED. The request requires CSRF Token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "UNSUPPORTED MEDIA TYPE. The server refuses to accept the request because the payload format is in an unsupported format.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "timestamp": "2022-09-08T09:47:58.319+00:00",
+                  "status": "415",
+                  "error": "Unsupported Media Type",
+                  "path": "/resources/v1/modeler/<corpus>/<corpus>:<type>/<id>"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/supplyChainCollabSpaces/{sccsid}/plans/{planId}": {
+      "get": {
+        "tags": [
+          "Plan Registry "
+        ],
+        "summary": "Get details about (the last version of) a single plan",
+        "operationId": "GET_ReadLastPlanVersion",
+        "parameters": [
+          {
+            "name": "sccsid",
+            "in": "path",
+            "description": "ID of the Supply Chain Collaborative Space the entity belongs to",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the Supply Chain Collaborative Space the entity belongs to"
+            }
+          },
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "validationStatus",
+            "in": "query",
+            "description": "Plan validation status to filter on, the latest plan version with this validation status will be returned",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Plan validation status to filter on, the latest plan version with this validation status will be returned",
+              "enum": [
+                "TO_BE_UPLOADED",
+                "COMMITTED",
+                "UPLOADED",
+                "UPLOAD_FAILED",
+                "VALIDATION_FAILED",
+                "VALIDATED"
+              ],
+              "example": "VALIDATED"
+            },
+            "example": "VALIDATED"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageExternalPlanResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND. The server has not found anything matching the Request-URI, or required entity record.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Plan Registry "
+        ],
+        "summary": "Create plan version",
+        "description": "Creates a plan version. Only <b>1 plan version</b> can be created per request.",
+        "operationId": "POST_CreatePlanVersion",
+        "parameters": [
+          {
+            "name": "sccsid",
+            "in": "path",
+            "description": "ID of the Supply Chain Collaborative Space the entity belongs to",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the Supply Chain Collaborative Space the entity belongs to"
+            }
+          },
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "X-Requested-With",
+            "in": "header",
+            "description": "Mandatory header for CSRF protection",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "XMLHttpRequest"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExternalCreatePlanVersionRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "CREATED. The request has been fulfilled and resulted in a new resource being created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageExternalCreatePlanResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND. The server has not found anything matching the Request-URI, or required entity record.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. ACCESS DENIED. The request requires CSRF Token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "UNSUPPORTED MEDIA TYPE. The server refuses to accept the request because the payload format is in an unsupported format.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "timestamp": "2022-09-08T09:47:58.319+00:00",
+                  "status": "415",
+                  "error": "Unsupported Media Type",
+                  "path": "/resources/v1/modeler/<corpus>/<corpus>:<type>/<id>"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/supplyChainCollabSpaces/{sccsid}/plans/{planId}/versions/{versionId}/status": {
+      "post": {
+        "tags": [
+          "Plan Registry "
+        ],
+        "summary": "Change plan status",
+        "description": "Updates a plan version status. Only <b>1 plan version</b> can be updated per request.",
+        "operationId": "POST_UpdatePlanVersionStatus",
+        "parameters": [
+          {
+            "name": "sccsid",
+            "in": "path",
+            "description": "ID of the Supply Chain Collaborative Space the entity belongs to",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the Supply Chain Collaborative Space the entity belongs to"
+            }
+          },
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "versionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "X-Requested-With",
+            "in": "header",
+            "description": "Mandatory header for CSRF protection",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "XMLHttpRequest"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExternalPlanSetStatusRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "NO CONTENT. Indicates that the server has successfully fulfilled the request and that there is no content to send in the response payload body."
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND. The server has not found anything matching the Request-URI, or required entity record.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. ACCESS DENIED. The request requires CSRF Token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/supplyChainCollabSpaces/{sccsid}/plans/{planId}/versions/{versionId}/commit": {
+      "post": {
+        "tags": [
+          "Plan Registry "
+        ],
+        "summary": "Commit plan",
+        "description": "Commits a plan. Only <b>1 plan</b> can be committed per request.",
+        "operationId": "POST_CommitPlanVersion",
+        "parameters": [
+          {
+            "name": "sccsid",
+            "in": "path",
+            "description": "ID of the Supply Chain Collaborative Space the entity belongs to",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the Supply Chain Collaborative Space the entity belongs to"
+            }
+          },
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "versionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "X-Requested-With",
+            "in": "header",
+            "description": "Mandatory header for CSRF protection",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "XMLHttpRequest"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExternalCommitRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "NO CONTENT. Indicates that the server has successfully fulfilled the request and that there is no content to send in the response payload body."
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND. The server has not found anything matching the Request-URI, or required entity record.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. ACCESS DENIED. The request requires CSRF Token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/supplyChainCollabSpaces": {
+      "get": {
+        "tags": [
+          "Supply Chain Collaborative Space "
+        ],
+        "summary": "Get SupplyChainCollaborativeSpaces",
+        "operationId": "getAllEntities",
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to be skipped from the beginning of the result",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "default": 0,
+              "description": "The number of items to be skipped from the beginning of the result"
+            }
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "description": "The maximum number of items to be returned per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50,
+              "description": "The maximum number of items to be returned per page"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageExternalSccsDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND. The server has not found anything matching the Request-URI, or required entity record.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/supplyChainCollabSpaces/{sccsid}/plans/{planId}/versions/{versionId}": {
+      "get": {
+        "tags": [
+          "Plan Registry "
+        ],
+        "summary": "Get details about a version of a single plan",
+        "operationId": "GET_ReadPlanVersion",
+        "parameters": [
+          {
+            "name": "sccsid",
+            "in": "path",
+            "description": "ID of the Supply Chain Collaborative Space the entity belongs to",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the Supply Chain Collaborative Space the entity belongs to"
+            }
+          },
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "versionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageExternalPlanResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND. The server has not found anything matching the Request-URI, or required entity record.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/supplyChainCollabSpaces/{sccsid}/plans/{planId}/versions/{versionId}/planPeriods": {
+      "get": {
+        "tags": [
+          "Plan Registry "
+        ],
+        "summary": "Get plan periods of a version of a single plan",
+        "operationId": "GET_BulkReadPlanVersionPlanPeriod",
+        "parameters": [
+          {
+            "name": "sccsid",
+            "in": "path",
+            "description": "ID of the Supply Chain Collaborative Space the entity belongs to",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the Supply Chain Collaborative Space the entity belongs to"
+            }
+          },
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "versionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to be skipped from the beginning of the result",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "default": 0,
+              "description": "The number of items to be skipped from the beginning of the result"
+            }
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "description": "The maximum number of items to be returned per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50,
+              "description": "The maximum number of items to be returned per page"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageExternalPlanPeriodDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND. The server has not found anything matching the Request-URI, or required entity record.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/supplyChainCollabSpaces/{sccsid}/plans/{planId}/versions/{versionId}/download": {
+      "get": {
+        "tags": [
+          "Plan Registry "
+        ],
+        "summary": "Get download links for a plan version",
+        "operationId": "GET_PlanVersionDownloadLink",
+        "parameters": [
+          {
+            "name": "sccsid",
+            "in": "path",
+            "description": "ID of the Supply Chain Collaborative Space the entity belongs to",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the Supply Chain Collaborative Space the entity belongs to"
+            }
+          },
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "versionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageExternalPlanFileDownloadResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND. The server has not found anything matching the Request-URI, or required entity record.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/supplyChainCollabSpaces/{sccsid}/plans/{planId}/planPeriods": {
+      "get": {
+        "tags": [
+          "Plan Registry "
+        ],
+        "summary": "Get plan periods of (the last version of) a single plan",
+        "operationId": "GET_BulkReadLastPlanVersionPlanPeriod",
+        "parameters": [
+          {
+            "name": "sccsid",
+            "in": "path",
+            "description": "ID of the Supply Chain Collaborative Space the entity belongs to",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the Supply Chain Collaborative Space the entity belongs to"
+            }
+          },
+          {
+            "name": "planId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to be skipped from the beginning of the result",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "default": 0,
+              "description": "The number of items to be skipped from the beginning of the result"
+            }
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "description": "The maximum number of items to be returned per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50,
+              "description": "The maximum number of items to be returned per page"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageExternalPlanPeriodDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND. The server has not found anything matching the Request-URI, or required entity record.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ExternalCreateMetricsFileDTO": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Metrics file type",
+            "example": "SCDM_SP_DEMAND_FORECAST_FULFILLMENT",
+            "minLength": 1,
+            "oneOf": [
+              {
+                "enum": [
+                  "SCDM_ACTUAL_DEMAND",
+                  "SCDM_ACTUAL_INVENTORY",
+                  "SCDM_IP_SAFETY_STOCK",
+                  "SCDM_DP_FORECASTED_DEMAND",
+                  "SCDM_SP_DEMAND_FORECAST_FULFILLMENT",
+                  "SCDM_SP_PURCHASING",
+                  "SCDM_SP_PRODUCTION",
+                  "SCDM_SP_TRANSPORT",
+                  "SCDM_SP_LOAD",
+                  "SCDM_SP_AVAILABLE_CAPACITY",
+                  "SCDM_SP_INVENTORY",
+                  "SCDM_SP_PURCHASING_DEPENDENT_DEMAND",
+                  "SCDM_SP_PRODUCTION_DEPENDENT_DEMAND",
+                  "SCDM_SP_TRANSPORT_DEPENDENT_DEMAND",
+                  "SCDM_SP_EXTERNAL_DEPENDENT_DEMAND_FULFILLMENT"
+                ]
+              },
+              {
+                "deprecated": true,
+                "description": "Deprecated since 2026xFD01",
+                "enum": [
+                  "ACTUALS",
+                  "DEMAND_PLAN"
+                ]
+              }
+            ]
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the file, unique within this request, may be different than the file's name in the file system",
+            "example": "Safety Stocks EU June 2025",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "name",
+          "type"
+        ]
+      },
+      "ExternalCreatePlanDTO": {
+        "type": "object",
+        "properties": {
+          "originId": {
+            "type": "string",
+            "description": "Identifier from origin system. This is only for the origin system's reference and is stored, but not used, by SCDM",
+            "example": "Plan 1",
+            "minLength": 1
+          },
+          "planningScopeId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Planning Scope ID, only required when creating a Snapshot-registered plan",
+            "example": 1
+          },
+          "snapshotId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Snapshot ID, only required when creating a Snapshot-registered plan",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the plan",
+            "example": "Supply Plan",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "description": "Plan type",
+            "example": "SCDM_SUPPLY_PLAN",
+            "minLength": 1,
+            "oneOf": [
+              {
+                "enum": [
+                  "SCDM_ACTUAL_DEMAND",
+                  "SCDM_ACTUAL_INVENTORY",
+                  "SCDM_SAFETY_STOCK_PLAN",
+                  "SCDM_DEMAND_PLAN",
+                  "SCDM_SUPPLY_PLAN"
+                ]
+              },
+              {
+                "deprecated": true,
+                "description": "Deprecated since 26xFD01",
+                "enum": [
+                  "ACTUALS",
+                  "DEMAND_PLAN"
+                ]
+              }
+            ]
+          },
+          "planPeriods": {
+            "type": "array",
+            "description": "List of periods that the plan has metrics for",
+            "items": {
+              "$ref": "#/components/schemas/ExternalCreatePlanPeriodDTO"
+            },
+            "minItems": 1
+          },
+          "planInputs": {
+            "type": "array",
+            "description": "List of plans used as inputs for this plan",
+            "items": {
+              "$ref": "#/components/schemas/ExternalCreatePlanInputDTO"
+            }
+          },
+          "files": {
+            "type": "array",
+            "description": "List of metrics files for this plan",
+            "items": {
+              "$ref": "#/components/schemas/ExternalCreateMetricsFileDTO"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "files",
+          "name",
+          "originId",
+          "planInputs",
+          "planPeriods",
+          "type"
+        ]
+      },
+      "ExternalCreatePlanInputDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of plan used as input",
+            "example": 1
+          },
+          "versionId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Version of plan used as input",
+            "example": 1
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of relation between the plans",
+            "enum": [
+              "INPUT",
+              "PREVIOUS"
+            ],
+            "example": "INPUT",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "versionId"
+        ]
+      },
+      "ExternalCreatePlanPeriodDTO": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Period start",
+            "example": "2025-01-01"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Period end",
+            "example": "2025-02-01"
+          }
+        },
+        "required": [
+          "endDate",
+          "startDate"
+        ]
+      },
+      "ExternalCreatePlanRequestDTO": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalCreatePlanDTO"
+            },
+            "maxItems": 1,
+            "minItems": 1
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "ExternalCreatePlanResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Physical id of the entity",
+            "example": 1
+          },
+          "versionId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "The version of the plan. Starts at 1.",
+            "example": 1
+          },
+          "originId": {
+            "type": "string",
+            "description": "Identifier from origin system. This is only for the origin system's reference and is stored, but not used, by SCDM",
+            "example": "Plan 1"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the plan",
+            "example": "Supply Plan"
+          },
+          "type": {
+            "type": "string",
+            "description": "Plan type",
+            "example": "SCDM_SUPPLY_PLAN",
+            "oneOf": [
+              {
+                "enum": [
+                  "SCDM_ACTUAL_DEMAND",
+                  "SCDM_ACTUAL_INVENTORY",
+                  "SCDM_SAFETY_STOCK_PLAN",
+                  "SCDM_DEMAND_PLAN",
+                  "SCDM_SUPPLY_PLAN"
+                ]
+              },
+              {
+                "deprecated": true,
+                "description": "Deprecated since 26xFD01",
+                "enum": [
+                  "ACTUALS",
+                  "DEMAND_PLAN"
+                ]
+              }
+            ]
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "User who created the entity",
+            "example": "user"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp when the entity was created"
+          },
+          "uploadUrl": {
+            "type": "string",
+            "description": "URL that origin system uses to upload files",
+            "example": "https://<location>-<cluster>-<serviceurl>.3dx-staging.3ds.com/fcs/servlet/fcs/checkin"
+          },
+          "uploadTicket": {
+            "type": "string",
+            "description": "Ticket that origin system uses to upload files",
+            "example": "QEBlbnZ...eVNoFfvSsi1N"
+          },
+          "files": {
+            "type": "array",
+            "description": "List of metrics files for this plan",
+            "items": {
+              "$ref": "#/components/schemas/ExternalCreatePlanResponseMetricsFileDTO"
+            }
+          }
+        }
+      },
+      "ExternalCreatePlanResponseMetricsFileDTO": {
+        "type": "object",
+        "properties": {
+          "fileId": {
+            "type": "string",
+            "description": "ID used to download file from object storage",
+            "example": "a0f6b6e0-3cba-46b5-83e5-7d4d27b5488a-SafetyStocksEUJune2025"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the file when registered in plan registry",
+            "example": "Safety Stocks EU June 2025"
+          },
+          "type": {
+            "type": "string",
+            "description": "Metrics file type",
+            "example": "SCDM_SP_DEMAND_FORECAST_FULFILLMENT",
+            "oneOf": [
+              {
+                "enum": [
+                  "SCDM_ACTUAL_DEMAND",
+                  "SCDM_ACTUAL_INVENTORY",
+                  "SCDM_IP_SAFETY_STOCK",
+                  "SCDM_DP_FORECASTED_DEMAND",
+                  "SCDM_SP_DEMAND_FORECAST_FULFILLMENT",
+                  "SCDM_SP_PURCHASING",
+                  "SCDM_SP_PRODUCTION",
+                  "SCDM_SP_TRANSPORT",
+                  "SCDM_SP_LOAD",
+                  "SCDM_SP_AVAILABLE_CAPACITY",
+                  "SCDM_SP_INVENTORY",
+                  "SCDM_SP_PURCHASING_DEPENDENT_DEMAND",
+                  "SCDM_SP_PRODUCTION_DEPENDENT_DEMAND",
+                  "SCDM_SP_TRANSPORT_DEPENDENT_DEMAND",
+                  "SCDM_SP_EXTERNAL_DEPENDENT_DEMAND_FULFILLMENT"
+                ]
+              },
+              {
+                "deprecated": true,
+                "description": "Deprecated since 2026xFD01",
+                "enum": [
+                  "ACTUALS",
+                  "DEMAND_PLAN"
+                ]
+              }
+            ]
+          },
+          "bucket": {
+            "type": "string",
+            "description": "Bucket that the file is uploaded to",
+            "example": "supplychaindata"
+          }
+        }
+      },
+      "Info": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "statusCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "searchCount": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "PageExternalCreatePlanResponseDTO": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalCreatePlanResponseDTO"
+            }
+          },
+          "info": {
+            "$ref": "#/components/schemas/Info"
+          }
+        }
+      },
+      "ApiError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "100 CONTINUE",
+              "101 SWITCHING_PROTOCOLS",
+              "102 PROCESSING",
+              "103 EARLY_HINTS",
+              "103 CHECKPOINT",
+              "200 OK",
+              "201 CREATED",
+              "202 ACCEPTED",
+              "203 NON_AUTHORITATIVE_INFORMATION",
+              "204 NO_CONTENT",
+              "205 RESET_CONTENT",
+              "206 PARTIAL_CONTENT",
+              "207 MULTI_STATUS",
+              "208 ALREADY_REPORTED",
+              "226 IM_USED",
+              "300 MULTIPLE_CHOICES",
+              "301 MOVED_PERMANENTLY",
+              "302 FOUND",
+              "302 MOVED_TEMPORARILY",
+              "303 SEE_OTHER",
+              "304 NOT_MODIFIED",
+              "305 USE_PROXY",
+              "307 TEMPORARY_REDIRECT",
+              "308 PERMANENT_REDIRECT",
+              "400 BAD_REQUEST",
+              "401 UNAUTHORIZED",
+              "402 PAYMENT_REQUIRED",
+              "403 FORBIDDEN",
+              "404 NOT_FOUND",
+              "405 METHOD_NOT_ALLOWED",
+              "406 NOT_ACCEPTABLE",
+              "407 PROXY_AUTHENTICATION_REQUIRED",
+              "408 REQUEST_TIMEOUT",
+              "409 CONFLICT",
+              "410 GONE",
+              "411 LENGTH_REQUIRED",
+              "412 PRECONDITION_FAILED",
+              "413 PAYLOAD_TOO_LARGE",
+              "413 REQUEST_ENTITY_TOO_LARGE",
+              "414 URI_TOO_LONG",
+              "414 REQUEST_URI_TOO_LONG",
+              "415 UNSUPPORTED_MEDIA_TYPE",
+              "416 REQUESTED_RANGE_NOT_SATISFIABLE",
+              "417 EXPECTATION_FAILED",
+              "418 I_AM_A_TEAPOT",
+              "419 INSUFFICIENT_SPACE_ON_RESOURCE",
+              "420 METHOD_FAILURE",
+              "421 DESTINATION_LOCKED",
+              "422 UNPROCESSABLE_ENTITY",
+              "423 LOCKED",
+              "424 FAILED_DEPENDENCY",
+              "425 TOO_EARLY",
+              "426 UPGRADE_REQUIRED",
+              "428 PRECONDITION_REQUIRED",
+              "429 TOO_MANY_REQUESTS",
+              "431 REQUEST_HEADER_FIELDS_TOO_LARGE",
+              "451 UNAVAILABLE_FOR_LEGAL_REASONS",
+              "500 INTERNAL_SERVER_ERROR",
+              "501 NOT_IMPLEMENTED",
+              "502 BAD_GATEWAY",
+              "503 SERVICE_UNAVAILABLE",
+              "504 GATEWAY_TIMEOUT",
+              "505 HTTP_VERSION_NOT_SUPPORTED",
+              "506 VARIANT_ALSO_NEGOTIATES",
+              "507 INSUFFICIENT_STORAGE",
+              "508 LOOP_DETECTED",
+              "509 BANDWIDTH_LIMIT_EXCEEDED",
+              "510 NOT_EXTENDED",
+              "511 NETWORK_AUTHENTICATION_REQUIRED"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "path": {
+            "type": "string"
+          }
+        }
+      },
+      "ExternalCreatePlanVersionDTO": {
+        "type": "object",
+        "properties": {
+          "originId": {
+            "type": "string",
+            "description": "Identifier from origin system. This is only for the origin system's reference and is stored, but not used, by SCDM",
+            "example": "Plan 1",
+            "minLength": 1
+          },
+          "snapshotId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Snapshot ID, only required when creating a Snapshot-registered plan",
+            "example": 0
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the plan",
+            "example": "Supply Plan"
+          },
+          "planPeriods": {
+            "type": "array",
+            "description": "List of periods that the plan has metrics for",
+            "items": {
+              "$ref": "#/components/schemas/ExternalCreatePlanPeriodDTO"
+            },
+            "minItems": 1
+          },
+          "planInputs": {
+            "type": "array",
+            "description": "List of plans used as inputs for this plan",
+            "items": {
+              "$ref": "#/components/schemas/ExternalCreatePlanInputDTO"
+            }
+          },
+          "files": {
+            "type": "array",
+            "description": "List of metrics files for this plan",
+            "items": {
+              "$ref": "#/components/schemas/ExternalCreateMetricsFileDTO"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "files",
+          "name",
+          "originId",
+          "planInputs",
+          "planPeriods"
+        ]
+      },
+      "ExternalCreatePlanVersionRequestDTO": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalCreatePlanVersionDTO"
+            },
+            "maxItems": 1,
+            "minItems": 1
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "ExternalPlanSetStatusDTO": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "The (functional) status to assign to the plan.",
+            "enum": [
+              "DRAFT",
+              "CANDIDATE",
+              "RELEASED",
+              "REJECTED"
+            ],
+            "minLength": 1
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "ExternalPlanSetStatusRequestDTO": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalPlanSetStatusDTO"
+            },
+            "maxItems": 1,
+            "minItems": 1
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "ExternalCommitDTO": {
+        "type": "object",
+        "properties": {
+          "receipt": {
+            "type": "string",
+            "description": "DFS checkin receipt. Only applicable if success = true",
+            "example": "QEBlbnZ...ED/2o4LY7yaX"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Indicates whether the upload procedure succeeded. This value can be omitted, which defaults to 'true'. In case of 'false', then the receipt field may be null."
+          }
+        }
+      },
+      "ExternalCommitRequestDTO": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalCommitDTO"
+            },
+            "maxItems": 1,
+            "minItems": 1
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "ExternalSupplyChainCollaborativeSpaceDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "The supply chain collaborative space's id",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the supply chain collaborative space",
+            "example": "Common Space"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description for the supply chain collaborative space",
+            "example": "The common space for all members"
+          }
+        }
+      },
+      "PageExternalSccsDTO": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalSupplyChainCollaborativeSpaceDTO"
+            }
+          },
+          "info": {
+            "$ref": "#/components/schemas/Info"
+          }
+        }
+      },
+      "ExternalMetricsFileDTO": {
+        "type": "object",
+        "properties": {
+          "fileId": {
+            "type": "string",
+            "description": "ID used to download file from object storage",
+            "example": "a0f6b6e0-3cba-46b5-83e5-7d4d27b5488a-SafetyStocksEUJune2025"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the file when registered in plan registry",
+            "example": "Safety Stocks EU June 2025"
+          },
+          "bucket": {
+            "type": "string",
+            "description": "Bucket that the file is uploaded to",
+            "example": "supplychaindata"
+          },
+          "type": {
+            "type": "string",
+            "description": "Metrics file type",
+            "example": "SCDM_SP_DEMAND_FORECAST_FULFILLMENT",
+            "oneOf": [
+              {
+                "enum": [
+                  "SCDM_ACTUAL_DEMAND",
+                  "SCDM_ACTUAL_INVENTORY",
+                  "SCDM_IP_SAFETY_STOCK",
+                  "SCDM_DP_FORECASTED_DEMAND",
+                  "SCDM_SP_DEMAND_FORECAST_FULFILLMENT",
+                  "SCDM_SP_PURCHASING",
+                  "SCDM_SP_PRODUCTION",
+                  "SCDM_SP_TRANSPORT",
+                  "SCDM_SP_LOAD",
+                  "SCDM_SP_AVAILABLE_CAPACITY",
+                  "SCDM_SP_INVENTORY",
+                  "SCDM_SP_PURCHASING_DEPENDENT_DEMAND",
+                  "SCDM_SP_PRODUCTION_DEPENDENT_DEMAND",
+                  "SCDM_SP_TRANSPORT_DEPENDENT_DEMAND",
+                  "SCDM_SP_EXTERNAL_DEPENDENT_DEMAND_FULFILLMENT"
+                ]
+              },
+              {
+                "deprecated": true,
+                "description": "Deprecated since 2026xFD01",
+                "enum": [
+                  "ACTUALS",
+                  "DEMAND_PLAN"
+                ]
+              }
+            ]
+          },
+          "validationStatus": {
+            "type": "string",
+            "description": "Current status from validation",
+            "enum": [
+              "TO_BE_UPLOADED",
+              "UPLOADED",
+              "MISSING_FILE",
+              "CLEANED_UP",
+              "VALIDATION_FAILED",
+              "VALIDATED"
+            ],
+            "example": "TO_BE_UPLOADED"
+          }
+        }
+      },
+      "ExternalPlanInputDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of plan used as input",
+            "example": 1
+          },
+          "versionId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Version of plan used as input",
+            "example": 1
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of relation between the plans",
+            "enum": [
+              "INPUT",
+              "PREVIOUS"
+            ],
+            "example": "INPUT"
+          }
+        }
+      },
+      "ExternalSnapshotRegisteredPlanDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Physical id of the entity",
+            "example": 1
+          },
+          "originId": {
+            "type": "string",
+            "description": "Identifier from origin system. This is only for the origin system's reference and is stored, but not used, by SCDM",
+            "example": "Plan 1"
+          },
+          "versionId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Version number of the plan, the first plan starts at version 1, as more versions are created, this number increases",
+            "example": 1
+          },
+          "planningScopeId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Planning Scope ID, only required when creating a Snapshot-registered plan",
+            "example": 1
+          },
+          "snapshotId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Snapshot ID, only required when creating a Snapshot-registered plan",
+            "example": 0
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp when the entity was created"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the plan",
+            "example": "Supply Plan"
+          },
+          "type": {
+            "type": "string",
+            "description": "Plan type",
+            "example": "SCDM_SUPPLY_PLAN",
+            "oneOf": [
+              {
+                "enum": [
+                  "SCDM_ACTUAL_DEMAND",
+                  "SCDM_ACTUAL_INVENTORY",
+                  "SCDM_SAFETY_STOCK_PLAN",
+                  "SCDM_DEMAND_PLAN",
+                  "SCDM_SUPPLY_PLAN"
+                ]
+              },
+              {
+                "deprecated": true,
+                "description": "Deprecated since 26xFD01",
+                "enum": [
+                  "ACTUALS",
+                  "DEMAND_PLAN"
+                ]
+              }
+            ]
+          },
+          "periodStartDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Start of plan periods",
+            "example": "2025-01-01"
+          },
+          "periodEndDate": {
+            "type": "string",
+            "format": "date",
+            "description": "End of plan periods",
+            "example": "2025-12-31"
+          },
+          "nrOfPeriods": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Number of periods in this plan",
+            "example": 52
+          },
+          "status": {
+            "type": "string",
+            "description": "The (functional) status of the plan.",
+            "enum": [
+              "DRAFT",
+              "CANDIDATE",
+              "RELEASED",
+              "REJECTED"
+            ]
+          },
+          "validationStatus": {
+            "type": "string",
+            "description": "Status to indicate whether all checks on the plan have been completed (and what the result was).",
+            "enum": [
+              "TO_BE_UPLOADED",
+              "COMMITTED",
+              "UPLOADED",
+              "UPLOAD_FAILED",
+              "VALIDATION_FAILED",
+              "VALIDATED"
+            ]
+          },
+          "planInputs": {
+            "type": "array",
+            "description": "List of plans used as inputs for this plan",
+            "items": {
+              "$ref": "#/components/schemas/ExternalPlanInputDTO"
+            }
+          },
+          "files": {
+            "type": "array",
+            "description": "List of metrics files for this plan",
+            "items": {
+              "$ref": "#/components/schemas/ExternalMetricsFileDTO"
+            }
+          }
+        }
+      },
+      "PageExternalPlanResponseDTO": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalSnapshotRegisteredPlanDTO"
+            }
+          },
+          "info": {
+            "$ref": "#/components/schemas/Info"
+          }
+        }
+      },
+      "ExternalPlanPeriodDTO": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Period start",
+            "example": "2025-01-01"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Period end",
+            "example": "2025-02-01"
+          }
+        },
+        "required": [
+          "endDate",
+          "startDate"
+        ]
+      },
+      "PageExternalPlanPeriodDTO": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalPlanPeriodDTO"
+            }
+          },
+          "info": {
+            "$ref": "#/components/schemas/Info"
+          }
+        }
+      },
+      "ExternalPlanFileDownloadMetricsFileResponseDTO": {
+        "type": "object",
+        "properties": {
+          "fileId": {
+            "type": "string",
+            "description": "ID used to download file from object storage",
+            "example": "a0f6b6e0-3cba-46b5-83e5-7d4d27b5488a-SafetyStocksEUJune2025"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the file when registered in plan registry",
+            "example": "Safety Stocks EU June 2025"
+          },
+          "type": {
+            "type": "string",
+            "description": "Metrics file type",
+            "example": "SCDM_SP_DEMAND_FORECAST_FULFILLMENT",
+            "oneOf": [
+              {
+                "enum": [
+                  "SCDM_ACTUAL_DEMAND",
+                  "SCDM_ACTUAL_INVENTORY",
+                  "SCDM_IP_SAFETY_STOCK",
+                  "SCDM_DP_FORECASTED_DEMAND",
+                  "SCDM_SP_DEMAND_FORECAST_FULFILLMENT",
+                  "SCDM_SP_PURCHASING",
+                  "SCDM_SP_PRODUCTION",
+                  "SCDM_SP_TRANSPORT",
+                  "SCDM_SP_LOAD",
+                  "SCDM_SP_AVAILABLE_CAPACITY",
+                  "SCDM_SP_INVENTORY",
+                  "SCDM_SP_PURCHASING_DEPENDENT_DEMAND",
+                  "SCDM_SP_PRODUCTION_DEPENDENT_DEMAND",
+                  "SCDM_SP_TRANSPORT_DEPENDENT_DEMAND",
+                  "SCDM_SP_EXTERNAL_DEPENDENT_DEMAND_FULFILLMENT"
+                ]
+              },
+              {
+                "deprecated": true,
+                "description": "Deprecated since 2026xFD01",
+                "enum": [
+                  "ACTUALS",
+                  "DEMAND_PLAN"
+                ]
+              }
+            ]
+          },
+          "url": {
+            "type": "string",
+            "description": "A (long) URL that can be used to download the file from the DFS."
+          },
+          "validationStatus": {
+            "type": "string",
+            "description": "Current status from validation",
+            "enum": [
+              "TO_BE_UPLOADED",
+              "UPLOADED",
+              "MISSING_FILE",
+              "CLEANED_UP",
+              "VALIDATION_FAILED",
+              "VALIDATED"
+            ],
+            "example": "TO_BE_UPLOADED"
+          }
+        }
+      },
+      "ExternalPlanFileDownloadResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Physical id of the entity",
+            "example": 1
+          },
+          "versionId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "The version of the plan. Starts at 1.",
+            "example": 1
+          },
+          "originId": {
+            "type": "string",
+            "description": "Identifier from origin system. This is only for the origin system's reference and is stored, but not used, by SCDM",
+            "example": "Plan 1"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the plan",
+            "example": "Supply Plan"
+          },
+          "type": {
+            "type": "string",
+            "description": "Plan type",
+            "example": "SCDM_SUPPLY_PLAN",
+            "oneOf": [
+              {
+                "enum": [
+                  "SCDM_ACTUAL_DEMAND",
+                  "SCDM_ACTUAL_INVENTORY",
+                  "SCDM_SAFETY_STOCK_PLAN",
+                  "SCDM_DEMAND_PLAN",
+                  "SCDM_SUPPLY_PLAN"
+                ]
+              },
+              {
+                "deprecated": true,
+                "description": "Deprecated since 26xFD01",
+                "enum": [
+                  "ACTUALS",
+                  "DEMAND_PLAN"
+                ]
+              }
+            ]
+          },
+          "validationStatus": {
+            "type": "string",
+            "description": "Status to indicate whether all checks on the plan have been completed (and what the result was).",
+            "enum": [
+              "TO_BE_UPLOADED",
+              "COMMITTED",
+              "UPLOADED",
+              "UPLOAD_FAILED",
+              "VALIDATION_FAILED",
+              "VALIDATED"
+            ]
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "User who created the entity",
+            "example": "user"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp when the entity was created"
+          },
+          "files": {
+            "type": "array",
+            "description": "List of metrics files for this plan",
+            "items": {
+              "$ref": "#/components/schemas/ExternalPlanFileDownloadMetricsFileResponseDTO"
+            }
+          }
+        }
+      },
+      "PageExternalPlanFileDownloadResponseDTO": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalPlanFileDownloadResponseDTO"
+            }
+          },
+          "info": {
+            "$ref": "#/components/schemas/Info"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  }
+}

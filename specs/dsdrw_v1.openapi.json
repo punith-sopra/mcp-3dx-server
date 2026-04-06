@@ -1,0 +1,1807 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "dsdrw: CAD Web corpus REST Services provided in 3DSpace service for Drawings objects.",
+    "version": "1.0.0",
+    "title": "Drawing Web Services.",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dsdrw",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3dspace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsdrw/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/dsdrw:Drawing/{ID}": {
+      "get": {
+        "summary": "Gets a Drawing",
+        "description": "Gets a Drawing",
+        "operationId": "GET_dsdrw:Drawing_ID",
+        "tags": [
+          "dsdrw:Drawing"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsdrw:Drawing object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvdrw:DrawingMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvdrw:DrawingMask.Default",
+                "dsmvdrw:DrawingMask.Details",
+                "dsmvdrw:DrawingMask.Properties",
+                "dsmvdrw:DrawingMask.ParentEngItems"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvdrw_DrawingMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvdrw_DrawingMask.Details_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvdrw_DrawingMask.Properties_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvdrw_DrawingMask.ParentEngItems"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Modify an existing Drawing",
+        "description": "Modify an existing Drawing. Only the elements passed in input are modified. Output will be composed of the core part as well as the modified fields. Addition of Proposed Changes is limited at 150 per call.",
+        "operationId": "PATCH_dsdrw:Drawing_ID",
+        "tags": [
+          "dsdrw:Drawing"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "CSRF token could be obtained from a GET or from dedicated web service /resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsdrw:Drawing object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvdrw:DrawingMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvdrw:DrawingMask.Default",
+                "dsmvdrw:DrawingMask.Details",
+                "dsmvdrw:DrawingMask.Properties"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dsdrw_Drawing_PATCH"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": "Response will be returned with oneOf mask available in the Schema Tab.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvdrw_DrawingMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvdrw_DrawingMask.Details_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvdrw_DrawingMask.Properties_WithCEStamp"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsdrw:Drawing/Search": {
+      "get": {
+        "summary": "Gets a indexed search result of Drawing",
+        "description": "Gets a indexed search result of Drawing",
+        "operationId": "GETSearch_dsdrw:Drawing_Search",
+        "tags": [
+          "dsdrw:Drawing"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$searchStr",
+            "in": "query",
+            "description": "A search text to find one or more items.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvdrw:DrawingMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvdrw:DrawingMask.Default",
+                "dsmvdrw:DrawingMask.Details",
+                "dsmvdrw:DrawingMask.Properties"
+              ]
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 1000.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": "Response will be returned with oneOf mask available in the Schema Tab.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvdrw_DrawingMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvdrw_DrawingMask.Details_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvdrw_DrawingMask.Properties_WithCEStamp"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsdrw:Drawing": {
+      "get": {
+        "summary": "Gets all the Drawings",
+        "deprecated": true,
+        "description": "Gets all the Drawings",
+        "operationId": "GETAll_dsdrw:Drawing",
+        "tags": [
+          "dsdrw:Drawing"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvdrw:DrawingMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvdrw:DrawingMask.Default",
+                "dsmvdrw:DrawingMask.Details",
+                "dsmvdrw:DrawingMask.Properties"
+              ]
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 1000.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": "Response will be returned with oneOf mask available in the Schema Tab.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvdrw_DrawingMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvdrw_DrawingMask.Details_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvdrw_DrawingMask.Properties_WithCEStamp"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsdrw:Drawing/getItems": {
+      "post": {
+        "summary": "Gets a list of Drawing",
+        "deprecated": true,
+        "description": "Gets a list of Drawing",
+        "operationId": "getItems_dsdrw:Drawing_getItems",
+        "tags": [
+          "dsdrw:Drawing"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvdrw:DrawingMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvdrw:DrawingMask.Default",
+                "dsmvdrw:DrawingMask.Details",
+                "dsmvdrw:DrawingMask.Properties"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addGetItems"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": "Response will be returned with oneOf mask available in the Schema Tab.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvdrw_DrawingMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvdrw_DrawingMask.Details_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvdrw_DrawingMask.Properties_WithCEStamp"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "dsdrw_Drawing": {
+        "properties": {
+          "Attribute DB Name": {
+            "description": "Attribute DB Value",
+            "type": "string",
+            "example": "Attribute DB Value"
+          }
+        }
+      },
+      "dsdrw_Drawing_PATCH": {
+        "properties": {
+          "Attribute DB Name": {
+            "description": "Attribute DB Value",
+            "type": "string",
+            "example": "Attribute DB Value"
+          }
+        }
+      },
+      "addGetItems": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "example": [
+          "EE512F4A015FE57B4F940A513C63AA77",
+          "EE5211D2015FF9F94F940A513C63AA77"
+        ]
+      },
+      "addEmpty": {},
+      "addLinks": {
+        "properties": {
+          "fromID": {
+            "type": "string",
+            "example": "EE5211D2015FF9F94F940A513C63AA77"
+          },
+          "toID": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "EE562168015FFCF14F940A513C63AA77"
+            }
+          }
+        }
+      },
+      "addVersions": {
+        "properties": {
+          "versionName": {
+            "type": "string",
+            "example": "A.1"
+          },
+          "parents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "parentID": {
+                  "type": "string",
+                  "example": "EE4FBDEA015FEC3D4F940A513C63AA77"
+                },
+                "scemantic": {
+                  "type": "string",
+                  "example": "fix"
+                }
+              }
+            }
+          }
+        }
+      },
+      "dsmvdrw_DrawingMask.Details": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "My Type"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "Dec 15, 2017 11:17 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "Dec 11, 2017 12:53 PM"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "In Work"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "dsdrw:DrawingEnterpriseAttributes": {
+                  "properties": {
+                    "Attribute DB Name": {
+                      "description": "Attribute DB Value",
+                      "type": "string",
+                      "example": "Attribute DB Value"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvdrw_DrawingMask.Details_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "My Type"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "Dec 15, 2017 11:17 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "Dec 11, 2017 12:53 PM"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "In Work"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "dsdrw:DrawingEnterpriseAttributes": {
+                  "properties": {
+                    "Attribute DB Name": {
+                      "description": "Attribute DB Value",
+                      "type": "string",
+                      "example": "Attribute DB Value"
+                    }
+                  }
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvdrw_DrawingMask.Default": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "My Type"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "Dec 15, 2017 11:17 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "Dec 11, 2017 12:53 PM"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "In Work"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvdrw_DrawingMask.Default_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "My Type"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "Dec 15, 2017 11:17 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "Dec 11, 2017 12:53 PM"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "In Work"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvdrw_DrawingMask.Properties": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "In Work"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvdrw_DrawingMask.Properties_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "In Work"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvdrw_DrawingMask.ParentEngItems": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "My Type"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "Dec 15, 2017 11:17 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "Dec 11, 2017 12:53 PM"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "In Work"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "dsdrw:ParentEngItems": {
+                  "properties": {
+                    "totalItems": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "description": "Reference name",
+                            "type": "string",
+                            "example": "My name"
+                          },
+                          "title": {
+                            "description": "Reference object title value",
+                            "type": "string",
+                            "example": "My title"
+                          },
+                          "description": {
+                            "description": "Reference description value",
+                            "type": "string",
+                            "example": "My description"
+                          },
+                          "id": {
+                            "description": "Entity physical id",
+                            "type": "string",
+                            "example": "EE562168015FFCF14F940A513C63AA77"
+                          },
+                          "type": {
+                            "description": "Basic type value",
+                            "type": "string",
+                            "example": "My Type"
+                          },
+                          "modified": {
+                            "description": "Basic modified value",
+                            "type": "string",
+                            "example": "Dec 15, 2017 11:17 PM"
+                          },
+                          "created": {
+                            "description": "Object created value",
+                            "type": "string",
+                            "example": "Dec 11, 2017 12:53 PM"
+                          },
+                          "revision": {
+                            "description": "Object revision value",
+                            "type": "string",
+                            "example": "A.1"
+                          },
+                          "state": {
+                            "description": "Object current state value",
+                            "type": "string",
+                            "example": "In Work"
+                          },
+                          "owner": {
+                            "description": "Object owner value",
+                            "type": "string",
+                            "example": "John Doe"
+                          },
+                          "organization": {
+                            "description": "Object organization value",
+                            "type": "string",
+                            "example": "MyCompany"
+                          },
+                          "collabspace": {
+                            "description": "Object collabspace value",
+                            "type": "string",
+                            "example": "Default"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultBusMask.public": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "My Type"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "Dec 15, 2017 11:17 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "Dec 11, 2017 12:53 PM"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "In Work"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultBusMask.public_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "My Type"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "Dec 15, 2017 11:17 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "Dec 11, 2017 12:53 PM"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "In Work"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultRelMask.public": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "My Type"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "Dec 15, 2017 11:17 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "Dec 11, 2017 12:53 PM"
+                },
+                "name": {
+                  "description": "Instance name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "description": {
+                  "description": "Instance description vlaue",
+                  "type": "string",
+                  "example": "My description"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultRelMask.public_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "My Type"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "Dec 15, 2017 11:17 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "Dec 11, 2017 12:53 PM"
+                },
+                "name": {
+                  "description": "Instance name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "description": {
+                  "description": "Instance description vlaue",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultExtensionMask.public": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "Dec 15, 2017 11:17 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "Dec 11, 2017 12:53 PM"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultExtensionMask.public_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "Dec 15, 2017 11:17 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "Dec 11, 2017 12:53 PM"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,738 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "x-ds-copyright": "3DEXPERIENCE R2025x (c) 2020 Dassault Systemes.",
+    "title": "Model Based System Engineering Web Services",
+    "description": "Web Services for managing the Model Based System Engineering resource.",
+    "version": "1.4.0",
+    "x-ds-service": [
+      "MyService"
+    ]
+  },
+  "servers": [
+    {
+      "url": "{MBSEApps_onCloud}/resources/v1/modeler/dssyseng",
+      "variables": {
+        "MBSEApps": {
+          "default": "https://mbseapps.mydomain:443/resources/v1/modeler/dssyseng",
+          "description": "URL of the MBSEApps service (on cloud)"
+        }
+      }
+    },
+    {
+      "url": "{3DSpace_onPremise}",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/resources/v1/modeler/dssyseng",
+          "description": "URL of the 3DSpace service (on premise)"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dssyseng/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/dssyseng:Model/{ID}": {
+      "get": {
+        "summary": "Gets a system model revision.",
+        "description": "Read properties of a system model revision providing credentials and resource identifier.",
+        "operationId": "GET_dssyseng:Model_ID",
+        "tags": [
+          "dssyseng:Model"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ID"
+          },
+          {
+            "$ref": "#/components/parameters/maskDetailsQuery"
+          },
+          {
+            "in": "query",
+            "name": "$iteration",
+            "description": "System model revision iteration",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvsyseng_ModelMask.Basic"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvsyseng_ModelMask.Details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes a system model revision.",
+        "description": "Deletes a system model revision.",
+        "operationId": "DELETE_dssyseng:Model",
+        "tags": [
+          "dssyseng:Model"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasicResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/dssyseng:Model/bulkfetch": {
+      "post": {
+        "summary": "Gets system model revisions.",
+        "description": "Read properties of system model revisions providing credentials and resource identifiers. Maximum of 1000 items can be passed to fetch the information.",
+        "operationId": "POST_dssyseng:Model_bulkfetch",
+        "tags": [
+          "dssyseng:Model"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/maskBasicQuery"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "System model revision identifier",
+                      "type": "string",
+                      "example": "EE562168015FFCF14F940A513C63AA77:FF673279126GGDG25G051B624D74BB88"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvsyseng_ModelMask.Basic"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/dssyseng:Model/search": {
+      "get": {
+        "summary": "Searches system model revision.",
+        "description": "System model revision full text search.",
+        "operationId": "GETSearch_dssyseng:Model_Search",
+        "tags": [
+          "dssyseng:Model"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/maskBasicQuery"
+          },
+          {
+            "$ref": "#/components/parameters/searchStrQuery"
+          },
+          {
+            "$ref": "#/components/parameters/topQuery"
+          },
+          {
+            "$ref": "#/components/parameters/skipQuery"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvsyseng_ModelMask.Basic"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/dssyseng:Model/locate": {
+      "post": {
+        "summary": "Locates system model revisions.",
+        "description": "Find system model revisions using some other system model revisions in input. Maximum of 1000 items can be passed to fetch the information. Locate only on system model revision having a content version greater or equal to 2024x.Refresh3.",
+        "operationId": "POST_dssyseng:Model_locate",
+        "tags": [
+          "dssyseng:Model"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/maskLocateQuery"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "System model revision identifier",
+                      "type": "string",
+                      "example": "EE562168015FFCF14F940A513C63AA77:FF673279126GGDG25G051B624D74BB88"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvsyseng_ModelMask.Locate"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "in": "header",
+        "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ID": {
+        "name": "ID",
+        "in": "path",
+        "description": "dssyseng:Model object ID",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "maskBasicQuery": {
+        "in": "query",
+        "name": "$mask",
+        "description": "Mask defining what will be returned. Default Mask is: dsmvsyseng:ModelMask.Basic",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "dsmvsyseng:ModelMask.Basic"
+          ]
+        }
+      },
+      "maskDetailsQuery": {
+        "in": "query",
+        "name": "$mask",
+        "description": "Mask defining what will be returned. Default Mask is: dsmvsyseng:ModelMask.Basic",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "dsmvsyseng:ModelMask.Basic",
+            "dsmvsyseng:ModelMask.Details"
+          ]
+        }
+      },
+      "maskLocateQuery": {
+        "in": "query",
+        "name": "$mask",
+        "description": "Mask defining what will be returned. Default Mask is: dsmvsyseng:ModelMask.Basic",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "dsmvsyseng:ModelMask.Locate"
+          ]
+        }
+      },
+      "searchStrQuery": {
+        "in": "query",
+        "name": "$searchStr",
+        "required": true,
+        "description": "Provide a 3DEXPERIENCE search expression with a minimum of two characters.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "topQuery": {
+        "in": "query",
+        "name": "$top",
+        "description": "Represents the total number of items returned from the search, accepts a maximum value of 1000. If not set, it returns 50 items.",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "skipQuery": {
+        "in": "query",
+        "name": "$skip",
+        "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "BasicResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Success": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "example": "EE562168015FFCF14F940A513C63AA77:FF673279126GGDG25G051B624D74BB88"
+        }
+      },
+      "Error": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "EE562168015FFCF14F940A513C63AA77:FF673279126GGDG25G051B624D74BB88"
+            },
+            "description": {
+              "type": "string",
+              "example": "Resource does not exist"
+            }
+          }
+        }
+      },
+      "BasicPayload": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "System model revision identifier",
+            "type": "string",
+            "example": "EE562168015FFCF14F940A513C63AA77:FF673279126GGDG25G051B624D74BB88"
+          },
+          "iteration": {
+            "description": "System model revision iteration",
+            "type": "string",
+            "example": 2
+          }
+        }
+      },
+      "PropertyAttributes": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Resource identifier",
+            "type": "string",
+            "example": "EE562168015FFCF14F940A513C63AA77:FF673279126GGDG25G051B624D74BB88"
+          },
+          "iteration": {
+            "description": "Resource iteration",
+            "type": "string",
+            "example": 1
+          },
+          "type": {
+            "description": "Resource type name",
+            "type": "string",
+            "example": "SystemModel"
+          },
+          "title": {
+            "description": "Resource title",
+            "type": "string",
+            "example": "My title"
+          },
+          "name": {
+            "description": "Resource name",
+            "type": "string",
+            "example": "My name"
+          },
+          "revision": {
+            "description": "Resource revision name",
+            "type": "string",
+            "example": "1.A"
+          },
+          "revisionComment": {
+            "description": "Resource revision comment",
+            "type": "string",
+            "example": "My revision commnent"
+          },
+          "description": {
+            "description": "Resource description",
+            "type": "string",
+            "example": "My description"
+          },
+          "created": {
+            "description": "Resource creation date in UTC format",
+            "type": "string",
+            "example": "2023-12-19T09:37:35Z"
+          },
+          "originator": {
+            "description": "Resource creator",
+            "type": "string",
+            "example": "John doe"
+          },
+          "modified": {
+            "description": "Resource last modification date in UTC format",
+            "type": "string",
+            "example": "2023-12-19T09:37:35Z"
+          },
+          "modifier": {
+            "description": "resource last modifier",
+            "type": "string",
+            "example": "John Doe"
+          },
+          "policy": {
+            "description": "Collaboration policy",
+            "type": "string",
+            "example": "System Engineering Definition"
+          },
+          "state": {
+            "description": "Resource maturity state",
+            "type": "string",
+            "example": "In Work"
+          },
+          "owner": {
+            "description": "Resource owner full name",
+            "type": "string",
+            "example": "John Doe"
+          },
+          "collabspace": {
+            "description": "Collabspace name owing the resource",
+            "type": "string",
+            "example": "Default"
+          },
+          "organization": {
+            "description": "Resource organization name",
+            "type": "string",
+            "example": "MyCompany"
+          },
+          "lockedBy": {
+            "description": "Person who reserved the resource",
+            "type": "string",
+            "example": "John Doe"
+          },
+          "contentType": {
+            "description": "Resource content type name",
+            "type": "string",
+            "example": "CATIA Magic"
+          },
+          "contentVersion": {
+            "description": "Resource content version",
+            "type": "string",
+            "example": "2024Refresh2"
+          }
+        }
+      },
+      "dsmvsyseng_ModelMask.Basic": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PropertyAttributes"
+            }
+          }
+        }
+      },
+      "dsmvsyseng_ModelMask.Details": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/PropertyAttributes"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "usedModels": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "description": "used model identifier",
+                            "type": "string",
+                            "example": "5470AC568BE01300673C07AF0011934E:5470AC568BE01300673C07AE00119200"
+                          },
+                          "iteration": {
+                            "description": "used model iteration",
+                            "type": "string",
+                            "example": 1
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "dsmvsyseng_ModelMask.Locate": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "System model revision identifier",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77:FF673279126GGDG25G051B624D74BB88"
+                },
+                "usingModels": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "description": "used model identifier",
+                        "type": "string",
+                        "example": "5470AC568BE01300673C07AF0011934E:5470AC568BE01300673C07AE00119200"
+                      },
+                      "iteration": {
+                        "description": "used model iteration",
+                        "type": "string",
+                        "example": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "SuccessResult": {
+        "description": "Request successful.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "totalItems": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "success": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PartialResult": {
+        "description": "MULTI-STATUS. indicates a mixture of responses",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "totalItems": {
+                  "type": "integer",
+                  "example": 2
+                },
+                "success": {
+                  "$ref": "#/components/schemas/Success"
+                },
+                "error": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "BadRequest": {
+        "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BasicResponse"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "UNAUTHORIZED. The request requires user authentication.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BasicResponse"
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BasicResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

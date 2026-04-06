@@ -1,0 +1,575 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "version": "1.0.0",
+    "title": "Privileges Management Web Services",
+    "description": "This document details the web services to automate privileges management for all RDF-based applications that support a dedicated access control center widget.\n\nThough each application has its own widget, the common end point of these web services is the User Groups service. For these web services to operate correctly, users and user groups referred to in the inputs should either be already invited users or already created user groups.\n\nA \"privilege\" is defined by three pieces of information: a grantee, i.e. a user or user group to whom the privilege is granted; a grantor, i.e. a user or user group who is granting the privilege; and a responsability defined by the target application which references the secured operations and commands made accessible to the grantee in the context of this application.\n\nOnly platform administrators and their delegates are able to grant privileges. So the connected user who grants the privileges, the grantor, will either be an admin or a delegate but by convention will always be referred to as the user group \"Platform Administrators Group\" in the privileges definition.\n\nFor RDF-based applications, with access control based on sharing of individual piece of data, the value of privileges management is to give access to whole sets of applicative data to specific users and user groups in one go.\n\nAs an example of control center, and to learn more about concepts and capabilities, you can refer to the User Assistance documentation about the control center dedicated to the User Groups application: Root > Social and Collaborative > 3D for all & Social Collaboration > User Groups Control Center. The article \"Understanding Privileges\" in the Developer Assistance documentation also gives information and advice about the usage of these web services.\n\nNote that OK responses obtained from the GET web service can be used as request bodies of the PATCH web service, so that replicating privileges from one platform to another is made easier.",
+    "x-ds-service": [
+      "UsersGroup"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{UsersGroup}",
+      "variables": {
+        "UsersGroup": {
+          "default": "https://3DEXPERIENCE_UsersGroup"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "Read",
+      "description": "Privileges retrieval web services"
+    },
+    {
+      "name": "Update",
+      "description": "Privileges modification web services"
+    }
+  ],
+  "paths": {
+    "/3drdfpersist/resources/v1/app-administration/grants": {
+      "patch": {
+        "tags": [
+          "Update"
+        ],
+        "summary": "Add/remove privileges to/from applications.",
+        "description": "This web service adds or removes privileges to or from given applications.\n\nOnly platform administrators or their delegates for the given applications have the rights to add or remove privileges to or from these applications.\n\nFor any other kind of users the web service does not fail but an error message is issued in the response. To detect this error, and other errors handled in the same way, the caller should check the property \"nb_errors\" in the \"statistics\" object returned with the response. If positive then the response should be analyzed by searching the property \"error\" both at the application level and at the privilege level. All errors handled that way are enumerated in the patch response schema below.\n\nAdding an existing privilege is not considered as an error and has no effect, still \"op\":\"added\" is returned. Removing a non-existing privilege is not considered as an error and has no effect, still \"op\":\"removed\" is returned.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/patchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK\n\nThe response body contains the added or removed privileges for each application as specified in the request body, or ignored if an invalid condition was found.\n\nIn this latter case, an error message detailing the invalid condition is issued either at the application level or at the privilege operation level.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/patchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request. Empty responses are generally due to malformed JSON request bodies."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Read"
+        ],
+        "summary": "Retrieve the privileges for a given or all applications.",
+        "description": "This web service retrieves the privileges defined for a given application or for all applications.\n\nFor each application, the response contains an array of privileges, each of which is defined by three pieces of information: a grantee, a grantor and a responsibility.\n\nGrantee users are identified by their email addresses, grantee and grantor groups by their URIs, and responsibilities by their long URIs.\n\nThe connected user needs to be platform administrator or be delegated the rights to manage privileges on an application to be able to retrieve the associated privileges, otherwise arrays of privileges are returned but empty.\n\nAll URL parameters are case sensitive.\n\nWhen parameter withNLS is present in the URL, display values are also returned: grantee users are displayed with their first and last names, while grantee and grantor groups are displayed with their titles. The NLS names of applications and responsibilities are also returned.\n\nFilters on grantees, grantors (here for completeness) and/or responsibilities can be provided to retrieve specific privileges using this format: filter=grantee~pattern1,grantor~pattern2,resp~pattern3. Multiple values for each three fields are supported but are OR'ed in the filter, while the three different fields are AND'ed in the filter. The article Understanding Access Control by Privileges gives more details.\n\nWarning: the pattern applies to display values when withNLS is present, otherwise it applies to identifiers only.\n\nAlternatively the number of returned privileges by application may always be controlled by providing a skip and a top parameters that define the result window. By default a limit of 100 results always applies.\n\nThe output of this web service can be used as input of the PATCH web service, each privilege containing an operation \"op\":\"add\" by default. It is possible to specify parameter forRemoval in the URL to change the operation from \"add\" to \"remove\" throughout the entire response.\n\nFinally, this web service can be used to only retrieve the long URI (and display value) of all supported applications by specifying top=0 in the URL.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/accept-language"
+          },
+          {
+            "$ref": "#/components/parameters/appURI"
+          },
+          {
+            "$ref": "#/components/parameters/filter"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "$ref": "#/components/parameters/withNLS"
+          },
+          {
+            "$ref": "#/components/parameters/forRemoval"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK\n\nThe response contains an array of applications, each application containing an array of its associated privileges.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/invalidFilter"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/invalidApplication"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "patchRequest": {
+        "title": "Patch request for privileges modifications",
+        "type": "object",
+        "properties": {
+          "grants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "appURI": {
+                  "type": "string",
+                  "description": "Long URI of the application (enclosed by &lt; &gt;).",
+                  "example": "&lt;http://www.3ds.com/RDF/Corpus/dsusergroup/GroupService.Administration&gt;"
+                },
+                "appNLS": {
+                  "type": "string",
+                  "description": "Display value of the application.",
+                  "example": "User Groups"
+                },
+                "privileges": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "op": {
+                        "type": "string",
+                        "description": "Mandatory operation: either 'add' to add this privilege to the application or 'remove' to remove this privilege from the application.",
+                        "example": "add"
+                      },
+                      "respURI": {
+                        "type": "string",
+                        "description": "Mandatory long URI of the responsibility (enclosed by &lt; &gt;).",
+                        "example": "&lt;http://www.3ds.com/RDF/Corpus/Access/Responsibility.Group.Author&gt;"
+                      },
+                      "granteeID": {
+                        "type": "string",
+                        "description": "Mandatory grantee identifier: either email address for users or URI (enclosed by &lt; &gt;) for groups.",
+                        "example": "foobar@acme.com"
+                      },
+                      "grantorID": {
+                        "type": "string",
+                        "description": "Optional grantor identifier: URI for groups (enclosed by &lt; &gt;).",
+                        "example": "&lt;uuid:7617a4b1-1f99-45cd-9b30-9e2dadbadc2b&gt;"
+                      },
+                      "granteeType": {
+                        "type": "string",
+                        "description": "Optional grantee type: either &lt;http://xmlns.com/foaf/0.1/Person&gt; or &lt;http://xmlns.com/foaf/0.1/Group&gt;  (enclosed by &lt; &gt;).",
+                        "example": "&lt;http://xmlns.com/foaf/0.1/Person&gt;"
+                      },
+                      "grantorType": {
+                        "type": "string",
+                        "description": "Optional grantor type: &lt;http://xmlns.com/foaf/0.1/Group&gt; (enclosed by &lt; &gt;) .",
+                        "example": "&lt;http://xmlns.com/foaf/0.1/Group&gt;"
+                      },
+                      "granteeDisplay": {
+                        "type": "string",
+                        "description": "Optional grantee display value: first and last names for users, title for groups.",
+                        "example": "Foo Bar"
+                      },
+                      "grantorDisplay": {
+                        "type": "string",
+                        "description": "Optional grantor display value: title for groups.",
+                        "example": "Platform Administrators Group"
+                      },
+                      "respDisplay": {
+                        "type": "string",
+                        "description": "Optional responsability display value (dskern:nlsLabel).",
+                        "example": "Group Manager"
+                      }
+                    },
+                    "required": [
+                      "op",
+                      "granteeID",
+                      "respURI"
+                    ],
+                    "description": "Privilege operation containing a minima: the operation to execute, the identifier of the grantee, and the long URI of the responsibility. All \"optional\" properties are completely ignored and are returned in the response unchanged."
+                  },
+                  "description": "Array of privilege operations to execute. Each privilege operation must at least contain the operation to execute, the identifier of the grantee, and the long URI of the responsibility."
+                }
+              },
+              "required": [
+                "appURI",
+                "privileges"
+              ],
+              "description": "Application containing an array of privilege operations to execute."
+            },
+            "description": "Array of applications, each containing an array of privilege operations to execute."
+          }
+        },
+        "required": [
+          "grants"
+        ],
+        "description": "Grant objects"
+      },
+      "patchResponse": {
+        "title": "Patch response for privileges modifications",
+        "type": "object",
+        "properties": {
+          "grants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "appURI": {
+                  "type": "string",
+                  "description": "Long URI of the application (enclosed by &lt; &gt;).",
+                  "example": "&lt;http://www.3ds.com/RDF/Corpus/dsusergroup/GroupService.Administration&gt;"
+                },
+                "appNLS": {
+                  "type": "string",
+                  "description": "Display value of the application.",
+                  "example": "User Groups"
+                },
+                "privileges": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "op": {
+                        "type": "string",
+                        "description": "Operation: either 'added' if this privilege has been added to the application or was already existing, 'removed' if this privilege has been removed from the application or does not exist, or 'ignored' if an error occurred. In this case the 'error' property details the cause of the failure.",
+                        "example": "ignored"
+                      },
+                      "respURI": {
+                        "type": "string",
+                        "description": "Long URI of the responsibility (enclosed by &lt &gt;) .",
+                        "example": "&lt;http://www.3ds.com/RDF/Corpus/Access/Responsibility.Group.Author&gt;"
+                      },
+                      "granteeID": {
+                        "type": "string",
+                        "description": "Grantee identifier: either email address for users or URI (enclosed by &lt; &gt;) for groups.",
+                        "example": "foobar@acme.com"
+                      },
+                      "grantorID": {
+                        "type": "string",
+                        "description": "Optional grantor identifier: URI for groups (enclosed by &lt; &gt;).",
+                        "example": "&lt;uuid:7617a4b1-1f99-45cd-9b30-9e2dadbadc2b&gt;"
+                      },
+                      "granteeType": {
+                        "type": "string",
+                        "description": "Optional grantee type: either &lt;http://xmlns.com/foaf/0.1/Person&gt; or &lt;http://xmlns.com/foaf/0.1/Group&gt; (enclosed by &lt; &gt;).",
+                        "example": "&lt;http://xmlns.com/foaf/0.1/Person&gt;"
+                      },
+                      "grantorType": {
+                        "type": "string",
+                        "description": "Optional grantor type: either &lt;http://xmlns.com/foaf/0.1/Group&gt; (enclosed by &lt; &gt;).",
+                        "example": "&lt;http://xmlns.com/foaf/0.1/Group&gt;"
+                      },
+                      "granteeDisplay": {
+                        "type": "string",
+                        "description": "Optional grantee display value: first and last names for users, title for groups.",
+                        "example": "Platform Administrators Group"
+                      },
+                      "grantorDisplay": {
+                        "type": "string",
+                        "description": "Optional grantor display value: title for groups.",
+                        "example": "Foo Bar"
+                      },
+                      "respDisplay": {
+                        "type": "string",
+                        "description": "Optional responsability display value (dskern:nlsLabel).",
+                        "example": "Group Manager"
+                      },
+                      "error": {
+                        "type": "string",
+                        "enum": [
+                          "'Unexpected operation demanded by the user'",
+                          "'Missing argument respURI'",
+                          "'The responsibility demanded by the user is not recognized or supported'",
+                          "'Missing argument granteeID'",
+                          "'Unknown person or group'"
+                        ],
+                        "description": "If 'op' property is equal to 'ignored' then this property details what prevented the operation from being executed.",
+                        "example": "Missing argument respURI"
+                      }
+                    },
+                    "required": [
+                      "op"
+                    ],
+                    "description": "Privilege operation containing a minima: the executed operation, the identifier of the grantee, and the long URI of the responsibility. All \"optional\" properties are returned for information only."
+                  },
+                  "description": "Array of executed privilege operations. Each executed privilege operation at least contains the executed operation, the identifier of the grantee, and the long URI of the responsibility."
+                },
+                "error": {
+                  "type": "string",
+                  "enum": [
+                    "'Unknown application'",
+                    "'Missing argument privileges'",
+                    "'According to access control, user is not authorized to grant or revoke privileges'"
+                  ],
+                  "description": "Error raised either when appURI does not refer to any known application or connected user has no authority to manage privileges. In these cases the array of privileges is ignored as a whole, but only one is returned as 'ignored'.",
+                  "example": "Unknown application"
+                }
+              },
+              "required": [
+                "appURI",
+                "privileges"
+              ],
+              "description": "Application containing an array of executed privilege operations."
+            },
+            "description": "Array of applications, each containing an array of executed privilege operations."
+          },
+          "statistics": {
+            "type": "object",
+            "properties": {
+              "nb_successes": {
+                "type": "integer",
+                "description": "Total number of privileges successfully operated.",
+                "example": "0"
+              },
+              "nb_errors": {
+                "type": "integer",
+                "description": "Total number of failures: each failure has an error message detailing its cause.",
+                "example": "1"
+              },
+              "elapse_ms": {
+                "type": "integer",
+                "description": "Total elapse time to execute the operations in millisecond.",
+                "example": "123"
+              }
+            },
+            "required": [
+              "nb_successes",
+              "nb_errors",
+              "elapse_ms"
+            ],
+            "description": "Object containing some statistics about the executed operations. In case of reported errors, each related message should be carefully reviewed for correction."
+          }
+        },
+        "required": [
+          "grants",
+          "statistics"
+        ],
+        "description": "Object containing the executed privilege operations and some statistics about the operations."
+      },
+      "getResponse": {
+        "title": "Get response for privileges retrieval",
+        "type": "object",
+        "properties": {
+          "grants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "appURI": {
+                  "type": "string",
+                  "description": "The long URI of the application (enclosed by &lt; &gt;).",
+                  "example": "&lt;http://www.3ds.com/RDF/Corpus/dsusergroup/GroupService.Administration&gt;"
+                },
+                "appNLS": {
+                  "type": "string",
+                  "description": "Display value of the application.",
+                  "example": "User Groups"
+                },
+                "privileges": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "op": {
+                        "type": "string",
+                        "description": "Operation: either 'add' by default or 'remove' if parameter forRemoval is present.",
+                        "example": "add"
+                      },
+                      "respURI": {
+                        "type": "string",
+                        "description": "Long URI of the responsibility (enclosed by &lt; &gt;).",
+                        "example": "&lt;http://www.3ds.com/RDF/Corpus/Access/Responsibility.Group.Author&gt;"
+                      },
+                      "granteeID": {
+                        "type": "string",
+                        "description": "Grantee identifier: either email address for users or URI (enclosed by &lt; &gt;) for groups.",
+                        "example": "foobar@acme.com"
+                      },
+                      "grantorID": {
+                        "type": "string",
+                        "description": "Grantor identifier: URI for groups (enclosed by &lt; &gt;).",
+                        "example": "&lt;uuid:7617a4b1-1f99-45cd-9b30-9e2dadbadc2b&gt;"
+                      },
+                      "granteeType": {
+                        "type": "string",
+                        "description": "Grantee type: either &lt;http://xmlns.com/foaf/0.1/Person&gt; or &lt;http://xmlns.com/foaf/0.1/Group&gt; (enclosed by &lt; &gt;).",
+                        "example": "&lt;http://xmlns.com/foaf/0.1/Person&gt;"
+                      },
+                      "grantorType": {
+                        "type": "string",
+                        "description": "Grantor type: &lt;http://xmlns.com/foaf/0.1/Group&gt; (enclosed by &lt; &gt;).",
+                        "example": "&lt;http://xmlns.com/foaf/0.1/Group&gt;"
+                      },
+                      "granteeDisplay": {
+                        "type": "string",
+                        "description": "Optional grantee display value if parameter withNLS is present: first and last names for users, title for groups.",
+                        "example": "Foo Bar"
+                      },
+                      "grantorDisplay": {
+                        "type": "string",
+                        "description": "Optional grantor display value if parameter withNLS is present: title for groups.",
+                        "example": "Platform Administrators Group"
+                      },
+                      "respDisplay": {
+                        "type": "string",
+                        "description": "Optional responsability display value (dskern:nlsLabel) if parameter withNLS is present.",
+                        "example": "Group Manager"
+                      }
+                    },
+                    "required": [
+                      "op",
+                      "granteeID",
+                      "respURI",
+                      "grantorID",
+                      "granteeType",
+                      "grantorType"
+                    ],
+                    "description": "Privilege definition containing a minima: an operation (for reusability with PATCH), the identifier of the grantee, and the long URI of the responsibility. All other properties are returned for information only. In particular, the properties related to the privilege grantor are always returned as referring to the group of platform administrators by design."
+                  },
+                  "description": "Array of privilege definitions. Empty if the connected user is neither admin nor delegate."
+                }
+              },
+              "required": [
+                "appURI",
+                "privileges"
+              ],
+              "description": "Application containing an array of privilege definitions."
+            },
+            "description": "Array of applications, each containing an array of privilege definitions."
+          }
+        },
+        "required": [
+          "grants"
+        ],
+        "description": "Grant objects"
+      },
+      "invalidFilter": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Unsupported value for parameter filter",
+            "description": "Unsupported value for parameter filter."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid value for parameter filter"
+      },
+      "invalidApplication": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Unknown application",
+            "description": "Unknown application."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid value for application URI"
+      }
+    },
+    "parameters": {
+      "accept-language": {
+        "in": "header",
+        "name": "Accept-Language",
+        "schema": {
+          "type": "string"
+        },
+        "description": "The language for display values in the response body when withNLS is true. Supported value follows ISO 639-1 standard. If value is unknown or not given, 'en' is considered.",
+        "example": "en"
+      },
+      "appURI": {
+        "in": "query",
+        "name": "appURI",
+        "schema": {
+          "type": "string"
+        },
+        "description": "The URL encoded long URI (enclosed by &lt; &gt;) of the application. If not present, all applications are returned.",
+        "example": "%3Chttp%3A%2F%2Fwww.3ds.com%2FRDF%2FCorpus%2Fdsusergroup%2FGroupService.Administration%3E"
+      },
+      "withNLS": {
+        "in": "query",
+        "name": "withNLS",
+        "schema": {
+          "type": "boolean",
+          "default": false
+        },
+        "description": "When present, specifies that display values should be returned. No value needed but any value except 'false' is considered 'true'."
+      },
+      "forRemoval": {
+        "in": "query",
+        "name": "forRemoval",
+        "schema": {
+          "type": "boolean",
+          "default": false
+        },
+        "description": "When present, specifies that operation 'remove' should be returned instead of 'add'. No value needed but any value except 'false' is considered 'true'."
+      },
+      "filter": {
+        "in": "query",
+        "name": "filter",
+        "description": "Specify a filter on grantees, grantors and/or responsibilities to retrieve specific privileges. It must follow this format: grantee~pattern1,grantor~pattern2,resp~pattern3 where patternN is a case insensitive filtering string. Whenever a filter is specified, at least one kind of filtering field (grantee, grantor, resp) must be provided. Multiple comma-separated occurrences for each kind of fields are supported but are OR'ed in the resulting filter, while the three kinds of fields are AND'ed in the resulting filter. Warning: patternN applies to display values when withNLS is present, otherwise it applies to identifiers.",
+        "example": "grantee~laurent,grantee~maged,resp~owner",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "skip": {
+        "in": "query",
+        "name": "skip",
+        "description": "Index of the first privilege to retrieve for each application. If skip is greater than the number of privileges for a given application, then the array of privileges is empty for this application. If skip is anything but a positive integer then the HTTP response code is 400 with no body.",
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        }
+      },
+      "top": {
+        "in": "query",
+        "name": "top",
+        "description": "Number of privileges to retrieve for each application starting from the skip value. If top is greater than the number of privileges for a given application, then the array of privileges contain all remaining privileges for this application starting from the skip value. If top is anything but a positive integer then the HTTP response code is 400 with no body.",
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 100
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,5234 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "Services provided in 3DSpace service for Resource Warehouse objects",
+    "version": "1.7.1",
+    "title": "Resource Warehouse Web Services",
+    "x-ds-service": [
+      "3DSpace"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dsrsc",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3DSpace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsrsc-warehouse/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/dsrsc:Warehouse/search": {
+      "get": {
+        "summary": "Gets  indexed search result of Warehouse references.",
+        "description": "Gets  indexed search result of Warehouse references.",
+        "operationId": "GETSearch_dsrsc:Warehouse_Search",
+        "tags": [
+          "dsrsc:Warehouse"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$searchStr",
+            "in": "query",
+            "description": "A search text to find one or more items.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsrsc:WarehouseMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseMask.Default"
+              ]
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 1000.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "minimum": 0,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseMask.Default"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsrsc:Warehouse/{ID}": {
+      "get": {
+        "summary": "Gets a Warehouse Reference",
+        "description": "Gets  a Warehouse Reference",
+        "operationId": "GET_dsrsc:Warehouse_PID",
+        "tags": [
+          "dsrsc:Warehouse"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsrsc:Warehouse object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is dsrsc:WarehouseMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseMask.Default",
+                "dsrsc:WarehouseMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseMask.Default"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseMask.Details"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Modify a Warehouse Reference",
+        "description": "Modify  a Warehouse Reference",
+        "operationId": "PATCH_dsrsc:Warehouse_PID",
+        "tags": [
+          "dsrsc:Warehouse"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsrsc:Warehouse object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is dsrsc:WarehouseMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseMask.Default",
+                "dsrsc:WarehouseMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dsrsc_Warehouse_PATCH"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseMask.Default"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseMask.Details"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a Warehouse Reference",
+        "description": "Delete  a Warehouse Reference",
+        "operationId": "DELETE_dsrsc:Warehouse_PID",
+        "tags": [
+          "dsrsc:Warehouse"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsrsc:Warehouse object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsrsc:Warehouse": {
+      "post": {
+        "summary": "Creates Warehouse Reference",
+        "description": "Creates Warehouse reference.  Only 1 item could be created per call 'on cloud'. Only 10 items could be created per call 'on premise'.",
+        "operationId": "POST_dsrsc:Warehouse",
+        "tags": [
+          "dsrsc:Warehouse"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is dsrsc:WarehouseMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseMask.Default",
+                "dsrsc:WarehouseMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "ResourceWarehouseReference_Create": {
+                  "$ref": "#/components/examples/ResourceWarehouseReference_Create"
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/dsrsc_Warehouse_Create_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseMask.Default"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseMask.Details"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsrsc:Warehouse/bulkfetch": {
+      "post": {
+        "summary": "Gets multiple Warehouse objects which are Indexed",
+        "description": "Gets multiple Warehouse objects which are Indexed. Maximum 1000 objects can be fetched",
+        "operationId": "POST_dsrsc:Warehouse_bulkfetch",
+        "tags": [
+          "dsrsc:Warehouse"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is dsrsc:WarehouseMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseMask.Default",
+                "dsrsc:WarehouseMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dsrsc_Warehouse_bulkfetch_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseMask.Default"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseMask.Details"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "207": {
+            "description": "Request successful but with multiple status. The Physical IDs that could not fetched due to [ DATA NOT INDEXED, INVALID ID] are listed in response.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "bulkFetch_207_Response_Example": {
+                    "$ref": "#/components/examples/bulkFetch_207_Response_Example"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsrsc:WarehouseLocation/search": {
+      "get": {
+        "summary": "Gets  indexed search result of WarehouseLocation references.",
+        "description": "Gets  indexed search result of WarehouseLocation references.",
+        "operationId": "GETSearch_dsrsc:WarehouseLocation_Search",
+        "tags": [
+          "dsrsc:WarehouseLocation"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$searchStr",
+            "in": "query",
+            "description": "A search text to find one or more items.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsrsc:WarehouseLocationMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseLocationMask.Default"
+              ]
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 1000.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "minimum": 0,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationMask.Default"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsrsc:WarehouseLocation/{ID}": {
+      "get": {
+        "summary": "Gets a WarehouseLocation Reference",
+        "description": "Gets  a WarehouseLocation Reference",
+        "operationId": "GET_dsrsc:WarehouseLocation_PID",
+        "tags": [
+          "dsrsc:WarehouseLocation"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsrsc:WarehouseLocation object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is dsrsc:WarehouseLocationMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseLocationMask.Default",
+                "dsrsc:WarehouseLocationMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationMask.Default"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationMask.Details"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Modify a WarehouseLocation Reference",
+        "description": "Modify  a WarehouseLocation Reference",
+        "operationId": "PATCH_dsrsc:WarehouseLocation_PID",
+        "tags": [
+          "dsrsc:WarehouseLocation"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsrsc:WarehouseLocation object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is dsrsc:WarehouseLocationMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseLocationMask.Default",
+                "dsrsc:WarehouseLocationMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dsrsc_WarehouseLocation_PATCH"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationMask.Default"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationMask.Details"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a WarehouseLocation Reference",
+        "description": "Delete  a WarehouseLocation Reference",
+        "operationId": "DELETE_dsrsc:WarehouseLocation_PID",
+        "tags": [
+          "dsrsc:WarehouseLocation"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsrsc:WarehouseLocation object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsrsc:WarehouseLocation": {
+      "post": {
+        "summary": "Creates WarehouseLocation Reference",
+        "description": "Creates WarehouseLocation reference.  Only 1 item could be created per call 'on cloud'. Only 10 items could be created per call 'on premise'.",
+        "operationId": "POST_dsrsc:WarehouseLocation",
+        "tags": [
+          "dsrsc:WarehouseLocation"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is dsrsc:WarehouseLocationMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseLocationMask.Default",
+                "dsrsc:WarehouseLocationMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "ResourceWarehouseLocationReference_Create": {
+                  "$ref": "#/components/examples/ResourceWarehouseLocationReference_Create"
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/dsrsc_WarehouseLocation_Create_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationMask.Default"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationMask.Details"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsrsc:WarehouseLocation/bulkfetch": {
+      "post": {
+        "summary": "Gets multiple WarehouseLocation objects which are Indexed",
+        "description": "Gets multiple WarehouseLocation objects which are Indexed. Maximum 1000 objects can be fetched",
+        "operationId": "POST_dsrsc:WarehouseLocation_bulkfetch",
+        "tags": [
+          "dsrsc:WarehouseLocation"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is dsrsc:WarehouseLocationMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseLocationMask.Default"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dsrsc_WarehouseLocation_bulkfetch_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationMask.Default"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationMask.Details"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "207": {
+            "description": "Request successful but with multiple status. The Physical IDs that could not fetched due to [ DATA NOT INDEXED, INVALID ID] are listed in response.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "bulkFetch_207_Response_Example": {
+                    "$ref": "#/components/examples/bulkFetch_207_Response_Example"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsrsc:OrganizationalResource/{PID}/dsrsc:WarehouseInstance/{ID}": {
+      "get": {
+        "summary": "Gets a WarehouseInstance Instance",
+        "description": "Gets a WarehouseInstance Instance",
+        "operationId": "GET_dsrsc:OrganizationalResource_PID_dsrsc:WarehouseInstance_ID",
+        "tags": [
+          "dsrsc:WarehouseInstance"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PID",
+            "in": "path",
+            "description": "dsrsc:OrganizationalResource object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsrsc:WarehouseInstance object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsrsc:WarehouseInstanceMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseInstanceMask.Default",
+                "dsrsc:WarehouseInstanceMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseInstanceMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseInstanceMask.Details_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Modify an WarehouseInstance Instance",
+        "description": "Modify an WarehouseInstance Instance",
+        "operationId": "PATCH_dsrsc:OrganizationalResource_PID_dsrsc:WarehouseInstance_ID",
+        "tags": [
+          "dsrsc:WarehouseInstance"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PID",
+            "in": "path",
+            "description": "dsrsc:OrganizationalResource object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsrsc:WarehouseInstance object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsrsc:WarehouseInstanceMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseInstanceMask.Default",
+                "dsrsc:WarehouseInstanceMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dsrsc_WarehouseInstance_PATCH_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseInstanceMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseInstanceMask.Details_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an WarehouseInstance Instance",
+        "description": "Delete an WarehouseInstance Instance",
+        "operationId": "DELETE_dsrsc:OrganizationalResource_PID_dsrsc:WarehouseInstance_ID",
+        "tags": [
+          "dsrsc:WarehouseInstance"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PID",
+            "in": "path",
+            "description": "dsrsc:OrganizationalResource object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsrsc:WarehouseInstance object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsrsc:OrganizationalResource/{PID}/dsrsc:WarehouseInstance": {
+      "get": {
+        "summary": "Gets all the WarehouseInstance Instance",
+        "description": "Gets all the WarehouseInstance Instance",
+        "operationId": "GETAll_dsrsc:OrganizationalResource_PID_dsrsc:WarehouseInstance_ID",
+        "tags": [
+          "dsrsc:WarehouseInstance"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PID",
+            "in": "path",
+            "description": "dsrsc:OrganizationalResource object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsrsc:WarehouseInstanceMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseInstanceMask.Default",
+                "dsrsc:WarehouseInstanceMask.Details"
+              ]
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 10.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "minimum": 0,
+              "maximum": 10
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": "Response will be returned with oneOf mask available in the Schema Tab.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseInstanceMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseInstanceMask.Details_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Creates WarehouseInstance Instances under the specified OrganizationalResource",
+        "description": "Creates WarehouseInstance Instances under the specified OrganizationalResource Only 1 item could be created per call 'on cloud'. Only 10 items could be created per call 'on premise'.",
+        "operationId": "POST_dsrsc:OrganizationalResource_dsrsc:WarehouseInstance_ID",
+        "tags": [
+          "dsrsc:WarehouseInstance"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PID",
+            "in": "path",
+            "description": "dsrsc:OrganizationalResource object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsrsc:WarehouseInstanceMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseInstanceMask.Default",
+                "dsrsc:WarehouseInstanceMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dsrsc_WarehouseInstance_CREATE_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "WarehouseInstanceInstance_Response": {
+                    "$ref": "#/components/examples/dsrsc_WarehouseInstance_Response"
+                  }
+                },
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseInstanceMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseInstanceMask.Details_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsrsc:WarehouseInstance/bulkfetch": {
+      "post": {
+        "summary": "Gets multiple WarehouseInstance objects which are Indexed",
+        "description": "Gets multiple WarehouseInstance objects which are Indexed. Maximum 1000 objects can be fetched",
+        "operationId": "POST_dsrsc:WarehouseInstance_bulkfetch",
+        "tags": [
+          "dsrsc:WarehouseInstance"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsrsc:WarehouseInstanceMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseInstanceMask.Default",
+                "dsrsc:WarehouseInstanceMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dsrsc_WarehouseInstance_bulkfetch_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": "Response will be returned with oneOf mask available in the Schema Tab.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseInstanceMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseInstanceMask.Details_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "207": {
+            "description": "Request successful but with multiple status. The Physical IDs that could not fetched due to [ DATA NOT INDEXED, INVALID ID] are listed in response.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "bulkFetch_207_Response_Example": {
+                    "$ref": "#/components/examples/bulkFetch_207_Response_Example"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsrsc:Warehouse/{PID}/dsrsc:WarehouseLocationInstance/{ID}": {
+      "get": {
+        "summary": "Gets a WarehouseLocationInstance Instance",
+        "description": "Gets a WarehouseLocationInstance Instance",
+        "operationId": "GET_dsrsc:Warehouse_PID_dsrsc:WarehouseLocationInstance_ID",
+        "tags": [
+          "dsrsc:WarehouseLocationInstance"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PID",
+            "in": "path",
+            "description": "dsrsc:Warehouse object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsrsc:WarehouseLocationInstance object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsrsc:WarehouseLocationInstanceMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseLocationInstanceMask.Default",
+                "dsrsc:WarehouseLocationInstanceMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationInstanceMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationInstanceMask.Details_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Modify an WarehouseLocationInstance Instance",
+        "description": "Modify an WarehouseLocationInstance Instance",
+        "operationId": "PATCH_dsrsc:Warehouse_PID_dsrsc:WarehouseLocationInstance_ID",
+        "tags": [
+          "dsrsc:WarehouseLocationInstance"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PID",
+            "in": "path",
+            "description": "dsrsc:Warehouse object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsrsc:WarehouseLocationInstance object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsrsc:WarehouseLocationInstanceMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseLocationInstanceMask.Default",
+                "dsrsc:WarehouseLocationInstanceMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dsrsc_WarehouseLocationInstance_PATCH_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationInstanceMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationInstanceMask.Details_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an WarehouseLocationInstance Instance",
+        "description": "Delete an WarehouseLocationInstance Instance",
+        "operationId": "DELETE_dsrsc:Warehouse_PID_dsrsc:WarehouseLocationInstance_ID",
+        "tags": [
+          "dsrsc:WarehouseLocationInstance"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PID",
+            "in": "path",
+            "description": "dsrsc:Warehouse object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsrsc:WarehouseLocationInstance object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsrsc:Warehouse/{PID}/dsrsc:WarehouseLocationInstance": {
+      "get": {
+        "summary": "Gets all the WarehouseLocationInstance Instance",
+        "description": "Gets all the WarehouseLocationInstance Instance",
+        "operationId": "GETAll_dsrsc:Warehouse_PID_dsrsc:WarehouseLocationInstance_ID",
+        "tags": [
+          "dsrsc:WarehouseLocationInstance"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PID",
+            "in": "path",
+            "description": "dsrsc:Warehouse object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsrsc:WarehouseLocationInstanceMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseLocationInstanceMask.Default",
+                "dsrsc:WarehouseLocationInstanceMask.Details"
+              ]
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 10.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "minimum": 0,
+              "maximum": 10
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": "Response will be returned with oneOf mask available in the Schema Tab.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationInstanceMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationInstanceMask.Details_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Creates WarehouseLocationInstance Instances under the specified Warehouse",
+        "description": "Creates WarehouseLocationInstance Instances under the specified Warehouse Only 1 item could be created per call 'on cloud'. Only 10 items could be created per call 'on premise'.",
+        "operationId": "POST_dsrsc:Warehouse_dsrsc:WarehouseLocationInstance_ID",
+        "tags": [
+          "dsrsc:WarehouseLocationInstance"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PID",
+            "in": "path",
+            "description": "dsrsc:Warehouse object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsrsc:WarehouseLocationInstanceMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseLocationInstanceMask.Default",
+                "dsrsc:WarehouseLocationInstanceMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dsrsc_WarehouseLocationInstance_CREATE_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "dsrsc_WarehouseLocationInstance_Response": {
+                    "$ref": "#/components/examples/dsrsc_WarehouseLocationInstance_Response"
+                  }
+                },
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationInstanceMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationInstanceMask.Details_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsrsc:WarehouseLocationInstance/bulkfetch": {
+      "post": {
+        "summary": "Gets multiple WarehouseLocationInstance objects which are Indexed",
+        "description": "Gets multiple WarehouseLocationInstance objects which are Indexed. Maximum 1000 objects can be fetched",
+        "operationId": "POST_dsrsc:WarehouseLocationInstance_bulkfetch",
+        "tags": [
+          "dsrsc:WarehouseLocationInstance"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsrsc:WarehouseLocationInstanceMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsrsc:WarehouseLocationInstanceMask.Default",
+                "dsrsc:WarehouseLocationInstanceMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dsrsc_WarehouseLocationInstance_bulkfetch_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationInstanceMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsrsc_WarehouseLocationInstanceMask.Details_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/customerAttributes"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "207": {
+            "description": "Request successful but with multiple status. The Physical IDs that could not fetched due to [ DATA NOT INDEXED, INVALID ID] are listed in response.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "bulkFetch_207_Response_Example": {
+                    "$ref": "#/components/examples/bulkFetch_207_Response_Example"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "customerAttributes": {
+        "title": "customerAttributes",
+        "type": "object",
+        "properties": {
+          "customAttr1": {
+            "description": "Attribute DB Value",
+            "type": "string",
+            "example": "Attribute DB Value"
+          },
+          "DBcustomExtension": {
+            "properties": {
+              "MyDBAttr2": {
+                "description": "Attribute DB Value",
+                "type": "string",
+                "example": "Attribute DB Value"
+              }
+            }
+          },
+          "DBcustomAttributesGroup": {
+            "properties": {
+              "MyDBAttr3": {
+                "description": "Attribute DB Value",
+                "type": "string",
+                "example": "Attribute DB Value"
+              }
+            }
+          }
+        }
+      },
+      "dsrsc_MagExtnValue": {
+        "type": "object",
+        "properties": {
+          "magnitude": {
+            "description": "object magnitude value.",
+            "type": "string",
+            "example": "MASS"
+          },
+          "value": {
+            "description": "object value. <br> Displays MKS value",
+            "type": "number",
+            "format": "double",
+            "example": 10
+          },
+          "unit": {
+            "description": "object unit value. <br> Displays MKS Unit",
+            "type": "string",
+            "example": "kg"
+          },
+          "inpuValue": {
+            "description": "object input value as entered by the user .",
+            "type": "number",
+            "format": "string",
+            "example": "10.00"
+          },
+          "inputUnit": {
+            "description": "object unit value as entered by the user .",
+            "type": "string",
+            "example": "kg"
+          }
+        }
+      },
+      "dsrsc_MagExtnInputValue": {
+        "type": "object",
+        "properties": {
+          "magnitude": {
+            "description": "object magnitude value.",
+            "type": "string",
+            "example": "MASS"
+          },
+          "inputValue": {
+            "description": "Object value. Can be a string or a number.",
+            "oneOf": [
+              {
+                "type": "number",
+                "format": "double",
+                "example": 10.0
+              },
+              {
+                "type": "string",
+                "example": "10.6000"
+              }
+            ]
+          },
+          "inputUnit": {
+            "description": "object unit value. Supports any unit for the magnitude given",
+            "type": "string",
+            "example": "POUND"
+          }
+        }
+      },
+      "dsrsc_WarehouseMask.Default": {
+        "title": "dsrsc_WarehouseMask.Default",
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "Object Physical ID"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "ResourceWarehouseReference"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2024-07-01T09:48:10.000Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2024-07-01T09:48:10.000Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "Object cestamp value"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsrsc_WarehouseMask.Details": {
+        "title": "dsrsc_WarehouseMask.Details",
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "Object Physical ID"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "ResourceWarehouseReference"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2024-07-01T09:48:10.000Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2024-07-01T09:48:10.000Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "reservedby": {
+                  "description": "Reference Locked By UserId",
+                  "type": "string",
+                  "example": "Locked By User"
+                },
+                "createdFrom": {
+                  "description": "Created From Reference name",
+                  "type": "string",
+                  "example": "My Origin name"
+                },
+                "versionComment": {
+                  "description": "reference version comment value",
+                  "type": "string",
+                  "example": "My Version Comment"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "Object cestamp value"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsrsc_Warehouse_PATCH": {
+        "required": [
+          "cestamp"
+        ],
+        "properties": {
+          "cestamp": {
+            "type": "string",
+            "example": "Object cestamp value"
+          },
+          "title": {
+            "type": "string",
+            "example": "My title"
+          },
+          "description": {
+            "type": "string",
+            "example": "My description"
+          },
+          "versionComment": {
+            "description": "reference version comment value",
+            "type": "string",
+            "example": "My Version Comment"
+          },
+          "customerAttributes": {
+            "$ref": "#/components/schemas/customerAttributes"
+          }
+        }
+      },
+      "dsrsc_Warehouse_Create_Request": {
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "type"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "My Type"
+                },
+                "attributes": {
+                  "$ref": "#/components/schemas/dsrsc_Warehouse_Create_Attributes_request"
+                }
+              }
+            }
+          }
+        }
+      },
+      "dsrsc_Warehouse_Create_Attributes_request": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "My title"
+          },
+          "description": {
+            "type": "string",
+            "example": "My description"
+          },
+          "versionComment": {
+            "description": "reference version comment value",
+            "type": "string",
+            "example": "My Version Comment"
+          },
+          "customerAttributes": {
+            "$ref": "#/components/schemas/customerAttributes"
+          }
+        }
+      },
+      "dsrsc_Warehouse_bulkfetch_Request": {
+        "type": "array",
+        "description": "List of dsrsc:ResourceWarehouse reference physical ids. We limit 1000 physical ids to be passed per request.",
+        "items": {
+          "type": "string"
+        },
+        "example": [
+          "ResourceWarehouse ID1",
+          "ResourceWarehouse ID2",
+          "ResourceWarehouse ID3",
+          "..."
+        ]
+      },
+      "dsrsc_WarehouseLocationMask.Default": {
+        "title": "dsrsc_WarehouseLocationMask.Default",
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "Object Physical ID"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "ResourceWarehouseLocationReference"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2024-07-01T09:48:10.000Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2024-07-01T09:48:10.000Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "Object cestamp value"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsrsc_WarehouseLocationMask.Details": {
+        "title": "dsrsc_WarehouseLocationMask.Details",
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "Object Physical ID"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "ResourceWarehouseLocationReference"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2024-07-01T09:48:10.000Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2024-07-01T09:48:10.000Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "reservedby": {
+                  "description": "Reference Locked By UserId",
+                  "type": "string",
+                  "example": "Locked By User"
+                },
+                "createdFrom": {
+                  "description": "Created From Reference name",
+                  "type": "string",
+                  "example": "My Origin name"
+                },
+                "versionComment": {
+                  "description": "reference version comment value",
+                  "type": "string",
+                  "example": "My Version Comment"
+                },
+                "estimatedVolume": {
+                  "description": "Estimated Volume for a Warehouse Location",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_MagExtnValue"
+                    }
+                  ]
+                },
+                "volume": {
+                  "description": "Volume for a Warehouse Location. This is a ReadOnly attribute.",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/dsrsc_MagExtnValue"
+                    }
+                  ]
+                },
+                "aisle": {
+                  "description": "Object aisle value",
+                  "type": "string",
+                  "example": "A"
+                },
+                "row": {
+                  "description": "Object row value",
+                  "type": "string",
+                  "example": "10"
+                },
+                "tier": {
+                  "description": "Object tier value",
+                  "type": "string",
+                  "example": "5"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "Object cestamp value"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsrsc_WarehouseLocation_PATCH": {
+        "required": [
+          "cestamp"
+        ],
+        "properties": {
+          "cestamp": {
+            "type": "string",
+            "example": "Object cestamp value"
+          },
+          "title": {
+            "type": "string",
+            "example": "My title"
+          },
+          "description": {
+            "type": "string",
+            "example": "My description"
+          },
+          "versionComment": {
+            "description": "reference version comment value",
+            "type": "string",
+            "example": "My Version Comment"
+          },
+          "estimatedVolume": {
+            "$ref": "#/components/schemas/dsrsc_MagExtnInputValue"
+          },
+          "aisle": {
+            "description": "Object aisle value",
+            "type": "string",
+            "example": "A"
+          },
+          "row": {
+            "description": "Object row value",
+            "type": "string",
+            "example": "10"
+          },
+          "tier": {
+            "description": "Object tier value",
+            "type": "string",
+            "example": "5"
+          },
+          "customerAttributes": {
+            "$ref": "#/components/schemas/customerAttributes"
+          }
+        }
+      },
+      "dsrsc_WarehouseLocation_Create_Request": {
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "type"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "My Type"
+                },
+                "attributes": {
+                  "$ref": "#/components/schemas/dsrsc_WarehouseLocation_Create_Attributes_Request"
+                }
+              }
+            }
+          }
+        }
+      },
+      "dsrsc_WarehouseLocation_Create_Attributes_Request": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "My title"
+          },
+          "description": {
+            "type": "string",
+            "example": "My description"
+          },
+          "versionComment": {
+            "description": "reference version comment value",
+            "type": "string",
+            "example": "My Version Comment"
+          },
+          "estimatedVolume": {
+            "$ref": "#/components/schemas/dsrsc_MagExtnValue"
+          },
+          "aisle": {
+            "description": "Object aisle value",
+            "type": "string",
+            "example": "A"
+          },
+          "row": {
+            "description": "Object row value",
+            "type": "string",
+            "example": "10"
+          },
+          "tier": {
+            "description": "Object tier value",
+            "type": "string",
+            "example": "5"
+          },
+          "customerAttributes": {
+            "$ref": "#/components/schemas/customerAttributes"
+          }
+        }
+      },
+      "dsrsc_WarehouseLocation_bulkfetch_Request": {
+        "type": "array",
+        "description": "List of dsrsc:WarehouseLocation reference physical ids. We limit 1000 physical ids to be passed per request.",
+        "items": {
+          "type": "string"
+        },
+        "example": [
+          "WarehouseLocation ID1",
+          "WarehouseLocation ID2",
+          "WarehouseLocation ID3",
+          "..."
+        ]
+      },
+      "dsrsc_WarehouseInstance_bulkfetch_Request": {
+        "type": "array",
+        "description": "List of dsrsc:WarehouseInstance reference physical ids. We limit 1000 physical ids to be passed per request.",
+        "items": {
+          "type": "string"
+        },
+        "example": [
+          "WarehouseInstance ID1",
+          "WarehouseInstance ID2",
+          "WarehouseInstance ID3",
+          "..."
+        ]
+      },
+      "dsrsc_WarehouseLocationInstance_bulkfetch_Request": {
+        "type": "array",
+        "description": "List of dsrsc:WarehouseLocationInstance reference physical ids. We limit 1000 physical ids to be passed per request.",
+        "items": {
+          "type": "string"
+        },
+        "example": [
+          "WarehouseInstance ID1",
+          "WarehouseInstance ID2",
+          "WarehouseInstance ID3",
+          "..."
+        ]
+      },
+      "dsrsc_WarehouseInstance_CREATE_Request": {
+        "properties": {
+          "instances": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "referencedObject": {
+                  "type": "object",
+                  "required": [
+                    "identifier"
+                  ],
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "example": "physicalIdChildRef",
+                      "description": "The Reference Physical ID of the dsrsc:Warehouse child."
+                    },
+                    "source": {
+                      "description": "source",
+                      "type": "string",
+                      "example": "https://server_name.dsone.3ds.com:443/3DSpace"
+                    },
+                    "relativePath": {
+                      "description": "relativePath",
+                      "type": "string",
+                      "example": "/resources/v1/modeler/dsrsc/dsrsc:Warehouse/{physicalIdChildRef}"
+                    },
+                    "type": {
+                      "description": "Basic type value",
+                      "type": "string",
+                      "example": "My Type"
+                    }
+                  }
+                },
+                "attributes": {
+                  "$ref": "#/components/schemas/dsrsc_WarehouseInstance_CREATE_Attributes"
+                }
+              }
+            }
+          }
+        }
+      },
+      "dsrsc_WarehouseInstance_CREATE_Attributes": {
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "My description"
+          },
+          "customerAttributes": {
+            "$ref": "#/components/schemas/customerAttributes"
+          }
+        }
+      },
+      "dsrsc_WarehouseInstance_PATCH_Request": {
+        "required": [
+          "cestamp"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My name"
+          },
+          "description": {
+            "type": "string",
+            "example": "My description"
+          },
+          "cestamp": {
+            "type": "string",
+            "example": "Object cestamp value"
+          },
+          "customerAttributes": {
+            "$ref": "#/components/schemas/customerAttributes"
+          }
+        }
+      },
+      "dsrsc_WarehouseInstanceMask.Default_WithCEStamp": {
+        "title": "dsrsc_WarehouseInstanceMask.Default_WithCEStamp",
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "My Type"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2024-07-18T14:55:42Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2024-07-18T14:55:42Z"
+                },
+                "name": {
+                  "description": "Instance name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "description": {
+                  "description": "Instance description vlaue",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "My User"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "reference": {
+                  "description": "Reference Physical ID of Instance",
+                  "type": "string",
+                  "example": "String"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsrsc_WarehouseInstanceMask.Details_WithCEStamp": {
+        "title": "dsrsc_WarehouseInstanceMask.Details_WithCEStamp",
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "My Type"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2024-07-18T14:55:42Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2024-07-18T14:55:42Z"
+                },
+                "name": {
+                  "description": "Instance name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "description": {
+                  "description": "Instance description vlaue",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "reference": {
+                  "description": "Reference Physical ID of Instance",
+                  "type": "string",
+                  "example": "String"
+                },
+                "referencedObject": {
+                  "properties": {
+                    "source": {
+                      "description": "source",
+                      "type": "string",
+                      "example": "https://server_name.dsone.3ds.com:443/3DSpace"
+                    },
+                    "type": {
+                      "description": "type",
+                      "type": "string",
+                      "example": "ResourceWarehouseReference"
+                    },
+                    "identifier": {
+                      "description": "Entity physical id",
+                      "type": "string",
+                      "example": "07188256207600005F9BA2400013E2DF"
+                    },
+                    "relativePath": {
+                      "description": "relativePath",
+                      "type": "string",
+                      "example": "/resources/v1/modeler/dsrsc/dsrsc:Warehouse/07188256207600005F9BA2400013E2DF"
+                    }
+                  }
+                },
+                "reservedby": {
+                  "description": "Instance Locked By UserId",
+                  "type": "string",
+                  "example": "Locked By User"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsrsc_WarehouseLocationInstance_CREATE_Request": {
+        "properties": {
+          "instances": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "referencedObject": {
+                  "type": "object",
+                  "required": [
+                    "identifier"
+                  ],
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "example": "physicalIdChildRef",
+                      "description": "The Reference Physical ID of the dsrsc:WarehouseLocation child."
+                    },
+                    "source": {
+                      "description": "source",
+                      "type": "string",
+                      "example": "https://server_name.dsone.3ds.com:443/3DSpace"
+                    },
+                    "relativePath": {
+                      "description": "relativePath",
+                      "type": "string",
+                      "example": "/resources/v1/modeler/dsrsc/dsrsc:WarehouseLocation/{physicalIdChildRef}"
+                    },
+                    "type": {
+                      "description": "Basic type value",
+                      "type": "string",
+                      "example": "ResourceWarehouseLocationReference"
+                    }
+                  }
+                },
+                "attributes": {
+                  "$ref": "#/components/schemas/dsrsc_WarehouseInstance_CREATE_Attributes"
+                }
+              }
+            }
+          }
+        }
+      },
+      "dsrsc_WarehouseLocationInstance_CREATE_Attributes": {
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "My description"
+          },
+          "customerAttributes": {
+            "$ref": "#/components/schemas/customerAttributes"
+          }
+        }
+      },
+      "dsrsc_WarehouseLocationInstance_PATCH_Request": {
+        "required": [
+          "cestamp"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My name"
+          },
+          "description": {
+            "type": "string",
+            "example": "My description"
+          },
+          "cestamp": {
+            "type": "string",
+            "example": "Object cestamp value"
+          },
+          "customerAttributes": {
+            "$ref": "#/components/schemas/customerAttributes"
+          }
+        }
+      },
+      "dsrsc_WarehouseLocationInstanceMask.Default_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "SPP_SpaceInstance"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2024-07-18T14:55:42Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2024-07-18T14:55:42Z"
+                },
+                "name": {
+                  "description": "Instance name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "description": {
+                  "description": "Instance description vlaue",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "My User"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "reference": {
+                  "description": "Reference Physical ID of Instance",
+                  "type": "string",
+                  "example": "String"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsrsc_WarehouseLocationInstanceMask.Details_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "SPP_SpaceInstance"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2024-07-18T14:55:42Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2024-07-18T14:55:42Z"
+                },
+                "name": {
+                  "description": "Instance name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "description": {
+                  "description": "Instance description vlaue",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "reference": {
+                  "description": "Reference Physical ID of Instance",
+                  "type": "string",
+                  "example": "String"
+                },
+                "referencedObject": {
+                  "properties": {
+                    "source": {
+                      "description": "source",
+                      "type": "string",
+                      "example": "https://server_name.dsone.3ds.com:443/3DSpace"
+                    },
+                    "type": {
+                      "description": "type",
+                      "type": "string",
+                      "example": "ResourceWarehouseLocationReference"
+                    },
+                    "identifier": {
+                      "description": "Entity physical id",
+                      "type": "string",
+                      "example": "07188256207600005F9BA2400013E2DF"
+                    },
+                    "relativePath": {
+                      "description": "relativePath",
+                      "type": "string",
+                      "example": "/resources/v1/modeler/dsrsc/dsrsc:WarehouseLocation/07188256207600005F9BA2400013E2DF"
+                    }
+                  }
+                },
+                "reservedby": {
+                  "description": "Instance Locked By UserId",
+                  "type": "string",
+                  "example": "Locked By User"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      }
+    },
+    "examples": {
+      "bulkFetch_207_Response_Example": {
+        "value": {
+          "totalNonmembers": 2,
+          "nonmembers": [
+            "PID2",
+            "PID3"
+          ],
+          "totalItems": 1,
+          "member": [
+            {
+              "name": "My name",
+              "description": "My description",
+              "id": "PID1",
+              "type": "My Type",
+              "modified": "2022-01-31T09:48:10Z",
+              "created": "2022-01-31T09:48:10Z",
+              "owner": "John Doe",
+              "organization": "MyCompany",
+              "collabspace": "Default",
+              "cestamp": "2D70169432D84866A200F907881AC9B1"
+            }
+          ],
+          "nlsLabel": {
+            "id": "Id",
+            "type": "Type",
+            "modified": "Modification Date",
+            "created": "Creation Date",
+            "revision": "Revision",
+            "state": "State",
+            "owner": "Owner"
+          }
+        }
+      },
+      "ResourceWarehouseReference_Create": {
+        "value": {
+          "items": [
+            {
+              "type": "ResourceWarehouseReference",
+              "attributes": {
+                "title": "My Title",
+                "description": "My Description",
+                "versionComment": "My Version Comment",
+                "customerAttributes": {
+                  "DBcustomExtension": {
+                    "MyDBAttr2": "Attribute DB Value"
+                  },
+                  "DBcustomAttributesGroup": {
+                    "MyDBAttr3": "Attribute DB Value"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "ResourceWarehouseLocationReference_Create": {
+        "value": {
+          "items": [
+            {
+              "type": "ResourceWarehouseLocationReference",
+              "attributes": {
+                "title": "My Title",
+                "description": "My Description",
+                "estimatedVolume": {
+                  "inputUnit": "gal",
+                  "inputValue": "126.6600"
+                },
+                "aisle": "A",
+                "row": "10",
+                "tier": "5",
+                "versionComment": "My Version Comment",
+                "customerAttributes": {
+                  "DBcustomExtension": {
+                    "MyDBAttr2": "Attribute DB Value"
+                  },
+                  "DBcustomAttributesGroup": {
+                    "MyDBAttr3": "Attribute DB Value"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "dsrsc_WarehouseInstance_Response": {
+        "value": {
+          "totalItems": 1,
+          "member": [
+            {
+              "id": "TT562168015FFCF14F940A513C63AA78",
+              "type": "VPMInstance",
+              "modified": "2024-07-18T14:55:42Z",
+              "created": "2024-07-17T14:55:42Z",
+              "name": "My name",
+              "description": "My description",
+              "owner": "mss34",
+              "organization": "MyCompany",
+              "collabspace": "Default",
+              "reference": "D48B8256902D320066A1CA1D000022F1",
+              "referencedObject": {
+                "identifier": "D48B8256902D320066A1CA1D000022F1",
+                "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                "relativePath": "/resources/v1/modeler/dsrsc/dsrsc:Warehouse/D48B8256902D320066A1CA1D000022F1",
+                "type": "ResourceWarehouseReference"
+              },
+              "customerAttributes": {
+                "DBcustomExtension": {
+                  "MyDBAttr2": "Attribute DB Value"
+                },
+                "DBcustomAttributesGroup": {
+                  "MyDBAttr3": "Attribute DB Value"
+                }
+              },
+              "cestamp": "2D70169432D84866A200F907881AC9B2"
+            }
+          ],
+          "nlsLabel": {
+            "id": "My Id translated value",
+            "type": "My Type translated value",
+            "modified": "My Modification Date translated value",
+            "created": "My Creation Date translated value",
+            "owner": "My Owner translated value"
+          }
+        }
+      },
+      "dsrsc_WarehouseLocationInstance_Response": {
+        "value": {
+          "totalItems": 1,
+          "member": [
+            {
+              "id": "EE562168015FFCF14F940A513C63AA78",
+              "type": "SPP_SpaceInstance",
+              "modified": "2024-07-16T14:55:42Z",
+              "created": "2024-07-15T14:55:42Z",
+              "name": "My name",
+              "description": "My description",
+              "owner": "mss34",
+              "organization": "MyCompany",
+              "collabspace": "Default",
+              "reference": "D48B8256902D320066A1CA1D000022F1",
+              "referencedObject": {
+                "identifier": "D48B8256902D320066A1CA1D000022F1",
+                "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                "relativePath": "/resources/v1/modeler/dsrsc/dsrsc:WarehouseLocation/D48B8256902D320066A1CA1D000022F1",
+                "type": "ResourceWarehouseLocationReference"
+              },
+              "customerAttributes": {
+                "DBcustomExtension": {
+                  "MyDBAttr2": "Attribute DB Value"
+                },
+                "DBcustomAttributesGroup": {
+                  "MyDBAttr3": "Attribute DB Value"
+                }
+              },
+              "cestamp": "2D70169432D84866A200F907881AC9B1"
+            }
+          ],
+          "nlsLabel": {
+            "id": "My Id translated value",
+            "type": "My Type translated value",
+            "modified": "My Modification Date translated value",
+            "created": "My Creation Date translated value",
+            "owner": "My Owner translated value"
+          }
+        }
+      }
+    }
+  }
+}

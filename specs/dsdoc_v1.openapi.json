@@ -1,0 +1,3773 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "x-ds-copyright": "3DEXPERIENCE R2025x (c) 2025 Dassault Systemes.",
+    "title": "Document Web Services",
+    "description": "Web Services for managing the Document modeler.",
+    "version": "1.1.5",
+    "x-ds-service": [
+      "3DSpace"
+    ]
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/documents",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_3DSpace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/documents/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/{docId}/files/{fileId}/DownloadTicket": {
+      "put": {
+        "summary": "Get the download ticket to download a specific file associated to a document.",
+        "description": "",
+        "operationId": "getDocumentFileDownloadTicket",
+        "tags": [
+          "FCS"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-DownloadTicket"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fileId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/{docId}/files/{fileId}/versions/{versionId}": {
+      "delete": {
+        "summary": "Delete the given file versions.",
+        "description": "",
+        "operationId": "deleteDocumentFileVersion",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fileId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "versionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/{docId}": {
+      "get": {
+        "summary": "Get the information for a given document object.",
+        "description": "",
+        "operationId": "getDocument",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-NewDocuments"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: [!]ownerInfo, [!]originatorInfo, [!]parents, [!]files, [!]sovaccess, [!]relOwnerInfo, [!]lockerInfo, [!]versions.  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update the information for a given document object.",
+        "description": "",
+        "operationId": "updateDocument",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-documents"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/documents"
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "parentRelName",
+            "description": "The parent relationship to link the document; dependent on parentId(i.e. Reference Document, SpecificationDocument). It is required if managing parents objects with this request.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: [!]ownerInfo, [!]originatorInfo, [!]parents, [!]files, [!]sovaccess, [!]relOwnerInfo, [!]lockerInfo, [!]versions.  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete a given document object.",
+        "description": "",
+        "operationId": "deleteDocument",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/{docId}/files": {
+      "get": {
+        "summary": "Retrieve the files meta-data for a given document.",
+        "description": "",
+        "operationId": "getDocumentFiles",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-files"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: [!]ownerInfo, [!]lockerInfo, [!]versions.  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create new document object files.",
+        "description": "",
+        "operationId": "createDocumentFiles",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-files"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/files"
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: [!]ownerInfo, [!]lockerInfo, [!]versions.  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update the document object files.",
+        "description": "",
+        "operationId": "updateDocumentFiles",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-files"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/files"
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: [!]ownerInfo, [!]lockerInfo, [!]versions.  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/{docId}/files/CheckinTicket": {
+      "put": {
+        "summary": "Get an checkin ticket to upload files to FCS in order to add or modify a file for a given document.",
+        "description": "",
+        "operationId": "getDocumentCheckinTicket",
+        "tags": [
+          "FCS"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-CheckinTicket"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "store",
+            "description": "name of destination file store",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "policy",
+            "description": "name of document policy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/{docId}/files/CheckoutTicket": {
+      "put": {
+        "summary": "Lock and get the checkout ticket for a document; a zip is returned when multiple files exist.",
+        "description": "",
+        "operationId": "getDocumentCheckoutTicket",
+        "tags": [
+          "FCS"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-CheckoutTicket"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "zipFiles",
+            "description": "should be true to zip the files",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "zipName",
+            "description": "name of the zip file",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fileStream",
+            "description": "true or false option to return a url. This is an FCS option to allow to stream as long as the request is for one file. Default is false.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/search": {
+      "get": {
+        "summary": "Search Documents for the provided input string.",
+        "description": "The search request must provide a string as input, and the service returns all the documents containing this string. The lookup for the string is performed on both the document meta-data as well as on the contents of the files checked in to the documents (anything that is indexed). You can use macros as $top and $skip to have pagination effect.The documents retrieved will search all index fields including file data provided to the searchStr=parameter. Maximum 50 documents are only allowed in a service call.Multiple criteria can be specified by adding + in searchStr. <pre>GET resources/v1/modeler/documents/search?searchStr=TitleOfDocument+(current:Frozen)&$top=30&$skip=10</pre>",
+        "operationId": "searchDocuments",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-documents"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "searchStr",
+            "description": "Input Search Criteria; 2 or more characters required",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 1000. The default value is 50",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: [!]ownerInfo, [!]originatorInfo, [!]parents, [!]files, [!]sovaccess, [!]relOwnerInfo, [!]lockerInfo, [!]versions.  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/{docId}/files/{fileId}": {
+      "put": {
+        "summary": "Update a given document object file.",
+        "description": "",
+        "operationId": "updateDocumentFile",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-files"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/files"
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fileId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: [!]ownerInfo, [!]lockerInfo, [!]versions.  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete a given document object file.",
+        "description": "",
+        "operationId": "deleteDocumentFile",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fileId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/{docId}/files/{fileId}/versions": {
+      "get": {
+        "summary": "Get the file versions.",
+        "description": "",
+        "operationId": "getDocumentFileVersions",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-versions"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fileId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: [!]ownerInfo, [!]lockerInfo.  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/{docId}/files/{fileId}/CheckoutTicket": {
+      "put": {
+        "summary": "Lock and get the checkout ticket for a given file within a document.",
+        "description": "",
+        "operationId": "getDocumentFileCheckoutTicket",
+        "tags": [
+          "FCS"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-CheckoutTicket"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fileId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/DownloadTicket": {
+      "put": {
+        "summary": "Get the FCS download ticket for the given documents.",
+        "description": "",
+        "operationId": "getDocumentsDownloadTicket",
+        "tags": [
+          "FCS"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-DownloadTicket"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "zipFiles",
+            "description": "should be true to zip the files",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "zipName",
+            "description": "name of the zip file",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fileStream",
+            "description": "true or false option to return a url. This is an FCS option to allow to stream as long as the request is for one file. Default is false.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/{docId}/unreserve": {
+      "put": {
+        "summary": "Unreserve the given document.",
+        "description": "",
+        "operationId": "unreserveDocument",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-documents"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: [!]ownerInfo, [!]originatorInfo, [!]parents, [!]files, [!]sovaccess, [!]relOwnerInfo, [!]lockerInfo, [!]versions.  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/CheckoutTicket": {
+      "put": {
+        "summary": "Lock and get the checkout tickets for the given documents",
+        "description": "",
+        "operationId": "getDocumentsCheckoutTicket",
+        "tags": [
+          "FCS"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-CheckoutTicket"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "zipFiles",
+            "description": "should be true to zip the files",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "zipName",
+            "description": "name of the zip file",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fileStream",
+            "description": "true or false option to return a url. This is an FCS option to allow to stream as long as the request is for one file. Default is false.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/ids": {
+      "post": {
+        "summary": "Get the documents for a given set of document IDs.",
+        "description": "",
+        "operationId": "getMultipleDocuments2",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-documents"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "$ids": {
+                    "description": "Comma-separated list of IDs to retrieve.",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: [!]ownerInfo, [!]originatorInfo, [!]parents, [!]files, [!]sovaccess, [!]relOwnerInfo, [!]lockerInfo, [!]versions.  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/{docId}/reserve": {
+      "put": {
+        "summary": "Reserve the given document.",
+        "description": "",
+        "operationId": "reserveDocument",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-documents"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: [!]ownerInfo, [!]originatorInfo, [!]parents, [!]files, [!]sovaccess, [!]relOwnerInfo, [!]lockerInfo, [!]versions.  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/files/CheckinTicket": {
+      "put": {
+        "summary": "Get a checkin ticket to upload files to FCS; required for checking in a file to a new document that is not created yet.",
+        "description": "",
+        "operationId": "getCheckinTicket",
+        "tags": [
+          "FCS"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-CheckinTicket"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "store",
+            "description": "name of destination file store",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "policy",
+            "description": "name of document policy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fileCount",
+            "description": "number of files being checked in",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ticketCount",
+            "description": "number of tickets to generate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/{docId}/files/{fileId}/versions/{versionId}/DownloadTicket": {
+      "put": {
+        "summary": "Get the download ticket to download a specific file version associated to a document/file.",
+        "description": "",
+        "operationId": "getFileVersionDownloadTicket",
+        "tags": [
+          "FCS"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-DownloadTicket"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fileId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "versionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/parentId/{parentId}": {
+      "get": {
+        "summary": "Get the documents related to a given parent object.",
+        "description": "",
+        "operationId": "getRelatedDocuments",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-documents"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "parentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "parentRelName",
+            "description": "The name of the relationship (e.g. Reference Document, PLMDocConnection). Avoid using * in parentRelName. If used, error might occur.",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "parentDirection",
+            "description": "The direction of the relationship (from|to, default is from)",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: [!]ownerInfo, [!]originatorInfo, [!]parents, [!]files, [!]sovaccess, [!]relOwnerInfo, [!]lockerInfo, [!]versions.  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/{docId}/files/DownloadTicket": {
+      "put": {
+        "summary": "Get the download ticket to download all the files associated to a document.",
+        "description": "",
+        "operationId": "getDocumentFilesDownloadTicket",
+        "tags": [
+          "FCS"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-DownloadTicket"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "docId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "zipFiles",
+            "description": "should be true to zip the files",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "zipName",
+            "description": "name of the zip file",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fileStream",
+            "description": "true or false option to return a url. This is an FCS option to allow to stream as long as the request is for one file. Default is false.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/": {
+      "post": {
+        "summary": "Create new document and related file data.",
+        "description": "",
+        "operationId": "createDocuments",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-documents"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/documents"
+        },
+        "parameters": [
+          {
+            "name": "parentRelName",
+            "description": "The parent relationship to link the document; dependent on parentId(i.e. Reference Document, SpecificationDocument). It is required if managing parents objects with this request.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: [!]ownerInfo, [!]originatorInfo, [!]parents, [!]files, [!]sovaccess, [!]relOwnerInfo, [!]lockerInfo, [!]versions.  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update a given set of documents and their related data.",
+        "description": "",
+        "operationId": "updateDocuments",
+        "tags": [
+          "Document"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-documents"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/documents"
+        },
+        "parameters": [
+          {
+            "name": "parentRelName",
+            "description": "The parent relationship to link the document; dependent on parentId(i.e. Reference Document, SpecificationDocument). It is required if managing parents objects with this request.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: [!]ownerInfo, [!]originatorInfo, [!]parents, [!]files, [!]sovaccess, [!]relOwnerInfo, [!]lockerInfo, [!]versions.  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "DownloadTicket": {
+        "$ref": "#/components/x-schemas/DownloadTicket"
+      },
+      "documents": {
+        "$ref": "#/components/x-schemas/documents"
+      },
+      "files": {
+        "$ref": "#/components/x-schemas/files"
+      },
+      "CheckinTicket": {
+        "$ref": "#/components/x-schemas/CheckinTicket"
+      },
+      "CheckoutTicket": {
+        "$ref": "#/components/x-schemas/CheckoutTicket"
+      },
+      "versions": {
+        "$ref": "#/components/x-schemas/versions"
+      }
+    },
+    "x-schemas": {
+      "getStreamInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {}
+        ]
+      },
+      "unlock": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {}
+        ]
+      },
+      "relOwnerInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "VPLMAdminUser",
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "example": "AdminUser",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "example": "VPLM",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "email": {
+                    "example": "VPLMAdminUser@3ds.com",
+                    "default": "Unknown",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "readOnly": true
+          }
+        ]
+      },
+      "documents": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The name of the document object.",
+                    "example": "DOC-0000001",
+                    "type": "string"
+                  },
+                  "policy": {
+                    "description": "The policy of the document object.",
+                    "example": "Document Release",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "state": {
+                    "description": "The current state of the document object.",
+                    "example": "IN_WORK",
+                    "type": "string"
+                  },
+                  "stateNLS": {
+                    "example": "In Work",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "typeNLS": {
+                    "example": "Document",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "The revision of the document object.",
+                    "example": "0",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "isLatestRevision": {
+                    "description": "The last revision number of the document object.",
+                    "example": "TRUE",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "title": {
+                    "description": "The title of the document object.",
+                    "example": "Document Title",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "description": {
+                    "description": "The description of the document object.",
+                    "example": "Document Description",
+                    "type": "string"
+                  },
+                  "organization": {
+                    "description": "The document belongs to which organization.",
+                    "example": "MyCompany",
+                    "type": "string"
+                  },
+                  "organizationTitle": {
+                    "example": "Company Name",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "collabspace": {
+                    "description": "The collaborative space of the document object.",
+                    "example": "Public Collab Space",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "collabSpaceTitle": {
+                    "example": "Public Collab Space",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "originated": {
+                    "description": "The creation date of the document object.",
+                    "format": "date-time",
+                    "example": "2023-01-02T07:10:07.000Z",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "The last modified date of the document object.",
+                    "format": "date-time",
+                    "example": "2023-01-02T07:20:10.000Z",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "comments": {
+                    "description": "the document checkin reason.",
+                    "example": "Document comment",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "hasDownloadAccess": {
+                    "description": "Whether the user has download access to the document files.",
+                    "example": "TRUE",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "hasReviseAccess": {
+                    "description": "Whether the user has revise access to the document files.",
+                    "example": "TRUE",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "hasModifyAccess": {
+                    "description": "Whether the user has modify access to the document files.",
+                    "example": "TRUE",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "hasDeleteAccess": {
+                    "description": "Whether the user has delete access to the document files.",
+                    "example": "TRUE",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "reservedby": {
+                    "description": "Reflects the reserved by user if the document is reserved.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "parentId": {
+                    "description": "The parent id to link the document to during creation; dependent on parentRelName.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "parentRelName": {
+                    "description": "The parent relationship to link the document to during creation; dependent on parentId.",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+                  },
+                  "parentDirection": {
+                    "description": "The parent direction for the relationship; dependent on parentRelName; default is 'from'.",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "type": "string",
+                      "readOnly": true
+                    }
+                  },
+                  "imageId": {
+                    "description": "The image holder id in case the document is associated to an Image Holder.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "receipt": {
+                    "description": "The FCS receipt for supporting the files related data operations.",
+                    "type": "string",
+                    "writeOnly": true
+                  },
+                  "secondaryTitle": {
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "extensions": {
+                    "description": "Identifies the object extensions.",
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "enum": [
+                      "IPML.Automatic"
+                    ],
+                    "items": {
+                      "x-IncludedByDefault": "no",
+                      "type": "string",
+                      "enum": [
+                        "IPML.Automatic"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "ownerInfo": {
+                    "description": "Object Owner Information",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  },
+                  "originatorInfo": {
+                    "description": "Object Originator Information",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "$ref": "#/components/x-schemas/originatorInfo"
+                    }
+                  },
+                  "parents": {
+                    "description": "where-used based on parentRelName + parentDirection parameters",
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/parents"
+                    }
+                  },
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/files"
+                    }
+                  },
+                  "sovaccess": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/sovaccess"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "NewDocuments": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The name of the document object.",
+                    "example": "DOC-0000001",
+                    "type": "string"
+                  },
+                  "policy": {
+                    "description": "The policy of the document object.",
+                    "example": "Document Release",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "state": {
+                    "description": "The current state of the document object.",
+                    "example": "IN_WORK",
+                    "type": "string"
+                  },
+                  "stateNLS": {
+                    "example": "In Work",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "typeNLS": {
+                    "example": "Document",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "The revision of the document object.",
+                    "example": "0",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "isLatestRevision": {
+                    "description": "The last revision number of the document object.",
+                    "example": "TRUE",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "title": {
+                    "description": "The title of the document object.",
+                    "example": "Document Title",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "description": {
+                    "description": "The description of the document object.",
+                    "example": "Document Description",
+                    "type": "string"
+                  },
+                  "organization": {
+                    "description": "The document belongs to which organization.",
+                    "example": "MyCompany",
+                    "type": "string"
+                  },
+                  "organizationTitle": {
+                    "example": "Company Name",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "collabspace": {
+                    "description": "The collaborative space of the document object.",
+                    "example": "Public Collab Space",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "collabSpaceTitle": {
+                    "example": "Public Collab Space",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "originated": {
+                    "description": "The creation date of the document object.",
+                    "format": "date-time",
+                    "example": "2023-01-02T07:10:07.000Z",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "The last modified date of the document object.",
+                    "format": "date-time",
+                    "example": "2023-01-02T07:20:10.000Z",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "comments": {
+                    "description": "the document checkin reason.",
+                    "example": "Document comment",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "hasDownloadAccess": {
+                    "description": "Whether the user has download access to the document files.",
+                    "example": "TRUE",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "hasReviseAccess": {
+                    "description": "Whether the user has revise access to the document files.",
+                    "example": "TRUE",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "hasModifyAccess": {
+                    "description": "Whether the user has modify access to the document files.",
+                    "example": "TRUE",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "hasDeleteAccess": {
+                    "description": "Whether the user has delete access to the document files.",
+                    "example": "TRUE",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "reservedby": {
+                    "description": "Reflects the reserved by user if the document is reserved.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "type": "string",
+                      "readOnly": true
+                    }
+                  },
+                  "imageId": {
+                    "description": "The image holder id in case the document is associated to an Image Holder.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "receipt": {
+                    "description": "The FCS receipt for supporting the files related data operations.",
+                    "type": "string",
+                    "writeOnly": true
+                  },
+                  "secondaryTitle": {
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "extensions": {
+                    "description": "Identifies the object extensions.",
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "enum": [
+                      "IPML.Automatic"
+                    ],
+                    "items": {
+                      "x-IncludedByDefault": "no",
+                      "type": "string",
+                      "enum": [
+                        "IPML.Automatic"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "ownerInfo": {
+                    "description": "Object Owner Information",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  },
+                  "originatorInfo": {
+                    "description": "Object Originator Information",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "$ref": "#/components/x-schemas/originatorInfo"
+                    }
+                  },
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/files"
+                    }
+                  },
+                  "sovaccess": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/sovaccess"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "CheckoutTicket": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "ticketURL": {
+                    "description": "The URL to retrieve the file from the FCS server.",
+                    "example": "https://3DEXPERIENCE_3DSpace:453/fcs/servlet/fcs/checkout?__fcs__jobTicket=EBlbnZlbG9wQEBmY3NrZXlfM2ZkYTAxZTBhNDhmMDE1OEBA",
+                    "type": "string"
+                  },
+                  "fileName": {
+                    "description": "The file name associated with the download ticket in the case one file is being downloaded.",
+                    "example": "Document1.docx",
+                    "type": "string"
+                  },
+                  "fileNames": {
+                    "description": "The file names associated with the download ticket in the case multiple files are being downloaded.",
+                    "example": "[Document1.docx, Document2.xlsx]",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "ownerInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "VPLMAdminUser",
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "example": "AdminUser",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "example": "VPLM",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "email": {
+                    "example": "VPLMAdminUser@3ds.com",
+                    "default": "Unknown",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "description": "Object Owner Information",
+            "readOnly": true
+          }
+        ]
+      },
+      "originatorInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "VPLMAdminUser",
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "example": "AdminUser",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "example": "VPLM",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "email": {
+                    "example": "VPLMAdminUser@3ds.com",
+                    "default": "Unknown",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "description": "Object Originator Information",
+            "readOnly": true
+          }
+        ]
+      },
+      "parentId": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {}
+        ]
+      },
+      "unreserve": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {}
+        ]
+      },
+      "notifyMissingDO": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {}
+        ]
+      },
+      "search": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The name of the document object.",
+                    "example": "DOC-0000001",
+                    "type": "string"
+                  },
+                  "policy": {
+                    "description": "The policy of the document object.",
+                    "example": "Document Release",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "state": {
+                    "description": "The current state of the document object.",
+                    "example": "IN_WORK",
+                    "type": "string"
+                  },
+                  "stateNLS": {
+                    "example": "In Work",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "typeNLS": {
+                    "example": "Document",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "The revision of the document object.",
+                    "example": "0",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "isLatestRevision": {
+                    "description": "The last revision number of the document object.",
+                    "example": "TRUE",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "title": {
+                    "description": "The title of the document object.",
+                    "example": "Document Title",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "description": {
+                    "description": "The description of the document object.",
+                    "example": "Document Description",
+                    "type": "string"
+                  },
+                  "organization": {
+                    "description": "The document belongs to which organization.",
+                    "example": "MyCompany",
+                    "type": "string"
+                  },
+                  "organizationTitle": {
+                    "example": "Company Name",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "collabspace": {
+                    "description": "The collaborative space of the document object.",
+                    "example": "Public Collab Space",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "collabSpaceTitle": {
+                    "example": "Public Collab Space",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "originated": {
+                    "description": "The creation date of the document object.",
+                    "format": "date-time",
+                    "example": "2023-01-02T07:10:07.000Z",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "The last modified date of the document object.",
+                    "format": "date-time",
+                    "example": "2023-01-02T07:20:10.000Z",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "comments": {
+                    "description": "the document checkin reason.",
+                    "example": "Document comment",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "hasDownloadAccess": {
+                    "description": "Whether the user has download access to the document files.",
+                    "example": "TRUE",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "hasReviseAccess": {
+                    "description": "Whether the user has revise access to the document files.",
+                    "example": "TRUE",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "hasModifyAccess": {
+                    "description": "Whether the user has modify access to the document files.",
+                    "example": "TRUE",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "hasDeleteAccess": {
+                    "description": "Whether the user has delete access to the document files.",
+                    "example": "TRUE",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "reservedby": {
+                    "description": "Reflects the reserved by user if the document is reserved.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "parentId": {
+                    "description": "The parent id to link the document to during creation; dependent on parentRelName.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "parentRelName": {
+                    "description": "The parent relationship to link the document to during creation; dependent on parentId.",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+                  },
+                  "parentDirection": {
+                    "description": "The parent direction for the relationship; dependent on parentRelName; default is 'from'.",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "type": "string",
+                      "readOnly": true
+                    }
+                  },
+                  "imageId": {
+                    "description": "The image holder id in case the document is associated to an Image Holder.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "receipt": {
+                    "description": "The FCS receipt for supporting the files related data operations.",
+                    "type": "string",
+                    "writeOnly": true
+                  },
+                  "secondaryTitle": {
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "extensions": {
+                    "description": "Identifies the object extensions.",
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "enum": [
+                      "IPML.Automatic"
+                    ],
+                    "items": {
+                      "x-IncludedByDefault": "no",
+                      "type": "string",
+                      "enum": [
+                        "IPML.Automatic"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "ownerInfo": {
+                    "description": "Object Owner Information",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  },
+                  "originatorInfo": {
+                    "description": "Object Originator Information",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "$ref": "#/components/x-schemas/originatorInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "versions": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "the file name.",
+                    "example": "Fruits.docx",
+                    "default": "",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Required), Read (Yes), Modify (No)"
+                  },
+                  "name": {
+                    "description": "The name of the file object.",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "comments": {
+                    "description": "the comments associated with the file checkin operation.",
+                    "example": "Filecomments",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "locker": {
+                    "description": "The locker user name if the file is locked.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "fileType": {
+                    "description": "Type of the file checked in beyond the extension of a file.",
+                    "default": " ",
+                    "type": "string"
+                  },
+                  "dimension": {
+                    "description": "Dimension of the file if the file is a kind of image.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "length": {
+                    "description": "Duration of the file if the file is a video.",
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "The revision of the document object.",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "originated": {
+                    "description": "the originated date of the file.",
+                    "format": "date-time",
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "the last modified date of the file.",
+                    "format": "date-time",
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "receipt": {
+                    "description": "The FCS receipt for supporting the file operation; takes precedence over the one provided with the document.",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+                  },
+                  "keepLocked": {
+                    "description": "Keeps the file locked after a checkin process.",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+                  },
+                  "format": {
+                    "description": "Override the default format for the checkin process",
+                    "example": "generic",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+                  },
+                  "store": {
+                    "description": "Override the default store for the checkin process",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+                  },
+                  "fileSize": {
+                    "description": "The file size in bytes.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "fileChecksum": {
+                    "description": "The file checksum information.",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                },
+                "required": [
+                  "title"
+                ]
+              }
+            },
+            "required": [
+              "title"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "ownerInfo": {
+                    "description": "Object Owner Information",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  },
+                  "lockerInfo": {
+                    "description": "File locker Information",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "$ref": "#/components/x-schemas/lockerInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "readOnly": true
+          }
+        ]
+      },
+      "reserve": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "reservedComment": {
+                    "description": "The comments associated with the reserve command.",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "files": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "the file name.",
+                    "example": "Fruits.docx",
+                    "default": "",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Required), Read (Yes), Modify (No)"
+                  },
+                  "name": {
+                    "description": "The name of the file object.",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "comments": {
+                    "description": "the comments associated with the file checkin operation.",
+                    "example": "Filecomments",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "locker": {
+                    "description": "The locker user name if the file is locked.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "fileType": {
+                    "description": "Type of the file checked in beyond the extension of a file.",
+                    "default": " ",
+                    "type": "string"
+                  },
+                  "dimension": {
+                    "description": "Dimension of the file if the file is a kind of image.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "length": {
+                    "description": "Duration of the file if the file is a video.",
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "The revision of the document object.",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "originated": {
+                    "description": "the originated date of the file.",
+                    "format": "date-time",
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "the last modified date of the file.",
+                    "format": "date-time",
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "receipt": {
+                    "description": "The FCS receipt for supporting the file operation; takes precedence over the one provided with the document.",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+                  },
+                  "keepLocked": {
+                    "description": "Keeps the file locked after a checkin process.",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+                  },
+                  "format": {
+                    "description": "Override the default format for the checkin process",
+                    "example": "generic",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+                  },
+                  "store": {
+                    "description": "Override the default store for the checkin process",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+                  },
+                  "fileSize": {
+                    "description": "The file size in bytes.",
+                    "example": "11900",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "fileChecksum": {
+                    "description": "The file checksum information.",
+                    "example": "{MD5}7db42b2d31d0c04e77865b4fdff71a72",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                },
+                "required": [
+                  "title"
+                ]
+              }
+            },
+            "required": [
+              "title"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "ownerInfo": {
+                    "description": "Object Owner Information",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  },
+                  "lockerInfo": {
+                    "description": "File locker Information",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "$ref": "#/components/x-schemas/lockerInfo"
+                    }
+                  },
+                  "versions": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "$ref": "#/components/x-schemas/versions"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "sovaccess": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "orgnization": {
+                    "type": "string"
+                  },
+                  "project": {
+                    "type": "string"
+                  },
+                  "person": {
+                    "type": "string"
+                  },
+                  "access": {
+                    "type": "string"
+                  },
+                  "comment": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "lock": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {}
+        ]
+      },
+      "DownloadTicket": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "ticketURL": {
+                    "description": "The URL to retrieve the file from the FCS server.",
+                    "example": "https://3DEXPERIENCE_3DSpace:453/fcs/servlet/fcs/checkout?__fcs__jobTicket=EBlbnZlbG9wQEBmY3NrZXlfM2ZkYTAxZTBhNDhmMDE1OEBA",
+                    "type": "string"
+                  },
+                  "fileName": {
+                    "description": "The file name associated with the download ticket in the case one file is being downloaded.",
+                    "example": "Document1.docx",
+                    "type": "string"
+                  },
+                  "fileNames": {
+                    "description": "The file names associated with the download ticket in the case multiple files are being downloaded.",
+                    "example": "[Document1.docx, Document2.xlsx]",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "CheckinTicket": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "ticketURL": {
+                    "description": "The FCS server URL to upload the file.",
+                    "example": "https://3DEXPERIENCE_3DSpace:453/fcs/servlet/fcs/checkin",
+                    "type": "string"
+                  },
+                  "ticketparamname": {
+                    "description": "The Ticket parameter name required by the FCS server.",
+                    "example": "__fcs__jobTicket",
+                    "type": "string"
+                  },
+                  "ticket": {
+                    "description": "The ticket paramter value required by the FCS server.",
+                    "example": "EBlbnZlbG9wQEBmY3NrZXlfM2ZkYTAxZTBhNDhmMDE1OEBA",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "parents": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "title": {
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "format": "date-time",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "firstname": {
+                    "description": "the person's first name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "lastname": {
+                    "description": "the person's last name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "fullname": {
+                    "description": "the person's full name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "policy": {
+                    "description": "required to support state NLS",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "stateNLS": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "typeNLS": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "collabSpace": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "collabSpaceTitle": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "organization": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "organizationTitle": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "ownerFullname": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "hasfiles": {
+                    "description": "determines whether the object has a file checked in any format",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "type": "string",
+                      "readOnly": true
+                    }
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "type": "string",
+                      "readOnly": true
+                    }
+                  },
+                  "parentRelName": {
+                    "description": "required if not provided as query parameter",
+                    "type": "string",
+                    "writeOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "relOwnerInfo": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "$ref": "#/components/x-schemas/relOwnerInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "description": "where-used based on parentRelName + parentDirection parameters"
+          }
+        ]
+      },
+      "lockerInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "VPLMAdminUser",
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "example": "AdminUser",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "example": "VPLM",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "email": {
+                    "example": "VPLMAdminUser@3ds.com",
+                    "default": "Unknown",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "description": "File locker Information",
+            "readOnly": true
+          }
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-DownloadTicket": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/DownloadTicket"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-EMPTY": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-documents": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/documents"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-NewDocuments": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/NewDocuments"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-files": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/files"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-CheckinTicket": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/CheckinTicket"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-CheckoutTicket": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/CheckoutTicket"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-versions": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/versions"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "BASICS_ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "BASICS": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "description": "The object type.",
+            "type": "string"
+          },
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object.",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "PATCH_SUB_RESOURCE_ACTION": {
+        "type": "object",
+        "properties": {
+          "updateAction": {
+            "description": "Specify the sub-resource update action. See 6W Web Service Principles: Data Object Updates",
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "CONNECT",
+              "DISCONNECT"
+            ]
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://3dspace.mydomain:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "csrf": {
+        "description": "CSRF object is required to be sent back for update operations and may be provided with read operations.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The CSRF token name.",
+            "example": "ENO_CSRF_TOKEN",
+            "type": "string"
+          },
+          "value": {
+            "description": "The CSRF token value.",
+            "example": "EXAM-PLEW-R1CD-BNF7-G8UC-KT52-MGUA-UBE1",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request.",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-DownloadTicket": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-DownloadTicket"
+            }
+          }
+        }
+      },
+      "200-documents": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-documents"
+            }
+          }
+        }
+      },
+      "200-NewDocuments": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-NewDocuments"
+            }
+          }
+        }
+      },
+      "200-files": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-files"
+            }
+          }
+        }
+      },
+      "200-CheckinTicket": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-CheckinTicket"
+            }
+          }
+        }
+      },
+      "200-CheckoutTicket": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-CheckoutTicket"
+            }
+          }
+        }
+      },
+      "200-versions": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-versions"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "documents": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/documents"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "files": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/files"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "description": "Identifies the locale for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "description": "The ENOVIA CSRF token which is typically required for update operations.  Retrieve using {server}/resources/v1/application/CSRF",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "fields": {
+        "name": "$fields",
+        "description": "Specify resource and sub-resource fields that should be returned by the web request  Fields include keywords none & all plus payload fields - see schema response payload.  For more information, see 6W REST Services Principles - Refinement Section",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

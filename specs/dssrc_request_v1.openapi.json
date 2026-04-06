@@ -1,0 +1,1667 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "x-ds-copyright": "3DEXPERIENCE R2021x (c) 2020 Dassault Systemes.",
+    "title": "Component Request Web Services",
+    "description": "Web Services for managing the Component Requests.",
+    "version": "1.0.1",
+    "x-ds-service": [
+      "Sourcing"
+    ]
+  },
+  "servers": [
+    {
+      "url": "{Sourcing}/resources/v1/modeler/dssrc",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_Sourcing"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dssrc-requests/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/requests/search": {
+      "get": {
+        "summary": "Search Component Request for the provided input string.",
+        "description": "",
+        "operationId": "searchComponentRequests",
+        "tags": [
+          "Component Requests"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.componentrequests"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "searchStr",
+            "description": "Search Criteria; 2 or more characters required.",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "description": "The number of objects to return; default 50; max 1000",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "description": "The number of objects to skip in case of paginating through the serach results; default 0",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]input-items, [!]answer-items, [!]inprocess-items, [!]specification-document, [!]reference-documents, [!]component-classification, [!]context-plant, [!]context-product, [!]context-project, [!]request-assignee, [!]request-template</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/requests": {
+      "get": {
+        "summary": "Get Info of Component Requests.",
+        "description": "",
+        "operationId": "getAllComponentRequest",
+        "tags": [
+          "Component Requests"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.componentrequests"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]input-items, [!]answer-items, [!]inprocess-items, [!]specification-document, [!]reference-documents, [!]component-classification, [!]context-plant, [!]context-product, [!]context-project, [!]request-assignee, [!]request-template</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create Component Request.",
+        "description": "",
+        "operationId": "createComponentRequest",
+        "tags": [
+          "Component Requests"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.componentrequests"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/dssrc.componentrequestsPOST"
+        },
+        "parameters": [
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]input-items, [!]answer-items, [!]inprocess-items, [!]specification-document, [!]reference-documents, [!]component-classification, [!]context-plant, [!]context-product, [!]context-project, [!]request-assignee, [!]request-template</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/requests/{id}": {
+      "get": {
+        "summary": "Get Info of Component Request.",
+        "description": "",
+        "operationId": "getComponentRequest",
+        "tags": [
+          "Component Requests"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.componentrequests"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]input-items, [!]answer-items, [!]inprocess-items, [!]specification-document, [!]reference-documents, [!]component-classification, [!]context-plant, [!]context-product, [!]context-project, [!]request-assignee, [!]request-template</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Modify Component Request.",
+        "description": "",
+        "operationId": "modifyComponentRequest",
+        "tags": [
+          "Component Requests"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.componentrequests"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/dssrc.componentrequestsPATCH"
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]input-items, [!]answer-items, [!]inprocess-items, [!]specification-document, [!]reference-documents, [!]component-classification, [!]context-plant, [!]context-product, [!]context-project, [!]request-assignee, [!]request-template</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete Component Request.",
+        "description": "",
+        "operationId": "deleteComponentRequest",
+        "tags": [
+          "Component Requests"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "dssrc.componentrequests": {
+        "$ref": "#/components/x-schemas/dssrc.componentrequests"
+      }
+    },
+    "x-schemas": {
+      "context-project": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "default": "",
+                "type": "string",
+                "example": "7B5282569B7300006162E1DC001CA616"
+              },
+              "type": {
+                "type": "string",
+                "example": "Project Space"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_CONTEXT-PROJECT"
+          },
+          {}
+        ]
+      },
+      "ownerInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "name": {
+                "type": "string"
+              },
+              "firstname": {
+                "default": "Unknown",
+                "type": "string"
+              },
+              "lastname": {
+                "default": "Unknown",
+                "type": "string"
+              },
+              "email": {
+                "default": "Unknown",
+                "x-IncludedByDefault": "no",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "description": "Object Owner Information",
+            "readOnly": true
+          }
+        ]
+      },
+      "reference-documents": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "default": "",
+                "type": "string",
+                "example": "19F882562494080066F1421D0000024E"
+              },
+              "type": {
+                "type": "string",
+                "example": "Document"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE-DOCUMENTS"
+          },
+          {}
+        ]
+      },
+      "context-plant": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "default": "",
+                "type": "string",
+                "example": "19F882560EB83E0066D4752B000027C8"
+              },
+              "type": {
+                "type": "string",
+                "example": "Plant"
+              },
+              "identifier": {
+                "default": "",
+                "type": "string",
+                "readOnly": true,
+                "example": "19F882560EB83E0066D4752B000027C8"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "specification-document": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "default": "",
+                "type": "string",
+                "example": "19F882562494080066F1415000000208"
+              },
+              "type": {
+                "type": "string",
+                "example": "Document"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_SPECIFICATION-DOCUMENTS"
+          },
+          {}
+        ]
+      },
+      "input-items": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "default": "",
+                "type": "string",
+                "example": "3DEF8256BAA5000066F12DC100000039"
+              },
+              "type": {
+                "type": "string",
+                "example": "Physical Product"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_INPUT-ITEMS"
+          },
+          {}
+        ]
+      },
+      "context-product": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "default": "",
+                "type": "string",
+                "example": "19F882564FE2380066D562ED00000005"
+              },
+              "type": {
+                "type": "string",
+                "example": "Physical Product"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_CONTEXT-PRODUCT"
+          },
+          {}
+        ]
+      },
+      "request-assignee": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "description": "The request assignee information. It is the user who will work on the component request once component request is submitted",
+            "x-IncludedByDefault": "no",
+            "properties": {
+              "username": {
+                "type": "string",
+                "example": "John"
+              }
+            }
+          },
+          {
+            "readOnly": true
+          }
+        ]
+      },
+      "component-classification": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "default": "",
+                "type": "string",
+                "example": "19F8825619E83A0066E835510000018E"
+              },
+              "type": {
+                "type": "string",
+                "example": "General Class"
+              },
+              "identifier": {
+                "default": "",
+                "type": "string",
+                "readOnly": true,
+                "example": "19F8825619E83A0066E835510000018E"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "dssrc.componentrequestsPOST": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "example": "Drone Component Request",
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "example": "Component Request"
+              },
+              "description": {
+                "type": "string",
+                "example": "Drone Component Request"
+              },
+              "duedate": {
+                "description": "Component Request due date.",
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "default": "",
+                "type": "string"
+              },
+              "comments": {
+                "type": "string",
+                "example": "Submitted for action"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "input-items": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/input-items"
+                }
+              },
+              "answer-items": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/answer-items"
+                }
+              },
+              "inprocess-items": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/inprocess-items"
+                }
+              },
+              "specification-document": {
+                "$ref": "#/components/x-schemas/specification-document"
+              },
+              "reference-documents": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/reference-documents"
+                }
+              },
+              "component-classification": {
+                "$ref": "#/components/x-schemas/component-classification"
+              },
+              "context-plant": {
+                "$ref": "#/components/x-schemas/context-plant"
+              },
+              "context-product": {
+                "$ref": "#/components/x-schemas/context-product"
+              },
+              "context-project": {
+                "$ref": "#/components/x-schemas/context-project"
+              },
+              "request-template": {
+                "$ref": "#/components/x-schemas/request-template"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "dssrc.componentrequestsPATCH": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "example": "Drone Component Request",
+                "type": "string"
+              },
+              "description": {
+                "type": "string",
+                "example": "Drone Component Request"
+              },
+              "duedate": {
+                "description": "Component Request due date.",
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "default": "",
+                "type": "string"
+              },
+              "comments": {
+                "type": "string",
+                "example": "Submitted for action"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "input-items": {
+                "type": "array",
+                "items": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/x-schemas/input-items"
+                    },
+                    {
+                      "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+                    }
+                  ]
+                }
+              },
+              "answer-items": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/x-schemas/answer-items"
+                    },
+                    {
+                      "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+                    }
+                  ]
+                }
+              },
+              "inprocess-items": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/x-schemas/inprocess-items"
+                    },
+                    {
+                      "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+                    }
+                  ]
+                }
+              },
+              "specification-document": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/x-schemas/specification-document"
+                  },
+                  {
+                    "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+                  }
+                ]
+              },
+              "reference-documents": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/x-schemas/reference-documents"
+                    },
+                    {
+                      "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+                    }
+                  ]
+                }
+              },
+              "component-classification": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/x-schemas/component-classification"
+                  },
+                  {
+                    "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+                  }
+                ]
+              },
+              "context-plant": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/x-schemas/context-plant"
+                  },
+                  {
+                    "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+                  }
+                ]
+              },
+              "context-product": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/x-schemas/context-product"
+                  },
+                  {
+                    "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+                  }
+                ]
+              },
+              "context-project": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/x-schemas/context-project"
+                  },
+                  {
+                    "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+                  }
+                ]
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "dssrc.componentrequests": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "readOnly": true,
+                "example": "7B5282569B7300006162E3520012E97A"
+              },
+              "type": {
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)",
+                "example": "Component Request"
+              },
+              "identifier": {
+                "type": "string",
+                "readOnly": true,
+                "example": "7B5282569B7300006162E3520012E97A"
+              },
+              "source": {
+                "type": "string",
+                "readOnly": true,
+                "example": "https://server_name.dsone.3ds.com:443/3dspace"
+              },
+              "relativePath": {
+                "type": "string",
+                "readOnly": true,
+                "example": "/resources/v1/modeler/dssrc/requests/7B5282569B7300006162E3520012E97A"
+              },
+              "title": {
+                "description": "Component Request Title.",
+                "example": "Drone Component Request",
+                "default": "",
+                "type": "string"
+              },
+              "state": {
+                "type": "string",
+                "readOnly": true,
+                "example": "Submitted"
+              },
+              "name": {
+                "type": "string",
+                "readOnly": true,
+                "example": "CQR-100000"
+              },
+              "revision": {
+                "type": "string",
+                "readOnly": true,
+                "example": 1
+              },
+              "description": {
+                "type": "string",
+                "example": "Drone Component Request"
+              },
+              "originated": {
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "type": "string",
+                "readOnly": true
+              },
+              "owner": {
+                "description": "The owner of the component request",
+                "type": "string",
+                "readOnly": true,
+                "example": "John"
+              },
+              "modified": {
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "type": "string",
+                "readOnly": true
+              },
+              "submitted": {
+                "description": "Component Request submit date.",
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "default": "",
+                "type": "string",
+                "readOnly": true
+              },
+              "duedate": {
+                "description": "Component Request due date.",
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "default": "",
+                "type": "string"
+              },
+              "comments": {
+                "description": "Component Request comments.",
+                "example": "Component Request Comments",
+                "default": "",
+                "type": "string"
+              },
+              "contextProject": {
+                "default": "",
+                "type": "string",
+                "readOnly": true,
+                "example": "Project2"
+              },
+              "requestApprovalStatus": {
+                "description": "Component Request Approval Status.",
+                "example": "",
+                "default": "",
+                "type": "string",
+                "readOnly": true,
+                "enum": [
+                  "Pending Clarification",
+                  "Cancelled",
+                  "Rejected",
+                  "Approved",
+                  ""
+                ]
+              },
+              "closureComments": {
+                "description": "Component Request closure comments.",
+                "default": "",
+                "type": "string",
+                "readOnly": true
+              },
+              "completedBy": {
+                "description": "User who completed the Component Request.",
+                "example": "",
+                "default": "",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "input-items": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/input-items"
+                }
+              },
+              "answer-items": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/answer-items"
+                }
+              },
+              "inprocess-items": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/inprocess-items"
+                }
+              },
+              "specification-document": {
+                "$ref": "#/components/x-schemas/specification-document"
+              },
+              "reference-documents": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/reference-documents"
+                }
+              },
+              "component-classification": {
+                "$ref": "#/components/x-schemas/component-classification"
+              },
+              "context-plant": {
+                "$ref": "#/components/x-schemas/context-plant"
+              },
+              "context-product": {
+                "$ref": "#/components/x-schemas/context-product"
+              },
+              "context-project": {
+                "$ref": "#/components/x-schemas/context-project"
+              },
+              "request-assignee": {
+                "$ref": "#/components/x-schemas/request-assignee"
+              },
+              "request-template": {
+                "$ref": "#/components/x-schemas/request-template"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "request-template": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "19F88256C8E2380066E190E200000E62"
+              },
+              "type": {
+                "type": "string",
+                "example": "Component Request Template"
+              }
+            }
+          },
+          {
+            "x-ApplicableOperations": "Create (Required), Read (Yes), Modify (No)"
+          },
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REQUEST-TEMPLATE"
+          }
+        ]
+      },
+      "customerAttributes": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {}
+        ]
+      },
+      "answer-items": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "default": "",
+                "type": "string",
+                "example": "3DEF8256BAA5000066F12DC600000047"
+              },
+              "type": {
+                "type": "string",
+                "example": "Physical Product"
+              },
+              "identifier": {
+                "type": "string",
+                "example": "3DEF8256BAA5000066F12DC600000047"
+              },
+              "source": {
+                "default": "",
+                "type": "string",
+                "example": "https://server_name.dsone.3ds.com:443/3DSpace"
+              },
+              "relativePath": {
+                "default": "",
+                "type": "string",
+                "example": "/resources/v1/modeler/dseng/dseng:EngItem/3DEF8256BAA5000066F12DC600000047"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "inprocess-items": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "default": "",
+                "type": "string",
+                "example": "3DEF8256BAA5000066F131110000040A"
+              },
+              "type": {
+                "type": "string",
+                "example": "Component Request"
+              },
+              "identifier": {
+                "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+                "example": "3DEF8256BAA5000066F131110000040A",
+                "type": "string"
+              },
+              "source": {
+                "description": "The object server URL when an object is represented by a Public Resource URI.",
+                "example": "https://server_name.dsone.3ds.com:443/3DSpace",
+                "type": "string"
+              },
+              "relativePath": {
+                "description": "The object resource path when an object is represented by a Public Resource URI.",
+                "example": "/resources/v1/modeler/dssrc/requests/3DEF8256BAA5000066F131110000040A",
+                "type": "string"
+              }
+            }
+          },
+          {}
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-dssrc.componentrequests": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/dssrc.componentrequests"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-EMPTY": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {}
+        ]
+      },
+      "BASICS_ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "3DEF825623C21900670E64470000074A",
+            "type": "string"
+          }
+        }
+      },
+      "BASICS": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "description": "The object type.",
+            "type": "string"
+          }
+        }
+      },
+      "CESTAMP": {
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object.",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "CESTAMP_REQUIRED": {
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object; required for modify operations",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string"
+          }
+        }
+      },
+      "PATCH_SUB_RESOURCE_ACTION": {
+        "type": "object",
+        "properties": {
+          "updateAction": {
+            "description": "Specify the sub-resource update action. See 6W Web Service Principles: Data Object Updates",
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "CONNECT",
+              "DISCONNECT"
+            ]
+          }
+        }
+      },
+      "PUBLIC_OBJECT_CONTEXT-PROJECT": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "7B5282569B7300006162E1DC001CA616",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://server_name.dsone.3ds.com:443/3DSpace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/projects/7B5282569B7300006162E1DC001CA616",
+            "type": "string"
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE-DOCUMENTS": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "19F882562494080066F1421D0000024E",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://server_name.dsone.3ds.com:443/3DSpace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/documents/19F882562494080066F1421D0000024E",
+            "type": "string"
+          }
+        }
+      },
+      "PUBLIC_OBJECT_SPECIFICATION-DOCUMENTS": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "19F882562494080066F1415000000208",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://server_name.dsone.3ds.com:443/3DSpace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/documents/19F882562494080066F1415000000208",
+            "type": "string"
+          }
+        }
+      },
+      "PUBLIC_OBJECT_INPUT-ITEMS": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "3DEF8256BAA5000066F12DC100000039",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://server_name.dsone.3ds.com:443/3DSpace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/dseng/dseng:EngItem/3DEF8256BAA5000066F12DC100000039",
+            "type": "string"
+          }
+        }
+      },
+      "PUBLIC_OBJECT_CONTEXT-PRODUCT": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "19F882564FE2380066D562ED00000005",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://server_name.dsone.3ds.com:443/3DSpace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/dseng/dseng:EngItem/19F882564FE2380066D562ED00000005",
+            "type": "string"
+          }
+        }
+      },
+      "PUBLIC_OBJECT_ANSWER-ITEMS": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "3DEF8256BAA5000066F12DC600000047",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://server_name.dsone.3ds.com:443/3DSpace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/dseng/dseng:EngItem/3DEF8256BAA5000066F12DC600000047",
+            "type": "string"
+          }
+        }
+      },
+      "PUBLIC_OBJECT_INPROCESS-ITEMS": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "3DEF8256BAA5000066F131110000040A",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://server_name.dsone.3ds.com:443/3DSpace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/dssrc/requests/3DEF8256BAA5000066F131110000040A",
+            "type": "string"
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REQUEST-TEMPLATE": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "19F88256C8E2380066E190E200000E62",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://server_name.dsone.3ds.com:443/3DSpace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/dssrc/requesttemplates/19F88256C8E2380066E190E200000E62",
+            "type": "string"
+          }
+        }
+      },
+      "PUBLIC_OBJECT_COMPONENT-CLASSIFICATION": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "19F8825619E83A0066E835510000018E",
+            "type": "string"
+          }
+        }
+      },
+      "PUBLIC_OBJECT_CONTEXT-PLANT": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "19F882560EB83E0066D4752B000027C8",
+            "type": "string"
+          }
+        }
+      },
+      "csrf": {
+        "description": "CSRF object is required to be sent back for update operations and may be provided with read operations.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The CSRF token name.",
+            "example": "ENO_CSRF_TOKEN",
+            "type": "string"
+          },
+          "value": {
+            "description": "The CSRF token value.",
+            "example": "EXAM-PLEW-R1CD-BNF7-G8UC-KT52-MGUA-UBE1",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request.",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-dssrc.componentrequests": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-dssrc.componentrequests"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "dssrc.componentrequests": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/dssrc.componentrequests"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "dssrc.componentrequestsPOST": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/dssrc.componentrequestsPOST"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "dssrc.componentrequestsPATCH": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/dssrc.componentrequestsPATCH"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "description": "Identifies the locale for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "description": "The ENOVIA CSRF token which is typically required for update operations.  Retrieve using {server}/resources/v1/application/CSRF",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "fields": {
+        "name": "$fields",
+        "description": "Specify resource and sub-resource fields that should be returned by the web request  Fields include keywords none & all plus payload fields - see schema response payload.  For more information, see 6W REST Services Principles - Refinement Section",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

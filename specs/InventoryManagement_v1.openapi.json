@@ -1,0 +1,1778 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Materials Inventory Web Services",
+    "version": "1.0.0",
+    "description": "Materials Inventory Public REST API.",
+    "summary": "Materials Inventory Public REST API.",
+    "x-ds-copyright": "3DEXPERIENCE R2026x (c) 2026 Dassault Systemes.",
+    "x-ds-service": [
+      "Materials"
+    ]
+  },
+  "paths": {
+    "/Certificates/{id}": {
+      "get": {
+        "tags": [
+          "certificate"
+        ],
+        "summary": "Get an existing certificate by id.",
+        "description": "Synchronously returns the requested single certificate",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the existing certificate",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CertificateResponseDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "getCertificate"
+      },
+      "patch": {
+        "tags": [
+          "certificate"
+        ],
+        "summary": "Update the certificate content",
+        "description": "Synchronously edits an existing certificate. \r\nNote: Passing null as the value for a property will remove the existing property value.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the certificate to update",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "X-Requested-With",
+            "in": "header",
+            "description": "X-Requested-With header for CSRF.",
+            "required": true,
+            "schema": {
+              "description": "X-Requested-With header. Authorized values: 'XMLHttpRequest' or 'script'.",
+              "type": "string",
+              "enum": [
+                "XMLHttpRequest",
+                "script"
+              ],
+              "example": "XMLHttpRequest"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/merge-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CertificateUpdateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CertificateResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid values",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User does not have an authorized role to perform this action."
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "updateCertificate"
+      }
+    },
+    "/Certificates": {
+      "post": {
+        "tags": [
+          "certificate"
+        ],
+        "summary": "Create one or more new certificates",
+        "description": "One or more certificates up to 250 are validated and stored synchronously. If the request is successful, the certificate(s) will be returned. \r\nIf any certificate is invalid (for example name is not provided), then the request will fail. ",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CertificateCreateDTOBulkCreateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CertificateResponseDTOODataQueryResults"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing name, material.id, or material.materialname.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User does not have an authorized role to perform this action."
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "addCertificate",
+        "parameters": [
+          {
+            "name": "X-Requested-With",
+            "in": "header",
+            "description": "X-Requested-With header for CSRF.",
+            "required": true,
+            "schema": {
+              "description": "X-Requested-With header. Authorized values: 'XMLHttpRequest' or 'script'.",
+              "type": "string",
+              "enum": [
+                "XMLHttpRequest",
+                "script"
+              ],
+              "example": "XMLHttpRequest"
+            }
+          }
+        ]
+      }
+    },
+    "/Containers/{id}": {
+      "get": {
+        "tags": [
+          "container"
+        ],
+        "summary": "Get an existing container by id.",
+        "description": "Synchronously returns the requested single container",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the existing container",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContainerResponseDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "getContainer"
+      },
+      "patch": {
+        "tags": [
+          "container"
+        ],
+        "summary": "Update the container content",
+        "description": "Synchronously edits an existing container. \r\nNote: Passing null as the value for a property will remove the existing property value.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the container to update",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "X-Requested-With",
+            "in": "header",
+            "description": "X-Requested-With header for CSRF.",
+            "required": true,
+            "schema": {
+              "description": "X-Requested-With header. Authorized values: 'XMLHttpRequest' or 'script'.",
+              "type": "string",
+              "enum": [
+                "XMLHttpRequest",
+                "script"
+              ],
+              "example": "XMLHttpRequest"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/merge-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContainerUpdateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContainerResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid values",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User does not have an authorized role to perform this action."
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "updateContainer"
+      }
+    },
+    "/Containers": {
+      "post": {
+        "tags": [
+          "container"
+        ],
+        "summary": "Create one or more new containers",
+        "description": "One or more containers up to 250 are validated and stored synchronously. If the request is successful, the container(s) will be returned. \r\nIf any container is invalid (for example an invalid lifecycleState is passed), then the request will fail.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContainerBulkCreateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContainerResponseDTOODataQueryResults"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing lot.id, material.id, netQuantity, netQuantityUnit, or lifecycleState.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User does not have an authorized role to perform this action."
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "addContainer",
+        "parameters": [
+          {
+            "name": "X-Requested-With",
+            "in": "header",
+            "description": "X-Requested-With header for CSRF.",
+            "required": true,
+            "schema": {
+              "description": "X-Requested-With header. Authorized values: 'XMLHttpRequest' or 'script'.",
+              "type": "string",
+              "enum": [
+                "XMLHttpRequest",
+                "script"
+              ],
+              "example": "XMLHttpRequest"
+            }
+          }
+        ]
+      }
+    },
+    "/Locations/{id}": {
+      "get": {
+        "tags": [
+          "location"
+        ],
+        "summary": "Get an existing location by id.",
+        "description": "Synchronously returns the requested single location",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the existing location",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationResponseDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "getLocation"
+      },
+      "patch": {
+        "tags": [
+          "location"
+        ],
+        "summary": "Update the location content",
+        "description": "Synchronously edits an existing location. \r\nNote: Passing null as the value for a property will remove the existing property value.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the location to update",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "X-Requested-With",
+            "in": "header",
+            "description": "X-Requested-With header for CSRF.",
+            "required": true,
+            "schema": {
+              "description": "X-Requested-With header. Authorized values: 'XMLHttpRequest' or 'script'.",
+              "type": "string",
+              "enum": [
+                "XMLHttpRequest",
+                "script"
+              ],
+              "example": "XMLHttpRequest"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/merge-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationUpdateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid values",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User does not have an authorized role to perform this action."
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "updateLocation"
+      }
+    },
+    "/Locations": {
+      "post": {
+        "tags": [
+          "location"
+        ],
+        "summary": "Create one or more new locations",
+        "description": "One or more locations up to 250 are validated and stored synchronously. If the request is successful, the location(s) will be returned. \r\nIf any location is invalid (for example an invalid locationType is passed), then the request will fail.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationCreateDTOBulkCreateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationResponseDTOODataQueryResults"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing name, locationType, or allowsInventory.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User does not have an authorized role to perform this action."
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "addLocation",
+        "parameters": [
+          {
+            "name": "X-Requested-With",
+            "in": "header",
+            "description": "X-Requested-With header for CSRF.",
+            "required": true,
+            "schema": {
+              "description": "X-Requested-With header. Authorized values: 'XMLHttpRequest' or 'script'.",
+              "type": "string",
+              "enum": [
+                "XMLHttpRequest",
+                "script"
+              ],
+              "example": "XMLHttpRequest"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CertificateCreateDTO": {
+        "required": [
+          "material",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string",
+            "example": "CERT-123",
+            "description": "The human readable unique identifier of the Certificate."
+          },
+          "status": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true,
+            "example": "Approved",
+            "description": "The lifecycle state of the Certificate.  This value is managed outside of Materials Management and can be entered as freetext."
+          },
+          "level": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true,
+            "example": "Research",
+            "description": "The level of the Certificate.  This value is managed outside of Materials Management and can be entered as freetext."
+          },
+          "approvedUntil": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2025-06-06T23:59:59Z",
+            "description": "The date until which the Certificate is approved."
+          },
+          "externalSource": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true,
+            "example": "CISPro",
+            "description": "The name of the external inventory system managing this certificate."
+          },
+          "externalId": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true,
+            "example": "749237",
+            "description": "The external inventory system's unique identifier for this certificate."
+          },
+          "material": {
+            "$ref": "#/components/schemas/CertificateMaterialCreateDTO"
+          }
+        }
+      },
+      "CertificateCreateDTOBulkCreateDTO": {
+        "required": [
+          "member"
+        ],
+        "type": "object",
+        "properties": {
+          "member": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CertificateCreateDTO"
+            }
+          }
+        }
+      },
+      "CertificateMaterialCreateDTO": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true,
+            "example": "uuid:14c8fa3b-4a6f-4094-bdd4-8fd859f33949"
+          },
+          "name": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string",
+            "example": "MAT-00000123",
+            "description": "The name of the sourced or unified material for which this certificate is associated."
+          }
+        }
+      },
+      "CertificateMaterialResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true,
+            "example": "uuid:14c8fa3b-4a6f-4094-bdd4-8fd859f33949"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "example": "MAT-00000123"
+          },
+          "source": {
+            "type": "string",
+            "nullable": true,
+            "example": "https://devopstst1glnq92765-euw1-28dsw11106-substancereg.3dx-staging.3ds.com"
+          },
+          "relativePath": {
+            "type": "string",
+            "nullable": true,
+            "example": "/resources/v1/matmgmt/materials/uuid:14c8fa3b-4a6f-4094-bdd4-8fd859f33949?$expand=FormulationPropertySet"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "example": "dsmat:Material"
+          }
+        }
+      },
+      "CertificateResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 3465
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-01-01T12:59:59Z"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-01-01T12:59:59Z"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "example": "CERT-123",
+            "description": "The human readable unique identifier of the Certificate."
+          },
+          "status": {
+            "type": "string",
+            "nullable": true,
+            "example": "Approved",
+            "description": "The lifecycle state of the Certificate.  This value is managed outside of Materials Management and can be entered as freetext."
+          },
+          "level": {
+            "type": "string",
+            "nullable": true,
+            "example": "Research",
+            "description": "The level of the Certificate.  This value is managed outside of Materials Management and can be entered as freetext."
+          },
+          "approvedUntil": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2025-06-06T23:59:59Z",
+            "description": "The date until which the Certificate is approved."
+          },
+          "externalSource": {
+            "type": "string",
+            "nullable": true,
+            "example": "CISPro",
+            "description": "The name of the external inventory system managing this certificate."
+          },
+          "externalId": {
+            "type": "string",
+            "nullable": true,
+            "example": "749237",
+            "description": "The external inventory system's unique identifier for this certificate."
+          },
+          "material": {
+            "$ref": "#/components/schemas/CertificateMaterialResponseDTO"
+          }
+        }
+      },
+      "CertificateResponseDTOODataQueryResults": {
+        "type": "object",
+        "properties": {
+          "member": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CertificateResponseDTO"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "CertificateUpdateDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string",
+            "example": "CERT-123",
+            "description": "The human readable unique identifier of the Certificate."
+          },
+          "status": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true,
+            "example": "Approved",
+            "description": "The lifecycle state of the Certificate.  This value is managed outside of Materials Management and can be entered as freetext."
+          },
+          "level": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true,
+            "example": "Research",
+            "description": "The level of the Certificate.  This value is managed outside of Materials Management and can be entered as freetext."
+          },
+          "approvedUntil": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2025-06-06T23:59:59Z",
+            "description": "The date until which the Certificate is approved."
+          },
+          "externalSource": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true,
+            "example": "CISPro",
+            "description": "The name of the external inventory system managing this certificate."
+          },
+          "externalId": {
+            "maxLength": 500,
+            "type": "string",
+            "nullable": true,
+            "example": "749237",
+            "description": "The external inventory system's unique identifier for this certificate."
+          },
+          "material": {
+            "$ref": "#/components/schemas/CertificateMaterialCreateDTO"
+          }
+        }
+      },
+      "ContainerBulkCreateDTO": {
+        "required": [
+          "member"
+        ],
+        "type": "object",
+        "properties": {
+          "member": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContainerCreateDTO"
+            }
+          }
+        }
+      },
+      "ContainerCreateCertificateDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
+      "ContainerCreateDTO": {
+        "required": [
+          "lifecycleState",
+          "lot",
+          "material",
+          "netQuantity",
+          "netQuantityUnit"
+        ],
+        "type": "object",
+        "properties": {
+          "barcode": {
+            "maxLength": 80,
+            "type": "string",
+            "nullable": true,
+            "example": "C002847",
+            "description": "A unique identifier for the Container that can be scanned. If not provided a barcode will be generated."
+          },
+          "expirationDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2025-12-12T23:59:59Z",
+            "description": "The date and time at which the Material in this Container will expire."
+          },
+          "lot": {
+            "$ref": "#/components/schemas/ContainerCreateLotDTO"
+          },
+          "material": {
+            "$ref": "#/components/schemas/ContainerCreateMaterialDTO"
+          },
+          "location": {
+            "$ref": "#/components/schemas/ContainerCreateLocationDTO"
+          },
+          "certificate": {
+            "$ref": "#/components/schemas/ContainerCreateCertificateDTO"
+          },
+          "netQuantity": {
+            "type": "number",
+            "format": "double",
+            "example": 1,
+            "description": "The numeric value for the amount of Material in the Container."
+          },
+          "netQuantitySigFigs": {
+            "type": "integer",
+            "nullable": true,
+            "example": 1,
+            "description": "When applicable, the number of significant figures used to determine the value of netQuantity."
+          },
+          "netQuantityUnit": {
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string",
+            "example": "kg",
+            "description": "The the unit representing the amount of Material in the Container.",
+            "enum": [
+              "kg",
+              "g",
+              "mg",
+              "mug",
+              "ng",
+              "lb",
+              "oz",
+              "L",
+              "mL",
+              "muL",
+              "nL",
+              "m3",
+              "gal",
+              "qt",
+              "fl oz"
+            ]
+          },
+          "tareWeight": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "example": 0.1,
+            "description": "When applicable, the tare weight of the Container when it is empty."
+          },
+          "tareWeightSigFigs": {
+            "type": "integer",
+            "nullable": true,
+            "example": null,
+            "description": "When applicable, the number of significant figures used to determine the value of tareWeight."
+          },
+          "tareWeightUnit": {
+            "maxLength": 25,
+            "type": "string",
+            "nullable": true,
+            "example": "kg",
+            "description": "When applicable, the unit representing the tare weight of the Container.",
+            "enum": [
+              "kg",
+              "g",
+              "mg",
+              "mug",
+              "ng",
+              "lb",
+              "oz"
+            ]
+          },
+          "grossWeight": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "example": 1.1,
+            "description": "The gross weight of the Container, which must equal the sum of tareWeight and netQuantity when provided."
+          },
+          "grossWeightSigFigs": {
+            "type": "integer",
+            "nullable": true,
+            "example": 2,
+            "description": "When applicable, the number of significant figures used to determine the value of grossWeight."
+          },
+          "grossWeightUnit": {
+            "maxLength": 25,
+            "type": "string",
+            "nullable": true,
+            "example": "kg",
+            "description": "When applicable, the unit representing the gross weight of the Container.",
+            "enum": [
+              "kg",
+              "g",
+              "mg",
+              "mug",
+              "ng",
+              "lb",
+              "oz"
+            ]
+          },
+          "openedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2025-01-01T17:59:56Z",
+            "description": "The date and time the container was first opened for dispense."
+          },
+          "missingSince": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": null,
+            "description": "When set, the container is considered missing since this date."
+          },
+          "catalogNo": {
+            "maxLength": 80,
+            "type": "string",
+            "nullable": true,
+            "example": "ABC123x1L",
+            "description": "The catalog number of the package size of this Container, provided by the Material's supplier."
+          },
+          "externallyManaged": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether or not this container is being actively managed in another inventory system.  When set to true, this Container is not editable in the Materials Management UI."
+          },
+          "lifecycleState": {
+            "minLength": 1,
+            "type": "string",
+            "example": "Available",
+            "description": "The lifecycle state of this container.",
+            "enum": [
+              "Available",
+              "Quarantined",
+              "Disposed"
+            ]
+          },
+          "externalSource": {
+            "maxLength": 80,
+            "type": "string",
+            "nullable": true,
+            "example": "CISPro",
+            "description": "The name of the external inventory system managing this container."
+          },
+          "externalId": {
+            "maxLength": 80,
+            "type": "string",
+            "nullable": true,
+            "example": "3425789",
+            "description": "The external inventory system's unique identifier for this container."
+          }
+        }
+      },
+      "ContainerCreateLocationDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "nullable": true,
+            "example": 3452
+          }
+        }
+      },
+      "ContainerCreateLotDTO": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "minLength": 1,
+            "type": "string",
+            "example": "uuid:6027d8ea-a57f-43a4-88c5-c64c7a518e3f"
+          }
+        }
+      },
+      "ContainerCreateMaterialDTO": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "minLength": 1,
+            "type": "string",
+            "example": "uuid:14c8fa3b-4a6f-4094-bdd4-8fd859f33949"
+          }
+        }
+      },
+      "ContainerResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 2583
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-01-01T12:59:59Z"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-01-01T12:59:59Z"
+          },
+          "barcode": {
+            "type": "string",
+            "nullable": true,
+            "example": "CON-1827",
+            "description": "A unique identifier for the Container that can be scanned."
+          },
+          "expirationDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2025-12-12T23:59:59Z",
+            "description": "The date and time at which the Material in this Container will expire."
+          },
+          "lot": {
+            "$ref": "#/components/schemas/LotResponseDTO"
+          },
+          "material": {
+            "$ref": "#/components/schemas/MaterialResponseDTO"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationResponseDTO"
+          },
+          "certificate": {
+            "$ref": "#/components/schemas/CertificateResponseDTO"
+          },
+          "netQuantity": {
+            "type": "number",
+            "format": "double",
+            "example": 5,
+            "description": "The numeric value for the amount of Material in the Container."
+          },
+          "netQuantitySigFigs": {
+            "type": "integer",
+            "nullable": true,
+            "example": null,
+            "description": "When applicable, the number of significant figures used to determine the value of netQuantity."
+          },
+          "netQuantityUnit": {
+            "type": "string",
+            "nullable": true,
+            "example": "kg",
+            "description": "The the unit representing the amount of Material in the Container.",
+            "enum": [
+              "kg",
+              "g",
+              "mg",
+              "mug",
+              "ng",
+              "lb",
+              "oz",
+              "L",
+              "mL",
+              "muL",
+              "nL",
+              "m3",
+              "gal",
+              "qt",
+              "fl oz"
+            ]
+          },
+          "netQuantity_m3": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "example": 0,
+            "description": "The value of netQuantity normalized in m3 when the container is measured in a Volume unit."
+          },
+          "netQuantity_m3_SigFigs": {
+            "type": "integer",
+            "nullable": true,
+            "example": null
+          },
+          "netQuantity_kg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "example": 5,
+            "description": "The value of netQuantity normalized in kg when the container is measured in a Mass unit."
+          },
+          "netQuantity_kg_SigFigs": {
+            "type": "integer",
+            "nullable": true,
+            "example": null
+          },
+          "tareWeight": {
+            "type": "number",
+            "format": "double",
+            "example": 0.1,
+            "description": "When applicable, the tare weight of the Container when it is empty."
+          },
+          "tareWeightSigFigs": {
+            "type": "integer",
+            "nullable": true,
+            "example": null,
+            "description": "When applicable, the number of significant figures used to determine the value of tareWeight."
+          },
+          "tareWeightUnit": {
+            "type": "string",
+            "nullable": true,
+            "example": "kg",
+            "description": "When applicable, the unit representing the tare weight of the Container.",
+            "enum": [
+              "kg",
+              "g",
+              "mg",
+              "mug",
+              "ng",
+              "lb",
+              "oz"
+            ]
+          },
+          "tareWeight_kg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "example": 0.1,
+            "description": "When applicable, the value of tareWeight normalized in kg."
+          },
+          "tareWeight_kg_SigFigs": {
+            "type": "integer",
+            "nullable": true,
+            "example": null
+          },
+          "grossWeight": {
+            "type": "number",
+            "format": "double",
+            "example": 5.1,
+            "description": "The gross weight of the Container, which must equal the sum of tareWeight and netQuantity when provided."
+          },
+          "grossWeightSigFigs": {
+            "type": "integer",
+            "nullable": true,
+            "example": null,
+            "description": "When applicable, the number of significant figures used to determine the value of grossWeight."
+          },
+          "grossWeightUnit": {
+            "type": "string",
+            "nullable": true,
+            "example": "kg",
+            "description": "When applicable, the unit representing the gross weight of the Container.",
+            "enum": [
+              "kg",
+              "g",
+              "mg",
+              "mug",
+              "ng",
+              "lb",
+              "oz"
+            ]
+          },
+          "grossWeight_kg": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "example": 5.1,
+            "description": "When applicable, the value of grossWeight normalized in kg."
+          },
+          "grossWeight_kg_SigFigs": {
+            "type": "integer",
+            "nullable": true,
+            "example": 2
+          },
+          "openedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2025-01-01T17:59:56Z",
+            "description": "The date and time the container was first opened for dispense."
+          },
+          "missingSince": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": null,
+            "description": "When set, the container is considered missing since this date."
+          },
+          "catalogNo": {
+            "type": "string",
+            "nullable": true,
+            "example": "DFW218x5kg",
+            "description": "The catalog number of the package size of this Container, provided by the Material's supplier."
+          },
+          "externallyManaged": {
+            "type": "boolean",
+            "example": false,
+            "description": "Whether or not this container is being actively managed in another inventory system.  When set to true, this Container is not editable in the Materials Management UI."
+          },
+          "lifecycleState": {
+            "type": "string",
+            "nullable": true,
+            "example": "Available",
+            "enum": [
+              "Available",
+              "Quarantined",
+              "Disposed"
+            ]
+          },
+          "externalSource": {
+            "type": "string",
+            "nullable": true,
+            "example": null,
+            "description": "The name of the external inventory system managing this container."
+          },
+          "externalId": {
+            "type": "string",
+            "nullable": true,
+            "example": null,
+            "description": "The external inventory system's unique identifier for this container."
+          }
+        }
+      },
+      "ContainerResponseDTOODataQueryResults": {
+        "type": "object",
+        "properties": {
+          "member": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContainerResponseDTO"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "ContainerUpdateDTO": {
+        "type": "object",
+        "properties": {
+          "barcode": {
+            "maxLength": 80,
+            "type": "string",
+            "nullable": true,
+            "example": "C002847",
+            "description": "A unique identifier for the Container that can be scanned."
+          },
+          "expirationDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2025-12-12T23:59:59Z",
+            "description": "The date and time at which the Material in this Container will expire."
+          },
+          "location": {
+            "$ref": "#/components/schemas/ContainerCreateLocationDTO"
+          },
+          "certificate": {
+            "$ref": "#/components/schemas/ContainerCreateCertificateDTO"
+          },
+          "netQuantity": {
+            "type": "number",
+            "format": "double",
+            "example": 1,
+            "description": "The numeric value for the amount of Material in the Container."
+          },
+          "netQuantitySigFigs": {
+            "type": "integer",
+            "nullable": true,
+            "example": 1,
+            "description": "When applicable, the number of significant figures used to determine the value of netQuantity."
+          },
+          "netQuantityUnit": {
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string",
+            "example": "kg",
+            "description": "The the unit representing the amount of Material in the Container.",
+            "enum": [
+              "kg",
+              "g",
+              "mg",
+              "mug",
+              "ng",
+              "lb",
+              "oz",
+              "L",
+              "mL",
+              "muL",
+              "nL",
+              "m3",
+              "gal",
+              "qt",
+              "fl oz"
+            ]
+          },
+          "tareWeight": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "example": 0.1,
+            "description": "When applicable, the tare weight of the Container when it is empty."
+          },
+          "tareWeightSigFigs": {
+            "type": "integer",
+            "nullable": true,
+            "example": null,
+            "description": "When applicable, the number of significant figures used to determine the value of tareWeight."
+          },
+          "tareWeightUnit": {
+            "maxLength": 25,
+            "type": "string",
+            "nullable": true,
+            "example": "kg",
+            "description": "When applicable, the unit representing the tare weight of the Container.",
+            "enum": [
+              "kg",
+              "g",
+              "mg",
+              "mug",
+              "ng",
+              "lb",
+              "oz"
+            ]
+          },
+          "grossWeight": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "example": 1.1,
+            "description": "The gross weight of the Container, which must equal the sum of tareWeight and netQuantity when provided."
+          },
+          "grossWeightSigFigs": {
+            "type": "integer",
+            "nullable": true,
+            "example": 2,
+            "description": "When applicable, the number of significant figures used to determine the value of grossWeight."
+          },
+          "grossWeightUnit": {
+            "maxLength": 25,
+            "type": "string",
+            "nullable": true,
+            "example": "kg",
+            "description": "When applicable, the unit representing the gross weight of the Container.",
+            "enum": [
+              "kg",
+              "g",
+              "mg",
+              "mug",
+              "ng",
+              "lb",
+              "oz"
+            ]
+          },
+          "openedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2025-01-01T17:59:56Z",
+            "description": "The date and time the container was first opened for dispense."
+          },
+          "missingSince": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": null,
+            "description": "When set, the container is considered missing since this date."
+          },
+          "catalogNo": {
+            "maxLength": 80,
+            "type": "string",
+            "nullable": true,
+            "example": "ABC123x1L",
+            "description": "The catalog number of the package size of this Container, provided by the Material's supplier."
+          },
+          "externallyManaged": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether or not this container is being actively managed in another inventory system.  When set to true, this Container is not editable in the Materials Management UI."
+          },
+          "lifecycleState": {
+            "minLength": 1,
+            "type": "string",
+            "example": "Available",
+            "description": "The lifecycle state of this container.",
+            "enum": [
+              "Available",
+              "Quarantined",
+              "Disposed"
+            ]
+          },
+          "externalSource": {
+            "maxLength": 80,
+            "type": "string",
+            "nullable": true,
+            "example": "CISPro",
+            "description": "The name of the external inventory system managing this container."
+          },
+          "externalId": {
+            "maxLength": 80,
+            "type": "string",
+            "nullable": true,
+            "example": "3425789",
+            "description": "The external inventory system's unique identifier for this container."
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "errors:3dx:invalidRequest"
+          },
+          "title": {
+            "type": "string",
+            "example": "Bad Request"
+          },
+          "status": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The HTTP status",
+            "example": 400
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true,
+            "example": "One or more fields did not pass validation."
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorResponseDetail"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "ErrorResponseDetail": {
+        "type": "object",
+        "description": "Specific data points relevant to the error",
+        "nullable": true,
+        "properties": {
+          "detail": {
+            "type": "string",
+            "description": "The type of error",
+            "nullable": true,
+            "example": "The lot field is required."
+          },
+          "pointer": {
+            "type": "string",
+            "description": "The HTTP status",
+            "example": "member[0].lot"
+          }
+        }
+      },
+      "LocationCreateDTO": {
+        "required": [
+          "allowsInventory",
+          "inheritLocationActionPermissions",
+          "locationType",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 80,
+            "minLength": 1,
+            "type": "string",
+            "example": "Lab 101",
+            "description": "The name of the location. Must be unique per parent location."
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationCreateLocationDTO"
+          },
+          "locationType": {
+            "maxLength": 80,
+            "minLength": 1,
+            "type": "string",
+            "example": "Room",
+            "description": "The type of location, to be used to describe the location hierarchy.",
+            "enum": [
+              "Site",
+              "Building",
+              "Room",
+              "Lab",
+              "Freezer",
+              "Cabinet",
+              "Shelf"
+            ]
+          },
+          "allowsInventory": {
+            "type": "boolean"
+          },
+          "inheritLocationActionPermissions": {
+            "type": "boolean"
+          }
+        }
+      },
+      "LocationCreateDTOBulkCreateDTO": {
+        "required": [
+          "member"
+        ],
+        "type": "object",
+        "properties": {
+          "member": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LocationCreateDTO"
+            }
+          }
+        }
+      },
+      "LocationCreateLocationDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "nullable": true,
+            "example": 1927
+          }
+        }
+      },
+      "LocationParentResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "nullable": true,
+            "example": 1927
+          }
+        }
+      },
+      "LocationResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1964
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-01-01T12:59:59Z"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-01-01T12:59:59Z"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "example": "Lab 101",
+            "description": "The name of the location. Must be unique per parent location."
+          },
+          "barcode": {
+            "type": "string",
+            "nullable": true,
+            "example": "LOC-2959",
+            "description": "A unique identifier for the Location that will be generated by the application."
+          },
+          "fullPath": {
+            "type": "string",
+            "nullable": true,
+            "example": "My Site > Building 1 > Lab 101",
+            "description": "The computed hierarchy of the current location and all of its parents."
+          },
+          "locationType": {
+            "type": "string",
+            "nullable": true,
+            "example": "Room",
+            "description": "The type of location, to be used to describe the locaiton hierarchy.",
+            "enum": [
+              "Site",
+              "Building",
+              "Room",
+              "Lab",
+              "Freezer",
+              "Cabinet",
+              "Shelf"
+            ]
+          },
+          "allowsInventory": {
+            "type": "boolean"
+          },
+          "inheritLocationActionPermissions": {
+            "type": "boolean"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationParentResponseDTO"
+          }
+        }
+      },
+      "LocationResponseDTOODataQueryResults": {
+        "type": "object",
+        "properties": {
+          "member": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LocationResponseDTO"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "LocationUpdateDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1964
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "example": "Lab 101",
+            "description": "The name of the location. Must be unique per parent location."
+          },
+          "locationType": {
+            "type": "string",
+            "nullable": true,
+            "example": "Room",
+            "description": "The type of location, to be used to describe the locaiton hierarchy.",
+            "enum": [
+              "Site",
+              "Building",
+              "Room",
+              "Lab",
+              "Freezer",
+              "Cabinet",
+              "Shelf"
+            ]
+          },
+          "allowsInventory": {
+            "type": "boolean"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationParentResponseDTO"
+          }
+        }
+      },
+      "LotResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true,
+            "example": "uuid:6027d8ea-a57f-43a4-88c5-c64c7a518e3f"
+          },
+          "source": {
+            "type": "string",
+            "nullable": true,
+            "example": "https://devopstst1glnq92765-euw1-28dsw11106-substancereg.3dx-staging.3ds.com"
+          },
+          "relativePath": {
+            "type": "string",
+            "nullable": true,
+            "example": "/resources/v1/matmgmt/lots/uuid:6027d8ea-a57f-43a4-88c5-c64c7a518e3f"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "example": "dsmat:Lot"
+          }
+        }
+      },
+      "MaterialResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true,
+            "example": "dsmat:Material-20a32a1522804d0a8ac3fcd6fcc70905"
+          },
+          "source": {
+            "type": "string",
+            "nullable": true,
+            "example": "https://devopstst1glnq92765-euw1-28dsw11106-substancereg.3dx-staging.3ds.com"
+          },
+          "relativePath": {
+            "type": "string",
+            "nullable": true,
+            "example": "/resources/v1/matmgmt/materials/dsmat:Material-20a32a1522804d0a8ac3fcd6fcc70905?$expand=FormulationPropertySet"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "example": "dsmat:Material"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "{Materials}/resources/v1/invmgmt",
+      "variables": {
+        "Materials": {
+          "default": "https://3DEXPERIENCE_Materials",
+          "description": "URL of the Materials Management service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/invmgmt/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "container",
+      "description": "Access to Containers"
+    },
+    {
+      "name": "location",
+      "description": "Access to Locations"
+    },
+    {
+      "name": "certificate",
+      "description": "Access to Certificates"
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

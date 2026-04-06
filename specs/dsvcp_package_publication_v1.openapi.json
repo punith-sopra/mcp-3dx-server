@@ -1,0 +1,657 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Package Publication Web Services",
+    "description": "Web Services for managing the Package Publication object type of Collaboration Package Management.",
+    "version": "1.0.0",
+    "x-ds-service": [
+      "3DSpace"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dsvcp/publications",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_3DSpace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsvcp/publications/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/search": {
+      "get": {
+        "summary": "Search package publications for the provided input string.",
+        "description": "",
+        "operationId": "searchPackagePublications",
+        "tags": [
+          "Package Publication APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dsvcp.packagePublication"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "name": "searchStr",
+            "description": "Search Criteria; 2 or more characters required.",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "description": "The number of objects to return; default 50; max 1000",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "description": "The number of objects to skip in case of paginating through the serach results; default 0",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/packagePublicationinclude"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/{id}": {
+      "get": {
+        "summary": "Get Info of Package Publication.",
+        "description": "",
+        "operationId": "getPackagePublication",
+        "tags": [
+          "Package Publication APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dsvcp.packagePublication"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/packagePublicationinclude"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "dsvcp.packagePublication": {
+        "$ref": "#/components/x-schemas/dsvcp.packagePublication"
+      }
+    },
+    "x-schemas": {
+      "collaboration-package": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "default": "",
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "identifier": {
+                "default": "",
+                "type": "string",
+                "readOnly": true
+              },
+              "source": {
+                "default": "",
+                "type": "string"
+              },
+              "relativePath": {
+                "default": "",
+                "type": "string"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "dsvcp.packagePublication": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "readOnly": true
+              },
+              "type": {
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "identifier": {
+                "type": "string",
+                "readOnly": true
+              },
+              "title": {
+                "description": "Collaboration Package Title.",
+                "example": "Drone Package",
+                "default": "",
+                "type": "string"
+              },
+              "state": {
+                "type": "string",
+                "readOnly": true
+              },
+              "name": {
+                "type": "string",
+                "readOnly": true
+              },
+              "revision": {
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "type": "string"
+              },
+              "originated": {
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "type": "string",
+                "readOnly": true
+              },
+              "owner": {
+                "description": "The owner of the Collaboration Package",
+                "type": "string",
+                "readOnly": true
+              },
+              "modified": {
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "type": "string",
+                "readOnly": true
+              }
+            },
+            "required": [
+              "title"
+            ]
+          },
+          {
+            "$ref": "#/components/x-definitions/OPTIONAL_ATTRIBUTES"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "collaboration-package": {
+                "$ref": "#/components/x-schemas/collaboration-package"
+              }
+            }
+          },
+          {}
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-dsvcp.packagePublication": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/dsvcp.packagePublication"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-EMPTY": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {}
+        ]
+      },
+      "BASICS_ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "BASICS": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "description": "The object type.",
+            "type": "string"
+          }
+        }
+      },
+      "CESTAMP": {
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object.",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "CESTAMP_REQUIRED": {
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object; required for modify operations",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string"
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://3dspace.mydomain:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "OPTIONAL_ATTRIBUTES": {
+        "type": "object",
+        "properties": {
+          "packageLevel": {
+            "description": "Represents progression of package from inception to production. For publication, packageLevel is of same Collaboration Package from which Package Publication is generated. ",
+            "example": "Not Specified, Conceptual Level, Developmental Level, Product Level",
+            "default": "Not Specified",
+            "type": "string"
+          },
+          "exportFormats": {
+            "description": "Represents format of files present in Publication.",
+            "example": "docx, pdf, 3dpdf, step, etc...",
+            "type": "string"
+          },
+          "fileRemovalDate": {
+            "description": "Represents the Publication file removal date.",
+            "example": "date",
+            "type": "string"
+          },
+          "endEffectivityDate": {
+            "description": "Represents the date beyond which publication file becomes ineffective.",
+            "example": "date",
+            "type": "string"
+          },
+          "containsIPData": {
+            "description": "Represents if Publication contains Data from IP Protected/IP Export Control Content",
+            "example": "FALSE, TRUE",
+            "default": "FALSE",
+            "type": "boolean"
+          },
+          "isPasswordProtected": {
+            "description": "Represents if the Publication file password protected.",
+            "example": "FALSE, TRUE",
+            "default": "FALSE",
+            "type": "boolean"
+          }
+        }
+      },
+      "csrf": {
+        "description": "CSRF object is required to be sent back for update operations and may be provided with read operations.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The CSRF token name.",
+            "example": "ENO_CSRF_TOKEN",
+            "type": "string"
+          },
+          "value": {
+            "description": "The CSRF token value.",
+            "example": "EXAM-PLEW-R1CD-BNF7-G8UC-KT52-MGUA-UBE1",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request.",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-dsvcp.packagePublication": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-dsvcp.packagePublication"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "dsvcp.packagePublication": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/dsvcp.packagePublication"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "packagePublicationinclude": {
+        "name": "include",
+        "description": "Specify sub-resources that should be returned by the web request. Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: [!]collaboration-package. For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "fields": {
+        "name": "$fields",
+        "description": "Specify resource and sub-resource fields that should be returned by the web request  Fields include keywords none & all plus payload fields - packageLevel, exportFormats, fileRemovalDate, endEffectivityDate, containsIPData, isPasswordProtected. See schema response payload.  For more information, see 6W REST Services Principles - Refinement Section",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

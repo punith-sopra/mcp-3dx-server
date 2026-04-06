@@ -1,0 +1,620 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Authoring Collaborative Spaces",
+    "description": "<p>This page contains the definition of web services to <b>create</b> or <b>modify</b> <b>collaborative spaces</b>. For the modification there are two possibilities, a complete redefinition, or a partial one. For the latter only the passed attributes are changed in database. </p>\n - <p>Beside, it enables to add (or remove)  <b>security contexts</b>, whose collaborative space is the one in creation or update process, to several members. A member can be a person, or a user group. For the latter, all persons of the group have (or do not have anymore) the security context.</p>\n - <p>These web services works with <b>a bunch</b> of collaborative spaces, but there is no transaction. If there is at least one error in the definition of a collaborative space, APIs return an error, and no collaborative space is created or updated. </p>\n - <p>The connected person invoking the APis must own and use a security context where the role is <b>administrator</b>.</p>\n - <p>Finally do not forget to pass the <b>CSRF token</b> in the appropriate header. Its value is  returned by <3DSPACE_URL>/resources/v1/application/CSRF</p>",
+    "version": "1.0.0",
+    "x-ds-service": [
+      "3DSpace"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_3DSpace"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "Collaborative Space",
+      "description": "."
+    }
+  ],
+  "paths": {
+    "/resources/modeler/pno/collabspace": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/SecurityContext"
+        },
+        {
+          "$ref": "#/components/parameters/CSRFToken"
+        }
+      ],
+      "post": {
+        "summary": "Creates collaborative spaces",
+        "description": "It creates several collaborative spaces.  The request body contains a definition for each of them.\n - If one collaborative space already exists, nothing at all is done for it.\n- If there is an issue with the request body no collaborative space is created at all.\n- All referenced persons, user groups, roles, organizations must already exist.\n- The collaborative space owner is not automatically added as member, and therefore no security context is associated with him/her. It must be explicitely done.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/collabspaces"
+        },
+        "tags": [
+          "Collaborative Space"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "put": {
+        "summary": "Redefines collaborative spaces",
+        "description": "It fully modifies several collaborative spaces. The request body contains a new definition for each of them.\n  - The name (not modifiable) identifies the collaborative space to redefine. If one does not exist, an error is raised. \n- The family and owner attributes must be passed but cannot be changed. Their values must be original ones. In case of difference, an error is raised. \n - If  title or description attributes are not passed, their values are the collaborative space name and an empty string respectively. \n - The members attributes gives the new security contexts to create, existing ones implying this collab space are ungranted. \n - If there is an issue with the request body no collaborative space is updated at all.  \n- All referenced persons, user groups, roles, organizations must already exist. \n",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/collabspaces"
+        },
+        "tags": [
+          "Collaborative Space"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Modifies collaborative spaces",
+        "description": "It modifies several collaborative spaces.The request body contains some changes for each of them.\n - Each collaborative space is modified with the passed value only. \n- If there is an issue with the request body no collaborative space is updated at all. \n- All referenced persons, user groups, roles, organizations must already exist. \n- Adding an existing member, or removing a non existing member do no raise an error.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/collabspacesforPatch"
+        },
+        "tags": [
+          "Collaborative Space"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/resources/modeler/pno/collabspace/{collabspaceName}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/SecurityContext"
+        },
+        {
+          "$ref": "#/components/parameters/CSRFToken"
+        },
+        {
+          "$ref": "#/components/parameters/CollabSpaceName"
+        }
+      ],
+      "delete": {
+        "summary": "Delete collaborative space",
+        "description": "It deletes the collaborative space identified by {collabspaceName}. The deletion only works if the collaborative space is empty. If the collaborative space is not empty, we send an error 403 with the code PNO030.",
+        "tags": [
+          "Collaborative Space"
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/204"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "CSRFToken": {
+        "name": "ENO_CSRF_TOKEN",
+        "description": "The ENOVIA CSRF token is required for server side modifications. Its value is returned by <3DSPACE_URL>/resources/v1/application/CSRF ",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "CollabSpaceName": {
+        "name": "collabspaceName",
+        "description": "The collaborative space name is required in order to delete it.",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "collabspacesbody": {
+        "description": "It is the request body for POST and PUT verbs.",
+        "type": "object",
+        "required": [
+          "collabspaces"
+        ],
+        "properties": {
+          "collabspaces": {
+            "description": " ",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/collabspacebody"
+            }
+          }
+        }
+      },
+      "collabspacebody": {
+        "description": "It defines a collaborative space to create or redefine.",
+        "type": "object",
+        "required": [
+          "name",
+          "family",
+          "visibility",
+          "owner"
+        ],
+        "properties": {
+          "name": {
+            "description": "It defines the collaborative space identifier. Once the collabspace is created the value cannot change. The string cannot be longer than 32 characters and must not contain the following characters: < > / \\  : * | ?  \" @ # $ % , . [ ] ",
+            "type": "string"
+          },
+          "title": {
+            "description": "It defines the collaborative space external name. The string cannot be longer than 32 characters and must not contain the following characters: < > / \\ : * | ? \" @ # $ % , . [ ]. If the value is not passed, the title is the collaborative space name. If the value is passed, and is an empty string it raises an error.",
+            "type": "string"
+          },
+          "description": {
+            "description": "It defines a description for the collaborative space. The string cannot be longer than 255 characters.",
+            "type": "string"
+          },
+          "family": {
+            "description": "It defines the collaborative space categorize. Once the collabspace is created the value cannot change. There are only 2 categories: Design and Standard respectively referenced by DesignTeam and StandardTeam.",
+            "type": "string",
+            "enum": [
+              "DesignTeam",
+              "StandardTeam"
+            ]
+          },
+          "visibility": {
+            "description": "It defines the collaborative space contents visibility. <br>A public collaborative space can have for family Design or Standard, while for protected and public, the family can only be Design.",
+            "type": "string",
+            "enum": [
+              "Private",
+              "Protected",
+              "Public"
+            ]
+          },
+          "owner": {
+            "description": "It defines the collaborative space owner. Once the collabspace is created the value cannot change. In other words the transfert ownership is impossible. In case of update, the value must be the same as at the creation time, otherwise it is an error.",
+            "type": "string"
+          },
+          "members": {
+            "description": "It defines security contexts, whose the collabspace is the curent one, to associate with members. If the same member is passed more than once, it is the union of the definitions.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/member"
+            }
+          }
+        }
+      },
+      "collabspacesPatchbody": {
+        "description": "It is the request body for PATCH verb.",
+        "type": "object",
+        "required": [
+          "collabspaces"
+        ],
+        "properties": {
+          "collabspaces": {
+            "description": " ",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/collabspacePatchbody"
+            }
+          }
+        }
+      },
+      "collabspacePatchbody": {
+        "description": "It defines the list of attributes which can be modified for a collaborative space. If one is missed in the body, the collaborative space attribute is not changed in database.",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "description": "The identifier of the collaborative space.",
+            "type": "string"
+          },
+          "title": {
+            "description": "It defines the collaborative space external name. The string cannot be longer than 32 characters and must not contain the following characters: < > / \\ : * | ? \" @ # $ % , . [ ] . The value cannot be an empty string, otherwise it raises an error. ",
+            "type": "string"
+          },
+          "description": {
+            "description": "It defines a description for the collaborative space. The string is limited to 255 characters.",
+            "type": "string"
+          },
+          "visibility": {
+            "description": "It defines the collaborative space visibility.",
+            "type": "string",
+            "enum": [
+              "Private",
+              "Protected",
+              "Public"
+            ]
+          },
+          "members": {
+            "description": "It defines security contexts, whose the collabspace is the curent one, to associate with or remove to members. \n- If the same member is passed more than once, it is the union of the definitions. \n- If for the same member, there are additions and removals for the same couple, the last action is taken. \n- For a removal there is no check for the role and organization. if one is wrong, the API does not raise an error.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/memberPatch"
+            }
+          }
+        }
+      },
+      "member": {
+        "description": "It defines the members (persons or user groups) to associate with security contexts.",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "The member is a person. The value is the username (login) of the person.",
+                "type": "string"
+              },
+              "couples": {
+                "$ref": "#/components/schemas/couples"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "uri": {
+                "description": "The member is a user group. The  expected format is uuid:UUIDv4HexaString.",
+                "type": "string"
+              },
+              "couples": {
+                "$ref": "#/components/schemas/couples"
+              }
+            }
+          }
+        ]
+      },
+      "memberPatch": {
+        "description": "It defines the members (persons or user groups) to add or remove security contexts.",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "The member is a person. The value is the username (login) of the person.",
+                "type": "string"
+              },
+              "couples": {
+                "$ref": "#/components/schemas/couplesPatch"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "uri": {
+                "description": "The member is a user group. The  expected format is uuid:UUIDv4HexaString.",
+                "type": "string"
+              },
+              "couples": {
+                "$ref": "#/components/schemas/couplesPatch"
+              }
+            }
+          }
+        ]
+      },
+      "couples": {
+        "description": "It defines with the created/updated collaborative space all security contexts to associate with the current member. ",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/couple"
+        }
+      },
+      "couplesPatch": {
+        "description": "It defines with the patched collaborative space all security contexts to add or remove to the current member.",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/couplePatch"
+        }
+      },
+      "couple": {
+        "description": "It defines un couple (role, organization). With the current collabspace space, it defines a security context. The latter will be associated with the member.",
+        "type": "object",
+        "required": [
+          "organization",
+          "role"
+        ],
+        "properties": {
+          "organization": {
+            "$ref": "#/components/schemas/RoleorOrganizationReference"
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleorOrganizationReference"
+          }
+        }
+      },
+      "couplePatch": {
+        "description": "It first sets a couple (role, organization). With the current collabspace space, it defines a security context. Finally the couple defines if the security context must be removed or added to the member.  ",
+        "type": "object",
+        "required": [
+          "op",
+          "organization",
+          "role"
+        ],
+        "properties": {
+          "op": {
+            "description": "The operation to apply for the members.",
+            "type": "string",
+            "enum": [
+              "add",
+              "remove"
+            ]
+          },
+          "organization": {
+            "$ref": "#/components/schemas/RoleorOrganizationReference"
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleorOrganizationReference"
+          }
+        }
+      },
+      "RoleorOrganizationReference": {
+        "description": "It references a business role or an organization. The object must exists in database.",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "description": "The name of the entity (role or organization).",
+            "type": "string"
+          }
+        }
+      },
+      "responseOK": {
+        "type": "object",
+        "description": "It is the  body in case of successul response.",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "description": "A successful code.",
+            "type": "string"
+          },
+          "message": {
+            "description": "A successful message",
+            "type": "string"
+          }
+        }
+      },
+      "responseKO": {
+        "description": "It is the  body in case of failure response.",
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": [
+              "code",
+              "message"
+            ],
+            "properties": {
+              "code": {
+                "description": "Its format is PNOXXX, where XXX is a unique number specifying the error.",
+                "type": "string"
+              },
+              "message": {
+                "description": "A text (in English) describing the error. The message text may change.",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "collabspaces": {
+        "description": "The request body for creating or updating a bunch of collaborative spaces.",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/collabspacesbody"
+            }
+          }
+        }
+      },
+      "collabspacesforPatch": {
+        "description": "The request body for patching a bunch of collaborative spaces.",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/collabspacesPatchbody"
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Successful response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/responseOK"
+            },
+            "example": {
+              "code": "0",
+              "message": "success"
+            }
+          }
+        }
+      },
+      "204": {
+        "description": "Ok."
+      },
+      "401": {
+        "description": "Authentification issue. The list of INFXXX errors is available in the article 3DSpace Web Service HTTP Failures",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/responseKO"
+            },
+            "example": {
+              "error": {
+                "code": "INF101",
+                "message": "wrong security context"
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/responseKO"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Authorization issue. It can be due to a missing or wrong CSRF header, or because the role of the security context is not administrator, or because the collaborative space is not empty, or because an administrator is on a collaborative space and tries to delete it.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/responseKO"
+            },
+            "examples": {
+              "CSRF": {
+                "value": {
+                  "error": {
+                    "code": "PNO018",
+                    "message": "Invalid or Missing CSRF token."
+                  }
+                }
+              },
+              "Invalid Privilege": {
+                "value": {
+                  "error": {
+                    "code": "PNO015",
+                    "message": "User has no administrator privilege. (wrong security context)."
+                  }
+                }
+              },
+              "Project Not Empty": {
+                "value": {
+                  "error": {
+                    "code": "PNO030",
+                    "message": "Specified Collaborative Space is not empty"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not able to retrieve information. It can be due to a collaborative space that does not exist, or because the role of the security context is not administrator, or because the collaborative space is not empty, or because an administrator is on a collaborative space and tries to delete it.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/responseKO"
+            },
+            "examples": {
+              "Project Non-Existent": {
+                "value": {
+                  "error": {
+                    "code": "PNO025",
+                    "message": "Specified Collaborative Space does not exist"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Server internal error.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/responseKO"
+            },
+            "example": {
+              "error": {
+                "code": "PNO011",
+                "message": "internal error"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

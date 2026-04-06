@@ -1,0 +1,539 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Country Web Services",
+    "description": "Web Services for retrieving Country information.",
+    "version": "2.0.0",
+    "x-ds-service": [
+      "3DSpace"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/dslbl/v2",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_3DSpace"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dslbl:country/v2",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/countries/{countryId}": {
+      "get": {
+        "summary": "Get the information for a given Country.",
+        "description": "",
+        "operationId": "getCountry",
+        "tags": [
+          "Country"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-country"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "countryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      }
+    },
+    "/countries": {
+      "get": {
+        "summary": "Get all the Countries.",
+        "description": "",
+        "operationId": "getCountries",
+        "tags": [
+          "Country"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-country"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "country": {
+        "$ref": "#/components/x-schemas/country"
+      }
+    },
+    "x-schemas": {
+      "country": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "eTag": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "2LetterCode": {
+                "default": "",
+                "type": "string"
+              },
+              "3LetterCode": {
+                "default": "",
+                "type": "string"
+              },
+              "number": {
+                "default": "",
+                "type": "string"
+              },
+              "continent": {
+                "default": "",
+                "type": "string",
+                "enum": [
+                  "",
+                  "AF",
+                  "AS",
+                  "EU",
+                  "NA",
+                  "OC",
+                  "SA",
+                  "AN",
+                  "OT"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "languages": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/languages"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "languages": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "eTag": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "2LetterCode": {
+                "type": "string"
+              },
+              "3LetterCode": {
+                "type": "string"
+              }
+            }
+          },
+          {}
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-null": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/country"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "BASICS_ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "PATCH_SUB_RESOURCE_ACTION": {
+        "type": "object",
+        "properties": {
+          "op": {
+            "description": "Specify the sub-resource update action. See 6W Web Service Principles: Data Object Updates",
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "add",
+              "remove"
+            ]
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "object",
+            "properties": {
+              "success": {
+                "description": "Reflects true to indicate successful request.",
+                "example": true,
+                "type": "boolean"
+              },
+              "statusCode": {
+                "description": "The HTTP response code.",
+                "example": 200,
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "successful_delete": {
+        "description": "The response data for successful delete request.",
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "object",
+            "properties": {
+              "success": {
+                "description": "Reflects false to indicate failure.",
+                "example": false,
+                "type": "boolean"
+              },
+              "statusCode": {
+                "description": "The HTTP response code.",
+                "example": 400,
+                "type": "integer"
+              }
+            }
+          },
+          "error": {
+            "allOf": [
+              {
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+                      "example": "NLS Error.",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "object",
+            "properties": {
+              "success": {
+                "description": "Reflects false to indicate failure.",
+                "example": false,
+                "type": "boolean"
+              },
+              "statusCode": {
+                "description": "The HTTP response code.",
+                "example": 401,
+                "type": "integer"
+              }
+            }
+          },
+          "error": {
+            "allOf": [
+              {
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+                      "example": "NLS Error.",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "object",
+            "properties": {
+              "success": {
+                "description": "Reflects false to indicate failure.",
+                "example": false,
+                "type": "boolean"
+              },
+              "statusCode": {
+                "description": "The HTTP response code.",
+                "example": 403,
+                "type": "integer"
+              }
+            }
+          },
+          "error": {
+            "allOf": [
+              {
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+                      "example": "NLS Error.",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "object",
+            "properties": {
+              "success": {
+                "description": "Reflects false to indicate failure.",
+                "example": false,
+                "type": "boolean"
+              },
+              "statusCode": {
+                "description": "The HTTP response code.",
+                "example": 500,
+                "type": "integer"
+              }
+            }
+          },
+          "error": {
+            "allOf": [
+              {
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+                      "example": "NLS Error.",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-country": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-null"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {},
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "example": "en-US",
+        "description": "Identifies the locale for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "X-Requested-With": {
+        "name": "X-Requested-With",
+        "example": "XMLHttpRequest",
+        "description": "Required header for non GET operations; use value XMLHttpRequest.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

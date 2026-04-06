@@ -1,0 +1,1527 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Weekly Timesheet Web Services",
+    "description": "Web Services for managing Timesheet modeler.",
+    "version": "1.0.0",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3dspace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dspm:timesheet/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/timesheets/{timesheetId}/efforts": {
+      "get": {
+        "summary": "Get the efforts associated to a given Timesheet.",
+        "description": "",
+        "operationId": "getTimesheetEfforts",
+        "tags": [
+          "Timesheet"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-efforts"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "timesheetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]task, [!]project</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create new Efforts associated to a given Timesheet.",
+        "description": "",
+        "operationId": "createTimesheetEfforts",
+        "tags": [
+          "Timesheet"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-efforts"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/efforts"
+        },
+        "parameters": [
+          {
+            "name": "timesheetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]task, [!]project</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update existing Efforts associated to a given Timesheet.",
+        "description": "",
+        "operationId": "modifyTimesheetEfforts",
+        "tags": [
+          "Timesheet"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-efforts"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/efforts"
+        },
+        "parameters": [
+          {
+            "name": "timesheetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]task, [!]project</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/timesheets/{timesheetId}/efforts/{effortId}": {
+      "delete": {
+        "summary": "Delete a given Effort associated to a given Timesheet.",
+        "description": "",
+        "operationId": "deleteTimesheetEffort",
+        "tags": [
+          "Timesheet"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "timesheetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "effortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/timesheets/{timesheetId}": {
+      "get": {
+        "summary": "Get the information for a given Timesheet object.",
+        "description": "",
+        "operationId": "getTimesheet",
+        "tags": [
+          "Timesheet"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-timesheets"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "timesheetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]ownerInfo, [!]efforts, [!]associatedProjects, [!]task, [!]project</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update existing Timesheet and Timesheet related data.",
+        "description": "",
+        "operationId": "modifyTimesheet",
+        "tags": [
+          "Timesheet"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-timesheets"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/timesheets"
+        },
+        "parameters": [
+          {
+            "name": "timesheetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]ownerInfo, [!]efforts, [!]associatedProjects, [!]task, [!]project</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete a given Timesheet.",
+        "description": "",
+        "operationId": "deleteTimesheet",
+        "tags": [
+          "Timesheet"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "timesheetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/timesheets": {
+      "get": {
+        "summary": "Get the \"active\" Timesheets associated to the context user.",
+        "description": "",
+        "operationId": "getUserTimesheets",
+        "tags": [
+          "Timesheet"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-timesheets"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]ownerInfo, [!]efforts, [!]associatedProjects, [!]task, [!]project</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create new Timesheet(s) and associated data.",
+        "description": "",
+        "operationId": "createTimesheets",
+        "tags": [
+          "Timesheet"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-timesheets"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/timesheets"
+        },
+        "parameters": [
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]ownerInfo, [!]efforts, [!]associatedProjects, [!]task, [!]project</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/timesheets/submit": {
+      "post": {
+        "summary": "Submit the Timesheet for approval which includes all its associated efforts.",
+        "description": "",
+        "operationId": "submitTimesheets",
+        "tags": [
+          "Actions"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-timesheets"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/submit"
+        },
+        "parameters": [
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]ownerInfo, [!]efforts, [!]associatedProjects, [!]task, [!]project</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/timesheets/reject": {
+      "post": {
+        "summary": "Reject the given Timesheet including all or partially associated efforts.",
+        "description": "",
+        "operationId": "rejectTimesheets",
+        "tags": [
+          "Actions"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-timesheets"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/reject"
+        },
+        "parameters": [
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]ownerInfo, [!]efforts, [!]associatedProjects, [!]task, [!]project</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/timesheets/approve": {
+      "post": {
+        "summary": "Approve the given Timesheet including all or partially associated efforts.",
+        "description": "",
+        "operationId": "approveTimesheets",
+        "tags": [
+          "Actions"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-timesheets"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/approve"
+        },
+        "parameters": [
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]ownerInfo, [!]efforts, [!]associatedProjects, [!]task, [!]project</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "efforts": {
+        "$ref": "#/components/x-schemas/efforts"
+      },
+      "timesheets": {
+        "$ref": "#/components/x-schemas/timesheets"
+      }
+    },
+    "x-schemas": {
+      "efforts": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "sunday": {
+                "description": "Effort accumulated for Sunday.",
+                "default": "0.0",
+                "type": "string"
+              },
+              "monday": {
+                "description": "Effort accumulated for Monday.",
+                "default": "0.0",
+                "type": "string"
+              },
+              "tuesday": {
+                "description": "Effort accumulated for Tuesday",
+                "default": "0.0",
+                "type": "string"
+              },
+              "wednesday": {
+                "description": "Effort accumulated for Wednesday",
+                "default": "0.0",
+                "type": "string"
+              },
+              "thursday": {
+                "description": "Effort accumulated for Thursday",
+                "default": "0.0",
+                "type": "string"
+              },
+              "friday": {
+                "description": "Effort accumulated for Friday",
+                "default": "0.0",
+                "type": "string"
+              },
+              "saturday": {
+                "description": "Effort accumulated for Saturday",
+                "default": "0.0",
+                "type": "string"
+              },
+              "totalEffort": {
+                "description": "Total effort accumulated for the week.",
+                "default": "0.0",
+                "type": "string",
+                "readOnly": true
+              },
+              "state": {
+                "type": "string",
+                "readOnly": true
+              },
+              "userComments": {
+                "default": "",
+                "type": "string"
+              },
+              "approverComments": {
+                "default": "",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "task": {
+                "$ref": "#/components/x-schemas/task"
+              },
+              "project": {
+                "$ref": "#/components/x-schemas/project"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "task": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "submit": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {}
+        ]
+      },
+      "timesheets": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "readOnly": true
+              },
+              "weekEndingDate": {
+                "example": "2025-04-28T17:49:00.000",
+                "default": "",
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "state": {
+                "type": "string",
+                "readOnly": true
+              },
+              "userComments": {
+                "default": "",
+                "type": "string"
+              },
+              "approverComments": {
+                "default": "",
+                "type": "string",
+                "readOnly": true
+              },
+              "originated": {
+                "format": "date-time",
+                "type": "string",
+                "readOnly": true
+              },
+              "modified": {
+                "format": "date-time",
+                "type": "string",
+                "readOnly": true
+              },
+              "modifyAccess": {
+                "type": "string",
+                "readOnly": true
+              },
+              "deleteAccess": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ownerInfo": {
+                "$ref": "#/components/x-schemas/ownerInfo"
+              },
+              "efforts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/efforts"
+                }
+              },
+              "associatedProjects": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/associatedProjects"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "approve": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "approverComments": {
+                "default": "",
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (No), Modify (No)"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "efforts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/AprovalEffort"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "reject": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "approverComments": {
+                "default": "",
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (No), Modify (No)"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "efforts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/AprovalEffort"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "AprovalEffort": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "approverComments": {
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (No), Modify (No)"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "ownerInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "firstname": {
+                "default": "Unknown",
+                "type": "string"
+              },
+              "lastname": {
+                "default": "Unknown",
+                "type": "string"
+              },
+              "email": {
+                "default": "Unknown",
+                "x-IncludedByDefault": "no",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "description": "Object Owner Information",
+            "readOnly": true
+          }
+        ]
+      },
+      "project": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "associatedProjects": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {}
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-efforts": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/efforts"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-EMPTY": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-timesheets": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/timesheets"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "BASICS_ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "BASICS": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "description": "The object type.",
+            "type": "string"
+          }
+        }
+      },
+      "CESTAMP": {
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object.",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "CESTAMP_REQUIRED": {
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object; required for modify operations",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string"
+          }
+        }
+      },
+      "PATCH_SUB_RESOURCE_ACTION": {
+        "type": "object",
+        "properties": {
+          "updateAction": {
+            "description": "Specify the sub-resource update action. See 6W Web Service Principles: Data Object Updates",
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "CONNECT",
+              "DISCONNECT"
+            ]
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://3dspace.mydomain:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "csrf": {
+        "description": "CSRF object is required to be sent back for update operations and may be provided with read operations.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The CSRF token name.",
+            "example": "ENO_CSRF_TOKEN",
+            "type": "string"
+          },
+          "value": {
+            "description": "The CSRF token value.",
+            "example": "EXAM-PLEW-R1CD-BNF7-G8UC-KT52-MGUA-UBE1",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request.",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-efforts": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-efforts"
+            }
+          }
+        }
+      },
+      "200-timesheets": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-timesheets"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "efforts": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/efforts"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "timesheets": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/timesheets"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "submit": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/submit"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "reject": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/reject"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "approve": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/approve"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "description": "Identifies the locale for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "description": "The ENOVIA CSRF token which is typically required for update operations.  Retrieve using {server}/resources/v1/application/CSRF",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "fields": {
+        "name": "$fields",
+        "description": "Specify resource and sub-resource fields that should be returned by the web request  Fields include keywords none & all plus payload fields - see schema response payload.  For more information, see 6W REST Services Principles - Refinement Section",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

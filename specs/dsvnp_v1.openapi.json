@@ -1,0 +1,2037 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Web Services for managing the 3DSupplyNetwork modeler.",
+    "x-ds-copyright": "3DEXPERIENCE R2021x (c) 2020 Dassault Systemes.",
+    "version": "1.0.0",
+    "title": "3DSupplyNetwork Web Services",
+    "x-ds-service": [
+      "3DNetwork"
+    ]
+  },
+  "servers": [
+    {
+      "url": "{3DNetwork}",
+      "variables": {
+        "3DNetwork": {
+          "default": "https://3DEXPERIENCE_3DNetwork"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/3drdfpersist/resources/v1/modeler/dsvnp/dsvnp:BuyerEntity/search": {
+      "get": {
+        "deprecated": true,
+        "tags": [
+          "Buyer Company"
+        ],
+        "summary": "Search Buyer Companies",
+        "description": "Search Buyer Companies based on name criteria or external Ids. Can be used on 3drdfindex.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Full name or part of the name of a Buyer Companie. Special character should be encoded.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "Company 1",
+              "default": "empty"
+            }
+          },
+          {
+            "name": "externalSource",
+            "in": "query",
+            "description": "Soure of an externalId. Special character should be encoded.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "ERP",
+              "default": "empty"
+            }
+          },
+          {
+            "name": "externalIdentifier",
+            "in": "query",
+            "description": "Identifier from an externalId. Special character should be encoded.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "24EDCF9D254F000061DBF56400060746",
+              "default": "empty"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining what will be returned.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp_LegalEntityMask.simple",
+                "dsvnp_LegalEntityMask.simplelogo",
+                "dsvnp_LegalEntityMask.details",
+                "dsvnp_LegalEntityMask.detailslogo"
+              ],
+              "example": "dsvnp_LegalEntityMask.simple",
+              "default": "dsvnp_LegalEntityMask.simple"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supplier Companies",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "Collection"
+                    },
+                    "totalitems": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "member": {
+                      "type": "array",
+                      "example": "[Response will be returned with oneOf mask available in the Schema Tab.]",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/dsvnp_LegalEntityMask.simple"
+                          },
+                          {
+                            "$ref": "#/components/schemas/dsvnp_LegalEntityMask.simplelogo"
+                          },
+                          {
+                            "$ref": "#/components/schemas/dsvnp_LegalEntityMask.details"
+                          },
+                          {
+                            "$ref": "#/components/schemas/dsvnp_LegalEntityMask.detailslogo"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/v1/modeler/dsvnp/dsvnp:BuyerEntity/{CompID}": {
+      "parameters": [
+        {
+          "name": "CompID",
+          "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0",
+          "in": "path",
+          "description": "URI of a Supplier Company.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "deprecated": true,
+        "tags": [
+          "Buyer Company"
+        ],
+        "summary": "Get Buyer Company details",
+        "description": "Get details of the Buyer Company given as ID. Can be used on 3drdfindex.",
+        "parameters": [
+          {
+            "name": "mask",
+            "description": "Mask defining what will be returned.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp_LegalEntityMask.simple",
+                "dsvnp_LegalEntityMask.simplelogo",
+                "dsvnp_LegalEntityMask.details",
+                "dsvnp_LegalEntityMask.detailslogo"
+              ],
+              "example": "dsvnp_LegalEntityMask.details",
+              "default": "dsvnp_LegalEntityMask.details"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supplier Company",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": "Response will be returned with oneOf mask available in the Schema Tab.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsvnp_LegalEntityMask.simple"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsvnp_LegalEntityMask.simplelogo"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsvnp_LegalEntityMask.details"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsvnp_LegalEntityMask.detailslogo"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/v1/modeler/dsvnp/dsvnp:SupplierCompany": {
+      "post": {
+        "deprecated": true,
+        "tags": [
+          "Supplier Company"
+        ],
+        "summary": "Create a Supplier Company",
+        "description": "Create a Supplier Company including Company definition and Relationship definition.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/SupplierCompany"
+                  }
+                ],
+                "required": [
+                  "name",
+                  "relationship"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Supplier Company created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dsvnp_SupplierCompanyMask.details"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/v1/modeler/dsvnp/dsvnp:SupplierCompany/search": {
+      "get": {
+        "deprecated": true,
+        "tags": [
+          "Supplier Company"
+        ],
+        "summary": "Search Supplier Companies",
+        "description": "Search Supplier Companies based on name criteria. Can be used on 3drdfindex instead.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Full name or part of the name of Supplier Companies. Special character should be encoded.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "Company 1",
+              "default": "empty"
+            }
+          },
+          {
+            "name": "externalSource",
+            "in": "query",
+            "description": "Soure of an externalId. Special character should be encoded.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "ERP",
+              "default": "empty"
+            }
+          },
+          {
+            "name": "externalIdentifier",
+            "in": "query",
+            "description": "Identifier from an externalId. Special character should be encoded.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "24EDCF9D254F000061DBF56400060746",
+              "default": "empty"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining what will be returned.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp_LegalEntityMask.simple",
+                "dsvnp_LegalEntityMask.simplelogo",
+                "dsvnp_LegalEntityMask.details",
+                "dsvnp_LegalEntityMask.detailslogo",
+                "dsvnp_SupplierCompanyMask.simple",
+                "dsvnp_SupplierCompanyMask.simplelogo",
+                "dsvnp_SupplierCompanyMask.details",
+                "dsvnp_SupplierCompanyMask.detailslogo"
+              ],
+              "example": "dsvnp_SupplierCompanyMask.simple",
+              "default": "dsvnp_SupplierCompanyMask.simple"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supplier Companies",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "Collection"
+                    },
+                    "totalitems": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "member": {
+                      "type": "array",
+                      "example": "[Response will be returned with oneOf mask available in the Schema Tab.]",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/dsvnp_LegalEntityMask.simple"
+                          },
+                          {
+                            "$ref": "#/components/schemas/dsvnp_LegalEntityMask.simplelogo"
+                          },
+                          {
+                            "$ref": "#/components/schemas/dsvnp_LegalEntityMask.details"
+                          },
+                          {
+                            "$ref": "#/components/schemas/dsvnp_LegalEntityMask.detailslogo"
+                          },
+                          {
+                            "$ref": "#/components/schemas/dsvnp_SupplierCompanyMask.simple"
+                          },
+                          {
+                            "$ref": "#/components/schemas/dsvnp_SupplierCompanyMask.simplelogo"
+                          },
+                          {
+                            "$ref": "#/components/schemas/dsvnp_SupplierCompanyMask.details"
+                          },
+                          {
+                            "$ref": "#/components/schemas/dsvnp_SupplierCompanyMask.detailslogo"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/v1/modeler/dsvnp/dsvnp:SupplierCompany/{CompID}": {
+      "parameters": [
+        {
+          "name": "CompID",
+          "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0",
+          "in": "path",
+          "description": "URI of a Supplier Company.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "deprecated": true,
+        "tags": [
+          "Supplier Company"
+        ],
+        "summary": "Get Supplier Company details",
+        "description": "Get details of the Supplier Company given as ID. Can be used on 3drdfindex instead.",
+        "parameters": [
+          {
+            "name": "mask",
+            "description": "Mask defining what will be returned.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp_LegalEntityMask.simple",
+                "dsvnp_LegalEntityMask.simplelogo",
+                "dsvnp_LegalEntityMask.details",
+                "dsvnp_LegalEntityMask.detailslogo",
+                "dsvnp_SupplierCompanyMask.simple",
+                "dsvnp_SupplierCompanyMask.simplelogo",
+                "dsvnp_SupplierCompanyMask.details",
+                "dsvnp_SupplierCompanyMask.detailslogo"
+              ],
+              "example": "dsvnp_SupplierCompanyMask.details",
+              "default": "dsvnp_SupplierCompanyMask.details"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supplier Company",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": "Response will be returned with oneOf mask available in the Schema Tab.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsvnp_LegalEntityMask.simple"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsvnp_LegalEntityMask.simplelogo"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsvnp_LegalEntityMask.details"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsvnp_LegalEntityMask.detailslogo"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsvnp_SupplierCompanyMask.simple"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsvnp_SupplierCompanyMask.simplelogo"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsvnp_SupplierCompanyMask.details"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsvnp_SupplierCompanyMask.detailslogo"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "patch": {
+        "deprecated": true,
+        "tags": [
+          "Supplier Company"
+        ],
+        "summary": "Update a Supplier Company",
+        "description": "Update the Supplier Company's properties given as ID.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "identifier": {
+                        "type": "string",
+                        "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+                      }
+                    }
+                  },
+                  {
+                    "$ref": "#/components/schemas/SupplierCompany"
+                  }
+                ],
+                "required": [
+                  "identifier"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Supplier Company updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dsvnp_SupplierCompanyMask.details"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/v1/modeler/dsvnp/dsvnp:SupplierCompany/{CompID}/Specialization": {
+      "parameters": [
+        {
+          "name": "CompID",
+          "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0",
+          "in": "path",
+          "description": "URI of a Supplier Company.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "deprecated": true,
+        "tags": [
+          "Relationship Specialization"
+        ],
+        "summary": "Create a Relationship Specialization",
+        "description": "Create a Supplier Company's Relationship Specialization.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Specialization"
+                  }
+                ],
+                "required": [
+                  "name",
+                  "level",
+                  "state",
+                  "specializeOn",
+                  "effectivitystartdate",
+                  "effectivityenddate"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Supplier Company's Relationship Specialization created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dsvnp_RelationshipSpecializationMask.details"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "get": {
+        "deprecated": true,
+        "tags": [
+          "Relationship Specialization"
+        ],
+        "summary": "List Relationships Specializations",
+        "description": "List all Relationships Specialization of a Supplier Company. Can be used on 3drdfindex instead.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining what will be returned.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp_RelationshipSpecializationMask.simple",
+                "dsvnp_RelationshipSpecializationMask.details"
+              ],
+              "example": "dsvnp_RelationshipSpecializationMask.simple",
+              "default": "dsvnp_RelationshipSpecializationMask.simple"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Relationships Specialization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "Collection"
+                    },
+                    "totalitems": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "member": {
+                      "type": "array",
+                      "example": "[Response will be returned with oneOf mask available in the Schema Tab.]",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/dsvnp_RelationshipSpecializationMask.simple"
+                          },
+                          {
+                            "$ref": "#/components/schemas/dsvnp_RelationshipSpecializationMask.details"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/v1/modeler/dsvnp/dsvnp:SupplierCompany/{CompID}/Specialization/{SpeID}": {
+      "parameters": [
+        {
+          "name": "CompID",
+          "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0",
+          "in": "path",
+          "description": "URI of a Supplier Company.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "SpeID",
+          "example": "uuid:af5850e3-a18f-4244-a4b5-ad26aedb1309",
+          "in": "path",
+          "description": "URI of a Relationship Specialization.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "deprecated": true,
+        "tags": [
+          "Relationship Specialization"
+        ],
+        "summary": "Get Relationship Specialization details",
+        "description": "Get Relationship Specialization's details of a Supplier Company. Can be used on 3drdfindex instead.",
+        "parameters": [
+          {
+            "name": "mask",
+            "description": "Mask defining what will be returned.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp_RelationshipSpecializationMask.simple",
+                "dsvnp_RelationshipSpecializationMask.details"
+              ],
+              "example": "dsvnp_RelationshipSpecializationMask.simple",
+              "default": "dsvnp_RelationshipSpecializationMask.details"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Relationships Specialization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dsvnp_RelationshipSpecializationMask.details"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "patch": {
+        "deprecated": true,
+        "tags": [
+          "Relationship Specialization"
+        ],
+        "summary": "Update a Relationship Specialization",
+        "description": "Update a Supplier Company's Relationship Specialization given as IDs.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "identifier": {
+                        "type": "string",
+                        "example": "uuid:af5850e3-a18f-4244-a4b5-ad26aedb1309"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Motor Parts"
+                      },
+                      "level": {
+                        "type": "string",
+                        "example": "Supplier",
+                        "enum": [
+                          "Supplier",
+                          "Potential Supplier",
+                          "Partner",
+                          "Candidate Supplier",
+                          "Refused Supplier"
+                        ]
+                      },
+                      "preferencestatus": {
+                        "type": "string",
+                        "example": "Default",
+                        "enum": [
+                          "Preferred",
+                          "Default",
+                          "Not Preferred"
+                        ]
+                      },
+                      "state": {
+                        "type": "string",
+                        "example": "Active",
+                        "enum": [
+                          "In Work",
+                          "Active",
+                          "Obsolete"
+                        ]
+                      },
+                      "effectivitystartdate": {
+                        "type": "string",
+                        "example": "2020-10-24"
+                      },
+                      "effectivityenddate": {
+                        "type": "string",
+                        "example": "2021-10-23"
+                      }
+                    }
+                  }
+                ],
+                "required": [
+                  "identifier"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Relationships Specialization successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dsvnp_RelationshipSpecializationMask.simple"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/v1/modeler/dsvnp/dsvnp:SupplierCompany/{CompID}/SupplierUser": {
+      "parameters": [
+        {
+          "name": "CompID",
+          "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0",
+          "in": "path",
+          "description": "URI of a Supplier Company.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "deprecated": true,
+        "tags": [
+          "Supplier User"
+        ],
+        "summary": "Invite a Supplier User",
+        "description": "Invite a Supplier User to a Supplier Company. The Supplier User will be fully created once he connect to the portal for the first time",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "sales-contact@companyone.com"
+                  },
+                  "mesage": {
+                    "type": "string",
+                    "example": "Welcome to our new collaboration experience"
+                  }
+                },
+                "required": [
+                  "email"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Supplier User invited succesfuly",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "example": "uuid:af5850e3-a18f-4244-a4b5-ad26aedb1309"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "sales-contact@companyone.com"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "Pending"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "get": {
+        "deprecated": true,
+        "tags": [
+          "Supplier User"
+        ],
+        "summary": "List Supplier Users",
+        "description": "List all Supplier User of a Supplier Company. Can be used on 3drdfindex instead.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining what will be returned.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp_SupplierUserMask.simple",
+                "dsvnp_SupplierUserMask.details"
+              ],
+              "example": "dsvnp_SupplierUserMask.simple",
+              "default": "dsvnp_SupplierUserMask.simple"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supplier Users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "Collection"
+                    },
+                    "totalitems": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "member": {
+                      "type": "array",
+                      "example": "[Response will be returned with oneOf mask available in the Schema Tab.]",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/dsvnp_SupplierUserMask.simple"
+                          },
+                          {
+                            "$ref": "#/components/schemas/dsvnp_SupplierUserMask.details"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/v1/modeler/dsvnp/dsvnp:SupplierCompany/{CompID}/SupplierUser/{UserID}": {
+      "parameters": [
+        {
+          "name": "CompID",
+          "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0",
+          "in": "path",
+          "description": "URI of a Supplier Company.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "UserID",
+          "example": "uuid:af5850e3-a18f-4244-a4b5-ad26aedb1309",
+          "in": "path",
+          "description": "URI of a Supplier User.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "deprecated": true,
+        "tags": [
+          "Supplier User"
+        ],
+        "summary": "Get Suplier User details",
+        "description": "Get Supplier User's details from a Supplier Company. Can be used on 3drdfindex instead.",
+        "parameters": [
+          {
+            "name": "mask",
+            "description": "Mask defining what will be returned.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp_SupplierUserMask.simple",
+                "dsvnp_SupplierUserMask.details"
+              ],
+              "example": "dsvnp_SupplierUserMask.simple",
+              "default": "dsvnp_SupplierUserMask.details"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supplier User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dsvnp_SupplierUserMask.details"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "patch": {
+        "deprecated": true,
+        "tags": [
+          "Supplier User"
+        ],
+        "summary": "Update a Supplier User",
+        "description": "Activate an inactive Supplier User or deactivate an active Supplier User.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "example": "active",
+                    "enum": [
+                      "active",
+                      "inactive"
+                    ]
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Supplier User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dsvnp_SupplierUserMask.simple"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "delete": {
+        "deprecated": true,
+        "tags": [
+          "Supplier User"
+        ],
+        "summary": "Delete Supplier User",
+        "description": "Delete a pending or inactive Supplier User.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supplier User succesfully deleted."
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SupplierCompany": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Company 1"
+          },
+          "registrationId": {
+            "type": "string",
+            "example": "12345678900123"
+          },
+          "registrationLocation": {
+            "type": "string",
+            "example": "France"
+          },
+          "description": {
+            "type": "string",
+            "example": "Company 1 description"
+          },
+          "externalIds": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "identifier": {
+                  "type": "string",
+                  "example": "24EDCF9D254F000061DBF56400060746"
+                },
+                "source": {
+                  "type": "string",
+                  "example": "ERP"
+                }
+              }
+            },
+            "minItems": 1,
+            "maxItems": 20
+          },
+          "logo": {
+            "type": "string",
+            "example": "data:image/jpeg;base64,/..."
+          },
+          "website": {
+            "type": "string",
+            "example": "http://companyone.com"
+          },
+          "email": {
+            "type": "string",
+            "example": "sales-contact@companyone.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "01 23 45 67 89"
+          },
+          "fax": {
+            "type": "string",
+            "example": "01 45 23 67 89"
+          },
+          "address": {
+            "type": "string",
+            "example": "10 rue republic"
+          },
+          "zipcode": {
+            "type": "string",
+            "example": "75000"
+          },
+          "city": {
+            "type": "string",
+            "example": "Paris"
+          },
+          "region": {
+            "type": "string",
+            "example": "Ile de France"
+          },
+          "country": {
+            "type": "string",
+            "example": "FRA"
+          },
+          "latitude": {
+            "type": "string",
+            "example": 52.479722
+          },
+          "longitude": {
+            "type": "string",
+            "example": 62.185667
+          },
+          "duns": {
+            "type": "string",
+            "example": "0123456789"
+          },
+          "industry": {
+            "type": "string",
+            "example": "Architecture, Engineering & Construction",
+            "enum": [
+              "AEROSPACE & DEFENSE COMPANY",
+              "ARCHITECTURE, ENGINEERING & CONTRUCTION COMPANY",
+              "CONSUMER GOOD & RETAIL COMPANY",
+              "CONSUMER PACKAGED GOODS & RETAIL COMPANY",
+              "ENERGY, PROCESS & UTILITIES COMPANY",
+              "FINANCIAL AND BUSINESS SERVICES COMPANY",
+              "HIGH-TECH COMPANY",
+              "INDUSTRIAL EQUIPMENT COMPANY",
+              "LIFE SCIENCES COMPANY",
+              "MARINE & OFFSHORE COMPANY",
+              "NATURAL RESOURCES COMPANY",
+              "TRANSPORTATION & MOBILITY COMPANY"
+            ]
+          },
+          "employees": {
+            "type": "string",
+            "example": "101-1000",
+            "enum": [
+              "0-100",
+              "101-1000",
+              "1001 and above"
+            ]
+          },
+          "revenue": {
+            "type": "string",
+            "example": "0-50 million",
+            "enum": [
+              "0-50 million",
+              "51-500 million",
+              "501 million and above"
+            ]
+          },
+          "otherIds": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "type": "string",
+                  "example": "24EDCF9D254F000061DBF56400060746"
+                },
+                "label": {
+                  "type": "string",
+                  "example": "TAX"
+                }
+              }
+            },
+            "minItems": 1,
+            "maxItems": 20
+          },
+          "productcategories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/proxy_IP_Classification"
+            }
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/proxy_IP_Classification"
+            }
+          },
+          "relationship": {
+            "type": "object",
+            "properties": {
+              "relationshipOwner": {
+                "type": "string",
+                "description": "Buyer Company identifier",
+                "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+              },
+              "level": {
+                "type": "string",
+                "example": "Supplier",
+                "enum": [
+                  "Supplier",
+                  "Potential Supplier",
+                  "Partner",
+                  "Candidate Supplier",
+                  "Refused Supplier"
+                ]
+              },
+              "preferencestatus": {
+                "type": "string",
+                "example": "Default",
+                "enum": [
+                  "Preferred",
+                  "Default",
+                  "Not Preferred"
+                ]
+              },
+              "effectivitystartdate": {
+                "type": "string",
+                "example": "2020-10-24"
+              },
+              "effectivityenddate": {
+                "type": "string",
+                "example": "2021-10-23"
+              },
+              "state": {
+                "type": "string",
+                "example": "Active",
+                "enum": [
+                  "In Work",
+                  "Active"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "Specialization": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Motor Parts"
+          },
+          "relationshipOwner": {
+            "type": "string",
+            "description": "Buyer Company identifier",
+            "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+          },
+          "level": {
+            "type": "string",
+            "example": "Supplier",
+            "enum": [
+              "Supplier",
+              "Potential Supplier",
+              "Partner",
+              "Candidate Supplier",
+              "Refused Supplier"
+            ]
+          },
+          "preferencestatus": {
+            "type": "string",
+            "example": "Default",
+            "enum": [
+              "Preferred",
+              "Default",
+              "Not Preferred"
+            ]
+          },
+          "state": {
+            "type": "string",
+            "example": "Active",
+            "enum": [
+              "In Work",
+              "Active",
+              "Obsolete"
+            ]
+          },
+          "effectivitystartdate": {
+            "type": "string",
+            "example": "2020-10-24"
+          },
+          "effectivityenddate": {
+            "type": "string",
+            "example": "2021-10-23"
+          },
+          "specializeOn": {
+            "$ref": "#/components/schemas/proxy_IP_Classification"
+          }
+        }
+      },
+      "comon": {
+        "properties": {
+          "owner": {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "example": "uuid:af5850e3-a18f-4244-a4b5-ad26aedb1309"
+              },
+              "type": {
+                "type": "string",
+                "example": "pno:Person"
+              },
+              "source": {
+                "type": "string",
+                "example": "https://<Service_URL>"
+              },
+              "relativePath": {
+                "type": "string",
+                "example": "/api/user/find/login/3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+              }
+            }
+          },
+          "created": {
+            "type": "string",
+            "example": "2020-10-14T12:56:16.53Z"
+          },
+          "modified": {
+            "type": "string",
+            "example": "2020-10-14T12:56:16.53Z"
+          }
+        }
+      },
+      "proxy_IP_Classification": {
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "example": "24EDCF9D254F000061DBF56400060746"
+          },
+          "type": {
+            "type": "string",
+            "example": "General Class"
+          },
+          "source": {
+            "type": "string",
+            "example": "Service_URL"
+          },
+          "relativePath": {
+            "type": "string",
+            "example": "/resources/v1/modeler/dslib:Class/24EDC…"
+          }
+        }
+      },
+      "dsvnp_LegalEntityMask.simple": {
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+          },
+          "name": {
+            "type": "string",
+            "example": "Company 1"
+          },
+          "registrationId": {
+            "type": "string",
+            "example": "12345678900123"
+          },
+          "registrationLocation": {
+            "type": "string",
+            "example": "France"
+          },
+          "description": {
+            "type": "string",
+            "example": "Company 1 description"
+          },
+          "externalIds": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "identifier": {
+                  "type": "string",
+                  "example": "24EDCF9D254F000061DBF56400060746"
+                },
+                "source": {
+                  "type": "string",
+                  "example": "ERP"
+                }
+              }
+            }
+          }
+        }
+      },
+      "dsvnp_LegalEntityMask.simplelogo": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/dsvnp_LegalEntityMask.simple"
+          },
+          {
+            "properties": {
+              "logo": {
+                "type": "string",
+                "example": "data:image/jpeg;base64,/..."
+              }
+            }
+          }
+        ]
+      },
+      "dsvnp_LegalEntityMask.details": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/dsvnp_LegalEntityMask.simple"
+          },
+          {
+            "$ref": "#/components/schemas/comon"
+          },
+          {
+            "properties": {
+              "website": {
+                "type": "string",
+                "example": "http://companyone.com"
+              },
+              "email": {
+                "type": "string",
+                "example": "sales-contact@companyone.com"
+              },
+              "phone": {
+                "type": "string",
+                "example": "01 23 45 67 89"
+              },
+              "fax": {
+                "type": "string",
+                "example": "01 45 23 67 89"
+              },
+              "address": {
+                "type": "string",
+                "example": "10 rue republic"
+              },
+              "zipcode": {
+                "type": "string",
+                "example": "75000"
+              },
+              "city": {
+                "type": "string",
+                "example": "Paris"
+              },
+              "region": {
+                "type": "string",
+                "example": "Ile de France"
+              },
+              "country": {
+                "type": "string",
+                "example": "CAN"
+              },
+              "latitude": {
+                "type": "string",
+                "example": 62.185667
+              },
+              "longitude": {
+                "type": "string",
+                "example": 62.185667
+              },
+              "employees": {
+                "type": "string",
+                "example": "100"
+              },
+              "revenue": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "example": "100"
+                  },
+                  "currency": {
+                    "type": "string",
+                    "example": "Euro"
+                  },
+                  "date": {
+                    "type": "string",
+                    "example": "2023"
+                  }
+                }
+              },
+              "otherIds": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "example": "24EDCF9D254F000061DBF56400060746"
+                    },
+                    "label": {
+                      "type": "string",
+                      "example": "TAX"
+                    }
+                  }
+                }
+              },
+              "productcategories": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/proxy_IP_Classification"
+                }
+              },
+              "capabilities": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/proxy_IP_Classification"
+                }
+              },
+              "classfifications ": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/proxy_IP_Classification"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "dsvnp_LegalEntityMask.detailslogo": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/dsvnp_LegalEntityMask.details"
+          },
+          {
+            "properties": {
+              "logo": {
+                "type": "string",
+                "example": "data:image/jpeg;base64,/..."
+              }
+            }
+          }
+        ]
+      },
+      "dsvnp_SupplierCompanyMask.simple": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/dsvnp_LegalEntityMask.simple"
+          },
+          {
+            "properties": {
+              "relationship": {
+                "type": "object",
+                "description": "If only one relationship exist with the old buyer",
+                "properties": {
+                  "relationshipOwner": {
+                    "type": "string",
+                    "description": "Buyer Company identifier",
+                    "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+                  },
+                  "level": {
+                    "type": "string",
+                    "example": "Supplier"
+                  },
+                  "preferencestatus": {
+                    "type": "string",
+                    "example": "Default"
+                  },
+                  "effectivitystartdate": {
+                    "type": "string",
+                    "example": "2020-10-24"
+                  },
+                  "effectivityenddate": {
+                    "type": "string",
+                    "example": "2021-10-23"
+                  },
+                  "state": {
+                    "type": "string",
+                    "example": "Active"
+                  }
+                }
+              },
+              "relationships": {
+                "type": "array",
+                "description": "If multiple relationships exist with different buyer",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "relationshipOwner": {
+                      "type": "string",
+                      "description": "Buyer Company identifier",
+                      "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+                    },
+                    "level": {
+                      "type": "string",
+                      "example": "Supplier"
+                    },
+                    "preferencestatus": {
+                      "type": "string",
+                      "example": "Default"
+                    },
+                    "effectivitystartdate": {
+                      "type": "string",
+                      "example": "2020-10-24"
+                    },
+                    "effectivityenddate": {
+                      "type": "string",
+                      "example": "2021-10-23"
+                    },
+                    "state": {
+                      "type": "string",
+                      "example": "Active"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "dsvnp_SupplierCompanyMask.simplelogo": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/dsvnp_SupplierCompanyMask.simple"
+          },
+          {
+            "properties": {
+              "logo": {
+                "type": "string",
+                "example": "data:image/jpeg;base64,/..."
+              }
+            }
+          }
+        ]
+      },
+      "dsvnp_SupplierCompanyMask.details": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/dsvnp_SupplierCompanyMask.simple"
+          },
+          {
+            "$ref": "#/components/schemas/comon"
+          },
+          {
+            "$ref": "#/components/schemas/dsvnp_LegalEntityMask.details"
+          },
+          {
+            "properties": {
+              "duns": {
+                "type": "string",
+                "example": "0123456789"
+              },
+              "industry": {
+                "type": "string",
+                "example": "Architecture, Engineering & Construction"
+              },
+              "employees_old": {
+                "type": "string",
+                "example": "101-1000"
+              },
+              "revenue_old": {
+                "type": "string",
+                "example": "0-50 million"
+              }
+            }
+          }
+        ]
+      },
+      "dsvnp_SupplierCompanyMask.detailslogo": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/dsvnp_SupplierCompanyMask.details"
+          },
+          {
+            "properties": {
+              "logo": {
+                "type": "string",
+                "example": "data:image/jpeg;base64,/..."
+              }
+            }
+          }
+        ]
+      },
+      "dsvnp_RelationshipSpecializationMask.simple": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "example": "uuid:af5850e3-a18f-4244-a4b5-ad26aedb1309"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/Specialization"
+          }
+        ]
+      },
+      "dsvnp_RelationshipSpecializationMask.details": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/dsvnp_RelationshipSpecializationMask.simple"
+          },
+          {
+            "$ref": "#/components/schemas/comon"
+          }
+        ]
+      },
+      "dsvnp_SupplierUserMask.simple": {
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "example": "uuid:af5850e3-a18f-4244-a4b5-ad26aedb1309"
+          },
+          "email": {
+            "type": "string",
+            "example": "sales-contact@companyone.com"
+          },
+          "status": {
+            "type": "string",
+            "example": "Active"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Doe"
+          }
+        }
+      },
+      "dsvnp_SupplierUserMask.details": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/dsvnp_SupplierUserMask.simple"
+          },
+          {
+            "$ref": "#/components/schemas/comon"
+          }
+        ]
+      }
+    },
+    "parameters": {
+      "skip": {
+        "name": "skip",
+        "description": "Skip a number of result equal to the parameter.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "example": "100",
+          "default": "0"
+        }
+      },
+      "top": {
+        "name": "top",
+        "description": "Number of returned results. Must be an integer between 1 and 50 included.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "default": "50",
+          "example": "25",
+          "minimum": 1,
+          "maximum": 50
+        }
+      },
+      "X-Requested-With": {
+        "name": "X-Requested-With",
+        "description": "Required header. The value should be XMLHttpRequest",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "XMLHttpRequest"
+        }
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "description": "Error code : Can be http code or custom app code.",
+                        "example": "400"
+                      },
+                      "details": {
+                        "type": "string",
+                        "description": "Error message",
+                        "example": "My Message"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "UNAUTHORIZED. The request requires user authentication.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "description": "Error code : Can be http code or custom app code.",
+                        "example": "401"
+                      },
+                      "details": {
+                        "type": "string",
+                        "description": "Error message",
+                        "example": "My Message"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "description": "Error code : Can be http code or custom app code.",
+                        "example": "403"
+                      },
+                      "details": {
+                        "type": "string",
+                        "description": "Error message",
+                        "example": "My Message"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "NOT FOUND. Requested ressources was not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "description": "Error code : Can be http code or custom app code.",
+                        "example": "404"
+                      },
+                      "details": {
+                        "type": "string",
+                        "description": "Error message",
+                        "example": "My Message"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

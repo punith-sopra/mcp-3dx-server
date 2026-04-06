@@ -1,0 +1,1476 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Risk Management Web Services",
+    "description": "Web Services for managing the Risk Management modeler.",
+    "summary": "APIs to manage risks (search, create, retrieve, update, delete)",
+    "version": "1.1.0",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3dspace/",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dspm:risk/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/risks/{riskId}": {
+      "get": {
+        "description": "",
+        "summary": "Get Risk item details by ID",
+        "operationId": "getRiskById",
+        "tags": [
+          "Risk"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-risks"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "riskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "description": "",
+        "summary": "Modify a Risk item.",
+        "operationId": "modifyRisks",
+        "tags": [
+          "Risk"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-risks"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/risks"
+        },
+        "parameters": [
+          {
+            "name": "riskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "delete": {
+        "description": "",
+        "summary": "Delete a Risk item.",
+        "operationId": "deleteRisk",
+        "tags": [
+          "Risk"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-risks"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "riskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/risks": {
+      "get": {
+        "description": "",
+        "summary": "Retieve Risks.",
+        "operationId": "getRisks",
+        "tags": [
+          "Risk"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-risks"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "owned",
+            "description": "Retrieve Risks owned by me (Default: true)",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assigned",
+            "description": "Retrieve Risks assigned to me (Default: true)",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "completed",
+            "description": "Retrieve Risks that have been Completed within this range (none, all, number of days; Default: none)",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "state",
+            "description": "Filter Risks by one or more comma separated states: Create, Assign, Active, Review, Complete (Default: all but Complete)",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "post": {
+        "description": "",
+        "summary": "Create Risks.",
+        "operationId": "createRisk",
+        "tags": [
+          "Risk"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-risks"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/risks"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/risks/search": {
+      "get": {
+        "description": "",
+        "summary": "Search for Risks using provided input string.",
+        "operationId": "searchRisk",
+        "tags": [
+          "Search"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-risks"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "searchStr",
+            "description": "Search Criteria; 2 or more characters required.",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "description": "The number of objects to return; default 50; max 1000",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "description": "The number of objects to skip in case of paginating through the serach results; default 0",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "risks": {
+        "$ref": "#/components/x-schemas/risks"
+      }
+    },
+    "x-schemas": {
+      "risks": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "description": "Title information if used, otherwise the object name.",
+                "type": "string"
+              },
+              "name": {
+                "description": "The object name.",
+                "type": "string"
+              },
+              "revision": {
+                "description": "(unique discriminator only, Risks are not revisioned)",
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "description": "Description of the object.",
+                "type": "string"
+              },
+              "originated": {
+                "description": "The creation date of the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "originator": {
+                "description": "The user who originally created the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "modified": {
+                "description": "Date of last modification to any object information.",
+                "type": "string",
+                "readOnly": true
+              },
+              "owner": {
+                "description": "The current owner of the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "policy": {
+                "description": "The current policy of the object.",
+                "type": "string"
+              },
+              "state": {
+                "description": "The current maturity of the object.",
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+              },
+              "estimatedStartDate": {
+                "description": "Object estimated start date target",
+                "type": "string"
+              },
+              "estimatedFinishDate": {
+                "description": "Object estimated completion date target",
+                "type": "string"
+              },
+              "actualStartDate": {
+                "description": "Object actual start date",
+                "type": "string",
+                "readOnly": true
+              },
+              "actualFinishDate": {
+                "description": "Object actual completion date",
+                "type": "string",
+                "readOnly": true
+              },
+              "classType": {
+                "description": "The classification of the Risk",
+                "type": "string"
+              },
+              "mitigationType": {
+                "description": "The mitigation approach for the Risk",
+                "type": "string"
+              },
+              "impact": {
+                "description": "The estimated negative effect the Risk will have.",
+                "type": "string"
+              },
+              "probability": {
+                "description": "The relative probability that the Risk will occur.",
+                "type": "string"
+              },
+              "rpnValue": {
+                "description": "The relative rating of the Risk.",
+                "type": "string",
+                "readOnly": true
+              },
+              "effectiveDate": {
+                "description": "The date the Risk is expected to be become active.",
+                "type": "string"
+              },
+              "abatement": {
+                "description": "The actions being planned or taken to mitigate or resolve the Risk.",
+                "type": "string"
+              },
+              "measureOfSuccess": {
+                "description": "The criteria to be used used to evaluate the Risk resolution.",
+                "type": "string"
+              },
+              "contextId": {
+                "description": "The object ID the Risk is created for (i.e., Project or Task). This is required for Create.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "title",
+              "name",
+              "impact",
+              "probability",
+              "effectiveDate",
+              "contextId"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ownerInfo": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/ownerInfo"
+                }
+              },
+              "classes": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/classes"
+                }
+              },
+              "rpn": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/rpn"
+                }
+              },
+              "context": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/context"
+                }
+              },
+              "assignees": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/assignees"
+                }
+              },
+              "affectedItems": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/affectedItems"
+                }
+              },
+              "resolvedBy": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/resolvedBy"
+                }
+              },
+              "references": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/references"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ownerInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "firstname": {
+                "default": "Unknown",
+                "type": "string"
+              },
+              "lastname": {
+                "default": "Unknown",
+                "type": "string"
+              },
+              "fullname": {
+                "default": "Unknown",
+                "type": "string"
+              },
+              "title": {
+                "default": "\n",
+                "type": "string"
+              },
+              "company": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          }
+        ]
+      },
+      "rmcActual": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "description": "Title information if used, otherwise the object name.",
+                "default": "\n",
+                "type": "string",
+                "readOnly": true
+              },
+              "name": {
+                "description": "The object name.",
+                "type": "string",
+                "readOnly": true
+              },
+              "originated": {
+                "description": "The creation date of the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "owner": {
+                "description": "The current owner of the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "state": {
+                "description": "Current maturity state",
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+              },
+              "sourceName": {
+                "description": "The name of the object providing the configuration",
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+              },
+              "sourceType": {
+                "description": "The type of the object providing the configuration",
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+              },
+              "sourceID": {
+                "description": "The ID of the object providing the configuration",
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+              },
+              "organization": {
+                "description": "The Organization the object was created in.",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "matrix": {
+                "$ref": "#/components/x-schemas/matrix"
+              }
+            }
+          }
+        ]
+      },
+      "matrix": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          }
+        ]
+      },
+      "rmcGoverning": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "description": "Title information if used, otherwise the object name.",
+                "default": "\n",
+                "type": "string",
+                "readOnly": true
+              },
+              "name": {
+                "description": "The object name.",
+                "type": "string",
+                "readOnly": true
+              },
+              "originated": {
+                "description": "The creation date of the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "owner": {
+                "description": "The current owner of the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "state": {
+                "description": "Current maturity state",
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+              },
+              "sourceName": {
+                "description": "The name of the object providing the configuration",
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+              },
+              "sourceType": {
+                "description": "The type of the object providing the configuration",
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+              },
+              "sourceID": {
+                "description": "The ID of the object providing the configuration",
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+              },
+              "organization": {
+                "description": "The Organization the object was created in.",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "matrix": {
+                "$ref": "#/components/x-schemas/matrix"
+              }
+            }
+          }
+        ]
+      },
+      "classes": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "description": "Title information if used, otherwise the object name.",
+                "default": "\n",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          }
+        ]
+      },
+      "rpn": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "rpnImpact": {
+                "description": "(Assessment Instance) The estimated negative effect the Risk will have.",
+                "default": "1",
+                "type": "string",
+                "readOnly": true,
+                "enum": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+                ]
+              },
+              "rpnProbability": {
+                "description": "(Assessment Instance) The relative probability that the Risk will occur.",
+                "default": "1",
+                "type": "string",
+                "readOnly": true,
+                "enum": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+                ]
+              },
+              "rpnValue": {
+                "description": "(Assessment Instance) The relative rating of the Risk.",
+                "type": "string",
+                "readOnly": true
+              },
+              "rpnStatus": {
+                "description": "(Assessment Instance) The current status of the rating or reassessment.",
+                "default": "Unknown",
+                "type": "string",
+                "readOnly": true
+              },
+              "rpnEffectiveDate": {
+                "description": "(Assessment Instance) The date this Risk assessment becomes effective.",
+                "type": "string",
+                "readOnly": true
+              },
+              "originated": {
+                "description": "The creation date of the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "modified": {
+                "description": "Date of last modification to any object information.",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          }
+        ]
+      },
+      "context": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "description": "Title information if used, otherwise the object name.",
+                "default": "\n",
+                "type": "string",
+                "readOnly": true
+              },
+              "name": {
+                "description": "The object name.",
+                "type": "string",
+                "readOnly": true
+              },
+              "revision": {
+                "description": "(unique discriminator only, Risks are not revisioned)",
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "description": "Description of the object.",
+                "type": "string"
+              },
+              "state": {
+                "description": "Current lifecycle state",
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+              },
+              "originated": {
+                "description": "The creation date of the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "originator": {
+                "description": "The user who originally created the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "modified": {
+                "description": "Date of last modification to any object information.",
+                "type": "string",
+                "readOnly": true
+              },
+              "owner": {
+                "description": "The current owner of the object.",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          }
+        ]
+      },
+      "assignees": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "firstname": {
+                "default": "Unknown",
+                "type": "string"
+              },
+              "lastname": {
+                "default": "Unknown",
+                "type": "string"
+              },
+              "fullname": {
+                "default": "Unknown",
+                "type": "string"
+              },
+              "title": {
+                "default": "\n",
+                "type": "string"
+              },
+              "email": {
+                "default": "Unknown",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "Assignments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/Assignments"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Assignments": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "TaskId": {
+                "x-IncludedByDefault:": "no",
+                "type": "string"
+              },
+              "TaskProjectId": {
+                "type": "string"
+              },
+              "owner": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "affectedItems": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "description": "Title information if used, otherwise the object name.",
+                "default": "\n",
+                "type": "string",
+                "readOnly": true
+              },
+              "name": {
+                "description": "The object name.",
+                "type": "string",
+                "readOnly": true
+              },
+              "revision": {
+                "description": "The object revision",
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "description": "Description of the object.",
+                "type": "string"
+              },
+              "state": {
+                "description": "Current lifecycle state",
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+              },
+              "originated": {
+                "description": "The creation date of the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "originator": {
+                "description": "The user who originally created the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "modified": {
+                "description": "Date of last modification to any object information.",
+                "type": "string",
+                "readOnly": true
+              },
+              "owner": {
+                "description": "The current owner of the object.",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          }
+        ]
+      },
+      "resolvedBy": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "description": "Title information if used, otherwise the object name.",
+                "default": "\n",
+                "type": "string",
+                "readOnly": true
+              },
+              "name": {
+                "description": "The object name.",
+                "type": "string",
+                "readOnly": true
+              },
+              "revision": {
+                "description": "(unique discriminator only, Risks are not revisioned)",
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "description": "Description of the object.",
+                "type": "string"
+              },
+              "state": {
+                "description": "Current lifecycle state",
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+              },
+              "originated": {
+                "description": "The creation date of the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "originator": {
+                "description": "The user who originally created the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "modified": {
+                "description": "Date of last modification to any object information.",
+                "type": "string",
+                "readOnly": true
+              },
+              "owner": {
+                "description": "The current owner of the object.",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          }
+        ]
+      },
+      "references": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "description": "Title information if used, otherwise the object name.",
+                "default": "\n",
+                "type": "string",
+                "readOnly": true
+              },
+              "name": {
+                "description": "The object name.",
+                "type": "string",
+                "readOnly": true
+              },
+              "revision": {
+                "description": "(unique discriminator only, Risks are not revisioned)",
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "description": "Description of the object.",
+                "type": "string"
+              },
+              "state": {
+                "description": "Current lifecycle state",
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+              },
+              "originated": {
+                "description": "The creation date of the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "originator": {
+                "description": "The user who originally created the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "modified": {
+                "description": "Date of last modification to any object information.",
+                "type": "string",
+                "readOnly": true
+              },
+              "owner": {
+                "description": "The current owner of the object.",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          }
+        ]
+      },
+      "performRefresh": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          }
+        ]
+      },
+      "search": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "The object name.",
+                "type": "string",
+                "readOnly": true
+              },
+              "state": {
+                "description": "Current lifecycle state",
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+              },
+              "originated": {
+                "description": "The creation date of the object.",
+                "type": "string",
+                "readOnly": true
+              },
+              "modified": {
+                "description": "Date of last modification to any object information.",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          }
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-risks": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/risks"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "BASICS": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "description": "The object type.",
+            "type": "string"
+          },
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public URI.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public URI.",
+            "example": "https://3dspace.mydomain:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object.",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string"
+          }
+        }
+      },
+      "csrf": {
+        "description": "CSRF object is required to be sent back for update operations and typically provided with read operations.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The CSRF token name.",
+            "example": "ENO_CSRF_TOKEN",
+            "type": "string"
+          },
+          "value": {
+            "description": "The CSRF token value.",
+            "example": "EXAM-PLEW-R1CD-BNF7-G8UC-KT52-MGUA-UBE1",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request.",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-risks": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-risks"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "risks": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/risks"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "description": "Identifies the locale for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "description": "The ENOVIA CSRF token which is typically required for update oerations.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "include": {
+        "name": "$include",
+        "description": "Identify sub-resources that should be returned by the web request.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "fields": {
+        "name": "$fields",
+        "description": "Identify resource and sub-resource fields that should be returned by the web request.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

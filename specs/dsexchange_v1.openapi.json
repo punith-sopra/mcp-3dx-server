@@ -1,0 +1,2745 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Enterprise IP Exchange Web Services",
+    "description": "It lists the API to exchange data through job.",
+    "version": "1.8.0",
+    "x-ds-service": [
+      "exchange"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{exchange}/resources/v1/modeler",
+      "variables": {
+        "exchange": {
+          "default": "https://3DEXPERIENCE_Exchange",
+          "description": "URL of the exchange service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/exchange/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "check login",
+      "description": ""
+    },
+    {
+      "name": "exports",
+      "description": ""
+    },
+    {
+      "name": "imports",
+      "description": ""
+    }
+  ],
+  "paths": {
+    "/logincheck": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerauthorization"
+          }
+        ],
+        "description": "Check login in the service.",
+        "operationId": "GETLogincheck_dslc_ca:Exchange_ID",
+        "summary": "Check login in the service.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "tags": [
+          "check login"
+        ]
+      }
+    },
+    "/exchangejobs/exports": {
+      "post": {
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerlg"
+          },
+          {
+            "$ref": "#/components/parameters/headeraccept"
+          },
+          {
+            "$ref": "#/components/parameters/headercontent"
+          },
+          {
+            "$ref": "#/components/parameters/headerrequestedwith"
+          },
+          {
+            "$ref": "#/components/parameters/headerauthorization"
+          }
+        ],
+        "description": "Create an exports.",
+        "summary": "Create an exports.",
+        "operationId": "POSTExports_dslc_ca:Exchange_ID",
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/201"
+          },
+          "202": {
+            "$ref": "#/components/responses/202"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "tags": [
+          "exports"
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/jobinputRequest"
+        }
+      }
+    },
+    "/exchangejobs/exports/{id}/submit": {
+      "post": {
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerlg"
+          },
+          {
+            "$ref": "#/components/parameters/headerrequestedwith"
+          },
+          {
+            "$ref": "#/components/parameters/headerauthorization"
+          },
+          {
+            "$ref": "#/components/parameters/jobid"
+          }
+        ],
+        "description": "Submit an exports.",
+        "summary": "Submit an exports.",
+        "operationId": "POSTExportsSubmit_dslc_ca:Exchange_ID",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "tags": [
+          "exports"
+        ]
+      }
+    },
+    "/exchangejobs/exports/{id}": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerlg"
+          },
+          {
+            "$ref": "#/components/parameters/headeraccept"
+          },
+          {
+            "$ref": "#/components/parameters/headerauthorization"
+          },
+          {
+            "$ref": "#/components/parameters/jobid"
+          },
+          {
+            "$ref": "#/components/parameters/typefileurls"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/top"
+          }
+        ],
+        "description": "Get the exports data.",
+        "summary": "Get the exports data. The content depends on the exports processing.",
+        "operationId": "GETExports_dslc_ca:Exchange_ID",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-output"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "tags": [
+          "exports"
+        ]
+      }
+    },
+    "/exchangejobs/exports/{id}/retry": {
+      "post": {
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerlg"
+          },
+          {
+            "$ref": "#/components/parameters/headerrequestedwith"
+          },
+          {
+            "$ref": "#/components/parameters/headerauthorization"
+          },
+          {
+            "$ref": "#/components/parameters/jobid"
+          }
+        ],
+        "description": "Retry an exports.",
+        "summary": "Retry an exports.",
+        "operationId": "GETExportsRetry_dslc_ca:Exchange_ID",
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/201-family"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "tags": [
+          "exports"
+        ]
+      }
+    },
+    "/exchangejobs/files/checkinticket": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerlg"
+          },
+          {
+            "$ref": "#/components/parameters/headeraccept"
+          },
+          {
+            "$ref": "#/components/parameters/headerauthorization"
+          },
+          {
+            "$ref": "#/components/parameters/maxNumberOfFiles"
+          }
+        ],
+        "description": "Start checkin. Files exist only as temporary construction components of imports.",
+        "summary": "Retrieve url, ticket and fileids for files upload.",
+        "operationId": "GETFilesCheckinticket_dslc_ca:Exchange_ID",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-filescheckinstart"
+          },
+          "400": {
+            "$ref": "#/components/responses/400-checkinticket"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "tags": [
+          "imports"
+        ]
+      }
+    },
+    "/exchangejobs/imports": {
+      "post": {
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerlg"
+          },
+          {
+            "$ref": "#/components/parameters/headeraccept"
+          },
+          {
+            "$ref": "#/components/parameters/headercontent"
+          },
+          {
+            "$ref": "#/components/parameters/headerrequestedwith"
+          },
+          {
+            "$ref": "#/components/parameters/headerauthorization"
+          },
+          {
+            "$ref": "#/components/parameters/headersecuritycontext"
+          }
+        ],
+        "description": "Create an imports.",
+        "summary": "Create an imports.",
+        "operationId": "POSTImports_dslc_ca:Exchange_ID",
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/201-imports"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "tags": [
+          "imports"
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/JobinputImportRequest"
+        }
+      }
+    },
+    "/exchangejobs/imports/{id}/submit": {
+      "post": {
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerlg"
+          },
+          {
+            "$ref": "#/components/parameters/headerrequestedwith"
+          },
+          {
+            "$ref": "#/components/parameters/headerauthorization"
+          },
+          {
+            "$ref": "#/components/parameters/jobid"
+          }
+        ],
+        "description": "Submit an imports.",
+        "summary": "Submit an imports.",
+        "operationId": "POSTImportsSubmit_dslc_ca:Exchange_ID",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "tags": [
+          "imports"
+        ]
+      }
+    },
+    "/exchangejobs/imports/{id}": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerlg"
+          },
+          {
+            "$ref": "#/components/parameters/headeraccept"
+          },
+          {
+            "$ref": "#/components/parameters/headerauthorization"
+          },
+          {
+            "$ref": "#/components/parameters/jobid"
+          },
+          {
+            "$ref": "#/components/parameters/typefileids-imports"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/top"
+          }
+        ],
+        "description": "Get the imports data.",
+        "summary": "Get the imports data. The content depends on the imports processing.",
+        "operationId": "GETImports_dslc_ca:Exchange_ID",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-outputImport"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "tags": [
+          "imports"
+        ]
+      }
+    },
+    "/exchangejobs/imports/{id}/retry": {
+      "post": {
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerlg"
+          },
+          {
+            "$ref": "#/components/parameters/headerrequestedwith"
+          },
+          {
+            "$ref": "#/components/parameters/headerauthorization"
+          },
+          {
+            "$ref": "#/components/parameters/jobid"
+          }
+        ],
+        "description": "Retry an imports.",
+        "summary": "Retry an imports.",
+        "operationId": "POSTImportsRetry_dslc_ca:Exchange_ID",
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/201-family-imports"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "tags": [
+          "imports"
+        ]
+      }
+    },
+    "/exchangejobs/imports/{id}/input": {
+      "patch": {
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerlg"
+          },
+          {
+            "$ref": "#/components/parameters/headercontent"
+          },
+          {
+            "$ref": "#/components/parameters/headerrequestedwith"
+          },
+          {
+            "$ref": "#/components/parameters/headerauthorization"
+          },
+          {
+            "$ref": "#/components/parameters/jobid"
+          }
+        ],
+        "description": "Modify the job input.",
+        "summary": "Modify the job input.",
+        "operationId": "PATCHImportsInput_dslc_ca:Exchange_ID",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/jobsInputUpdate"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400-lim"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "tags": [
+          "imports"
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "parameters": {
+      "headerlg": {
+        "in": "header",
+        "name": "Accept-Language",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "specifies the language for any error messages that have translations. Must be in accordance with the rfc 7231"
+      },
+      "headeraccept": {
+        "in": "header",
+        "name": "Accept",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "application/json"
+      },
+      "headerauthorization": {
+        "in": "header",
+        "name": "Authorization",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Needed for agent ONLY : basic data for agent where data is AgentID:AgentPassword converted in base64. "
+      },
+      "headersecuritycontext": {
+        "in": "header",
+        "name": "SecurityContext",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "SecurityContext for 3DSpace access"
+      },
+      "headercontent": {
+        "in": "header",
+        "name": "Content-Type",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "application/json"
+      },
+      "headerrequestedwith": {
+        "in": "header",
+        "name": "X-Requested-With",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Protect against Cross Site Forgery - Set to batch"
+      },
+      "jobid": {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Job identifier"
+      },
+      "jobid-query": {
+        "in": "query",
+        "name": "jobId",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "job identifier"
+      },
+      "fileid": {
+        "in": "path",
+        "name": "fileid",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "file identifier"
+      },
+      "userid": {
+        "in": "path",
+        "name": "userid",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "job identifier"
+      },
+      "typefileurls": {
+        "in": "query",
+        "name": "responseFilter",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "all",
+            "noFileUrl",
+            "resultFilesUrls",
+            "reportFilesUrls"
+          ],
+          "default": "all"
+        },
+        "description": "resultFiles to get the files computed by the export. reportFiles to understand how the export behaved."
+      },
+      "typefileids-imports": {
+        "in": "query",
+        "name": "responseFilter",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "all",
+            "importFilesUrls"
+          ],
+          "default": "all"
+        },
+        "description": "all or reportFilesUrls to get report files. importFilesUrls to get input file urls instead of input fileIds."
+      },
+      "jobStatus": {
+        "in": "query",
+        "name": "jobStatus",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "all",
+            "created",
+            "pending",
+            "working",
+            "succeeded",
+            "failed"
+          ],
+          "default": "all"
+        },
+        "description": "Select the job list by status."
+      },
+      "skip": {
+        "in": "query",
+        "name": "skip",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "default": "0"
+        },
+        "description": "Number of files urls to skip."
+      },
+      "top": {
+        "in": "query",
+        "name": "top",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "default": "100"
+        },
+        "description": "Number of files urls to read."
+      },
+      "maxNumberOfFiles": {
+        "in": "query",
+        "name": "maxNumberOfFiles",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "default": "1"
+        },
+        "description": "Maximum number of file to upload in DFS."
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Succeeded"
+      },
+      "200-input": {
+        "description": "Succeeded",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/jobInputExport"
+            },
+            "example": {
+              "version": "1.4",
+              "title": "ChangeAction As Selector",
+              "format": "STEPAP242XML",
+              "selectorMode": true,
+              "objects": [
+                {
+                  "source": "https://devopsph732bt10923-euw1-devprol21-space.3dx-staging.3ds.com:443/enovia",
+                  "type": "Change Action",
+                  "identifier": "6B45CE52F06400005F5A1D7F001A057A",
+                  "relativePath": "/resources/v1/modeler/dslc/changeaction/6B45CE52F06400005F5A1D7F001A057A"
+                }
+              ],
+              "parameters": [
+                {
+                  "domain": "Change",
+                  "entitiesToSelect": [
+                    "VPMReference"
+                  ]
+                },
+                {
+                  "domain": "Engineering",
+                  "expandDepth": "0"
+                },
+                {
+                  "domain": "Manufacturing",
+                  "expandDepth": "-1"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "200-output": {
+        "description": "Succeeded",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/jobContentExport"
+            },
+            "examples": {
+              "version 3.0 example 1": {
+                "value": {
+                  "version": "3.0",
+                  "title": "MyFirstExport",
+                  "format": "STEPAP242XML",
+                  "objects": [
+                    {
+                      "source": "https://devopsc3ohq8c27642-euw1-23dsw10723-space.3dx-staging.3ds.com:443/enovia",
+                      "type": "VPMReference",
+                      "identifier": "4BB0B86900000ADE5F1EDB370000BCBA",
+                      "relativePath": "/resource/v1/dseng/VPMReference/4BB0B86900000ADE5F1EDB370000BCBA"
+                    }
+                  ],
+                  "parameters": [
+                    {
+                      "domain": "Engineering",
+                      "expandDepth": "1",
+                      "geometricalFormats": [
+                        {
+                          "type": "Part",
+                          "ignoreIfNotFound": true,
+                          "allNativeCADs": true,
+                          "allDerivedOutput": true,
+                          "onlySynchronizedDerivedOutputFiles": true
+                        }
+                      ]
+                    },
+                    {
+                      "domain": "Manufacturing",
+                      "expandDepth": "1"
+                    },
+                    {
+                      "domain": "AdvancedFilter",
+                      "filterAsSelector": true
+                    }
+                  ],
+                  "retried": true,
+                  "retryIdentifier": 457159,
+                  "automatic retry": "pending",
+                  "retry count": 2,
+                  "creationDate": "2020-01-19T06:10:13.754",
+                  "submissionDate": "2020-01-19T06:10:13.754",
+                  "startDate": "2020-01-19T06:10:13.754",
+                  "endDate": "2020-01-19T06:10:13.754",
+                  "time to keep": "24",
+                  "time to live": "1440",
+                  "status": "Failed",
+                  "progress": "100",
+                  "credits": 2,
+                  "nbTotalObjects": 30,
+                  "consumableObjects": 15,
+                  "creator": "BHE",
+                  "nbTotalResults": 50,
+                  "resulturls": [
+                    "fileurl1"
+                  ],
+                  "nbTotalReports": 1,
+                  "reporturls": [
+                    "fileurl2"
+                  ],
+                  "retried exchangejobs": [
+                    {
+                      "source": "https://devopsc3ohq8c27642-euw1-23dsw10723-exchange.3dx-staging.3ds.com/exchange",
+                      "type": "exports",
+                      "identifier": "8ad88e99-2034-40be-b963-3e4151648d6e",
+                      "relativePath": "/resource/v1/modeler/exchangejobs/exports/8ad88e99-2034-40be-b963-3e4151648d6e"
+                    }
+                  ]
+                }
+              },
+              "version 3.0 example 2": {
+                "value": {
+                  "version": "3.0",
+                  "title": "MyFirstExport",
+                  "format": "STEPAP242XML",
+                  "objects": [
+                    {
+                      "source": "https://devopsc3ohq8c27642-euw1-23dsw10723-space.3dx-staging.3ds.com:443/enovia",
+                      "type": "VPMReference",
+                      "identifier": "4BB0B86900000ADE5F1EDB370000BCBA",
+                      "relativePath": "/resource/v1/dseng/VPMReference/4BB0B86900000ADE5F1EDB370000BCBA"
+                    }
+                  ],
+                  "parameters": [
+                    {
+                      "domain": "Engineering",
+                      "expandDepth": "1",
+                      "geometricalFormats": [
+                        {
+                          "type": "Part",
+                          "ignoreIfNotFound": true,
+                          "nativeCADPreferences": [
+                            "CREO",
+                            "CATIAV5"
+                          ],
+                          "derivedOutput": [
+                            {
+                              "format": "STEP",
+                              "geometricalParameters": [
+                                {
+                                  "name": "ApplicationProtocol",
+                                  "values": [
+                                    "AP242E1"
+                                  ]
+                                },
+                                {
+                                  "name": "3DAnnotations",
+                                  "values": [
+                                    "graphic",
+                                    "none"
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "applicativeCompletionOptions": {
+                        "with3DShapes": true,
+                        "withDrawings": true,
+                        "withDocuments": true
+                      }
+                    },
+                    {
+                      "domain": "Manufacturing",
+                      "expandDepth": "1"
+                    },
+                    {
+                      "domain": "AdvancedFilter",
+                      "filterAsSelector": true
+                    }
+                  ],
+                  "retried": true,
+                  "retryIdentifier": 457159,
+                  "automatic retry": "pending",
+                  "retry count": 2,
+                  "creationDate": "2020-01-19T06:10:13.754",
+                  "submissionDate": "2020-01-19T06:10:13.754",
+                  "startDate": "2020-01-19T06:10:13.754",
+                  "endDate": "2020-01-19T06:10:13.754",
+                  "time to keep": "24",
+                  "time to live": "1440",
+                  "status": "Failed",
+                  "progress": "100",
+                  "credits": 2,
+                  "nbTotalObjects": 30,
+                  "consumableObjects": 15,
+                  "creator": "BHE",
+                  "nbTotalResults": 50,
+                  "resulturls": [
+                    "fileurl1"
+                  ],
+                  "nbTotalReports": 1,
+                  "reporturls": [
+                    "fileurl2"
+                  ],
+                  "retried exchangejobs": [
+                    {
+                      "source": "https://devopsc3ohq8c27642-euw1-23dsw10723-exchange.3dx-staging.3ds.com/exchange",
+                      "type": "exports",
+                      "identifier": "8ad88e99-2034-40be-b963-3e4151648d6e",
+                      "relativePath": "/resource/v1/modeler/exchangejobs/exports/8ad88e99-2034-40be-b963-3e4151648d6e"
+                    }
+                  ]
+                }
+              },
+              "version 2.2 example 1": {
+                "value": {
+                  "version": "2.2",
+                  "title": "MyFirstExport",
+                  "format": "STEPAP242XML",
+                  "objects": [
+                    {
+                      "source": "https://devopsc3ohq8c27642-euw1-23dsw10723-space.3dx-staging.3ds.com:443/enovia",
+                      "type": "VPMReference",
+                      "identifier": "4BB0B86900000ADE5F1EDB370000BCBA",
+                      "relativePath": "/resource/v1/dseng/VPMReference/4BB0B86900000ADE5F1EDB370000BCBA"
+                    }
+                  ],
+                  "parameters": [
+                    {
+                      "domain": "Engineering",
+                      "expandDepth": "1",
+                      "geometricalFormats": [
+                        {
+                          "type": "Part",
+                          "ignoreIfNotFound": true,
+                          "allNativeCADs": true,
+                          "allDerivedOutput": true,
+                          "onlySynchronizedDerivedOutputFiles": true
+                        }
+                      ]
+                    },
+                    {
+                      "domain": "Manufacturing",
+                      "expandDepth": "1"
+                    },
+                    {
+                      "domain": "AdvancedFilter",
+                      "filterAsSelector": true
+                    }
+                  ],
+                  "retried": true,
+                  "retryIdentifier": 457159,
+                  "automatic retry": "pending",
+                  "retry count": 2,
+                  "creationDate": "2020-01-19T06:10:13.754",
+                  "submissionDate": "2020-01-19T06:10:13.754",
+                  "startDate": "2020-01-19T06:10:13.754",
+                  "endDate": "2020-01-19T06:10:13.754",
+                  "time to keep": "24",
+                  "time to live": "1440",
+                  "status": "Failed",
+                  "progress": "100",
+                  "credits": 2,
+                  "nbTotalObjects": 30,
+                  "consumableObjects": 15,
+                  "creator": "BHE",
+                  "nbTotalResults": 50,
+                  "resulturls": [
+                    "fileurl1"
+                  ],
+                  "nbTotalReports": 1,
+                  "reporturls": [
+                    "fileurl2"
+                  ],
+                  "retried exchangejobs": [
+                    {
+                      "source": "https://devopsc3ohq8c27642-euw1-23dsw10723-exchange.3dx-staging.3ds.com/exchange",
+                      "type": "exports",
+                      "identifier": "8ad88e99-2034-40be-b963-3e4151648d6e",
+                      "relativePath": "/resource/v1/modeler/exchangejobs/exports/8ad88e99-2034-40be-b963-3e4151648d6e"
+                    }
+                  ]
+                }
+              },
+              "version 2.2 example 2": {
+                "value": {
+                  "version": "2.2",
+                  "title": "MyFirstExport",
+                  "format": "STEPAP242XML",
+                  "objects": [
+                    {
+                      "source": "https://devopsc3ohq8c27642-euw1-23dsw10723-space.3dx-staging.3ds.com:443/enovia",
+                      "type": "VPMReference",
+                      "identifier": "4BB0B86900000ADE5F1EDB370000BCBA",
+                      "relativePath": "/resource/v1/dseng/VPMReference/4BB0B86900000ADE5F1EDB370000BCBA"
+                    }
+                  ],
+                  "parameters": [
+                    {
+                      "domain": "Engineering",
+                      "expandDepth": "1",
+                      "geometricalFormats": [
+                        {
+                          "type": "Part",
+                          "ignoreIfNotFound": true,
+                          "nativeCADPreferences": [
+                            "CREO",
+                            "CATIAV5"
+                          ],
+                          "derivedOutput": [
+                            {
+                              "format": "STEP",
+                              "geometricalParameters": [
+                                {
+                                  "name": "ApplicationProtocol",
+                                  "values": [
+                                    "AP242E1"
+                                  ]
+                                },
+                                {
+                                  "name": "3DAnnotations",
+                                  "values": [
+                                    "graphic",
+                                    "none"
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "applicativeCompletionOptions": {
+                        "with3DShapes": true,
+                        "withDrawings": true,
+                        "withDocuments": true
+                      }
+                    },
+                    {
+                      "domain": "Manufacturing",
+                      "expandDepth": "1"
+                    },
+                    {
+                      "domain": "AdvancedFilter",
+                      "filterAsSelector": true
+                    }
+                  ],
+                  "retried": true,
+                  "retryIdentifier": 457159,
+                  "automatic retry": "pending",
+                  "retry count": 2,
+                  "creationDate": "2020-01-19T06:10:13.754",
+                  "submissionDate": "2020-01-19T06:10:13.754",
+                  "startDate": "2020-01-19T06:10:13.754",
+                  "endDate": "2020-01-19T06:10:13.754",
+                  "time to keep": "24",
+                  "time to live": "1440",
+                  "status": "Failed",
+                  "progress": "100",
+                  "credits": 2,
+                  "nbTotalObjects": 30,
+                  "consumableObjects": 15,
+                  "creator": "BHE",
+                  "nbTotalResults": 50,
+                  "resulturls": [
+                    "fileurl1"
+                  ],
+                  "nbTotalReports": 1,
+                  "reporturls": [
+                    "fileurl2"
+                  ],
+                  "retried exchangejobs": [
+                    {
+                      "source": "https://devopsc3ohq8c27642-euw1-23dsw10723-exchange.3dx-staging.3ds.com/exchange",
+                      "type": "exports",
+                      "identifier": "8ad88e99-2034-40be-b963-3e4151648d6e",
+                      "relativePath": "/resource/v1/modeler/exchangejobs/exports/8ad88e99-2034-40be-b963-3e4151648d6e"
+                    }
+                  ]
+                }
+              },
+              "version 1.5": {
+                "value": {
+                  "version": "1.5",
+                  "title": "MyFirstExport",
+                  "format": "STEPAP242XML",
+                  "objects": [
+                    {
+                      "source": "https://devopsc3ohq8c27642-euw1-23dsw10723-space.3dx-staging.3ds.com:443/enovia",
+                      "type": "VPMReference",
+                      "identifier": "4BB0B86900000ADE5F1EDB370000BCBD",
+                      "relativePath": "/resource/v1/dseng/VPMReference/4BB0B86900000ADE5F1EDB370000BCBD"
+                    }
+                  ],
+                  "parameters": [
+                    {
+                      "domain": "Engineering",
+                      "expandDepth": "1",
+                      "geometricalFormats": [
+                        {
+                          "type": "Part",
+                          "format": "STEP",
+                          "nativeCADPreference": "CATIAV5",
+                          "ignoreIfNotFound": true,
+                          "geometricalParameters": [
+                            {
+                              "name": "ApplicationProtocol",
+                              "value": "AP242E1"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "Drawing",
+                          "format": "PDF"
+                        }
+                      ]
+                    },
+                    {
+                      "domain": "Manufacturing",
+                      "expandDepth": "1"
+                    },
+                    {
+                      "domain": "Document",
+                      "withFiles": "Yes"
+                    }
+                  ],
+                  "retried": true,
+                  "retryIdentifier": 457158,
+                  "creationDate": "2020-01-19T06:10:13.754",
+                  "submissionDate": "2020-01-19T06:10:13.754",
+                  "startDate": "2020-01-19T06:10:13.754",
+                  "endDate": "2020-01-19T06:10:13.754",
+                  "time to keep": "24",
+                  "time to live": "1440",
+                  "status": "Succeeded",
+                  "progress": "100",
+                  "credits": 2,
+                  "nbTotalObjects": 30,
+                  "consumableObjects": 15,
+                  "creator": "BHE",
+                  "nbTotalResults": 50,
+                  "resulturls": [
+                    "fileurl1"
+                  ],
+                  "nbTotalReports": 1,
+                  "reporturls": [
+                    "fileurl2"
+                  ],
+                  "retried exchangejobs": [
+                    {
+                      "source": "https://devopsc3ohq8c27642-euw1-23dsw10723-exchange.3dx-staging.3ds.com/exchange",
+                      "type": "exports",
+                      "identifier": "8ad88e99-2034-40be-b963-3e4151648d6e",
+                      "relativePath": "/resource/v1/modeler/exchangejobs/exports/8ad88e99-2034-40be-b963-3e4151648d6e"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "200-file": {
+        "description": "Succeeded",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "fileUrl": {
+                  "type": "string",
+                  "description": "File url to download."
+                }
+              }
+            },
+            "example": {
+              "fileUrl": "https://.../resources/dfs/v1bos/B740344A314F0000FF78925B62990200/fileurl?tenant=DEVOPSSBRDFFDR217136"
+            }
+          }
+        }
+      },
+      "200-csrf": {
+        "description": "Succeeded",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "X-Requested-With": {
+                  "type": "string",
+                  "description": "batch."
+                }
+              }
+            },
+            "example": {
+              "X-Requested-With": "batch"
+            }
+          }
+        }
+      },
+      "200-ticket": {
+        "description": "Created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Code"
+                },
+                "msg": {
+                  "type": "string",
+                  "description": "Message"
+                }
+              }
+            },
+            "example": {
+              "code": "0",
+              "msg": "ok"
+            }
+          }
+        }
+      },
+      "200-synchro": {
+        "description": "Succeeded",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Code"
+                },
+                "code": {
+                  "type": "string",
+                  "description": "Code"
+                },
+                "msg": {
+                  "type": "string",
+                  "description": "Message"
+                }
+              }
+            },
+            "example": {
+              "users": [
+                {
+                  "id": "ql9",
+                  "code": 0,
+                  "msg": "ok"
+                },
+                {
+                  "id": "lxm",
+                  "code": 0,
+                  "msg": "ok"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "200-filescheckinstart": {
+        "description": "Created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "description": "url"
+                },
+                "ticket": {
+                  "type": "string",
+                  "description": "ticket"
+                },
+                "uploadCorrelation": {
+                  "type": "array",
+                  "description": "import FileIds to store in job",
+                  "items": {
+                    "properties": {
+                      "fileId": {
+                        "type": "string"
+                      },
+                      "correlationId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "example": {
+              "url": "https://vdevpril165blr.dsone.3ds.com:453/fcs/servlet/fcs/checkin",
+              "ticket": "UjU5AAABsE8qrfWcH13OY3s9931EgCTa9RA8YqoHmbzpfYP7psIvOg7yAr10zvOBOGIiDrWZ+X4PosNhUMmDDoK/4kWsdvEsbNsoY8DCLLjZhQTCN6XcPtO9+j6Ep38n925AemwIFqv5bjw489TLsLqRifJNLg3APNLquLYd8osZMOtFrCGMiwW1uW/8WTL/Cfg+0Kq9wRTbw/VHdPS4paoih6rP2+Q3p6YVTQmdCI3fSG56d3VqHduY6IeqCsiq310Ph3l3+JYp252MWRTN63J3ieLP18f/rsrKSjXQI7klcjIJGQErSIwbg4uve5b4Poln9rssE3cdib4VGikH4fypvQyaeAd1ReR3JlZ3rHrAHvisphMBUalR8XQoZbaH82wjOxCj2H+OK6yv9Q7T8UntoVpidBa4mPgeq0b8xm3A7IVowB7X7MOIaPDJF30c5wuTJuXETzafULmPAoww6GEuatlCElHXVEgiiLWumDV3vtc64hH1aCd5EjBq6yYcJlaqx2Rc98qjPmTC4lA4Vgt7vu1qoSeCHLq/r7PATE63rGsQt1jnut/1uMtilBGZsDDPd15CGQ==",
+              "uploadCorrelation": [
+                {
+                  "fileId": "8ad88e99-2034-40be-b963-3e4151648dqe",
+                  "correlationId": "0"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "200-outputImport": {
+        "description": "Succeeded",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/jobContentImport"
+            },
+            "examples": {
+              "succeeded": {
+                "value": {
+                  "version": "1.1",
+                  "title": "myFirstImport",
+                  "format": "STEPAP242XML",
+                  "retried": false,
+                  "retryIdentifier": 457158,
+                  "creationDate": "2020-01-19T06:10:13.754",
+                  "submissionDate": "2020-01-19T06:10:13.754",
+                  "startDate": "2020-01-19T06:10:13.754",
+                  "endDate": "2020-01-19T06:10:13.754",
+                  "time to keep": "24",
+                  "time to live": "1440",
+                  "status": "Succeeded",
+                  "computeError": "Succeeded",
+                  "progress": "100",
+                  "creator": "Bruno",
+                  "nbTotalObjects": 30,
+                  "parameters": [
+                    {
+                      "rootFile": "ABC.stpx"
+                    }
+                  ],
+                  "nbTotalInputs": "1",
+                  "inputurls": [
+                    "fileurl1"
+                  ],
+                  "nbTotalReports": 1,
+                  "reporturls": [
+                    "fileurl2"
+                  ]
+                }
+              },
+              "manual retry": {
+                "value": {
+                  "version": "1.1",
+                  "title": "myFirstImport",
+                  "format": "STEPAP242XML",
+                  "retried": true,
+                  "retryIdentifier": 457158,
+                  "creationDate": "2020-01-19T06:10:13.754",
+                  "submissionDate": "2020-01-19T06:10:13.754",
+                  "startDate": "2020-01-19T06:10:13.754",
+                  "endDate": "",
+                  "time to keep": "24",
+                  "time to live": "1440",
+                  "progress": "20",
+                  "creator": "Pierre",
+                  "parameters": [
+                    {
+                      "rootFile": "ABC.stpx"
+                    }
+                  ],
+                  "nbTotalInputs": "1",
+                  "inputurls": [
+                    "fileurl1"
+                  ],
+                  "nbTotalReports": 1,
+                  "reporturls": [
+                    "fileurl2"
+                  ],
+                  "retried exchangejobs": [
+                    {
+                      "source": "https://devopsc3ohq8c27642-euw1-23dsw10723-exchange.3dx-staging.3ds.com/exchange",
+                      "type": "imports",
+                      "identifier": "8ad88e99-2034-40be-b963-3e4151648d6e",
+                      "relativePath": "/resources/v1/modeler/exchangejobs/imports/8ad88e99-2034-40be-b963-3e4151648d6e"
+                    }
+                  ]
+                }
+              },
+              "auto retry": {
+                "value": {
+                  "version": "1.1",
+                  "title": "myFirstImport",
+                  "format": "STEPAP242XML",
+                  "retried": true,
+                  "retryIdentifier": 457158,
+                  "automatic retry": "running",
+                  "retry count": 1,
+                  "creationDate": "2020-01-19T06:10:13.754",
+                  "submissionDate": "2020-01-19T06:10:13.754",
+                  "startDate": "2020-01-19T06:10:13.754",
+                  "endDate": "",
+                  "time to keep": "24",
+                  "time to live": "1440",
+                  "progress": "20",
+                  "creator": "Pierre",
+                  "parameters": [
+                    {
+                      "rootFile": "ABC.stpx"
+                    }
+                  ],
+                  "nbTotalInputs": "1",
+                  "inputurls": [
+                    "fileurl1"
+                  ],
+                  "nbTotalReports": 1,
+                  "reporturls": [
+                    "fileurl2"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "201": {
+        "description": "Created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "description": "The source."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The type."
+                },
+                "identifier": {
+                  "type": "string",
+                  "description": "The identifier."
+                },
+                "relativePath": {
+                  "type": "string",
+                  "description": "The relative path."
+                }
+              }
+            },
+            "example": {
+              "source": "https://r1132100982379-eu1-exchange.3dexperience.3ds.com/exchange",
+              "type": "exports",
+              "identifier": "8ad88e99-2034-40be-b963-3e4151648d6e",
+              "relativePath": "/resources/v1/modeler/exchangejobs/exports/8ad88e99-2034-40be-b963-3e4151648d6e"
+            }
+          }
+        }
+      },
+      "201-family": {
+        "description": "New exchangejob created and submitted. The current exchangejob already ended.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "description": "The source."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The type."
+                },
+                "identifier": {
+                  "type": "string",
+                  "description": "The identifier."
+                },
+                "relativePath": {
+                  "type": "string",
+                  "description": "The relative path."
+                }
+              }
+            },
+            "example": {
+              "source": "https://devopsc3ohq8c27642-euw1-23dsw10723-exchange.3dx-staging.3ds.com/exchange",
+              "type": "exports",
+              "identifier": "8ad88e99-2034-40be-b963-3e4151648d6e",
+              "relativePath": "/resources/v1/modeler/exchangejobs/exports/8ad88e99-2034-40be-b963-3e4151648d6e"
+            }
+          }
+        }
+      },
+      "201-imports": {
+        "description": "Created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "description": "The source."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The type."
+                },
+                "identifier": {
+                  "type": "string",
+                  "description": "The identifier."
+                },
+                "relativePath": {
+                  "type": "string",
+                  "description": "The relative path."
+                }
+              }
+            },
+            "example": {
+              "source": "https://devopsc3ohq8c27642-euw1-23dsw10723-exchange.3dx-staging.3ds.com/exchange",
+              "type": "imports",
+              "identifier": "8ad88e99-2034-40be-b963-3e4151648d6e",
+              "relativePath": "/resources/v1/modeler/exchangejobs/imports/8ad88e99-2034-40be-b963-3e4151648d6e"
+            }
+          }
+        }
+      },
+      "201-family-imports": {
+        "description": "New exchangejobs created and submitted. The current exchangejobs has already ended.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "description": "The source."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The type."
+                },
+                "identifier": {
+                  "type": "string",
+                  "description": "The identifier."
+                },
+                "relativePath": {
+                  "type": "string",
+                  "description": "The relative path."
+                }
+              }
+            },
+            "example": {
+              "source": "https://devopsc3ohq8c27642-euw1-23dsw10723-exchange.3dx-staging.3ds.com/exchange",
+              "type": "imports",
+              "identifier": "8ad88e99-2034-40be-b963-3e4151648d6e",
+              "relativePath": "/resources/v1/modeler/exchangejobs/imports/8ad88e99-2034-40be-b963-3e4151648d6e"
+            }
+          }
+        }
+      },
+      "202": {
+        "description": "Partial results. The source could not be extracted because of a server time out.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "The type."
+                },
+                "identifier": {
+                  "type": "string",
+                  "description": "The identifier."
+                },
+                "relativePath": {
+                  "type": "string",
+                  "description": "The relative path."
+                }
+              }
+            },
+            "example": {
+              "type": "exports",
+              "identifier": "8ad88e99-2034-40be-b963-3e4151648d6e",
+              "relativePath": "/resources/v1/modeler/exchangejobs/exports/8ad88e99-2034-40be-b963-3e4151648d6e"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errorcode": {
+                  "type": "string",
+                  "description": "Service error code."
+                },
+                "errormsg": {
+                  "type": "string",
+                  "description": "Error message."
+                }
+              }
+            },
+            "example": {
+              "errorcode": "510",
+              "errormsg": "Job not found."
+            }
+          }
+        }
+      },
+      "400-lim": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errorcode": {
+                  "type": "string",
+                  "description": "Service error code."
+                },
+                "errormsg": {
+                  "type": "string",
+                  "description": "Error message."
+                }
+              }
+            },
+            "example": {
+              "errorcode": "1280",
+              "errormsg": "Too large number of files 233. It must be lower than 100."
+            }
+          }
+        }
+      },
+      "400-sub": {
+        "description": "Bad request message",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errorcode": {
+                  "type": "string",
+                  "description": "Service error code."
+                },
+                "errormsg": {
+                  "type": "string",
+                  "description": "Error message."
+                }
+              }
+            },
+            "example": {
+              "errorcode": "86",
+              "errormsg": "Bad request message."
+            }
+          }
+        }
+      },
+      "400-checkinticket": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errorcode": {
+                  "type": "string",
+                  "description": "Service error code."
+                },
+                "errormsg": {
+                  "type": "string",
+                  "description": "Error message."
+                }
+              }
+            },
+            "example": {
+              "errorcode": "730",
+              "errormsg": "Invalid number of files."
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errorcode": {
+                  "type": "string",
+                  "description": "Service error code."
+                },
+                "errormsg": {
+                  "type": "string",
+                  "description": "Error message."
+                }
+              }
+            },
+            "example": {
+              "errorcode": "6",
+              "errormsg": "Unauthorized access."
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Cross-Site Request Forgery",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errorcode": {
+                  "type": "string",
+                  "description": "Service error code."
+                },
+                "errormsg": {
+                  "type": "string",
+                  "description": "Error message."
+                }
+              }
+            },
+            "example": {
+              "errorcode": "61",
+              "errormsg": "Cross-Site Request Forgery."
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errorcode": {
+                  "type": "string",
+                  "description": "Service error code."
+                },
+                "errormsg": {
+                  "type": "string",
+                  "description": "Error message."
+                }
+              }
+            },
+            "example": {
+              "errorcode": "71",
+              "errormsg": "Unexpected Job Id."
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Server error. Server is down",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errorcode": {
+                  "type": "string",
+                  "description": "Service error code."
+                },
+                "errormsg": {
+                  "type": "string",
+                  "description": "Error message."
+                }
+              }
+            },
+            "example": {
+              "errorcode": "5",
+              "errormsg": "Exchange resource broken."
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "jobinputRequest": {
+        "required": true,
+        "description": "Export specification.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/jobInputExport"
+            },
+            "examples": {
+              "version 3.0 example 1": {
+                "value": {
+                  "version": "3.0",
+                  "title": "MyFirstExport",
+                  "format": "STEPAP242XML",
+                  "objects": [
+                    {
+                      "source": "https://devopsxxxhzbn281359-euw1-25dsw10427-space.3dx-staging.3ds.com:443/enovia",
+                      "type": "VPMReference",
+                      "identifier": "EE562168015FFCF14F940A513C63AA77",
+                      "relativePath": "/resource/v1/dseng/VPMReference/EE562168015FFCF14F940A513C63AA77"
+                    }
+                  ],
+                  "parameters": [
+                    {
+                      "domain": "Engineering",
+                      "expandDepth": "1",
+                      "geometricalFormats": [
+                        {
+                          "type": "Part",
+                          "ignoreIfNotFound": true,
+                          "allNativeCADs": true,
+                          "allDerivedOutput": true,
+                          "onlySynchronizedDerivedOutputFiles": true
+                        }
+                      ],
+                      "applicativeCompletionOptions": {
+                        "with3DShapes": true,
+                        "withDrawings": true,
+                        "withDocuments": true
+                      }
+                    },
+                    {
+                      "domain": "Manufacturing",
+                      "expandDepth": "1"
+                    },
+                    {
+                      "domain": "AdvancedFilter",
+                      "filterAsSelector": true
+                    }
+                  ]
+                }
+              },
+              "version 3.0 example 2": {
+                "value": {
+                  "version": "3.0",
+                  "title": "MyFirstExport",
+                  "format": "STEPAP242XML",
+                  "objects": [
+                    {
+                      "source": "https://devopsxxxhzbn281359-euw1-25dsw10427-space.3dx-staging.3ds.com:443/enovia",
+                      "type": "VPMReference",
+                      "identifier": "EE562168015FFCF14F940A513C63AA77",
+                      "relativePath": "/resource/v1/dseng/VPMReference/EE562168015FFCF14F940A513C63AA77"
+                    }
+                  ],
+                  "parameters": [
+                    {
+                      "domain": "Engineering",
+                      "expandDepth": "1",
+                      "geometricalFormats": [
+                        {
+                          "type": "Part",
+                          "ignoreIfNotFound": true,
+                          "allNativeCADs": true,
+                          "onlySynchronizedDerivedOutputFiles": true,
+                          "derivedOutput": [
+                            {
+                              "format": "STEP",
+                              "geometricalParameters": [
+                                {
+                                  "name": "ApplicationProtocol",
+                                  "values": [
+                                    "AP242E1"
+                                  ]
+                                },
+                                {
+                                  "name": "3DAnnotations",
+                                  "values": [
+                                    "graphic",
+                                    "none"
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "applicativeCompletionOptions": {
+                        "with3DShapes": true,
+                        "withDrawings": true,
+                        "withDocuments": true
+                      }
+                    },
+                    {
+                      "domain": "Manufacturing",
+                      "expandDepth": "1"
+                    },
+                    {
+                      "domain": "AdvancedFilter",
+                      "filterAsSelector": true
+                    }
+                  ]
+                }
+              },
+              "version 2.2 example 1": {
+                "value": {
+                  "version": "2.2",
+                  "title": "MyFirstExport",
+                  "format": "STEPAP242XML",
+                  "objects": [
+                    {
+                      "source": "https://devopsxxxhzbn281359-euw1-25dsw10427-space.3dx-staging.3ds.com:443/enovia",
+                      "type": "VPMReference",
+                      "identifier": "EE562168015FFCF14F940A513C63AA77",
+                      "relativePath": "/resource/v1/dseng/VPMReference/EE562168015FFCF14F940A513C63AA77"
+                    }
+                  ],
+                  "parameters": [
+                    {
+                      "domain": "Engineering",
+                      "expandDepth": "1",
+                      "geometricalFormats": [
+                        {
+                          "type": "Part",
+                          "ignoreIfNotFound": true,
+                          "allNativeCADs": true,
+                          "allDerivedOutput": true,
+                          "onlySynchronizedDerivedOutputFiles": true
+                        }
+                      ],
+                      "applicativeCompletionOptions": {
+                        "with3DShapes": true,
+                        "withDrawings": true,
+                        "withDocuments": true
+                      }
+                    },
+                    {
+                      "domain": "Manufacturing",
+                      "expandDepth": "1"
+                    },
+                    {
+                      "domain": "AdvancedFilter",
+                      "filterAsSelector": true
+                    }
+                  ]
+                }
+              },
+              "version 2.2 example 2": {
+                "value": {
+                  "version": "2.2",
+                  "title": "MyFirstExport",
+                  "format": "STEPAP242XML",
+                  "objects": [
+                    {
+                      "source": "https://devopsxxxhzbn281359-euw1-25dsw10427-space.3dx-staging.3ds.com:443/enovia",
+                      "type": "VPMReference",
+                      "identifier": "EE562168015FFCF14F940A513C63AA77",
+                      "relativePath": "/resource/v1/dseng/VPMReference/EE562168015FFCF14F940A513C63AA77"
+                    }
+                  ],
+                  "parameters": [
+                    {
+                      "domain": "Engineering",
+                      "expandDepth": "1",
+                      "geometricalFormats": [
+                        {
+                          "type": "Part",
+                          "ignoreIfNotFound": true,
+                          "allNativeCADs": true,
+                          "onlySynchronizedDerivedOutputFiles": true,
+                          "derivedOutput": [
+                            {
+                              "format": "STEP",
+                              "geometricalParameters": [
+                                {
+                                  "name": "ApplicationProtocol",
+                                  "values": [
+                                    "AP242E1"
+                                  ]
+                                },
+                                {
+                                  "name": "3DAnnotations",
+                                  "values": [
+                                    "graphic",
+                                    "none"
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "applicativeCompletionOptions": {
+                        "with3DShapes": true,
+                        "withDrawings": true,
+                        "withDocuments": true
+                      }
+                    },
+                    {
+                      "domain": "Manufacturing",
+                      "expandDepth": "1"
+                    },
+                    {
+                      "domain": "AdvancedFilter",
+                      "filterAsSelector": true
+                    }
+                  ]
+                }
+              },
+              "version 2.1": {
+                "value": {
+                  "version": "2.1",
+                  "title": "MyFirstExport",
+                  "format": "STEPAP242XML",
+                  "objects": [
+                    {
+                      "source": "https://devopsxxxhzbn281359-euw1-25dsw10427-space.3dx-staging.3ds.com:443/enovia",
+                      "type": "VPMReference",
+                      "identifier": "EE562168015FFCF14F940A513C63AA77",
+                      "relativePath": "/resource/v1/dseng/VPMReference/EE562168015FFCF14F940A513C63AA77"
+                    }
+                  ],
+                  "parameters": [
+                    {
+                      "domain": "Engineering",
+                      "expandDepth": "1",
+                      "geometricalFormats": [
+                        {
+                          "type": "Part",
+                          "ignoreIfNotFound": true,
+                          "nativeCADPreferences": [
+                            "CREO",
+                            "CATIAV5"
+                          ],
+                          "derivedOutput": [
+                            {
+                              "format": "STEP",
+                              "geometricalParameters": [
+                                {
+                                  "name": "ApplicationProtocol",
+                                  "values": [
+                                    "AP242E1"
+                                  ]
+                                },
+                                {
+                                  "name": "3DAnnotations",
+                                  "values": [
+                                    "graphic",
+                                    "none"
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "applicativeCompletionOptions": {
+                        "with3DShapes": true,
+                        "withDrawings": true,
+                        "withDocuments": true
+                      }
+                    },
+                    {
+                      "domain": "Manufacturing",
+                      "expandDepth": "1"
+                    },
+                    {
+                      "domain": "AdvancedFilter",
+                      "filterAsSelector": true
+                    }
+                  ]
+                }
+              },
+              "version 1.5": {
+                "value": {
+                  "version": "1.5",
+                  "title": "MyFirstExport",
+                  "format": "STEPAP242XML",
+                  "objects": [
+                    {
+                      "source": "https://devopsxxxhzbn281359-euw1-25dsw10427-space.3dx-staging.3ds.com:443/enovia",
+                      "type": "VPMReference",
+                      "identifier": "EE562168015FFCF14F940A513C63AA77",
+                      "relativePath": "/resource/v1/dseng/VPMReference/EE562168015FFCF14F940A513C63AA77"
+                    }
+                  ],
+                  "parameters": [
+                    {
+                      "domain": "Engineering",
+                      "expandDepth": "1",
+                      "geometricalFormats": [
+                        {
+                          "type": "Part",
+                          "format": "STEP",
+                          "nativeCADPreference": "CREO",
+                          "ignoreIfNotFound": true,
+                          "geometricalParameters": [
+                            {
+                              "name": "ApplicationProtocol",
+                              "value": "AP242E1"
+                            }
+                          ]
+                        }
+                      ],
+                      "applicativeCompletionOptions": {
+                        "with3DShapes": true,
+                        "withDrawings": true,
+                        "withDocuments": true
+                      }
+                    },
+                    {
+                      "domain": "Manufacturing",
+                      "expandDepth": "1"
+                    },
+                    {
+                      "domain": "Document",
+                      "withFiles": "Yes"
+                    }
+                  ]
+                }
+              },
+              "version 1.4": {
+                "value": {
+                  "version": "1.4",
+                  "title": "ChangeAction As Selector",
+                  "format": "STEPAP242XML",
+                  "selectorMode": true,
+                  "objects": [
+                    {
+                      "source": "https://devopsph732bt10923-euw1-devprol21-space.3dx-staging.3ds.com:443/enovia",
+                      "type": "Change Action",
+                      "identifier": "6B45CE52F06400005F5A1D7F001A057A",
+                      "relativePath": "/resource/6B45CE52F06400005F5A1D7F001A057A"
+                    }
+                  ],
+                  "parameters": [
+                    {
+                      "domain": "Change",
+                      "entitiesToSelect": [
+                        "VPMReference"
+                      ]
+                    },
+                    {
+                      "domain": "Engineering",
+                      "expandDepth": "0"
+                    },
+                    {
+                      "domain": "Manufacturing",
+                      "expandDepth": "-1"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "JobinputImportRequest": {
+        "required": true,
+        "description": "import specification.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/jobInputImport"
+            },
+            "example": {
+              "version": "1.1",
+              "title": "MyFirstImport",
+              "format": "STEPAP242XML",
+              "receipts": [
+                "QEBlbnZlbG9wQEBmY3NrZXlfM2ZlMTg0"
+              ],
+              "fileIds": [
+                "8ad88e99-2034-40be-b963-3e4151648dqe"
+              ],
+              "parameters": [
+                {
+                  "rootFile": "ABC.stpx"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "jobsInputUpdate": {
+        "required": true,
+        "description": "Update the input of the job before its submission.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "add": {
+                  "type": "array",
+                  "description": "operation",
+                  "items": {
+                    "properties": {
+                      "receipts": {
+                        "type": "array",
+                        "items": {
+                          "properties": {
+                            "receipt": {
+                              "type": "string",
+                              "description": "receipt"
+                            }
+                          }
+                        }
+                      },
+                      "fileIds": {
+                        "type": "array",
+                        "items": {
+                          "properties": {
+                            "fileId": {
+                              "type": "string",
+                              "description": "file id."
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "example": {
+              "add": {
+                "receipts": [
+                  "QEBlbnZlbG9wQEBmY3NrZXlfM3ZlMTg0"
+                ],
+                "fileIds": [
+                  "8ad88e99-2034-40be-b963-5e4151648dqe",
+                  "8ad88e99-2034-40be-b963-5e4151648dqf"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "jobInputExport": {
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Version number. Must be set to 2.1 for the new input payload. This will ensure the compatibility with the previous payloads."
+          },
+          "title": {
+            "type": "string",
+            "description": "Title for the job."
+          },
+          "format": {
+            "type": "string",
+            "description": "Format STEPAP242XML."
+          },
+          "selectorMode": {
+            "type": "boolean",
+            "description": "Default value is false and authorized values are true or false."
+          },
+          "objects": {
+            "$ref": "#/components/schemas/objects"
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/parameters"
+          }
+        },
+        "type": "object"
+      },
+      "jobInputImport": {
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Version number. Must be set to 1.0 for the new input payload. This will ensure the compatibility with the future payloads."
+          },
+          "title": {
+            "type": "string",
+            "description": "Title for the job."
+          },
+          "format": {
+            "type": "string",
+            "description": "Format."
+          },
+          "receipts": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "receipt": {
+                  "type": "string",
+                  "description": "receipt"
+                }
+              }
+            }
+          },
+          "fileIds": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "fileId": {
+                  "type": "string",
+                  "description": "The file id."
+                }
+              }
+            }
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "rootFile": {
+                  "type": "string",
+                  "description": "The root file."
+                }
+              }
+            }
+          }
+        },
+        "type": "object"
+      },
+      "jobContentExport": {
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Version number."
+          },
+          "title": {
+            "type": "string",
+            "description": "Title for the job."
+          },
+          "format": {
+            "type": "string",
+            "description": "Format STEPAP242XML."
+          },
+          "selectorMode": {
+            "type": "boolean",
+            "description": "Default value is false and authorized values are true or false."
+          },
+          "objects": {
+            "$ref": "#/components/schemas/objects"
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/parameters"
+          },
+          "retried": {
+            "type": "boolean",
+            "description": "false or true if a manual retry has been done."
+          },
+          "retryIdentifier": {
+            "type": "integer",
+            "description": "additionnal identifier to distinguish the retried jobs "
+          },
+          "automatic retry": {
+            "type": "string",
+            "description": "pending or running."
+          },
+          "retry count": {
+            "type": "integer",
+            "description": "number of automatic retry."
+          },
+          "creationDate": {
+            "type": "string",
+            "description": "Date of the user submission with format yyyy-MM-dd'T'HH:mm:ss.SSS. The time is UTC."
+          },
+          "submissionDate": {
+            "type": "string",
+            "description": "Date of the user submission with format yyyy-MM-dd'T'HH:mm:ss.SSS. The time is UTC."
+          },
+          "startDate": {
+            "type": "string",
+            "description": "Date of the execution start with format yyyy-MM-dd'T'HH:mm:ss.SSS. The time is UTC."
+          },
+          "endDate": {
+            "type": "string",
+            "description": "Date of the execution end with format yyyy-MM-dd'T'HH:mm:ss.SSS. The time is UTC."
+          },
+          "time to keep": {
+            "type": "string",
+            "description": "Time in hours before the job is removed."
+          },
+          "time to live": {
+            "type": "string",
+            "description": "Time in minutes before the job execution is stopped."
+          },
+          "status": {
+            "type": "string",
+            "description": "Job execution status such as succeeded, failed."
+          },
+          "computeError": {
+            "type": "string",
+            "description": "Compute execution status only seen in case of failure."
+          },
+          "progress": {
+            "type": "string",
+            "description": "Value between 0 and 100."
+          },
+          "credits": {
+            "type": "integer",
+            "description": "Credits."
+          },
+          "nbTotalObjects": {
+            "type": "integer",
+            "description": "Number of exchanged objects."
+          },
+          "consumableObjects": {
+            "type": "integer",
+            "description": "Number of consumable objects."
+          },
+          "creator": {
+            "type": "string",
+            "description": "Job creator."
+          },
+          "nbTotalResults   ": {
+            "type": "integer",
+            "description": "Total number of result files."
+          },
+          "resulturls": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "resulturls": {
+                  "type": "string",
+                  "description": "Urls of the resulting files."
+                }
+              }
+            }
+          },
+          "nbTotalReport": {
+            "type": "integer",
+            "description": "Total number of report files."
+          },
+          "reporturls": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "reporturls": {
+                  "type": "string",
+                  "description": "Urls of the report files."
+                }
+              }
+            }
+          },
+          "retried exchangejobs": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "retried exchangejobs": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "source": {
+                        "type": "string",
+                        "description": "The source."
+                      },
+                      "type": {
+                        "type": "string",
+                        "description": "The type."
+                      },
+                      "identifier": {
+                        "type": "string",
+                        "description": "The identifier."
+                      },
+                      "relativePath": {
+                        "type": "string",
+                        "description": "The relative path."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "type": "object"
+      },
+      "jobContentImport": {
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Version number."
+          },
+          "title": {
+            "type": "string",
+            "description": "Title."
+          },
+          "format": {
+            "type": "string",
+            "description": "Format."
+          },
+          "retried": {
+            "type": "boolean",
+            "description": "false or true if retry has been done."
+          },
+          "retryIdentifier": {
+            "type": "integer",
+            "description": "additionnal identifier to distinguish the retried jobs "
+          },
+          "automatic retry": {
+            "type": "string",
+            "description": "pending or running."
+          },
+          "retry count": {
+            "type": "integer",
+            "description": "number of automatic retry."
+          },
+          "creationDate": {
+            "type": "string",
+            "description": "Date of the user submission with format yyyy-MM-dd'T'HH:mm:ss.SSS. Time is UTC."
+          },
+          "submissionDate": {
+            "type": "string",
+            "description": "Date of the user submission with format yyyy-MM-dd'T'HH:mm:ss.SSS. Time is UTC."
+          },
+          "startDate": {
+            "type": "string",
+            "description": "Date of the execution start with format yyyy-MM-dd'T'HH:mm:ss.SSS. Time is UTC."
+          },
+          "endDate": {
+            "type": "string",
+            "description": "Date of the execution end with format yyyy-MM-dd'T'HH:mm:ss.SSS. Time is UTC."
+          },
+          "time to keep": {
+            "type": "string",
+            "description": "Time in hours before the job is removed."
+          },
+          "time to live": {
+            "type": "string",
+            "description": "Time in minutes before the job execution is stopped."
+          },
+          "status": {
+            "type": "string",
+            "description": "Job execution status such as succeeded, failed."
+          },
+          "computeError": {
+            "type": "string",
+            "description": "Compute execution status such as succeeded, failed."
+          },
+          "progress": {
+            "type": "integer",
+            "description": "Value between 0 and 100."
+          },
+          "creator": {
+            "type": "string",
+            "description": "Job creator."
+          },
+          "nbTotalObjects": {
+            "type": "string",
+            "description": "Total number of objects."
+          },
+          "nbTotalInputs": {
+            "type": "integer",
+            "description": "Total number of input files."
+          },
+          "inputurls": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "inputurl": {
+                  "type": "string",
+                  "description": "Urls of the input files. Output depending on the reponseFilter."
+                }
+              }
+            }
+          },
+          "nbTotalReport": {
+            "type": "integer",
+            "description": "Total number of report files."
+          },
+          "reporturls": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "reporturls": {
+                  "type": "string",
+                  "description": "Urls of the report files."
+                }
+              }
+            }
+          },
+          "inputids": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "inputurl": {
+                  "type": "string",
+                  "description": "Identifiers of the input files. Output depending on the reponseFilter."
+                }
+              }
+            }
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "rootFile": {
+                  "type": "string",
+                  "description": "The root file."
+                }
+              }
+            }
+          },
+          "retried exchangejobs": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "retried exchangejobs": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "source": {
+                        "type": "string",
+                        "description": "The source."
+                      },
+                      "type": {
+                        "type": "string",
+                        "description": "The type."
+                      },
+                      "identifier": {
+                        "type": "string",
+                        "description": "The identifier."
+                      },
+                      "relativePath": {
+                        "type": "string",
+                        "description": "The relative path."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "objects": {
+        "type": "array",
+        "items": {
+          "properties": {
+            "source": {
+              "type": "string",
+              "description": "The source."
+            },
+            "type": {
+              "type": "string",
+              "description": "The type."
+            },
+            "identifier": {
+              "type": "string",
+              "description": "The identifier."
+            },
+            "relativePath": {
+              "type": "string",
+              "description": "The relative path."
+            }
+          }
+        }
+      },
+      "parameters": {
+        "description": "Optional. Only necessary to define an option different than the default value or an expand value. If no expandDepth option, no expand will be applied. If no geometricalFormat option, no stream attached to the Product Structure will be exported.If no withFiles option, no file attached to the Document will be exported.",
+        "items": {
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Domain identifier."
+            },
+            "expandDepth": {
+              "type": "string",
+              "description": "Optional, 0 to n, -1 for expand all, no expand if no option"
+            },
+            "withFiles": {
+              "type": "string",
+              "description": "Optional only for Document. Possible values are Yes or No (Default)."
+            },
+            "geometricalFormats": {
+              "$ref": "#/components/schemas/geometricalFormats"
+            },
+            "applicativeCompletionOptions": {
+              "$ref": "#/components/schemas/applicativeCompletionOptions"
+            },
+            "entitiesToSelect": {
+              "type": "array",
+              "description": "Optional and for change",
+              "items": {
+                "properties": {
+                  "selected entity": {
+                    "type": "string",
+                    "description": "Such as VPMReference."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "type": "array"
+      },
+      "geometricalFormats": {
+        "type": "array",
+        "description": "Optional and only for engineering to get geometry",
+        "items": {
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Possible values are Part or Drawing."
+            },
+            "nativeCADPreferences": {
+              "$ref": "#/components/schemas/nativeCADPreferences"
+            },
+            "allNativeCADs": {
+              "type": "boolean",
+              "description": "Optional - Exclusive with nativeCADPreferences."
+            },
+            "onlySynchronizedDerivedOutputFiles": {
+              "type": "boolean",
+              "description": "Optional - Export only synchronized derived output."
+            },
+            "ignoreIfNotFound": {
+              "type": "string",
+              "description": "Optional false by default."
+            },
+            "derivedOutput": {
+              "$ref": "#/components/schemas/derivedOutput"
+            },
+            "allDerivedOutput": {
+              "type": "boolean",
+              "description": "Optional - Exclusive with derivedOutput."
+            }
+          }
+        }
+      },
+      "applicativeCompletionOptions": {
+        "type": "object",
+        "description": "Optional and only for Engineering domain",
+        "properties": {
+          "with3DShapes": {
+            "type": "boolean",
+            "description": "to complete with all 3DShapes, by default no 3DShape exported except those from 3DPart."
+          },
+          "withDrawings": {
+            "type": "boolean",
+            "description": "to complete with all drawings, by default no drawing exported."
+          },
+          "withDocuments": {
+            "type": "boolean",
+            "description": "to complete with all documents, by default no document exported."
+          }
+        }
+      },
+      "nativeCADPreferences": {
+        "type": "array",
+        "description": "Optional - Exclusive with allNativeCADs",
+        "items": {
+          "properties": {
+            "nativeCADPreference": {
+              "type": "string",
+              "description": "A CAD for which native data will be exported for only Part, Drawing or both. Possible values : CATIAV5, NX, SOLIDEDGE, INVENTOR (2d), AUTOCAD, CREO, SOLIDWORKS, DRAFTSIGHT (2d)"
+            }
+          }
+        }
+      },
+      "derivedOutput": {
+        "type": "array",
+        "description": "Optional - Exclusive with allDerivedOutput",
+        "items": {
+          "properties": {
+            "format": {
+              "type": "string",
+              "description": "If type is Part : value is STEP, STEP_AP203, STEP_AP214 or PDF if 2D Layout is attached. If type is Drawing : value is PDF."
+            },
+            "geometricalParameters": {
+              "$ref": "#/components/schemas/geometricalParameters"
+            }
+          }
+        }
+      },
+      "geometricalParameters": {
+        "type": "array",
+        "description": "Optional",
+        "items": {
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Possible value is level."
+            },
+            "values": {
+              "$ref": "#/components/schemas/values"
+            }
+          }
+        }
+      },
+      "values": {
+        "type": "array",
+        "description": "Optional",
+        "items": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "Possible values are AP242."
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,2022 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "Services provided in the 3DSpace service for connections to SCM systems",
+    "version": "1.1.0",
+    "title": "Design Data Management Connector Web Services",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dsscm",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3dspace/",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsscm/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/dsscm:Connector/{ID}": {
+      "get": {
+        "summary": "Gets a SCM Repository Connector",
+        "description": "Gets a SCM Repository Connector",
+        "operationId": "GET_dsscm:Connector_ID",
+        "tags": [
+          "dsscm:Connector"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsscm:Connector object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvscm:Connector.basic",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvscm:Connector.basic"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvscm_Connector.basic"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "examples": [
+                        400
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "examples": [
+                        "My message"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "examples": [
+                        401
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "examples": [
+                        "My message"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "examples": [
+                        500
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "examples": [
+                        "My message"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsscm:Connector/search": {
+      "get": {
+        "summary": "Gets a list of SCM Repository Connectors from indexed search ",
+        "description": "Gets a list of SCM Repository Connectors. By default, returns a total of up to 50 items, can be optionally increased up to 1000 items using $top query parameter. Recommendation: Use $searchStr query parameter for better performances",
+        "operationId": "GETSearch_dsscm:Connector_Search",
+        "tags": [
+          "dsscm:Connector"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$searchStr",
+            "in": "query",
+            "description": "Provide a 3DEXPERIENCE search expression with a minimum of two characters. Note that this will run on indexed data only.</br>Example1 searchStr=\"Connector1\"",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvscm:Connector.basic",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvscm:Connector.basic"
+              ]
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 1000.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvscm_Connector.basic"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "examples": [
+                        400
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "examples": [
+                        "My message"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "examples": [
+                        401
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "examples": [
+                        "My message"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "examples": [
+                        500
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "examples": [
+                        "My message"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "dsscm_Connector": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "examples": [
+              "MyName"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "examples": [
+              "My description"
+            ]
+          },
+          "scmtype": {
+            "type": "string",
+            "examples": [
+              "Git"
+            ],
+            "enum": [
+              "Git",
+              "Internal",
+              "DesignSync"
+            ]
+          },
+          "address": {
+            "type": "string",
+            "examples": [
+              "https://h:p/3DSCM"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "examples": [
+              "/repositories"
+            ]
+          },
+          "classification": {
+            "type": "string",
+            "examples": [
+              "External"
+            ]
+          }
+        }
+      },
+      "dsscm_Connector_PATCH": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "examples": [
+              "MyName"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "examples": [
+              "My description"
+            ]
+          },
+          "cestamp": {
+            "type": "string",
+            "examples": [
+              "2D70169432D84866A200F907881AC9B1"
+            ]
+          },
+          "scmtype": {
+            "type": "string",
+            "examples": [
+              "Git"
+            ],
+            "enum": [
+              "Git",
+              "Internal",
+              "DesignSync"
+            ]
+          },
+          "address": {
+            "type": "string",
+            "examples": [
+              "https://h:p/3DSCM"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "examples": [
+              "/repositories"
+            ]
+          },
+          "classification": {
+            "type": "string",
+            "examples": [
+              "External"
+            ]
+          }
+        }
+      },
+      "dsscm_Connection": {
+        "properties": {
+          "itemAddress": {
+            "type": "string",
+            "examples": [
+              "/repository/path"
+            ]
+          },
+          "versionAddress": {
+            "type": "string",
+            "examples": [
+              "master"
+            ]
+          },
+          "dynamicVersionAddress": {
+            "type": "string",
+            "examples": [
+              "master"
+            ]
+          },
+          "versionAddressType": {
+            "type": "string",
+            "examples": [
+              "unknown"
+            ],
+            "enum": [
+              "static",
+              "dynamic",
+              "undefined"
+            ]
+          }
+        }
+      },
+      "dsscm_Connection_PATCH": {
+        "properties": {
+          "itemAddress": {
+            "type": "string",
+            "examples": [
+              "/repository/path"
+            ]
+          },
+          "versionAddress": {
+            "type": "string",
+            "examples": [
+              "master"
+            ]
+          },
+          "dynamicVersionAddress": {
+            "type": "string",
+            "examples": [
+              "master"
+            ]
+          },
+          "versionAddressType": {
+            "type": "string",
+            "examples": [
+              "unknown"
+            ],
+            "enum": [
+              "static",
+              "dynamic",
+              "undefined"
+            ]
+          },
+          "userAddress": {
+            "type": "string",
+            "examples": [
+              "https://h:p/repositories/name"
+            ]
+          }
+        }
+      },
+      "addGetItems": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "examples": [
+          "EE512F4A015FE57B4F940A513C63AA77",
+          "EE5211D2015FF9F94F940A513C63AA77"
+        ]
+      },
+      "addEmpty": {},
+      "addLinks": {
+        "properties": {
+          "fromID": {
+            "type": "string",
+            "examples": [
+              "EE5211D2015FF9F94F940A513C63AA77"
+            ]
+          },
+          "toID": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "examples": [
+                "EE562168015FFCF14F940A513C63AA77"
+              ]
+            }
+          }
+        }
+      },
+      "addVersions": {
+        "properties": {
+          "versionName": {
+            "type": "string",
+            "examples": [
+              "A.1"
+            ]
+          },
+          "parents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "parentID": {
+                  "type": "string",
+                  "examples": [
+                    "EE4FBDEA015FEC3D4F940A513C63AA77"
+                  ]
+                },
+                "scemantic": {
+                  "type": "string",
+                  "examples": [
+                    "fix"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "POST_BULK_UPDATE": {
+        "type": "array",
+        "items": {
+          "properties": {
+            "id": {
+              "description": "Physical ID",
+              "type": "string",
+              "examples": [
+                "CF446630000051C46023F7630004F39F"
+              ]
+            },
+            "attr1": {
+              "description": "Attribute Name1",
+              "type": "string",
+              "examples": [
+                "Attribute Value"
+              ]
+            },
+            "attr2": {
+              "description": "Attribute Name2",
+              "type": "string",
+              "examples": [
+                "Attribute Value"
+              ]
+            },
+            "cestamp": {
+              "description": "cestamp ID",
+              "type": "string",
+              "examples": [
+                "CF446630000051C460123453E8123C"
+              ]
+            },
+            "dsxxx:xxxEnterpriseAttributes": {
+              "properties": {
+                "attr3": {
+                  "description": "Attribute Name3",
+                  "type": "string",
+                  "examples": [
+                    "Attribute Value"
+                  ]
+                },
+                "attr4": {
+                  "description": "Attribute Name4",
+                  "type": "string",
+                  "examples": [
+                    "Attribute Value"
+                  ]
+                }
+              }
+            },
+            "customerAttributes": {
+              "properties": {
+                "attr5": {
+                  "description": "Attribute Name5",
+                  "type": "string",
+                  "examples": [
+                    "Attribute Value"
+                  ]
+                },
+                "attr6": {
+                  "description": "Attribute Name6",
+                  "type": "string",
+                  "examples": [
+                    "Attribute Value"
+                  ]
+                },
+                "customerAttributeGroups": {
+                  "properties": {
+                    "attr7": {
+                      "description": "Attribute Name7",
+                      "type": "string",
+                      "examples": [
+                        "Attribute Value"
+                      ]
+                    },
+                    "attr8": {
+                      "description": "Attribute Name8",
+                      "type": "string",
+                      "examples": [
+                        "Attribute Value"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "POST_BulkFetch": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "examples": [
+          "EE512F4A015FE57B4F940A513C63AA77",
+          "EE5211D2015FF9F94F940A513C63AA77"
+        ]
+      },
+      "dsmvscm_Connection.basic": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "examples": [
+              1
+            ]
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "examples": [
+                    "EE562168015FFCF14F940A513C63AA77"
+                  ]
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "examples": [
+                    "DBType"
+                  ]
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "name": {
+                  "description": "Instance name",
+                  "type": "string",
+                  "examples": [
+                    "My name"
+                  ]
+                },
+                "description": {
+                  "description": "Instance description value",
+                  "type": "string",
+                  "examples": [
+                    "My description"
+                  ]
+                },
+                "referencedObject": {
+                  "type": "object",
+                  "properties": {
+                    "source": {
+                      "type": "string",
+                      "description": "source",
+                      "examples": [
+                        "$3DSpace"
+                      ]
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "business type",
+                      "examples": [
+                        "dsscm:Connector"
+                      ]
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "physical id",
+                      "examples": [
+                        "EE562168015FFCF14F940A513C63AA77"
+                      ]
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "description": "relative path",
+                      "examples": [
+                        "/dsscm:Connector/EE562168015FFCF14F940A513C63AA77"
+                      ]
+                    }
+                  }
+                },
+                "itemAddress": {
+                  "description": "This is the relative leaf uri to a repository or just the repository id if internal. The connector path contains the root portion of the uri.",
+                  "type": "string",
+                  "examples": [
+                    "SCMRepositoryName"
+                  ]
+                },
+                "userAddress": {
+                  "description": "This is the full uri of the repository. It is the combination of connector path connection itemAddress",
+                  "type": "string",
+                  "examples": [
+                    "https://repositories/name"
+                  ]
+                },
+                "versionAddress": {
+                  "description": "The repository version, which can be dynamic (ex. branch name) or static (ex. commit or tag name)",
+                  "type": "string",
+                  "examples": [
+                    "master"
+                  ]
+                },
+                "versionAddressType": {
+                  "description": "The type of version address, which can be dynamic (ex. branch name), static (ex. commit or tag name), or unknown",
+                  "type": "string",
+                  "examples": [
+                    "static|dynamic|unknown"
+                  ]
+                },
+                "dynamicVersionAddress": {
+                  "description": "The saved dynamic version address (ex. branch name) to allow for restoring static back to dynamic version address. Can only be set if state is frozen or rleased.",
+                  "type": "string",
+                  "examples": [
+                    "master"
+                  ]
+                },
+                "cestamp": {
+                  "type": "string",
+                  "examples": [
+                    "2D70169532D84866A200F907881AC981"
+                  ]
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "examples": [
+                  "My Id translated value"
+                ]
+              },
+              "type": {
+                "type": "string",
+                "examples": [
+                  "My Type translated value"
+                ]
+              },
+              "modified": {
+                "type": "string",
+                "examples": [
+                  "My Modification Date translated value"
+                ]
+              },
+              "created": {
+                "type": "string",
+                "examples": [
+                  "My Creation Date translated value"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "dsmvscm_Connection.basic_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "examples": [
+              1
+            ]
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "examples": [
+                    "EE562168015FFCF14F940A513C63AA77"
+                  ]
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "examples": [
+                    "DBType"
+                  ]
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "name": {
+                  "description": "Instance name",
+                  "type": "string",
+                  "examples": [
+                    "My name"
+                  ]
+                },
+                "description": {
+                  "description": "Instance description value",
+                  "type": "string",
+                  "examples": [
+                    "My description"
+                  ]
+                },
+                "referencedObject": {
+                  "type": "object",
+                  "properties": {
+                    "source": {
+                      "type": "string",
+                      "description": "source",
+                      "examples": [
+                        "$3DSpace"
+                      ]
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "business type",
+                      "examples": [
+                        "dsscm:Connector"
+                      ]
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "physical id",
+                      "examples": [
+                        "EE562168015FFCF14F940A513C63AA77"
+                      ]
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "description": "relative path",
+                      "examples": [
+                        "/resources/v1/modeler/dsscm/dsscm:Connector/EE562168015FFCF14F940A513C63AA77"
+                      ]
+                    }
+                  }
+                },
+                "itemAddress": {
+                  "description": "This is the relative leaf uri to a repository or just the repository id if internal. The connector path contains the root portion of the uri.",
+                  "type": "string",
+                  "examples": [
+                    "SCMRepositoryName"
+                  ]
+                },
+                "userAddress": {
+                  "description": "This is the full uri of the repository. It is the combination of connector path connection itemAddress",
+                  "type": "string",
+                  "examples": [
+                    "https://repositories/name"
+                  ]
+                },
+                "versionAddress": {
+                  "description": "The repository version, which can be dynamic (ex. branch name) or static (ex. commit or tag name)",
+                  "type": "string",
+                  "examples": [
+                    "master"
+                  ]
+                },
+                "versionAddressType": {
+                  "description": "The type of version address, which can be dynamic (ex. branch name), static (ex. commit or tag name), or unknown",
+                  "type": "string",
+                  "examples": [
+                    "static|dynamic|unknown"
+                  ]
+                },
+                "dynamicVersionAddress": {
+                  "description": "The saved dynamic version address (ex. branch name) to allow for restoring static back to dynamic version address. Can only be set if state is frozen or rleased.",
+                  "type": "string",
+                  "examples": [
+                    "master"
+                  ]
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "examples": [
+                    "2D70169432D84866A200F907881AC9B1"
+                  ]
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "examples": [
+                  "My Id translated value"
+                ]
+              },
+              "type": {
+                "type": "string",
+                "examples": [
+                  "My Type translated value"
+                ]
+              },
+              "modified": {
+                "type": "string",
+                "examples": [
+                  "My Modification Date translated value"
+                ]
+              },
+              "created": {
+                "type": "string",
+                "examples": [
+                  "My Creation Date translated value"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "dsmvscm_Connector.basic": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "examples": [
+              1
+            ]
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "object name",
+                  "type": "string",
+                  "examples": [
+                    "My name"
+                  ]
+                },
+                "title": {
+                  "description": "Object Title value",
+                  "type": "string",
+                  "examples": [
+                    "My title"
+                  ]
+                },
+                "description": {
+                  "description": "Object description value",
+                  "type": "string",
+                  "examples": [
+                    "My description"
+                  ]
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "examples": [
+                    "EE562168015FFCF14F940A513C63AA77"
+                  ]
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "examples": [
+                    "DBType"
+                  ]
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "examples": [
+                    "A.1"
+                  ]
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "examples": [
+                    "IN_WORK"
+                  ]
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "examples": [
+                    "DB Owner"
+                  ]
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "examples": [
+                    "MyCompany"
+                  ]
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "examples": [
+                    "Default"
+                  ]
+                },
+                "connectorType": {
+                  "type": "string",
+                  "examples": [
+                    "Git|DesignSync"
+                  ]
+                },
+                "address": {
+                  "description": "The url to the connection service",
+                  "type": "string",
+                  "examples": [
+                    "https://host:port/3DSCM"
+                  ]
+                },
+                "path": {
+                  "description": "The root uri to one or more repositories. For git it is a path, for DesignSync it is a url",
+                  "type": "string",
+                  "examples": [
+                    "/home/repositories"
+                  ]
+                },
+                "cestamp": {
+                  "type": "string",
+                  "examples": [
+                    "2D70169532D84866A200F907881AC981"
+                  ]
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "examples": [
+                  "My Name translated value"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "My Title translated value"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "examples": [
+                  "My Description translated value"
+                ]
+              },
+              "id": {
+                "type": "string",
+                "examples": [
+                  "My Id translated value"
+                ]
+              },
+              "type": {
+                "type": "string",
+                "examples": [
+                  "My Type translated value"
+                ]
+              },
+              "modified": {
+                "type": "string",
+                "examples": [
+                  "My Modification Date translated value"
+                ]
+              },
+              "created": {
+                "type": "string",
+                "examples": [
+                  "My Creation Date translated value"
+                ]
+              },
+              "revision": {
+                "type": "string",
+                "examples": [
+                  "My Revision translated value"
+                ]
+              },
+              "state": {
+                "type": "string",
+                "examples": [
+                  "My State translated value"
+                ]
+              },
+              "owner": {
+                "type": "string",
+                "examples": [
+                  "My Owner translated value"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "dsmvscm_Connector.basic_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "examples": [
+              1
+            ]
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "object name",
+                  "type": "string",
+                  "examples": [
+                    "My name"
+                  ]
+                },
+                "title": {
+                  "description": "Object Title value",
+                  "type": "string",
+                  "examples": [
+                    "My title"
+                  ]
+                },
+                "description": {
+                  "description": "Object description value",
+                  "type": "string",
+                  "examples": [
+                    "My description"
+                  ]
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "examples": [
+                    "EE562168015FFCF14F940A513C63AA77"
+                  ]
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "examples": [
+                    "DBType"
+                  ]
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "examples": [
+                    "A.1"
+                  ]
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "examples": [
+                    "IN_WORK"
+                  ]
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "examples": [
+                    "DB Owner"
+                  ]
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "examples": [
+                    "MyCompany"
+                  ]
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "examples": [
+                    "Default"
+                  ]
+                },
+                "connectorType": {
+                  "type": "string",
+                  "examples": [
+                    "Git|DesignSync"
+                  ]
+                },
+                "address": {
+                  "description": "The url to the connection service",
+                  "type": "string",
+                  "examples": [
+                    "https://host:port/3DSCM"
+                  ]
+                },
+                "path": {
+                  "description": "The root uri to one or more repositories. For git it is a path, for DesignSync it is a url",
+                  "type": "string",
+                  "examples": [
+                    "/home/repositories"
+                  ]
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "examples": [
+                    "2D70169432D84866A200F907881AC9B1"
+                  ]
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "examples": [
+                  "My Name translated value"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "examples": [
+                  "My Title translated value"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "examples": [
+                  "My Description translated value"
+                ]
+              },
+              "id": {
+                "type": "string",
+                "examples": [
+                  "My Id translated value"
+                ]
+              },
+              "type": {
+                "type": "string",
+                "examples": [
+                  "My Type translated value"
+                ]
+              },
+              "modified": {
+                "type": "string",
+                "examples": [
+                  "My Modification Date translated value"
+                ]
+              },
+              "created": {
+                "type": "string",
+                "examples": [
+                  "My Creation Date translated value"
+                ]
+              },
+              "revision": {
+                "type": "string",
+                "examples": [
+                  "My Revision translated value"
+                ]
+              },
+              "state": {
+                "type": "string",
+                "examples": [
+                  "My State translated value"
+                ]
+              },
+              "owner": {
+                "type": "string",
+                "examples": [
+                  "My Owner translated value"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultBusMask.public": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "examples": [
+              1
+            ]
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "examples": [
+                    "My name"
+                  ]
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "examples": [
+                    "My title"
+                  ]
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "examples": [
+                    "My description"
+                  ]
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "examples": [
+                    "EE562168015FFCF14F940A513C63AA77"
+                  ]
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "examples": [
+                    "DBType"
+                  ]
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "examples": [
+                    "A.1"
+                  ]
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "examples": [
+                    "IN_WORK"
+                  ]
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "examples": [
+                    "DB Owner"
+                  ]
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "examples": [
+                    "MyCompany"
+                  ]
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "examples": [
+                    "Default"
+                  ]
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "examples": [
+                  "My Id translated value"
+                ]
+              },
+              "type": {
+                "type": "string",
+                "examples": [
+                  "My Type translated value"
+                ]
+              },
+              "modified": {
+                "type": "string",
+                "examples": [
+                  "My Modification Date translated value"
+                ]
+              },
+              "created": {
+                "type": "string",
+                "examples": [
+                  "My Creation Date translated value"
+                ]
+              },
+              "revision": {
+                "type": "string",
+                "examples": [
+                  "My Revision translated value"
+                ]
+              },
+              "state": {
+                "type": "string",
+                "examples": [
+                  "My State translated value"
+                ]
+              },
+              "owner": {
+                "type": "string",
+                "examples": [
+                  "My Owner translated value"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultBusMask.public_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "examples": [
+              1
+            ]
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "examples": [
+                    "My name"
+                  ]
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "examples": [
+                    "My title"
+                  ]
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "examples": [
+                    "My description"
+                  ]
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "examples": [
+                    "EE562168015FFCF14F940A513C63AA77"
+                  ]
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "examples": [
+                    "DBType"
+                  ]
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "examples": [
+                    "A.1"
+                  ]
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "examples": [
+                    "IN_WORK"
+                  ]
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "examples": [
+                    "DB Owner"
+                  ]
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "examples": [
+                    "MyCompany"
+                  ]
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "examples": [
+                    "Default"
+                  ]
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "examples": [
+                    "2D70169432D84866A200F907881AC9B1"
+                  ]
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "examples": [
+                  "My Id translated value"
+                ]
+              },
+              "type": {
+                "type": "string",
+                "examples": [
+                  "My Type translated value"
+                ]
+              },
+              "modified": {
+                "type": "string",
+                "examples": [
+                  "My Modification Date translated value"
+                ]
+              },
+              "created": {
+                "type": "string",
+                "examples": [
+                  "My Creation Date translated value"
+                ]
+              },
+              "revision": {
+                "type": "string",
+                "examples": [
+                  "My Revision translated value"
+                ]
+              },
+              "state": {
+                "type": "string",
+                "examples": [
+                  "My State translated value"
+                ]
+              },
+              "owner": {
+                "type": "string",
+                "examples": [
+                  "My Owner translated value"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultRelMask.public": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "examples": [
+              1
+            ]
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "examples": [
+                    "EE562168015FFCF14F940A513C63AA77"
+                  ]
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "examples": [
+                    "DBType"
+                  ]
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "name": {
+                  "description": "Instance name",
+                  "type": "string",
+                  "examples": [
+                    "My name"
+                  ]
+                },
+                "description": {
+                  "description": "Instance description value",
+                  "type": "string",
+                  "examples": [
+                    "My description"
+                  ]
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "examples": [
+                  "My Id translated value"
+                ]
+              },
+              "type": {
+                "type": "string",
+                "examples": [
+                  "My Type translated value"
+                ]
+              },
+              "modified": {
+                "type": "string",
+                "examples": [
+                  "My Modification Date translated value"
+                ]
+              },
+              "created": {
+                "type": "string",
+                "examples": [
+                  "My Creation Date translated value"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultRelMask.public_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "examples": [
+              1
+            ]
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "examples": [
+                    "EE562168015FFCF14F940A513C63AA77"
+                  ]
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "examples": [
+                    "DBType"
+                  ]
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "name": {
+                  "description": "Instance name",
+                  "type": "string",
+                  "examples": [
+                    "My name"
+                  ]
+                },
+                "description": {
+                  "description": "Instance description value",
+                  "type": "string",
+                  "examples": [
+                    "My description"
+                  ]
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "examples": [
+                    "2D70169432D84866A200F907881AC9B1"
+                  ]
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "examples": [
+                  "My Id translated value"
+                ]
+              },
+              "type": {
+                "type": "string",
+                "examples": [
+                  "My Type translated value"
+                ]
+              },
+              "modified": {
+                "type": "string",
+                "examples": [
+                  "My Modification Date translated value"
+                ]
+              },
+              "created": {
+                "type": "string",
+                "examples": [
+                  "My Creation Date translated value"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultExtensionMask.public": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "examples": [
+              1
+            ]
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "modified": {
+                "type": "string",
+                "examples": [
+                  "My Modification Date translated value"
+                ]
+              },
+              "created": {
+                "type": "string",
+                "examples": [
+                  "My Creation Date translated value"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultExtensionMask.public_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "examples": [
+              1
+            ]
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "examples": [
+                    "10/19/2021 10:58:01 PM"
+                  ]
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "examples": [
+                    "2D70169432D84866A200F907881AC9B1"
+                  ]
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "modified": {
+                "type": "string",
+                "examples": [
+                  "My Modification Date translated value"
+                ]
+              },
+              "created": {
+                "type": "string",
+                "examples": [
+                  "My Creation Date translated value"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "anyValue": {
+        "examples": [
+          "My Value, true, 3.14, [My value 1, My value 2], [12,45,85]"
+        ],
+        "description": "The value for the attributes (Expand to review type specifications)",
+        "oneOf": [
+          {
+            "type": "string",
+            "examples": [
+              "my value"
+            ]
+          },
+          {
+            "type": "integer",
+            "examples": [
+              "36352"
+            ]
+          },
+          {
+            "type": "number",
+            "examples": [
+              "3.14"
+            ]
+          },
+          {
+            "type": "boolean",
+            "examples": [
+              "true"
+            ]
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "examples": [
+                "[my value 1,my value 2,my value 3]"
+              ]
+            }
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "examples": [
+                "[36352,475,6719]"
+              ]
+            }
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "examples": [
+                "[3.14,6.28,12.56]"
+              ]
+            }
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "boolean",
+              "examples": [
+                "[true,false,false]"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,2771 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "x-ds-copyright": "Copyright Dassault Systemes 2025",
+    "description": "Laboratory service facilitates all aspects of the laboratory workflow including process execution, equipment and material usage, sample management, analytical testing, results reporting, and review and compliance. Laboratory exposes a subset of its resources through web services implementing the REST architecture.",
+    "summary": "Laboratory Data Management Public REST APIs",
+    "version": "1.1.5",
+    "title": "Laboratory Web Services",
+    "x-ds-service": [
+      "Laboratory"
+    ]
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "servers": [
+    {
+      "url": "{Laboratory}/resources/v1/laboratory",
+      "variables": {
+        "Laboratory": {
+          "default": "https://3DEXPERIENCE_Laboratory"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/laboratory/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/configuredworkflows": {
+      "get": {
+        "tags": [
+          "ConfiguredWorkflows"
+        ],
+        "operationId": "findJobs",
+        "summary": "Find configured workflows",
+        "description": "Find configured workflow resources based on criteria specified by query parameters",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/filter"
+          },
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/orderby"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns summary information for each configured workflow matching the query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfiguredWorkflows_searchResponse"
+                },
+                "examples": {
+                  "example": {
+                    "$ref": "#/components/examples/configuredWorkflows_searchResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unauthenticated User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthenticatedUserResponse"
+                },
+                "examples": {
+                  "example": {
+                    "$ref": "#/components/examples/unauthenticatedUserResponse"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User does not have appropriate roles to access the laboratory system",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringSchema"
+                },
+                "examples": {
+                  "example": {
+                    "$ref": "#/components/examples/noLabAccessResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/configuredworkflows/{ID}": {
+      "get": {
+        "tags": [
+          "ConfiguredWorkflows"
+        ],
+        "operationId": "getJobById",
+        "summary": "Get details about a configured workflow",
+        "description": "Retrieve metadata about a configured workflow by id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ID",
+            "description": "Id of the configured workflow",
+            "schema": {
+              "type": "string",
+              "example": "8130d0d4-804f-4e3b-a811-36aa3ff9836d"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the details of the configured workflow associated to the provided id",
+            "headers": {
+              "etag": {
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfiguredWorkflow"
+                },
+                "examples": {
+                  "example": {
+                    "$ref": "#/components/examples/configuredWorkflow"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource doesn't exist, or the current user is not authorized to view this resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringSchema"
+                },
+                "examples": {
+                  "example": {
+                    "$ref": "#/components/examples/resourceNotFoundResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unauthenticated User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthenticatedUserResponse"
+                },
+                "examples": {
+                  "example": {
+                    "$ref": "#/components/examples/unauthenticatedUserResponse"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User does not have appropriate roles to access the laboratory system",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringSchema"
+                },
+                "examples": {
+                  "example": {
+                    "$ref": "#/components/examples/noLabAccessResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "ConfiguredWorkflows"
+        ],
+        "operationId": "updateJobById",
+        "summary": "Update configured workflow metadata",
+        "description": "Currently only the externalId property of the configured workflow, and of its associated studyCandidates can be updated using this API. Any request to update other configured workflow properties will result in a 422 response",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ID",
+            "description": "Id of the configured workflow",
+            "schema": {
+              "type": "string",
+              "example": "8130d0d4-804f-4e3b-a811-36aa3ff9836d"
+            },
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "If-Match",
+            "description": "Version of the resource. If the version on the server is different, this operation will return a 412 response code to prevent operations on outdated resources.\n\nValid values are integers and the string 'force'(case-insensitive; update is attempted 3 times, fetching the latest version number)\n\nUpdates involving studyCandidate/s should use 'force'",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "X-REQUESTED-WITH",
+            "description": "Header for CSRF. Value is Batch (case sensitive) and no header ORIGIN or value is XMLHttpRequest (case sensitive) and the header ORIGIN (case insensitive) exists",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/configuredWorkflow_updateRequestBody"
+              },
+              "examples": {
+                "example": {
+                  "$ref": "#/components/examples/configuredWorkflow_updateRequestBody"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The workflow update/s is successful"
+          },
+          "207": {
+            "description": "Check the individual operations status' in the response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfiguredWorkflow_updatesMultiStatus"
+                },
+                "examples": {
+                  "example": {
+                    "$ref": "#/components/examples/configuredWorkflow_updatesMultiStatus"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource doesn't exist, or the current user is not authorized to view this resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringSchema"
+                },
+                "examples": {
+                  "example": {
+                    "$ref": "#/components/examples/resourceNotFoundResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unauthenticated User, or Invalid and/or Incorrect JSON in request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/UnauthenticatedUserResponse",
+                      "title": "Unauthenticated User"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrorMessageStatusCodeSchema",
+                      "title": "Error in request Body"
+                    },
+                    {
+                      "$ref": "#/components/schemas/StringSchema",
+                      "title": "Request format deviation Error"
+                    },
+                    {
+                      "title": "Incorrect Request Data",
+                      "type": "object",
+                      "properties": {
+                        "Candidate update/s": {
+                          "type": "array",
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "items": {
+                            "$ref": "#/components/schemas/updateCandidatesResponse_failure"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/unauthenticatedUserResponse"
+                  },
+                  "example2": {
+                    "summary": "Response for incorrect Json request",
+                    "$ref": "#/components/examples/incorrectJsonRequestResponse"
+                  },
+                  "example3": {
+                    "summary": "Response for deviation from API request body format",
+                    "value": "Provided value '1234' for Json property 'externalId' is not of STRING type"
+                  },
+                  "example4": {
+                    "$ref": "#/components/examples/configuredWorkflowUpdate_IncorrectDetailsRequestResponse"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User does not have appropriate roles to access the laboratory system, or the User is not authorized to edit this resource and/or the configured workflow's lifecycle state does not allow updates to the requested attribute/s",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/noLabAccessResponse"
+                  },
+                  "example2": {
+                    "summary": "Workflow not in editable lifecycle state",
+                    "value": {
+                      "errorMessage": "Workflow: 35e69208-b54f-41d2-8bfe-ba6cc2db15fe cannot be updated in 'submitted' state.",
+                      "statusCode": 403
+                    }
+                  },
+                  "example3": {
+                    "$ref": "#/components/examples/editAccessAbsent"
+                  }
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed. If-Match header absent, or does not match the current version of the resource (Get the latest version of the resource from the server and update the header)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageStatusCodeSchema"
+                },
+                "examples": {
+                  "example": {
+                    "$ref": "#/components/examples/configuredWorkflowUpdate_preconditionFailure"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unsupported operation. Updating the value of the 'externalId' property is the only currently supported operation from this API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageStatusCodeSchema"
+                },
+                "examples": {
+                  "example": {
+                    "$ref": "#/components/examples/configuredWorkflowUpdate_unsupportedOperation"
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Workflow ID is not provided"
+          }
+        }
+      }
+    },
+    "/configuredworkflows/{ID}/values": {
+      "patch": {
+        "tags": [
+          "ConfiguredWorkflows"
+        ],
+        "operationId": "updateJobResultsById",
+        "summary": "Update results of a configured workflow",
+        "description": "Update results of configured workflow by id, in accordance with the values provided in request body.\n\nThe API supports result updates for Numeric, Quantity, Vocabulary(case insensitive update), Boolean(case insensitive update), and Integer result types.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ID",
+            "description": "Id of the configured workflow",
+            "schema": {
+              "type": "string",
+              "example": "8130d0d4-804f-4e3b-a811-36aa3ff9836d"
+            },
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "X-REQUESTED-WITH",
+            "description": "Header for CSRF. Value is Batch (case sensitive) and no header ORIGIN or value is XMLHttpRequest (case sensitive) and the header ORIGIN (case insensitive) exists",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Any additional JSON names / keys other than those mentioned below in the example, are ignored if provided",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfiguredWorkflow_updateResultsRequestBody"
+              },
+              "examples": {
+                "example": {
+                  "$ref": "#/components/examples/configuredWorkflow_updateResultsRequestBody"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The result/s update is successful"
+          },
+          "404": {
+            "description": "Requested resource doesn't exist, or the current user is not authorized to view this resource, or Workflow ID is not provided ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringSchema"
+                },
+                "examples": {
+                  "example": {
+                    "$ref": "#/components/examples/resourceNotFoundResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unauthenticated User, or Invalid/Incorrect JSON in request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/unauthenticatedUserResponse"
+                  },
+                  "example2": {
+                    "summary": "Response for incorrect Json and/or deviation from API request body format",
+                    "$ref": "#/components/examples/incorrectJsonRequestResponse"
+                  },
+                  "example3": {
+                    "$ref": "#/components/examples/configuredWorkflowUpdateResults_IncorrectDetailsRequestResponse"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User does not have appropriate roles to access the laboratory system, or the User is not authorized to edit this resource",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/noLabAccessResponse"
+                  },
+                  "example2": {
+                    "summary": "Workflow not in required lifecycle state",
+                    "value": {
+                      "errorMessage": "Workflow: 35e69208-b54f-41d2-8bfe-ba6cc2db15fe is not in 'inProgress' state. Results of a Workflow not in 'inProgress' state cannot be updated",
+                      "statusCode": 403
+                    }
+                  },
+                  "example3": {
+                    "$ref": "#/components/examples/editAccessAbsent"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unsupported operation. When Workflow doesn't have any studyParameters or they are not allowed for update from the API (ex: all studyParameters are associated to a sample plan)",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "example1": {
+                    "summary": "No StudyParameters present or they are not allowed for update form API",
+                    "value": {
+                      "errorMessage": "No studyParameters present in the workflow: 35e69208-b54f-41d2-8bfe-ba6cc2db15fe, or they are not allowed for update from the API",
+                      "statusCode": 422
+                    }
+                  },
+                  "example2": {
+                    "$ref": "#/components/examples/configuredWorkflowUpdateResults_unsupportedOperation"
+                  }
+                }
+              }
+            }
+          },
+          "207": {
+            "description": "Check the individual operations status' in the response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfiguredWorkflow_updateResultsMultiStatus"
+                },
+                "examples": {
+                  "example": {
+                    "$ref": "#/components/examples/configuredWorkflow_updateResultsMultiStatus"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "parameters": {
+      "top": {
+        "in": "query",
+        "name": "$top",
+        "description": "OData-styled parameter that specifies how many items to return.\n\nExample $top=10 will return 10 items",
+        "content": {
+          "text/plain": {
+            "schema": {
+              "type": "string",
+              "example": 10,
+              "default": 20
+            }
+          }
+        },
+        "required": false
+      },
+      "skip": {
+        "in": "query",
+        "name": "$skip",
+        "description": "OData-styled parameter that specifies how many items to skip from the start of the items to return.\n\nExample $skip=7 will skip the first 7 items from the results ",
+        "content": {
+          "text/plain": {
+            "schema": {
+              "type": "string",
+              "example": 0,
+              "default": 0
+            }
+          }
+        },
+        "required": false
+      },
+      "orderby": {
+        "in": "query",
+        "name": "$orderby",
+        "description": "OData-styled parameter that specifies the order of the items returned.\n\nExample $orderby=name desc will order the results by name in descending order",
+        "content": {
+          "text/plain": {
+            "schema": {
+              "type": "string",
+              "example": "dateCreated desc"
+            }
+          }
+        },
+        "required": false
+      },
+      "filter": {
+        "in": "query",
+        "name": "pattern",
+        "description": "The value is case insensitive and compared against the jobId and name attributes of the configured workflow. If either attribute contains the pattern string, it is included in the results. Note that this web service does *not* support having multi-pattern parameters",
+        "content": {
+          "text/plain": {
+            "schema": {
+              "type": "string",
+              "example": "J-00123"
+            }
+          }
+        },
+        "required": true
+      }
+    },
+    "examples": {
+      "configuredWorkflows_searchResponse": {
+        "summary": "Summary details of configured workflows matching the query parameters",
+        "value": [
+          {
+            "id": "fe1a5b33-2468-4dee-b904-403647b085f0",
+            "jobId": "J000003",
+            "name": "New shampoo",
+            "relativePath": "/resources/v1/laboratory/configuredworkflows/fe1a5b33-2468-4dee-b904-403647b085f0",
+            "source": "{Laboratory}",
+            "type": "configuredworkflow",
+            "workflowType": "Formulation"
+          },
+          {
+            "id": "db2dc3b0-1eb3-48dd-97f0-84e8d0326f7e",
+            "jobId": "J000023",
+            "name": "New face cream",
+            "relativePath": "/resources/v1/laboratory/configuredworkflows/db2dc3b0-1eb3-48dd-97f0-84e8d0326f7e",
+            "source": "{Laboratory}",
+            "type": "configuredworkflow",
+            "workflowType": "Formulation"
+          }
+        ]
+      },
+      "configuredWorkflow": {
+        "summary": "Configured workflow based on make and test of a formula",
+        "value": {
+          "collaborativeSpace": "Lab-01",
+          "collaboratorGroup": "Foundation/Everyone",
+          "creator": "user1, biolab",
+          "dateCreated": "2025-04-24T10:03:15Z",
+          "description": "Description for Workflow",
+          "documentId": "Doc-1.0",
+          "externalId": "Ext-1.0",
+          "id": "3d7aef24-d92a-4e6d-bcec-456dde588672",
+          "initiatedBy": {
+            "source": "https://3DEXPERIENCE_Experiment",
+            "type": "dsinv:recipe",
+            "id": "<uuid:76bfed78-766e-412c-bd9a-f7b82db10498>",
+            "relativePath": "/resources/v1/spr/recipes/uuid:76bfed78-766e-412c-bd9a-f7b82db10498"
+          },
+          "jobId": "J000001",
+          "lastUpdated": "2025-04-24T10:07:58Z",
+          "lifeCyclePolicy": "Default LifeCycle Policy",
+          "lifeCyclePolicyDescription": "Default signature policies associated to actions",
+          "lifeCycleState": "inProgress",
+          "location": "Data Center",
+          "name": "Formulation_Workflow",
+          "objective": "Objective for Workflow",
+          "owner": {
+            "id": "<uuid:daa16206-5876-441e-a5c2-fb0eedd52f59>",
+            "relativePath": "/api/user/find/login/daa16206-5876-441e-a5c2-fb0eedd52f59",
+            "source": "https://devopsdbi10cil2485613-euw1-27dsw10417-3dswym.3dx-staging.3ds.com:443",
+            "type": "foaf:Person"
+          },
+          "workflowType": "Formulation",
+          "taskPlan": "Formulation_Workflow",
+          "studyCandidates": [
+            {
+              "externalId": null,
+              "externalReference": {
+                "id": "uuid:7ddb0756-e8fb-44d4-a251-ea0bf6e565d8",
+                "relativePath": "/resources/v1/spr/recipes/uuid:7ddb0756-e8fb-44d4-a251-ea0bf6e565d8",
+                "source": "https://devopsdbi10cil2485613-euw1-27dsw10417-bioexperiment.3dx-staging.3ds.com:443",
+                "type": "dsinv:Recipe"
+              },
+              "id": "1ed20cd9-c0f8-4dc9-a739-d9e87f9fcd2f",
+              "itemIndex": 1,
+              "name": "Hydrating Shampoo Formula",
+              "studyCandidateType": "Formulation"
+            },
+            {
+              "externalId": null,
+              "externalReference": {
+                "id": "uuid:7ddb0756-e8fb-44d4-a251-ea0bf6e565d8",
+                "relativePath": "/resources/v1/spr/recipes/uuid:7ddb0756-e8fb-44d4-a251-ea0bf6e565d8",
+                "source": "https://devopsdbi10cil2485613-euw1-27dsw10417-bioexperiment.3dx-staging.3ds.com:443",
+                "type": "dsinv:Recipe"
+              },
+              "id": "a4c6c297-4425-4a96-aab3-f4c83ed596b8",
+              "itemIndex": 2,
+              "name": "Hydrating Shampoo Formula",
+              "studyCandidateType": "Formulation"
+            }
+          ],
+          "studyParameters": [
+            {
+              "acceptanceCriteria": "",
+              "displayName": "PIF File",
+              "id": "bfd44203-a0dd-4c81-bf46-5fcffa46b3dd",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "File",
+              "sectionName": "Design Study",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "File"
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Source URN",
+              "id": "3ce8331f-d406-42f2-ad78-358a4c1d3b57",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "String",
+              "sectionName": "Design Study",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Text",
+              "values": [
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": "urn:dsinvrecipe:7ddb0756-e8fb-44d4-a251-ea0bf6e565d8"
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": "urn:dsinvrecipe:7ddb0756-e8fb-44d4-a251-ea0bf6e565d8"
+                },
+                {
+                  "itemIndex": 0,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:03:15Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": null
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Inventory Material UUID",
+              "id": "ae8e1e8d-8e99-41db-8a0c-0de64f75c61d",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "String",
+              "studyComponent": "Execute",
+              "userEditable": false,
+              "valueType": "Text",
+              "values": [
+                {
+                  "itemIndex": 1,
+                  "key": "Actual",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": null
+                },
+                {
+                  "itemIndex": 2,
+                  "key": "Actual",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": null
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Material Number",
+              "id": "d28496e9-ec3f-4b1b-920d-e23488910481",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "String",
+              "sectionName": "Design Candidate",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Text",
+              "values": [
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": "FORM-00000006"
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": "FORM-00000006"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Batch Material",
+              "id": "6ea12622-80d6-4070-a564-ac3d5e4660ab",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Material",
+              "studyComponent": "Execute",
+              "userEditable": false,
+              "valueType": "Material",
+              "values": [
+                {
+                  "itemIndex": 2,
+                  "key": "Actual",
+                  "lastUpdated": "2025-04-24T10:07:56Z",
+                  "name": "Hydrating Shampoo Formula"
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Actual",
+                  "lastUpdated": "2025-04-24T10:07:56Z",
+                  "name": "Hydrating Shampoo Formula"
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "name": "Hydrating Shampoo Formula"
+                },
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "name": "Hydrating Shampoo Formula"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Specifications",
+              "id": "c250fdbf-4e87-41b1-bc37-cd907f330810",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Specification",
+              "sectionName": "Design Study",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Reference",
+              "values": [
+                {
+                  "id": "2556291f-9fdc-4ec2-845b-746b9d35e63d",
+                  "lifeCycleState": "approved",
+                  "lifeCycleVersion": "1.0",
+                  "name": "Spec-01 (SP001) (1.0)"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Conclusion",
+              "id": "1d888831-3531-4757-8712-3133da11f0fe",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "String",
+              "sectionName": "Inspect Study Outcome",
+              "studyComponent": "Inspect",
+              "userEditable": true,
+              "valueType": "Text",
+              "values": [
+                {
+                  "itemIndex": 0,
+                  "key": "Actual",
+                  "lastUpdated": "2025-04-24T10:03:15Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": null
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Ad Hoc Activities",
+              "id": "24b06311-ea39-43af-92ad-1b96572894df",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Activity",
+              "sectionName": "Design Study",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Reference"
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Make Batch",
+              "id": "47dbf348-9af5-45fb-ad85-ecf1b0ba2d9c",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Activity",
+              "studyComponent": "Execute",
+              "userEditable": false,
+              "valueType": "Reference",
+              "values": [
+                {
+                  "activityDescription": "Activity to create a Simple Batch",
+                  "activityName": "Simple Batch",
+                  "activityType": "Simple Batch",
+                  "assignedTo": "user1, biolab",
+                  "externalId": "Ext-3",
+                  "id": "3fe92323-1f7b-4dc0-892e-849036a12524",
+                  "itemIndex": 1,
+                  "key": "Actual",
+                  "lastUpdated": "2025-04-24T10:07:58Z",
+                  "methodId": "MethodId-2",
+                  "methodVersion": "MethodVer-2.0",
+                  "taskId": "T002",
+                  "taskLifeCycleState": "completed",
+                  "taskName": "FORM-00000006 Hydrating Shampoo Formula"
+                },
+                {
+                  "activityDescription": "Activity to create a Simple Batch",
+                  "activityName": "Simple Batch",
+                  "activityType": "Simple Batch",
+                  "assignedTo": "user1, biolab",
+                  "externalId": "Ext-2",
+                  "id": "a12ff703-6d38-40a5-af19-7b1fc473c0f6",
+                  "itemIndex": 2,
+                  "key": "Actual",
+                  "lastUpdated": "2025-04-24T10:07:58Z",
+                  "methodId": "MethodId-1",
+                  "methodVersion": "MethodVer-1.0",
+                  "taskId": "T001",
+                  "taskLifeCycleState": "completed",
+                  "taskName": "FORM-00000006 Hydrating Shampoo Formula"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Task Sample Plans",
+              "id": "1c5abeb7-c17b-49cf-af50-1c509f065157",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Sample Plan",
+              "sectionName": "Design Study",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "SamplePlan",
+              "values": [
+                {
+                  "itemIndex": 0,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:04:17Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": null
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Material Sample Plans",
+              "id": "fbe6692b-00b2-4acd-8d29-de81b9662dac",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Sample Plan",
+              "sectionName": "Design Study",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "SamplePlan",
+              "values": [
+                {
+                  "itemIndex": 0,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:03:15Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": null
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "External Reference",
+              "id": "1f8a3ab1-3cca-4168-a2dd-54b711ba7715",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "String",
+              "sectionName": "Design Candidate",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Text",
+              "values": [
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": "FORM-00000006"
+                },
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": "FORM-00000006"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Material Name",
+              "id": "d1d5b7b1-56f0-4012-ab0d-f6b360c7380c",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "String",
+              "sectionName": "Design Candidate",
+              "studyComponent": "Design",
+              "userEditable": true,
+              "valueType": "Text",
+              "values": [
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": "Hydrating Shampoo Formula"
+                },
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": "Hydrating Shampoo Formula"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Material Batch/Lot #",
+              "id": "bc756519-f1d0-4b6f-8521-4d4e4148a09f",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "String",
+              "sectionName": "Design Candidate",
+              "studyComponent": "Design",
+              "userEditable": true,
+              "valueType": "Text",
+              "values": [
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": "FORM-00000006"
+                },
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": "FORM-00000006"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Make Activity",
+              "id": "00e56c9f-1039-4127-bf3a-b672931883e2",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Activity",
+              "sectionName": "Design Candidate",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Reference",
+              "values": [
+                {
+                  "activityType": "Simple Batch",
+                  "category": "General",
+                  "description": "Activity to create a Simple Batch",
+                  "id": "e4b02348-1cca-4afa-8410-be4b2e0b96a4",
+                  "lifeCycleState": "approved",
+                  "lifeCycleVersion": "1.0",
+                  "name": "Simple Batch"
+                },
+                {
+                  "activityType": "Simple Batch",
+                  "category": "General",
+                  "description": "Activity to create a Simple Batch",
+                  "id": "e4b02348-1cca-4afa-8410-be4b2e0b96a4",
+                  "lifeCycleState": "approved",
+                  "lifeCycleVersion": "1.0",
+                  "name": "Simple Batch"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Outcome",
+              "id": "5638d611-00c4-45c7-bdb0-83449c87b838",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Candidate Outcome",
+              "sectionName": "Inspect Candidate",
+              "studyComponent": "Inspect",
+              "userEditable": true,
+              "valueType": "Vocabulary",
+              "values": [
+                {
+                  "itemIndex": 2,
+                  "key": "Actual",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": null
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Actual",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": null
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Certificate Level",
+              "id": "a3653908-5a94-454d-8a66-f93bfa3311fe",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Certificate Level",
+              "sectionName": "Design Make Activity",
+              "studyComponent": "Design",
+              "userEditable": true,
+              "valueType": "String",
+              "values": [
+                {
+                  "itemIndex": 1,
+                  "key": "Actual",
+                  "lastUpdated": "2025-05-23T14:44:13Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": null
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-05-23T14:44:13Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": "GMP,Vendor CofA,Partial Spec Testing"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Batch Size",
+              "id": "524d0f18-3a33-45fe-aac9-1c06fcec87a0",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Batch Size",
+              "sectionName": "Design Make Activity",
+              "studyComponent": "Design",
+              "userEditable": true,
+              "valueType": "Quantity",
+              "values": [
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "1000",
+                  "reportedValue": "1000",
+                  "sigFigs": 4,
+                  "value": "1000",
+                  "valueString": "1000"
+                },
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "1000",
+                  "reportedValue": "1000",
+                  "sigFigs": 4,
+                  "value": "1000",
+                  "valueString": "1000"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "PIF File",
+              "id": "d05f816a-426f-47c8-8ca3-2b56a9aaba43",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "PIF File",
+              "sectionName": "Design Make Activity",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "File"
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Sodium Laureth Sulfate",
+              "id": "47408838-aac7-46a5-98eb-0ac38d79fd63",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Material Amount",
+              "sectionName": "Batch Content",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Quantity",
+              "values": [
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "500",
+                  "reportedValue": "500",
+                  "sigFigs": 3,
+                  "value": "500",
+                  "valueString": "500"
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "500",
+                  "reportedValue": "500",
+                  "sigFigs": 3,
+                  "value": "500",
+                  "valueString": "500"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Distilled Water",
+              "id": "d47129a0-82b7-4617-9362-04b8ac9555ae",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Material Amount",
+              "sectionName": "Batch Content",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Quantity",
+              "values": [
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "118",
+                  "reportedValue": "118",
+                  "sigFigs": 3,
+                  "value": "118",
+                  "valueString": "118"
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "128",
+                  "reportedValue": "128",
+                  "sigFigs": 3,
+                  "value": "128",
+                  "valueString": "128"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Decyl Glucoside",
+              "id": "d903a971-dd02-4108-8c5d-67c466b6e612",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Material Amount",
+              "sectionName": "Batch Content",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Quantity",
+              "values": [
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "150",
+                  "reportedValue": "150",
+                  "sigFigs": 3,
+                  "value": "150",
+                  "valueString": "150"
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "151",
+                  "reportedValue": "151",
+                  "sigFigs": 3,
+                  "value": "151",
+                  "valueString": "151"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Cocamidopropyl Betaine",
+              "id": "b3657171-8a9f-410e-badb-fbf3ce79e622",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Material Amount",
+              "sectionName": "Batch Content",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Quantity",
+              "values": [
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "20",
+                  "reportedValue": "20",
+                  "sigFigs": 2,
+                  "value": "20",
+                  "valueString": "20"
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "20",
+                  "reportedValue": "20",
+                  "sigFigs": 2,
+                  "value": "20",
+                  "valueString": "20"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Sulfochem AEG Surfactant Blend",
+              "id": "6f939215-cdc7-46ca-945d-7a64fda65790",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Material Amount",
+              "sectionName": "Batch Content",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Quantity",
+              "values": [
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "30",
+                  "reportedValue": "30",
+                  "sigFigs": 2,
+                  "value": "30",
+                  "valueString": "30"
+                },
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "30",
+                  "reportedValue": "30",
+                  "sigFigs": 2,
+                  "value": "30",
+                  "valueString": "30"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Glycerin, USP",
+              "id": "b41fc299-befe-4e60-85b2-029474778039",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Material Amount",
+              "sectionName": "Batch Content",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Quantity",
+              "values": [
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "5",
+                  "reportedValue": "5",
+                  "sigFigs": 1,
+                  "value": "5",
+                  "valueString": "5"
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "5",
+                  "reportedValue": "5",
+                  "sigFigs": 1,
+                  "value": "5",
+                  "valueString": "5"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Floraesters K-20W Jojoba",
+              "id": "b42a48b0-1fe1-40a9-9225-b1253192e22b",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Material Amount",
+              "sectionName": "Batch Content",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Quantity",
+              "values": [
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "53",
+                  "reportedValue": "53",
+                  "sigFigs": 2,
+                  "value": "53",
+                  "valueString": "53"
+                },
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "53",
+                  "reportedValue": "53",
+                  "sigFigs": 2,
+                  "value": "53",
+                  "valueString": "53"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Distilled Water",
+              "id": "a752c5cd-56c4-4604-9d39-be42af4b471f",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Material Amount",
+              "sectionName": "Batch Content",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Quantity",
+              "values": [
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "20",
+                  "reportedValue": "20",
+                  "sigFigs": 2,
+                  "value": "20",
+                  "valueString": "20"
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "20",
+                  "reportedValue": "20",
+                  "sigFigs": 2,
+                  "value": "20",
+                  "valueString": "20"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Quatrisoft Polymer LM-200 (Polyquaternium-24)",
+              "id": "80b0dfcc-0630-4a3d-a29e-b2ecdb7ee1d0",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Material Amount",
+              "sectionName": "Batch Content",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Quantity",
+              "values": [
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "1",
+                  "reportedValue": "1",
+                  "sigFigs": 1,
+                  "value": "1",
+                  "valueString": "1"
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "1",
+                  "reportedValue": "1",
+                  "sigFigs": 1,
+                  "value": "1",
+                  "valueString": "1"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Sodium cocoyl isethionate",
+              "id": "c269188a-54d5-4c3a-ac73-af6605576cd2",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Material Amount",
+              "sectionName": "Batch Content",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Quantity",
+              "values": [
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "47",
+                  "reportedValue": "47",
+                  "sigFigs": 2,
+                  "value": "47",
+                  "valueString": "47"
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "47",
+                  "reportedValue": "47",
+                  "sigFigs": 2,
+                  "value": "47",
+                  "valueString": "47"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Link to Finishing Ingredients",
+              "id": "a28f3dd3-649c-4062-bc7b-5263c5ae8dde",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Material Amount",
+              "sectionName": "Batch Content",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Quantity",
+              "values": [
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "75",
+                  "reportedValue": "75",
+                  "sigFigs": 2,
+                  "value": "75",
+                  "valueString": "75"
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "75",
+                  "reportedValue": "75",
+                  "sigFigs": 2,
+                  "value": "75",
+                  "valueString": "75"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Benzyl Alcohol",
+              "id": "e090cca8-5f46-4a49-baab-f7762146d9d1",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Material Amount",
+              "sectionName": "Batch Content",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Quantity",
+              "values": [
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "250",
+                  "reportedValue": "250",
+                  "sigFigs": 3,
+                  "value": "250",
+                  "valueString": "250"
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "250",
+                  "reportedValue": "250",
+                  "sigFigs": 3,
+                  "value": "250",
+                  "valueString": "250"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Serene Blue Fragrance",
+              "id": "10f31e77-2787-4fab-86f9-72a0170a23ca",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Material Amount",
+              "sectionName": "Batch Content",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Quantity",
+              "values": [
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "51",
+                  "reportedValue": "51",
+                  "sigFigs": 2,
+                  "value": "51",
+                  "valueString": "51"
+                },
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "51",
+                  "reportedValue": "51",
+                  "sigFigs": 2,
+                  "value": "51",
+                  "valueString": "51"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "FD&C Blue # 2",
+              "id": "962efa6e-f2b8-4a3f-ad4d-a1a280f72577",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Material Amount",
+              "sectionName": "Batch Content",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Quantity",
+              "values": [
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "0.2",
+                  "reportedValue": "0.2",
+                  "sigFigs": 1,
+                  "value": "0",
+                  "valueString": "0.2"
+                },
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "0.2",
+                  "reportedValue": "0.2",
+                  "sigFigs": 1,
+                  "value": "0",
+                  "valueString": "0.2"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Propylene Glycol",
+              "id": "42d0be91-c3df-4a7b-af29-33ff9909dd05",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Material Amount",
+              "sectionName": "Batch Content",
+              "studyComponent": "Design",
+              "userEditable": false,
+              "valueType": "Quantity",
+              "values": [
+                {
+                  "itemIndex": 1,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:21Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "698.8",
+                  "reportedValue": "698.8",
+                  "sigFigs": 4,
+                  "value": "698",
+                  "valueString": "698.8"
+                },
+                {
+                  "itemIndex": 2,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:05:32Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "698.8",
+                  "reportedValue": "698.8",
+                  "sigFigs": 4,
+                  "value": "698",
+                  "valueString": "698.8"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "1 to 10",
+              "displayName": "pH",
+              "id": "21362322-7de6-4b85-8efa-911fad696161",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "pH",
+              "sectionName": "Inspect Candidate",
+              "significantDigits": 3,
+              "specificationMethodName": "BC: pH",
+              "specificationName": "Spec-01 (SP001) (1.0)",
+              "studyComponent": "Inspect",
+              "userEditable": false,
+              "valueType": "Numeric",
+              "values": [
+                {
+                  "itemIndex": 2,
+                  "key": "Actual",
+                  "lastUpdated": "2025-04-24T10:31:27Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "6",
+                  "reportedValue": "6",
+                  "sigFigs": 1,
+                  "value": "6",
+                  "valueString": "6"
+                },
+                {
+                  "itemIndex": 1,
+                  "key": "Actual",
+                  "lastUpdated": "2025-04-24T10:31:04Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "5",
+                  "reportedValue": "5",
+                  "sigFigs": 1,
+                  "value": "5",
+                  "valueString": "5"
+                },
+                {
+                  "itemIndex": 0,
+                  "key": "Min",
+                  "lastUpdated": "2025-04-24T10:31:04Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "1",
+                  "reportedValue": "1",
+                  "sigFigs": 1,
+                  "value": "1",
+                  "valueString": "1"
+                },
+                {
+                  "itemIndex": 0,
+                  "key": "Planned",
+                  "lastUpdated": "2025-04-24T10:07:58Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": null
+                },
+                {
+                  "itemIndex": 0,
+                  "key": "Max",
+                  "lastUpdated": "2025-04-24T10:31:04Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "recordedValue": "10",
+                  "reportedValue": "10",
+                  "sigFigs": 2,
+                  "value": "10",
+                  "valueString": "10"
+                }
+              ]
+            },
+            {
+              "acceptanceCriteria": "",
+              "displayName": "Specification Outcome",
+              "id": "1f205b36-9e48-4d27-92b0-b2b65e3472b9",
+              "isQualitative": false,
+              "isValid": true,
+              "name": "Outcome",
+              "sectionName": "Inspect Candidate Specification Outcome",
+              "specificationName": "Spec-01 (SP001) (1.0)",
+              "studyComponent": "Inspect",
+              "userEditable": false,
+              "valueType": "Vocabulary",
+              "values": [
+                {
+                  "itemIndex": 1,
+                  "key": "Actual",
+                  "lastUpdated": "2025-04-24T10:31:04Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": "Pass"
+                },
+                {
+                  "itemIndex": 2,
+                  "key": "Actual",
+                  "lastUpdated": "2025-04-24T10:31:27Z",
+                  "manualOverride": false,
+                  "outOfLimits": false,
+                  "value": "Pass"
+                }
+              ]
+            }
+          ],
+          "signatureEvents": [
+            {
+              "description": "Lifecycle Action - Mark As Reviewed",
+              "id": "d7f79a08-6262-4ede-9fc7-755a9db7fd73",
+              "multiSignatureFlag": 1,
+              "reasonCode": "LooksGood - Signer2",
+              "signaturePolicySigner": "Signer2",
+              "timestamp": "2023-09-19T13:10:49Z",
+              "userComment": "",
+              "userFullName": "user1, biolab"
+            },
+            {
+              "description": "Lifecycle Action - Mark As Reviewed",
+              "id": "b0267c3f-bb56-486d-bb67-1659fa001cc1",
+              "multiSignatureFlag": 1,
+              "reasonCode": "LooksGood",
+              "signaturePolicySigner": "Signer1",
+              "timestamp": "2023-09-19T13:10:11Z",
+              "userComment": "",
+              "userFullName": "user2, biolab"
+            }
+          ],
+          "extendedProperties": {
+            "Description": "Workflow overview",
+            "WorkflowReviewed": true,
+            "DueDate": "2024-01-24T18:30:00Z",
+            "Samples": 5,
+            "SampleQuantity": {
+              "unit": {
+                "id": "721299ac-529b-4f85-86cc-3f883b29a1e2",
+                "displayName": "g/L (grams per liter)",
+                "externalId": null,
+                "name": "g/L",
+                "symbol": "g/L",
+                "textName": "GRAMPERL",
+                "unitType": {
+                  "id": "bc6cb1ed-5523-4dbc-857b-f943ec245034",
+                  "name": "Density"
+                }
+              },
+              "value": 12,
+              "type": "Quantity"
+            },
+            "Comment": "Test looks fine",
+            "SampleVocabulary": {
+              "id": "0642113f-4afc-41d5-9689-4ba1a0b6761d",
+              "externalId": "https://www.3ds.com/Corpus/sprro/activity/analysis_characterization_assay_WaterContent",
+              "name": "water content",
+              "vocabulary": {
+                "id": "d30758a5-d886-44bf-8b55-7a9a6cd6e635",
+                "name": "Analysis",
+                "relatedVocabulary": null
+              }
+            }
+          }
+        }
+      },
+      "configuredWorkflow_updateRequestBody": {
+        "summary": "Metadata details to update in the Configured workflow",
+        "value": {
+          "externalId": "Workflow's externalId",
+          "studyCandidates": [
+            {
+              "id": "7ee8169b-33d8-48df-8971-24fedd6e759c",
+              "externalId": "Candidate's externalId"
+            },
+            {
+              "id": "49e2ee64-cb6a-4dbb-87d0-cf55a7e81ca1",
+              "externalId": "Other Candidate's externalId"
+            }
+          ]
+        }
+      },
+      "configuredWorkflow_updatesMultiStatus": {
+        "summary": "Response(s) of attempting metadata update in the configured workflow",
+        "value": {
+          "Candidate update/s": [
+            {
+              "studyCandidateId": "7ee8169b-33d8-48df-8971-24fedd6e759c",
+              "responseCode": 400,
+              "errorResponse": "studyCandidate: 7ee8169b-33d8-48df-8971-24fedd6e759c, is not part of the workflow: f4102f2e-b01f-44dc-8410-5742dc305e3d being updated"
+            },
+            {
+              "studyCandidateId": "259d06e9-6db4-46f9-8337-eb7b47533b35",
+              "responseCode": 200,
+              "message": "Updated candidate"
+            }
+          ],
+          "Workflow update": {
+            "responseCode": 412,
+            "errorResponse": {
+              "errors": [
+                {
+                  "message": "This [Study] has been modified by another user and your changes cannot be saved."
+                }
+              ]
+            }
+          }
+        }
+      },
+      "configuredWorkflow_updateResultsRequestBody": {
+        "summary": "Results to update in the configured workflow",
+        "value": [
+          {
+            "studyCandidateId": "49e2ee64-cb6a-4dbb-87d0-cf55a7e81ca1",
+            "values": [
+              {
+                "studyParameterId": "34e72626-785a-4fc1-ac1d-ea317972571c",
+                "value": "32.67"
+              },
+              {
+                "studyParameterId": "9529b3d4-a6ce-4d64-b265-cd0a7c37e8e3",
+                "value": "37"
+              },
+              {
+                "studyParameterId": "2d4df382-d4f2-4dc7-b192-f031abdf5e60",
+                "value": "true"
+              },
+              {
+                "studyParameterId": "070003b5-dd3f-4898-99bf-b36298887034",
+                "value": "-5.8"
+              },
+              {
+                "studyParameterId": "e97f094c-af2b-9945-4d9c-afb9d4168f3b",
+                "value": "Nitrogen"
+              }
+            ]
+          },
+          {
+            "studyCandidateId": "ca7e2a2f-b8a7-405c-b11c-c25f2aa21e4d",
+            "values": [
+              {
+                "studyParameterId": "3b3972cd-1ff0-4536-af48-cbc3dbfacc8b",
+                "value": "false"
+              },
+              {
+                "studyParameterId": "c85088cd-4ec5-4775-86b2-cad245853574",
+                "value": "123.4321"
+              }
+            ]
+          }
+        ]
+      },
+      "configuredWorkflow_updateResultsMultiStatus": {
+        "summary": "Response(s) of attempted studyCandidates' results updates in the configured workflow",
+        "value": [
+          {
+            "responseCode": 500,
+            "studyCandidateId": "083e581c-8725-4a35-bb42-4bc0ed219d47"
+          },
+          {
+            "responseCode": 412,
+            "errorResponse": {
+              "errors": [
+                {
+                  "message": "This [StudyCandidate] has been modified by another user and your changes cannot be saved."
+                }
+              ]
+            },
+            "studyCandidateId": "49e2ee64-cd6a-4dbb-87d0-5a7ecf581ca1"
+          },
+          {
+            "responseCode": 200,
+            "studyCandidateId": "e12fa684-9d36-49f6-b9ce-3de5cac624d6"
+          }
+        ]
+      },
+      "unauthenticatedUserResponse": {
+        "summary": "Response for unauthenticated user request",
+        "value": {
+          "error": "invalid_grant",
+          "error_description": "Invalid, expired or missing authenticated session. New service ticket required",
+          "x3ds_auth_url": "https://devopskde142zr102324-euw1-28dsw10904.iam.3dx-staging.3ds.com:443/login?service=https%3A%2F%2Fdevopskde142zr102324-euw1-28dsw10904-laboratory.3dx-staging.3ds.com%2Fresources%2Fv1%2Flaboratory%2Fconfiguredworkflows%3Fpattern%3DJ00%26serverId%3DHubVM_0_9980"
+        }
+      },
+      "noLabAccessResponse": {
+        "summary": "Response for users accessing Laboratory endpoints without access to the Laboratory service",
+        "value": "Your account does not have appropriate roles to access the laboratory system."
+      },
+      "resourceNotFoundResponse": {
+        "summary": "Response for when the resource associated to the request is not found",
+        "value": "The requested resource doesn't exist, or the current user is not authorized to view this resource"
+      },
+      "configuredWorkflowUpdate_preconditionFailure": {
+        "summary": "ETag header absent, precondition failure response",
+        "value": {
+          "errorMessage": "Missing etag header",
+          "statusCode": 412
+        }
+      },
+      "configuredWorkflowUpdate_unsupportedOperation": {
+        "summary": "Configured Workflow update Unsupported operation response",
+        "value": {
+          "errorMessage": "Too many properties found in the payload",
+          "statusCode": 422
+        }
+      },
+      "configuredWorkflowUpdateResults_unsupportedOperation": {
+        "summary": "Unit type not assigned to quantity result type",
+        "value": {
+          "studyCandidateId": "49e2ee64-cd6a-4dbb-87d0-5a7ecf583caa",
+          "responseCode": 422,
+          "errorResponse": {
+            "errorMessage": "Unit type is not assigned to the result associated to studyParameter: 50f3ff75-cd6a-3caa-87d0-5a7ecf581ca1, for the studyCandidate: 49e2ee64-cd6a-4dbb-87d0-5a7ecf581ca1"
+          }
+        }
+      },
+      "incorrectJsonRequestResponse": {
+        "value": {
+          "errorMessage": "Request body is not in the right format",
+          "statusCode": 400
+        }
+      },
+      "configuredWorkflowUpdate_IncorrectDetailsRequestResponse": {
+        "summary": "Response for incorrect details in request",
+        "value": {
+          "Candidate update/s": [
+            {
+              "studyCandidateId": "ed6946ce-a179-4e06-b9a0-f8ebefdbd7e1",
+              "responseCode": 400,
+              "errorResponse": "studyCandidate: ed6946ce-a179-4e06-b9a0-f8ebefdbd7e1, is not part of the workflow: e4ceb1ff-e1b8-4de5-b176-16c4405c9dce being updated"
+            }
+          ]
+        }
+      },
+      "editAccessAbsent": {
+        "summary": "Response for edit attempt from user without edit access",
+        "value": {
+          "errors": [
+            {
+              "message": "You are not permitted to edit [c09c13c9-f58c-45dc-9ebc-58b468758773]"
+            }
+          ]
+        }
+      },
+      "configuredWorkflowUpdateResults_IncorrectDetailsRequestResponse": {
+        "summary": "Response for incorrect details in request",
+        "value": {
+          "errorResponse": {
+            "errorMessage": "studyCandidate: d9750389-0a5f-431f-b341-4138544f1862, is not part of the workflow: b6f25b26-a4d4-4c97-8ca9-01c1768b8e39 being updated"
+          },
+          "responseCode": 400,
+          "studyCandidateId": "d9750389-0a5f-431f-b341-4138544f1862"
+        }
+      }
+    },
+    "schemas": {
+      "ConfiguredWorkflows_searchResponse": {
+        "type": "array",
+        "description": "description: Configured Workflow search summary response",
+        "items": {
+          "$ref": "#/components/schemas/configuredWorkflow_searchSummary"
+        }
+      },
+      "configuredWorkflow_searchSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "jobId": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "workflowType": {
+            "type": "string"
+          }
+        }
+      },
+      "ConfiguredWorkflow": {
+        "type": "object",
+        "description": "Configured Workflow",
+        "properties": {
+          "collaboratorGroup": {
+            "type": "string"
+          },
+          "collaborativeSpace": {
+            "type": "string"
+          },
+          "creator": {
+            "type": "string"
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "documentId": {
+            "type": "string"
+          },
+          "externalId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "initiatedBy": {
+            "$ref": "#/components/schemas/ResourceLocation"
+          },
+          "jobId": {
+            "type": "string"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lifeCyclePolicy": {
+            "type": "string"
+          },
+          "lifeCyclePolicyDescription": {
+            "type": "string"
+          },
+          "lifeCycleState": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "objective": {
+            "type": "string"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/ResourceLocation"
+          },
+          "workflowType": {
+            "type": "string"
+          },
+          "taskPlan": {
+            "type": "string"
+          },
+          "studyCandidates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/studyCandidate"
+            }
+          },
+          "studyParameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/studyParameter"
+            }
+          },
+          "signatureEvents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/signatureEvent"
+            }
+          },
+          "extendedProperties": {
+            "type": "object",
+            "description": "One or more extended custom properties. Property type can be boolean, date, numeric, quantity, string, text and/or vocabulary"
+          }
+        }
+      },
+      "studyCandidate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "itemIndex": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "studyCandidateType": {
+            "type": "string"
+          },
+          "externalReference": {
+            "$ref": "#/components/schemas/ResourceLocation"
+          },
+          "externalId": {
+            "type": "string"
+          }
+        }
+      },
+      "studyParameter": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "acceptanceCriteria": {
+            "type": "string"
+          },
+          "component": {
+            "type": "string"
+          },
+          "documentId": {
+            "type": "string"
+          },
+          "isQualitative": {
+            "type": "boolean"
+          },
+          "isValid": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sectionName": {
+            "type": "string"
+          },
+          "significantDigits": {
+            "type": "integer"
+          },
+          "specificationMethodName": {
+            "type": "string"
+          },
+          "specificationName": {
+            "type": "string"
+          },
+          "studyComponent": {
+            "type": "string"
+          },
+          "userEditable": {
+            "type": "boolean"
+          },
+          "valueType": {
+            "type": "string"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/studyParameterValue_Activity",
+                  "title": "studyParameterValue_Activity"
+                },
+                {
+                  "$ref": "#/components/schemas/studyParameterValue_Numeric",
+                  "title": "studyParameterValue_Numeric"
+                },
+                {
+                  "$ref": "#/components/schemas/studyParameterValue_Task",
+                  "title": "studyParameterValue_Task"
+                },
+                {
+                  "$ref": "#/components/schemas/studyParameterValue_Material",
+                  "title": "studyParameterValue_Material"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "studyParameterValue_Activity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "analysis": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "activityType": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "lifeCycleState": {
+            "type": "string"
+          },
+          "lifeCycleVersion": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "studyParameterValue_Numeric": {
+        "type": "object",
+        "properties": {
+          "itemIndex": {
+            "type": "string",
+            "description": "This corresponds to the itemIndex of the candidate that it applies to"
+          },
+          "key": {
+            "type": "string"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "valueString": {
+            "type": "string"
+          },
+          "outOfLimits": {
+            "type": "boolean"
+          },
+          "reportedValue": {
+            "type": "number"
+          },
+          "recordedValue": {
+            "type": "number"
+          },
+          "sigFigs": {
+            "type": "integer"
+          },
+          "manualOverride": {
+            "type": "boolean",
+            "description": "Whether the value came from an equipment measurement or a manual override"
+          }
+        }
+      },
+      "studyParameterValue_Task": {
+        "type": "object",
+        "properties": {
+          "activityDescription": {
+            "type": "string"
+          },
+          "activityName": {
+            "type": "string"
+          },
+          "activityType": {
+            "type": "string"
+          },
+          "assignedTo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "externalId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "itemIndex": {
+            "type": "number"
+          },
+          "key": {
+            "type": "string"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "methodId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "methodVersion": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "taskId": {
+            "type": "string"
+          },
+          "taskLifeCycleState": {
+            "type": "string"
+          },
+          "taskName": {
+            "type": "string"
+          }
+        }
+      },
+      "studyParameterValue_Material": {
+        "type": "object",
+        "properties": {
+          "itemIndex": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "ResourceLocation": {
+        "type": "object",
+        "description": "A reference to a resource in another system or service",
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          }
+        }
+      },
+      "signatureEvent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "multiSignatureFlag": {
+            "type": "integer"
+          },
+          "reasonCode": {
+            "type": "string"
+          },
+          "signaturePolicySigner": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userComments": {
+            "type": "string"
+          },
+          "userFullName": {
+            "type": "string"
+          }
+        }
+      },
+      "configuredWorkflow_updateRequestBody": {
+        "type": "object",
+        "description": "Request body to update Configured workflow metadata",
+        "properties": {
+          "externalId": {
+            "type": "string"
+          },
+          "studyCandidates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/studyCandidate_update"
+            }
+          }
+        }
+      },
+      "studyCandidate_update": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "externalId": {
+            "type": "string"
+          }
+        }
+      },
+      "ConfiguredWorkflow_updatesMultiStatus": {
+        "type": "object",
+        "description": "Configured Workflow metadata updates multi status response",
+        "properties": {
+          "Workflow update": {
+            "$ref": "#/components/schemas/updateWorkflowResponse"
+          },
+          "Candidate update/s": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/updateCandidatesResponse_success",
+                  "title": "updateCandidatesResponse_success"
+                },
+                {
+                  "$ref": "#/components/schemas/updateCandidatesResponse_failure",
+                  "title": "updateCandidatesResponse_failure"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "updateWorkflowResponse": {
+        "type": "object",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/updateWorkflowResponse_success",
+            "title": "updateWorkflowResponse_success"
+          },
+          {
+            "$ref": "#/components/schemas/updateWorkflowResponse_failure",
+            "title": "updateWorkflowResponse_failure"
+          }
+        ]
+      },
+      "updateWorkflowResponse_success": {
+        "type": "object",
+        "properties": {
+          "responseCode": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "updateWorkflowResponse_failure": {
+        "type": "object",
+        "properties": {
+          "responseCode": {
+            "type": "integer"
+          },
+          "errorResponse": {
+            "type": "object"
+          }
+        }
+      },
+      "updateCandidatesResponse_success": {
+        "type": "object",
+        "properties": {
+          "studyCandidateId": {
+            "type": "string"
+          },
+          "responseCode": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "updateCandidatesResponse_failure": {
+        "type": "object",
+        "properties": {
+          "studyCandidateId": {
+            "type": "string"
+          },
+          "responseCode": {
+            "type": "integer"
+          },
+          "errorResponse": {
+            "type": "string"
+          }
+        }
+      },
+      "ConfiguredWorkflow_updateResultsRequestBody": {
+        "type": "array",
+        "description": "description: Request body to update results of Configured workflow",
+        "items": {
+          "$ref": "#/components/schemas/studyCandidate_resultUpdate"
+        }
+      },
+      "studyCandidate_resultUpdate": {
+        "type": "object",
+        "properties": {
+          "studyCandidateId": {
+            "type": "string"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/studyParameter_resultUpdate"
+            }
+          }
+        }
+      },
+      "studyParameter_resultUpdate": {
+        "type": "object",
+        "properties": {
+          "studyParameterId": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "ConfiguredWorkflow_updateResultsMultiStatus": {
+        "type": "array",
+        "description": "description: Configured Workflow update results multi status response",
+        "items": {
+          "$ref": "#/components/schemas/updateResultResponse"
+        }
+      },
+      "updateResultResponse": {
+        "type": "object",
+        "properties": {
+          "responseCode": {
+            "type": "integer"
+          },
+          "studyCandidateId": {
+            "type": "string"
+          },
+          "errorResponse": {
+            "type": "object",
+            "description": "Included in the individual candidate's result/s update response, when the update/s fail/s (contains the error encountered; can be excluded for Internal Server Error)"
+          }
+        }
+      },
+      "UnauthenticatedUserResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "error_description": {
+            "type": "string"
+          },
+          "x3ds_auth_url": {
+            "type": "string"
+          }
+        }
+      },
+      "StringSchema": {
+        "type": "string"
+      },
+      "ErrorMessageStatusCodeSchema": {
+        "type": "object",
+        "properties": {
+          "errorMessage": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "ConfiguredWorkflow_updateResultsUnprocessableContent": {
+        "type": "object",
+        "properties": {
+          "studyCandidateId": {
+            "type": "string"
+          },
+          "responseCode": {
+            "type": "integer"
+          },
+          "errorResponse": {
+            "type": [
+              "object",
+              "array",
+              "string"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,5990 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Project Web Services",
+    "description": "Web Services for managing the Project modeler.",
+    "version": "1.2.0",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3DSpace/",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dspm:project/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/projects/{projectId}/folders": {
+      "get": {
+        "description": "",
+        "summary": "Get the folders for a given project id.",
+        "operationId": "getProjectFolders",
+        "tags": [
+          "Folders"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-folders"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "post": {
+        "description": "",
+        "summary": "Create the folders for a given project id.",
+        "operationId": "createProjectFolders",
+        "tags": [
+          "Folders"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-folders"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/folders"
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "description": "",
+        "summary": "Update the folders for a given project id.",
+        "operationId": "updateProjectFolders",
+        "tags": [
+          "Folders"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-folders"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/folders"
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projects/search": {
+      "get": {
+        "description": "",
+        "summary": "Search Projects using the provided input string.",
+        "operationId": "searchProjects",
+        "tags": [
+          "Search"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-projects"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "searchStr",
+            "description": "Search Criteria; 2 or more characters required.",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "description": "The number of objects to return; default 50; max 1000",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "description": "The number of objects to skip in case of paginating through the serach results; default 0",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projects/fromTemplate": {
+      "post": {
+        "summary": "Create project from a template",
+        "description": "",
+        "operationId": "copyProjectFromTemplate",
+        "tags": [
+          "From Template"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-fromTemplate"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/fromTemplate"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projects/{projectId}/hold": {
+      "post": {
+        "summary": "Hold a project",
+        "description": "",
+        "operationId": "holdProject",
+        "tags": [
+          "Hold/Cancel/Resume"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-hold"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projects/{projectId}/cancel": {
+      "post": {
+        "summary": "Cancel a project",
+        "description": "",
+        "operationId": "cancelProject",
+        "tags": [
+          "Hold/Cancel/Resume"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-cancel"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projects/{projectId}/resume": {
+      "post": {
+        "summary": "Resume a project",
+        "description": "",
+        "operationId": "resumeProject",
+        "tags": [
+          "Hold/Cancel/Resume"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-resume"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projects/{projectId}/issues/{issueId}": {
+      "get": {
+        "description": "",
+        "summary": "Get the issue details for a given project & issue id.",
+        "operationId": "getProjectIssue",
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-issues"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "issueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projects/{projectId}/assessments": {
+      "get": {
+        "description": "",
+        "summary": "Get the latest Assessment for a given Project.",
+        "operationId": "getProjectAssessments",
+        "tags": [
+          "Assessments"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-assessments"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "allAssessments",
+            "description": "Optionally retrieve all Assessments for the Project. (Default: false)",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "post": {
+        "description": "",
+        "summary": "Create an Assessment for a given Project.",
+        "operationId": "createProjectAssessments",
+        "tags": [
+          "Assessments"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-assessments"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/assessments"
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "description": "",
+        "summary": "Update the Assessments for a given Project.",
+        "operationId": "updateProjectAssessments",
+        "tags": [
+          "Assessments"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-assessments"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/assessments"
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projects/{projectId}/risks": {
+      "get": {
+        "description": "",
+        "summary": "Get the risks associated directly to a given project.",
+        "operationId": "getProjectRisks",
+        "tags": [
+          "Risks"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-risks"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projects/{projectId}/risks/{riskId}": {
+      "get": {
+        "description": "",
+        "summary": "Get the risk details for a given project & risk id.",
+        "operationId": "getProjectRiskForID",
+        "tags": [
+          "Risks"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-risks"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "riskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projects/{projectId}/assessments/{assessmentId}": {
+      "get": {
+        "description": "",
+        "summary": "Get the information for a given Assessment.",
+        "operationId": "getProjectAssessmentInfo",
+        "tags": [
+          "Assessments"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-assessments"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assessmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "description": "",
+        "summary": "Update an Assessment for a given Project.",
+        "operationId": "updateProjectAssessment",
+        "tags": [
+          "Assessments"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-assessments"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/assessments"
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assessmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "delete": {
+        "description": "",
+        "summary": "Delete an Assessment for a given Project.",
+        "operationId": "deleteProjectAssessment",
+        "tags": [
+          "Assessments"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assessmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projects/{projectId}": {
+      "get": {
+        "description": "",
+        "summary": "Get a specific Project detail and related data.",
+        "operationId": "getProjectByID",
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-projects"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "description": "",
+        "summary": "Update projects and related data.",
+        "operationId": "updateProjectsByID",
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-projects"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/projects"
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "delete": {
+        "description": "",
+        "summary": "Delete the given project.",
+        "operationId": "deleteProject",
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projects/{projectId}/issues": {
+      "get": {
+        "description": "",
+        "summary": "Get Project Issues for a given project.",
+        "operationId": "getProjectIssues",
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-issues"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projects/{projectId}/folders/{folderId}": {
+      "delete": {
+        "description": "",
+        "summary": "Delete a given folder based on the given project & folder id.",
+        "operationId": "deleteProjectFolder",
+        "tags": [
+          "Folders"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "folderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projects": {
+      "get": {
+        "description": "",
+        "summary": "Get all users Projects.",
+        "operationId": "getProjectsForUser",
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-projects"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "post": {
+        "description": "",
+        "summary": "Create projects and related data.",
+        "operationId": "createProjects",
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-projects"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/projects"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "description": "",
+        "summary": "Update projects and related data.",
+        "operationId": "modifyProjects",
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-projects"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/projects"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projects/programId/{programId}": {
+      "get": {
+        "description": "",
+        "summary": "Get the projects for a given program id",
+        "operationId": "getProjectsForProgram",
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-projects"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "programId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projects/folderId/{folderId}": {
+      "get": {
+        "description": "",
+        "summary": "Get the information for a given folder object associated with any project.",
+        "operationId": "getFolderInfo",
+        "tags": [
+          "Folders"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-folders"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "folders": {
+        "$ref": "#/components/x-schemas/folders"
+      },
+      "projects": {
+        "$ref": "#/components/x-schemas/projects"
+      },
+      "issues": {
+        "$ref": "#/components/x-schemas/issues"
+      },
+      "assessments": {
+        "$ref": "#/components/x-schemas/assessments"
+      },
+      "fromTemplate": {
+        "$ref": "#/components/x-schemas/fromTemplate"
+      },
+      "hold": {
+        "$ref": "#/components/x-schemas/hold"
+      },
+      "cancel": {
+        "$ref": "#/components/x-schemas/cancel"
+      },
+      "resume": {
+        "$ref": "#/components/x-schemas/resume"
+      },
+      "risks": {
+        "$ref": "#/components/x-schemas/risks"
+      }
+    },
+    "x-schemas": {
+      "projects": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "(unique discriminator only, Projects and Tasks are not revisioned)",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "description": "Description of the object.",
+                    "type": "string"
+                  },
+                  "state": {
+                    "description": "Current lifecycle state",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "policy": {
+                    "description": "The policy of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modifyAccess": {
+                    "description": "Whether the user has modify access to the Project.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "deleteAccess": {
+                    "description": "Whether the user has delete access to the Project.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "project": {
+                    "description": "Collaborative Space (project) the Project was created in.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "estimatedStartDate": {
+                    "description": "Project start date target",
+                    "type": "string"
+                  },
+                  "estimatedFinishDate": {
+                    "description": "Project completion date target",
+                    "type": "string"
+                  },
+                  "dueDate": {
+                    "description": "Project completion date target (depecatd)",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "actualStartDate": {
+                    "description": "Project actual start date",
+                    "type": "string"
+                  },
+                  "actualFinishDate": {
+                    "description": "Project actual completion date",
+                    "type": "string"
+                  },
+                  "nlsType": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "color": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "pattern": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "ganttConfig": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "kindofBaseline": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "kindofExperiment": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "kindofTemplate": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "kindofConcept": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "routeId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "columns": {
+                    "description": "Gantt Chart columns",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "percentComplete": {
+                    "description": "Percentage complete of project",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "percentCompleteBasedOn": {
+                    "description": "This attribute stores the value of parameter based on which the percent complete is calculated",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "lagCalendar": {
+                    "description": "Lag Calendar",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "estimatedDurationInputValue": {
+                    "description": "Duration value",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "estimatedDurationInputUnit": {
+                    "description": "Duration unit",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "estimatedDuration": {
+                    "description": "Estimated duration",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "actualDuration": {
+                    "description": "Actual duration",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "forecastDuration": {
+                    "type": "string"
+                  },
+                  "forecastStartDate": {
+                    "type": "string"
+                  },
+                  "forecastFinishDate": {
+                    "type": "string"
+                  },
+                  "constraintType": {
+                    "description": "Reflects ASAP or ALAP depending on schedule from.",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "constraintDate": {
+                    "description": "Constraint date",
+                    "type": "string"
+                  },
+                  "defaultConstraintType": {
+                    "description": "Constraint type",
+                    "type": "string"
+                  },
+                  "scheduleFrom": {
+                    "description": "Scheduling type",
+                    "type": "string"
+                  },
+                  "scheduleBasedOn": {
+                    "description": "Scheduling basis",
+                    "type": "string"
+                  },
+                  "projectVisibility": {
+                    "description": "A non-controlling identification of the desired Project access.",
+                    "type": "string"
+                  },
+                  "currency": {
+                    "description": "Currency type",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "notes": {
+                    "description": "Notes",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "status": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "PALId": {
+                    "description": "The Project Access List object (used for some navigation)",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "objectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "sequenceOrder": {
+                    "description": "the task sequence id within a project.",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "ownerInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  },
+                  "originatorInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/originatorInfo"
+                    }
+                  },
+                  "tasks": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/tasks"
+                    }
+                  },
+                  "members": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/members"
+                    }
+                  },
+                  "subTypesInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/subTypesInfo"
+                    }
+                  },
+                  "folders": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/folders"
+                    }
+                  },
+                  "calendar": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/calendar"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ownerInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The user account name",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "firstname": {
+                    "description": "The user's first name",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "lastname": {
+                    "description": "The user's last name",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "email": {
+                    "description": "The user's email address",
+                    "default": "Unknown",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "calendar": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/calendar"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "calendar": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "default": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "originatorInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The user account name",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "firstname": {
+                    "description": "The user's first name",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "lastname": {
+                    "description": "The user's last name",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "email": {
+                    "description": "The user's email address",
+                    "default": "Unknown",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "calendar": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/calendar"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "tasks": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "The name/title of the task.",
+                    "default": "\n",
+                    "type": "string"
+                  },
+                  "revision": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "originated": {
+                    "description": "The originated date of the task.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modifyAccess": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "deleteAccess": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "changeSOVAccess": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string",
+                    "enum": [
+                      "Create",
+                      "Assign",
+                      "Active",
+                      "Review",
+                      "Complete"
+                    ]
+                  },
+                  "project": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "hasProject": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "taskRequirement": {
+                    "default": "Optional",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "enum": [
+                      "Optional",
+                      "Mandatory"
+                    ]
+                  },
+                  "notes": {
+                    "description": "Additional notes associated to the task",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "needsReview": {
+                    "default": "No",
+                    "type": "string",
+                    "enum": [
+                      "No",
+                      "Yes"
+                    ]
+                  },
+                  "percentComplete": {
+                    "type": "string"
+                  },
+                  "estimatedStartDate": {
+                    "type": "string"
+                  },
+                  "dueDate": {
+                    "type": "string"
+                  },
+                  "estimatedDurationInputValue": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "estimatedDurationInputUnit": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "estimatedDuration": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "actualStartDate": {
+                    "type": "string"
+                  },
+                  "actualFinishDate": {
+                    "type": "string"
+                  },
+                  "actualDuration": {
+                    "type": "string"
+                  },
+                  "forecastStartDate": {
+                    "type": "string"
+                  },
+                  "forecastFinishDate": {
+                    "type": "string"
+                  },
+                  "forecastDuration": {
+                    "type": "string"
+                  },
+                  "constraintType": {
+                    "default": "",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "enum": [
+                      "As Soon As Possible",
+                      "As Late As Possible",
+                      "Finish No Earlier Than",
+                      "Finish No Later Than",
+                      "Must Finish On",
+                      "Must Start On",
+                      "Start No Earlier Than",
+                      "Start No Later Than"
+                    ]
+                  },
+                  "constraintDate": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "scheduleFrom": {
+                    "default": "Project Start Date",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "enum": [
+                      "Project Finish Date",
+                      "Project Start Date"
+                    ]
+                  },
+                  "scheduleBasedOn": {
+                    "default": "Estimated",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "enum": [
+                      "Forecast",
+                      "Actual",
+                      "Estimated"
+                    ]
+                  },
+                  "projectVisibility": {
+                    "default": "Members",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "enum": [
+                      "Company",
+                      "Members"
+                    ]
+                  },
+                  "routeTaskInstructions": {
+                    "description": "Route Task Instructions for route-based tasks.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "routeTaskAction": {
+                    "default": "Comment",
+                    "type": "string",
+                    "readOnly": true,
+                    "enum": [
+                      "Comment",
+                      "Approve",
+                      "Information Only",
+                      "Notify Only",
+                      "Investigate"
+                    ]
+                  },
+                  "routeTaskDueDate": {
+                    "type": "string"
+                  },
+                  "routeTaskActualFinishDate": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "routeTaskDelegationAllowed": {
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true,
+                    "enum": [
+                      "True",
+                      "False"
+                    ]
+                  },
+                  "routeTaskAssigneeSetDueDate": {
+                    "default": "No",
+                    "type": "string",
+                    "readOnly": true,
+                    "enum": [
+                      "Yes",
+                      "No"
+                    ]
+                  },
+                  "routeTaskApprovalAction": {
+                    "type": "string",
+                    "enum": [
+                      "Approve",
+                      "Reject",
+                      "Abstain",
+                      "None"
+                    ]
+                  },
+                  "routeTaskApprovalComments": {
+                    "type": "string"
+                  },
+                  "routeTaskReviewerComments": {
+                    "type": "string"
+                  },
+                  "policy": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "PALId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "objectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "freeFloat": {
+                    "description": "Free Float value",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "totalFloat": {
+                    "description": "Total Float value",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "isOverallCritical": {
+                    "description": "isOverallCritical",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "nlsType": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "pattern": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "color": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "isSummaryTask": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "effortId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "sourceId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "taskProjectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "passiveSubtask": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "criticalTask": {
+                    "default": "FALSE",
+                    "type": "string",
+                    "enum": [
+                      "TRUE",
+                      "FALSE"
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "Deviation": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "predictiveActualFinishDate": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "sequenceOrder": {
+                    "description": "the task sequence id within a project.",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "taskWBS": {
+                    "description": "the task WBS within a project.",
+                    "default": "1",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "predecessors": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/predecessors"
+                    }
+                  },
+                  "ownerInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  },
+                  "originatorInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/originatorInfo"
+                    }
+                  },
+                  "references": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/references"
+                    }
+                  },
+                  "deliverables": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/deliverables"
+                    }
+                  },
+                  "route": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/route"
+                    }
+                  },
+                  "scopes": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/scopes"
+                    }
+                  },
+                  "contents": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/contents"
+                    }
+                  },
+                  "assignees": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/assignees"
+                    }
+                  },
+                  "calendar": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/calendar"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "predecessors": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "PALId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "lagTime": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "dependencyType": {
+                    "default": "FS",
+                    "type": "string",
+                    "enum": [
+                      "FS",
+                      "SF",
+                      "FF",
+                      "SS"
+                    ]
+                  },
+                  "lagTimeInputUnit": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "lagTimeInputValue": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "From": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "predTaskSeqNumber": {
+                    "description": "the predecessor task sequence id.",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "To": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "predProjectName": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "predProjectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "successors": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "PALId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "lagTime": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "dependencyType": {
+                    "default": "FS",
+                    "type": "string",
+                    "enum": [
+                      "FS",
+                      "SF",
+                      "FF",
+                      "SS"
+                    ]
+                  },
+                  "lagTimeInputUnit": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "lagTimeInputValue": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "From": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "predTaskSeqNumber": {
+                    "description": "the predecessor task sequence id.",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "To": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "predProjectName": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "predProjectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "autoRefresh": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          }
+        ]
+      },
+      "scopeId": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          }
+        ]
+      },
+      "co-owners": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "default": "Unknown",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "references": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "default": "\n",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "(unique discriminator only, Risks are not revisioned)",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "description": "Description of the object.",
+                    "type": "string"
+                  },
+                  "state": {
+                    "description": "Current lifecycle state",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "originator": {
+                    "description": "The user who originally created the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "owner": {
+                    "description": "The current owner of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "deliverables": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "revision": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "default": "\n",
+                    "type": "string"
+                  },
+                  "synopsis": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "description": "the person's first name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "description": "the person's last name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "fullname": {
+                    "description": "the person's full name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "objectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "policy": {
+                    "description": "required to support state NLS",
+                    "type": "string"
+                  },
+                  "stateNLS": {
+                    "type": "string"
+                  },
+                  "typeNLS": {
+                    "type": "string"
+                  },
+                  "collabSpace": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "collabSpaceTitle": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "organization": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "organizationTitle": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "ownerFullname": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "hasfiles": {
+                    "description": "determines whether the object has a file checked in any format",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "linkURL": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "route": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "scopes": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "revision": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "default": "\n",
+                    "type": "string"
+                  },
+                  "synopsis": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "description": "the person's first name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "description": "the person's last name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "fullname": {
+                    "description": "the person's full name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "objectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "policy": {
+                    "description": "required to support state NLS",
+                    "type": "string"
+                  },
+                  "stateNLS": {
+                    "type": "string"
+                  },
+                  "typeNLS": {
+                    "type": "string"
+                  },
+                  "collabSpace": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "collabSpaceTitle": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "organization": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "organizationTitle": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "ownerFullname": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "hasfiles": {
+                    "description": "determines whether the object has a file checked in any format",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "contents": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "revision": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "default": "\n",
+                    "type": "string"
+                  },
+                  "synopsis": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "description": "the person's first name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "description": "the person's last name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "fullname": {
+                    "description": "the person's full name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "objectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "policy": {
+                    "description": "required to support state NLS",
+                    "type": "string"
+                  },
+                  "stateNLS": {
+                    "type": "string"
+                  },
+                  "typeNLS": {
+                    "type": "string"
+                  },
+                  "collabSpace": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "collabSpaceTitle": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "organization": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "organizationTitle": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "ownerFullname": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "hasfiles": {
+                    "description": "determines whether the object has a file checked in any format",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "assignees": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The user account name",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "firstname": {
+                    "description": "The user's first name",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "lastname": {
+                    "description": "The user's last name",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "email": {
+                    "description": "The user's email address",
+                    "default": "Unknown",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "calendar": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/calendar"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Assignments": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "TaskId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "icon": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "TaskProjectId": {
+                    "type": "string"
+                  },
+                  "Name": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "percentComplete": {
+                    "type": "string"
+                  },
+                  "estimatedStartDate": {
+                    "type": "string"
+                  },
+                  "dueDate": {
+                    "type": "string"
+                  },
+                  "estimatedDurationInputValue": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "owner": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "allocation": {
+                    "default": "100.0",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "EventInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "weekDay": {
+                    "default": "\n",
+                    "type": "string"
+                  },
+                  "exceptionType": {
+                    "default": "Non Working",
+                    "type": "string",
+                    "enum": [
+                      "Working",
+                      "Non Working"
+                    ]
+                  },
+                  "workStartTime": {
+                    "default": "800",
+                    "type": "string"
+                  },
+                  "workFinishTime": {
+                    "default": "1700",
+                    "type": "string"
+                  },
+                  "lunchStartTime": {
+                    "default": "1200",
+                    "type": "string"
+                  },
+                  "lunchFinishTime": {
+                    "default": "1300",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "baselines": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "default": "\n",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "(unique discriminator only, Projects and Tasks are not revisioned)",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "description": "Description of the object.",
+                    "type": "string"
+                  },
+                  "state": {
+                    "description": "Current lifecycle state",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "baselineCurrentStartDate": {
+                    "description": "Baseline start date",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "baselineCurrentFinishDate": {
+                    "description": "Baseline finish date",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "originatorInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/originatorInfo"
+                    }
+                  },
+                  "tasks": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/tasks"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "assessments": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "Title of the Asessment",
+                    "default": "\n",
+                    "type": "string"
+                  },
+                  "name": {
+                    "description": "The Assessment name. (Assessments are auto named)",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "(unique discriminator only, Assessments are not revisioned)",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "policy": {
+                    "description": "The current policy of the object.",
+                    "type": "string",
+                    "enum": [
+                      "Assessment"
+                    ]
+                  },
+                  "state": {
+                    "description": "The current maturity of the object.",
+                    "type": "string",
+                    "enum": [
+                      "Exists",
+                      "Complete"
+                    ]
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "originator": {
+                    "description": "The user who originally created the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "owner": {
+                    "description": "The current owner of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "assessmentDate": {
+                    "description": "The date of the Project Assessment",
+                    "type": "string"
+                  },
+                  "assessment": {
+                    "description": "General Status",
+                    "type": "string",
+                    "enum": [
+                      "Red",
+                      "RedUp",
+                      "RedDown",
+                      "Yellow",
+                      "YellowUp",
+                      "YellowDown",
+                      "Green",
+                      "GreenUp",
+                      "GreenDown",
+                      "---"
+                    ]
+                  },
+                  "scope": {
+                    "description": "Scope Status",
+                    "type": "string",
+                    "enum": [
+                      "Red",
+                      "RedUp",
+                      "RedDown",
+                      "Yellow",
+                      "YellowUp",
+                      "YellowDown",
+                      "Green",
+                      "GreenUp",
+                      "GreenDown",
+                      "---"
+                    ]
+                  },
+                  "schedule": {
+                    "description": "Schedule Status",
+                    "type": "string",
+                    "enum": [
+                      "Red",
+                      "RedUp",
+                      "RedDown",
+                      "Yellow",
+                      "YellowUp",
+                      "YellowDown",
+                      "Green",
+                      "GreenUp",
+                      "GreenDown",
+                      "---"
+                    ]
+                  },
+                  "cost": {
+                    "description": "Finance Status",
+                    "type": "string",
+                    "enum": [
+                      "Red",
+                      "RedUp",
+                      "RedDown",
+                      "Yellow",
+                      "YellowUp",
+                      "YellowDown",
+                      "Green",
+                      "GreenUp",
+                      "GreenDown",
+                      "---"
+                    ]
+                  },
+                  "quality": {
+                    "description": "Quality Status",
+                    "type": "string",
+                    "enum": [
+                      "Red",
+                      "RedUp",
+                      "RedDown",
+                      "Yellow",
+                      "YellowUp",
+                      "YellowDown",
+                      "Green",
+                      "GreenUp",
+                      "GreenDown",
+                      "---"
+                    ]
+                  },
+                  "resource": {
+                    "description": "Resource Status",
+                    "type": "string",
+                    "enum": [
+                      "Red",
+                      "RedUp",
+                      "RedDown",
+                      "Yellow",
+                      "YellowUp",
+                      "YellowDown",
+                      "Green",
+                      "GreenUp",
+                      "GreenDown",
+                      "---"
+                    ]
+                  },
+                  "communication": {
+                    "description": "Communication Status",
+                    "type": "string",
+                    "enum": [
+                      "Red",
+                      "RedUp",
+                      "RedDown",
+                      "Yellow",
+                      "YellowUp",
+                      "YellowDown",
+                      "Green",
+                      "GreenUp",
+                      "GreenDown",
+                      "---"
+                    ]
+                  },
+                  "risk": {
+                    "description": "Risk Status",
+                    "type": "string",
+                    "enum": [
+                      "Red",
+                      "RedUp",
+                      "RedDown",
+                      "Yellow",
+                      "YellowUp",
+                      "YellowDown",
+                      "Green",
+                      "GreenUp",
+                      "GreenDown",
+                      "---"
+                    ]
+                  },
+                  "procurement": {
+                    "description": "Procurement Status",
+                    "type": "string",
+                    "enum": [
+                      "Red",
+                      "RedUp",
+                      "RedDown",
+                      "Yellow",
+                      "YellowUp",
+                      "YellowDown",
+                      "Green",
+                      "GreenUp",
+                      "GreenDown",
+                      "---"
+                    ]
+                  },
+                  "stakeholders": {
+                    "description": "Stakeholders Status",
+                    "type": "string",
+                    "enum": [
+                      "Red",
+                      "RedUp",
+                      "RedDown",
+                      "Yellow",
+                      "YellowUp",
+                      "YellowDown",
+                      "Green",
+                      "GreenUp",
+                      "GreenDown",
+                      "---"
+                    ]
+                  },
+                  "assessmentCmnts": {
+                    "description": "General Comments",
+                    "type": "string"
+                  },
+                  "scopeCmnts": {
+                    "description": "Scope Comments",
+                    "type": "string"
+                  },
+                  "scheduleCmnts": {
+                    "description": "Schedule Comments",
+                    "type": "string"
+                  },
+                  "costCmnts": {
+                    "description": "Finance Comments",
+                    "type": "string"
+                  },
+                  "qualityCmnts": {
+                    "description": "Quality Comments",
+                    "type": "string"
+                  },
+                  "resourceCmnts": {
+                    "description": "Resource Comments",
+                    "type": "string"
+                  },
+                  "communicationCmnts": {
+                    "description": "Communication Comments",
+                    "type": "string"
+                  },
+                  "riskCmnts": {
+                    "description": "Risk Comments",
+                    "type": "string"
+                  },
+                  "procurementCmnts": {
+                    "description": "Procurement Comments",
+                    "type": "string"
+                  },
+                  "stakeholdersCmnts": {
+                    "description": "Stakeholders Comments",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "assessmentDate"
+                ]
+              }
+            },
+            "required": [
+              "title",
+              "assessmentDate"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "ownerInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  },
+                  "originatorInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/originatorInfo"
+                    }
+                  },
+                  "references": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/references"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "members": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The user account name",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "firstname": {
+                    "description": "The user's first name",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "lastname": {
+                    "description": "The user's last name",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "email": {
+                    "description": "The user's email address",
+                    "default": "Unknown",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "projectAccess": {
+                    "default": "Project Member",
+                    "type": "string",
+                    "readOnly": true,
+                    "enum": [
+                      "Project Assessor",
+                      "Financial Reviewer",
+                      "Project Lead",
+                      "Project Member",
+                      "Project Owner"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "calendar": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/calendar"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "fromTemplate": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS-TYPE"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "constraintDate": {
+                    "example": "2025-09-09T12:20:00.000",
+                    "default": "",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "scheduleFrom": {
+                    "default": "Project Start Date",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "Project Finish Date",
+                      "Project Start Date"
+                    ]
+                  },
+                  "defaultConstraintType": {
+                    "description": "Constraint type",
+                    "default": "As Soon As Possible",
+                    "type": "string",
+                    "enum": [
+                      "As Soon As Possible",
+                      "As Late As Possible"
+                    ]
+                  },
+                  "currency": {
+                    "description": "Currency type",
+                    "default": "Unassigned",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "MUR-Mauritius Rupee-MAURITIUS",
+                      "MVR-Rufiyaa-MALDIVES",
+                      "PGK-Kina-PAPUA NEW GUINEA",
+                      "PHP-Philippine Peso-PHILIPPINES (THE)",
+                      "PKR-Pakistan Rupee-PAKISTAN",
+                      "PLN-Zloty-POLAND",
+                      "PYG-Guarani-PARAGUAY",
+                      "QAR-Qatari Rial-QATAR",
+                      "RON-Romanian Leu-ROMANIA",
+                      "RSD-Serbian Dinar-SERBIA",
+                      "RUB-Russian Ruble-RUSSIAN FEDERATION (THE)",
+                      "RWF-Rwanda Franc-RWANDA",
+                      "SAR-Saudi Riyal-SAUDI ARABIA",
+                      "SBD-Solomon Islands Dollar-SOLOMON ISLANDS",
+                      "SCR-Seychelles Rupee-SEYCHELLES",
+                      "SDG-Sudanese Pound-SUDAN (THE)",
+                      "SEK-Swedish Krona-SWEDEN",
+                      "SGD-Singapore Dollar-SINGAPORE",
+                      "MWK-Malawi Kwacha-MALAWI",
+                      "SHP-Saint Helena Pound-SAINT HELENA ASCENSION AND TRISTAN DA CUNHA",
+                      "SLL-Leone-SIERRA LEONE",
+                      "SOS-Somali Shilling-SOMALIA",
+                      "SRD-Surinam Dollar-SURINAME",
+                      "SSP-South Sudanese Pound-SOUTH SUDAN",
+                      "STN-Dobra-SAO TOME AND PRINCIPE",
+                      "SVC-El Salvador Colon-EL SALVADOR",
+                      "SYP-Syrian Pound-SYRIAN ARAB REPUBLIC",
+                      "SZL-Lilangeni-ESWATINI",
+                      "THB-Baht-THAILAND",
+                      "TJS-Somoni-TAJIKISTAN",
+                      "TMT-Turkmenistan New Manat-TURKMENISTAN",
+                      "TND-Tunisian Dinar-TUNISIA",
+                      "TOP-Paanga-TONGA",
+                      "TRY-Turkish Lira-TURKEY",
+                      "TTD-Trinidad and Tobago Dollar-TRINIDAD AND TOBAGO",
+                      "MXN-Mexican Peso-MEXICO",
+                      "TWD-New Taiwan Dollar-TAIWAN (PROVINCE OF CHINA)",
+                      "TZS-Tanzanian Shilling-TANZANIA UNITED REPUBLIC OF",
+                      "UAH-Hryvnia-UKRAINE",
+                      "UGX-Uganda Shilling-UGANDA",
+                      "USN-US Dollar (Next day)-UNITED STATES OF AMERICA (THE)",
+                      "UYI-Uruguay Peso en Unidades Indexadas (UI)-URUGUAY",
+                      "UYU-Peso Uruguayo-URUGUAY",
+                      "UYW-Unidad Previsional-URUGUAY",
+                      "UZS-Uzbekistan Sum-UZBEKISTAN",
+                      "VES-Bolivar Soberano-VENEZUELA (BOLIVARIAN REPUBLIC OF)",
+                      "VND-Dong-VIET NAM",
+                      "VUV-Vatu-VANUATU",
+                      "WST-Tala-SAMOA",
+                      "XAF-CFA Franc BEAC-CENTRAL AFRICAN REPUBLIC (THE)",
+                      "XCD-East Caribbean Dollar-ANTIGUA AND BARBUDA",
+                      "XDR-SDR (Special Drawing Right)-INTERNATIONAL MONETARY FUND (IMF)",
+                      "MXV-Mexican Unidad de Inversion (UDI)-MEXICO",
+                      "XOF-CFA Franc BCEAO-BENIN",
+                      "XPF-CFP Franc-FRENCH POLYNESIA",
+                      "XSU-Sucre-SISTEMA UNITARIO DE COMPENSACION REGIONAL DE PAGOS SUCRE",
+                      "XUA-ADB Unit of Account-MEMBER COUNTRIES OF THE AFRICAN DEVELOPMENT BANK GROUP",
+                      "YER-Yemeni Rial-YEMEN",
+                      "ZAR-Rand-SOUTH AFRICA",
+                      "ZMW-Zambian Kwacha-ZAMBIA",
+                      "ZWL-Zimbabwe Dollar-ZIMBABWE",
+                      "Euro",
+                      "Dollar",
+                      "Won",
+                      "Yen",
+                      "Yuan Renminbi",
+                      "Pound",
+                      "Unassigned",
+                      "AED-UAE Dirham-UNITED ARAB EMIRATES (THE)",
+                      "MYR-Malaysian Ringgit-MALAYSIA",
+                      "AFN-Afghani-AFGHANISTAN",
+                      "ALL-Lek-ALBANIA",
+                      "AMD-Armenian Dram-ARMENIA",
+                      "ANG-Netherlands Antillean Guilder-SINT MAARTEN (DUTCH PART)",
+                      "AOA-Kwanza-ANGOLA",
+                      "ARS-Argentine Peso-ARGENTINA",
+                      "AUD-Australian Dollar-AUSTRALIA",
+                      "AWG-Aruban Florin-ARUBA",
+                      "AZN-Azerbaijan Manat-AZERBAIJAN",
+                      "BAM-Convertible Mark-BOSNIA AND HERZEGOVINA",
+                      "BBD-Barbados Dollar-BARBADOS",
+                      "BDT-Taka-BANGLADESH",
+                      "BGN-Bulgarian Lev-BULGARIA",
+                      "BHD-Bahraini Dinar-BAHRAIN",
+                      "BIF-Burundi Franc-BURUNDI",
+                      "BMD-Bermudian Dollar-BERMUDA",
+                      "MZN-Mozambique Metical-MOZAMBIQUE",
+                      "BND-Brunei Dollar-BRUNEI DARUSSALAM",
+                      "BOB-Boliviano-BOLIVIA (PLURINATIONAL STATE OF)",
+                      "BOV-Mvdol-BOLIVIA (PLURINATIONAL STATE OF)",
+                      "BRL-Brazilian Real-BRAZIL",
+                      "BSD-Bahamian Dollar-BAHAMAS (THE)",
+                      "BTN-Ngultrum-BHUTAN",
+                      "BWP-Pula-BOTSWANA",
+                      "BYN-Belarusian Ruble-BELARUS",
+                      "BZD-Belize Dollar-BELIZE",
+                      "CAD-Canadian Dollar-CANADA",
+                      "CDF-Congolese Franc-CONGO (THE DEMOCRATIC REPUBLIC OF THE)",
+                      "CHE-WIR Euro-SWITZERLAND",
+                      "CHF-Swiss Franc-SWITZERLAND",
+                      "CHW-WIR Franc-SWITZERLAND",
+                      "CLF-Unidad de Fomento-CHILE",
+                      "CLP-Chilean Peso-CHILE",
+                      "NAD-Namibia Dollar-NAMIBIA",
+                      "COP-Colombian Peso-COLOMBIA",
+                      "COU-Unidad de Valor Real-COLOMBIA",
+                      "CRC-Costa Rican Colon-COSTA RICA",
+                      "CUC-Peso Convertible-CUBA",
+                      "CUP-Cuban Peso-CUBA",
+                      "CVE-Cabo Verde Escudo-CABO VERDE",
+                      "CZK-Czech Koruna-CZECHIA",
+                      "DJF-Djibouti Franc-DJIBOUTI",
+                      "DKK-Danish Krone-DENMARK",
+                      "DOP-Dominican Peso-DOMINICAN REPUBLIC (THE)",
+                      "DZD-Algerian Dinar-ALGERIA",
+                      "EGP-Egyptian Pound-EGYPT",
+                      "ERN-Nakfa-ERITREA",
+                      "ETB-Ethiopian Birr-ETHIOPIA",
+                      "FJD-Fiji Dollar-FIJI",
+                      "FKP-Falkland Islands Pound-FALKLAND ISLANDS (THE)",
+                      "NGN-Naira-NIGERIA",
+                      "GEL-Lari-GEORGIA",
+                      "GHS-Ghana Cedi-GHANA",
+                      "GIP-Gibraltar Pound-GIBRALTAR",
+                      "GMD-Dalasi-GAMBIA (THE)",
+                      "GNF-Guinean Franc-GUINEA",
+                      "GTQ-Quetzal-GUATEMALA",
+                      "GYD-Guyana Dollar-GUYANA",
+                      "HKD-Hong Kong Dollar-HONG KONG",
+                      "HNL-Lempira-HONDURAS",
+                      "HRK-Kuna-CROATIA",
+                      "HTG-Gourde-HAITI",
+                      "HUF-Forint-HUNGARY",
+                      "IDR-Rupiah-INDONESIA",
+                      "ILS-New Israeli Sheqel-ISRAEL",
+                      "INR-Indian Rupee-INDIA",
+                      "IQD-Iraqi Dinar-IRAQ",
+                      "NIO-Cordoba Oro-NICARAGUA",
+                      "IRR-Iranian Rial-IRAN (ISLAMIC REPUBLIC OF)",
+                      "ISK-Iceland Krona-ICELAND",
+                      "JMD-Jamaican Dollar-JAMAICA",
+                      "JOD-Jordanian Dinar-JORDAN",
+                      "KES-Kenyan Shilling-KENYA",
+                      "KGS-Som-KYRGYZSTAN",
+                      "KHR-Riel-CAMBODIA",
+                      "KMF-Comorian Franc-COMOROS (THE)",
+                      "KPW-North Korean Won-KOREA (THE DEMOCRATIC PEOPLES REPUBLIC OF)",
+                      "KWD-Kuwaiti Dinar-KUWAIT",
+                      "KYD-Cayman Islands Dollar-CAYMAN ISLANDS (THE)",
+                      "KZT-Tenge-KAZAKHSTAN",
+                      "LAK-Lao Kip-LAO PEOPLES DEMOCRATIC REPUBLIC (THE)",
+                      "LBP-Lebanese Pound-LEBANON",
+                      "LKR-Sri Lanka Rupee-SRI LANKA",
+                      "LRD-Liberian Dollar-LIBERIA",
+                      "NOK-Norwegian Krone-NORWAY",
+                      "LSL-Loti-LESOTHO",
+                      "LYD-Libyan Dinar-LIBYA",
+                      "MAD-Moroccan Dirham-MOROCCO",
+                      "MDL-Moldovan Leu-MOLDOVA (THE REPUBLIC OF)",
+                      "MGA-Malagasy Ariary-MADAGASCAR",
+                      "MKD-Denar-MACEDONIA (THE FORMER YUGOSLAV REPUBLIC OF)",
+                      "MMK-Kyat-MYANMAR",
+                      "MNT-Tugrik-MONGOLIA",
+                      "MOP-Pataca-MACAO",
+                      "MRU-Ouguiya-MAURITANIA",
+                      "NPR-Nepalese Rupee-NEPAL",
+                      "NZD-New Zealand Dollar-NEW ZEALAND",
+                      "OMR-Rial Omani-OMAN",
+                      "PAB-Balboa-PANAMA",
+                      "PEN-Sol-PERU"
+                    ]
+                  },
+                  "title": {
+                    "description": "Title of the Asessment",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "description": {
+                    "description": "Description of the object.",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "projectTemplate": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/x-definitions/BASICS"
+                        },
+                        {}
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "hold": {},
+      "cancel": {},
+      "resume": {},
+      "risks": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "default": "\n",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "(unique discriminator only, Risks are not revisioned)",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "description": "Description of the object.",
+                    "type": "string"
+                  },
+                  "state": {
+                    "description": "Current lifecycle state",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "originator": {
+                    "description": "The user who originally created the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "owner": {
+                    "description": "The current owner of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "estimatedStartDate": {
+                    "description": "Object estimated start date target",
+                    "type": "string"
+                  },
+                  "estimatedFinishDate": {
+                    "description": "Object estimated completion date target",
+                    "type": "string"
+                  },
+                  "actualStartDate": {
+                    "description": "Object actual start date",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "actualFinishDate": {
+                    "description": "Object actual completion date",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "riskType": {
+                    "description": "The classification of the risk",
+                    "default": "Cost",
+                    "type": "string",
+                    "enum": [
+                      "Cost",
+                      "Quality",
+                      "Technical",
+                      "Resource",
+                      "Performance",
+                      "Schedule",
+                      "Benefits",
+                      "Manufacturability",
+                      "Other"
+                    ]
+                  },
+                  "riskVisibility": {
+                    "description": "The assignment of Public or Restricted visibility of the Risk information",
+                    "default": "Public",
+                    "type": "string",
+                    "enum": [
+                      "Public",
+                      "Restricted"
+                    ]
+                  },
+                  "riskImpact": {
+                    "description": "The estimated negative effect the Risk will have.",
+                    "default": "1",
+                    "type": "string",
+                    "enum": [
+                      "1",
+                      "2",
+                      "3",
+                      "4",
+                      "5"
+                    ],
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "riskProbability": {
+                    "description": "The relative probability that the Risk will occur.",
+                    "default": "1",
+                    "type": "string",
+                    "enum": [
+                      "1",
+                      "2",
+                      "3",
+                      "4",
+                      "5"
+                    ],
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "riskFactor": {
+                    "description": "The relative rating of the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "riskResolution": {
+                    "description": "The status or assessment of the Risk resolution.",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (No), Modify (No)"
+                  },
+                  "riskAbatement": {
+                    "description": "The actions being planned or taken to mitigate or resolve the Risk.",
+                    "type": "string"
+                  },
+                  "measureOfSuccess": {
+                    "description": "The criteria to be used used to evaluate the Risk resolution.",
+                    "type": "string"
+                  },
+                  "riskCategory": {
+                    "description": "Business oriented categorization of the Risk",
+                    "default": "",
+                    "type": "string",
+                    "enum": [
+                      "Technical",
+                      "Quality",
+                      "Resource",
+                      "Market",
+                      "Schedule"
+                    ]
+                  },
+                  "modifyAccess": {
+                    "description": "Whether the user has modify access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "deleteAccess": {
+                    "description": "Whether the user has delete access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "promoteAccess": {
+                    "description": "Whether the user has promote access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "demoteAccess": {
+                    "description": "Whether the user has demote access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "fromConnectAccess": {
+                    "description": "Whether the user has connect access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "toConnectAccess": {
+                    "description": "Whether the user has connect access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "assignees": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/assignees"
+                    }
+                  },
+                  "ownerInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  },
+                  "rpn": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/rpn"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "rpn": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "rpnImpact": {
+                    "description": "(Assessment Instance) The estimated negative effect the Risk will have.",
+                    "default": "1",
+                    "type": "string",
+                    "readOnly": true,
+                    "enum": [
+                      "1",
+                      "2",
+                      "3",
+                      "4",
+                      "5"
+                    ]
+                  },
+                  "rpnProbability": {
+                    "description": "(Assessment Instance) The relative probability that the Risk will occur.",
+                    "default": "1",
+                    "type": "string",
+                    "readOnly": true,
+                    "enum": [
+                      "1",
+                      "2",
+                      "3",
+                      "4",
+                      "5"
+                    ]
+                  },
+                  "rpnValue": {
+                    "description": "(Assessment Instance) The relative rating of the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "rpnStatus": {
+                    "description": "(Assessment Instance) The current status of the rating or reassessment.",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "rpnEffectiveDate": {
+                    "description": "(Assessment Instance) The date this Risk assessment becomes effective.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "getFloatValues": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          }
+        ]
+      },
+      "getForecastValues": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          }
+        ]
+      },
+      "subTypesInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          }
+        ]
+      },
+      "dpm.opportunities": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "default": "\n",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "(unique discriminator only, Risks are not revisioned)",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "description": "Description of the object.",
+                    "type": "string"
+                  },
+                  "state": {
+                    "description": "Current lifecycle state",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "originator": {
+                    "description": "The user who originally created the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "owner": {
+                    "description": "The current owner of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "estimatedStartDate": {
+                    "description": "Object estimated start date target",
+                    "type": "string"
+                  },
+                  "estimatedFinishDate": {
+                    "description": "Object estimated completion date target",
+                    "type": "string"
+                  },
+                  "actualStartDate": {
+                    "description": "Object actual start date",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "actualFinishDate": {
+                    "description": "Object actual completion date",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "opportunityType": {
+                    "description": "The classification of the Opportunity",
+                    "default": "Cost",
+                    "type": "string",
+                    "enum": [
+                      "Cost",
+                      "Quality",
+                      "Technical",
+                      "Resource",
+                      "Performance",
+                      "Schedule",
+                      "Benefits",
+                      "Manufacturability",
+                      "Other"
+                    ]
+                  },
+                  "opportunityVisibility": {
+                    "description": "Recommended visibility",
+                    "default": "Public",
+                    "type": "string",
+                    "enum": [
+                      "Public",
+                      "Restricted"
+                    ]
+                  },
+                  "opportunityImpact": {
+                    "description": "The estimated benefit of the Opportunity.",
+                    "default": "1",
+                    "type": "string",
+                    "enum": [
+                      "1",
+                      "2",
+                      "3",
+                      "4",
+                      "5"
+                    ],
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "opportunityProbability": {
+                    "description": "The estimated probability that the Opportunity will occur.",
+                    "default": "1",
+                    "type": "string",
+                    "enum": [
+                      "1",
+                      "2",
+                      "3",
+                      "4",
+                      "5"
+                    ],
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "opportunityOpnValue": {
+                    "description": "The relative rating of the Opportunity.",
+                    "default": "0.0",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modifyAccess": {
+                    "description": "Whether the user has modify access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "deleteAccess": {
+                    "description": "Whether the user has delete access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "promoteAccess": {
+                    "description": "Whether the user has promote access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "demoteAccess": {
+                    "description": "Whether the user has demote access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "fromConnectAccess": {
+                    "description": "Whether the user has connect access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "toConnectAccess": {
+                    "description": "Whether the user has connect access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "assignees": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/assignees"
+                    }
+                  },
+                  "ownerInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "allrisks": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "affectedItemType": {
+                    "description": "Item Type causing the Risk",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "affectedItemName": {
+                    "description": "Name of the Item causing the Risk",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "affectedItemId": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "default": "\n",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "(unique discriminator only, Risks are not revisioned)",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "description": "Description of the object.",
+                    "type": "string"
+                  },
+                  "state": {
+                    "description": "Current lifecycle state",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "originator": {
+                    "description": "The user who originally created the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "owner": {
+                    "description": "The current owner of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "estimatedStartDate": {
+                    "description": "Object estimated start date target",
+                    "type": "string"
+                  },
+                  "estimatedFinishDate": {
+                    "description": "Object estimated completion date target",
+                    "type": "string"
+                  },
+                  "actualStartDate": {
+                    "description": "Object actual start date",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "actualFinishDate": {
+                    "description": "Object actual completion date",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "riskType": {
+                    "description": "The classification of the risk",
+                    "default": "Cost",
+                    "type": "string",
+                    "enum": [
+                      "Cost",
+                      "Quality",
+                      "Technical",
+                      "Resource",
+                      "Performance",
+                      "Schedule",
+                      "Benefits",
+                      "Manufacturability",
+                      "Other"
+                    ]
+                  },
+                  "riskVisibility": {
+                    "description": "The assignment of Public or Restricted visibility of the Risk information",
+                    "default": "Public",
+                    "type": "string",
+                    "enum": [
+                      "Public",
+                      "Restricted"
+                    ]
+                  },
+                  "riskImpact": {
+                    "description": "The estimated negative effect the Risk will have.",
+                    "default": "1",
+                    "type": "string",
+                    "enum": [
+                      "1",
+                      "2",
+                      "3",
+                      "4",
+                      "5"
+                    ],
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "riskProbability": {
+                    "description": "The relative probability that the Risk will occur.",
+                    "default": "1",
+                    "type": "string",
+                    "enum": [
+                      "1",
+                      "2",
+                      "3",
+                      "4",
+                      "5"
+                    ],
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "riskFactor": {
+                    "description": "The relative rating of the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "riskResolution": {
+                    "description": "The status or assessment of the Risk resolution.",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (No), Modify (No)"
+                  },
+                  "riskAbatement": {
+                    "description": "The actions being planned or taken to mitigate or resolve the Risk.",
+                    "type": "string"
+                  },
+                  "measureOfSuccess": {
+                    "description": "The criteria to be used used to evaluate the Risk resolution.",
+                    "type": "string"
+                  },
+                  "riskCategory": {
+                    "description": "Business oriented categorization of the Risk",
+                    "default": "",
+                    "type": "string",
+                    "enum": [
+                      "Technical",
+                      "Quality",
+                      "Resource",
+                      "Market",
+                      "Schedule"
+                    ]
+                  },
+                  "modifyAccess": {
+                    "description": "Whether the user has modify access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "deleteAccess": {
+                    "description": "Whether the user has delete access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "promoteAccess": {
+                    "description": "Whether the user has promote access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "demoteAccess": {
+                    "description": "Whether the user has demote access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "fromConnectAccess": {
+                    "description": "Whether the user has connect access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "toConnectAccess": {
+                    "description": "Whether the user has connect access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "assignees": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/assignees"
+                    }
+                  },
+                  "ownerInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  },
+                  "rpn": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/rpn"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "dpm.allopportunities": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "affectedItemType": {
+                    "description": "Item Type causing the opportunity",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "affectedItemName": {
+                    "description": "Name of the Item causing the Opportunity",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "affectedItemId": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "default": "\n",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "(unique discriminator only, Risks are not revisioned)",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "description": "Description of the object.",
+                    "type": "string"
+                  },
+                  "state": {
+                    "description": "Current lifecycle state",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "originator": {
+                    "description": "The user who originally created the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "owner": {
+                    "description": "The current owner of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "estimatedStartDate": {
+                    "description": "Object estimated start date target",
+                    "type": "string"
+                  },
+                  "estimatedFinishDate": {
+                    "description": "Object estimated completion date target",
+                    "type": "string"
+                  },
+                  "actualStartDate": {
+                    "description": "Object actual start date",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "actualFinishDate": {
+                    "description": "Object actual completion date",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "opportunityType": {
+                    "description": "The classification of the Opportunity",
+                    "default": "Cost",
+                    "type": "string",
+                    "enum": [
+                      "Cost",
+                      "Quality",
+                      "Technical",
+                      "Resource",
+                      "Performance",
+                      "Schedule",
+                      "Benefits",
+                      "Manufacturability",
+                      "Other"
+                    ]
+                  },
+                  "opportunityVisibility": {
+                    "description": "Recommended visibility",
+                    "default": "Public",
+                    "type": "string",
+                    "enum": [
+                      "Public",
+                      "Restricted"
+                    ]
+                  },
+                  "opportunityImpact": {
+                    "description": "The estimated benefit of the Opportunity.",
+                    "default": "1",
+                    "type": "string",
+                    "enum": [
+                      "1",
+                      "2",
+                      "3",
+                      "4",
+                      "5"
+                    ],
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "opportunityProbability": {
+                    "description": "The estimated probability that the Opportunity will occur.",
+                    "default": "1",
+                    "type": "string",
+                    "enum": [
+                      "1",
+                      "2",
+                      "3",
+                      "4",
+                      "5"
+                    ],
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "opportunityOpnValue": {
+                    "description": "The relative rating of the Opportunity.",
+                    "default": "0.0",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modifyAccess": {
+                    "description": "Whether the user has modify access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "deleteAccess": {
+                    "description": "Whether the user has delete access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "promoteAccess": {
+                    "description": "Whether the user has promote access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "demoteAccess": {
+                    "description": "Whether the user has demote access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "fromConnectAccess": {
+                    "description": "Whether the user has connect access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "toConnectAccess": {
+                    "description": "Whether the user has connect access to the Risk.",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "assignees": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/assignees"
+                    }
+                  },
+                  "ownerInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "milestones": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "default": "\n",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "description": "Description of the object.",
+                    "type": "string"
+                  },
+                  "state": {
+                    "description": "Current lifecycle state",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "estimatedStartDate": {
+                    "type": "string"
+                  },
+                  "dueDate": {
+                    "type": "string"
+                  },
+                  "actualStartDate": {
+                    "type": "string"
+                  },
+                  "actualFinishDate": {
+                    "type": "string"
+                  },
+                  "parentId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "issues": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "default": "\n",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "(unique discriminator only, Projects and Tasks are not revisioned)",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "description": "Description of the object.",
+                    "type": "string"
+                  },
+                  "state": {
+                    "description": "Current lifecycle state",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "estimatedStartDate": {
+                    "description": "Object start date target",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "estimatedFinishDate": {
+                    "description": "Object completion date target",
+                    "type": "string"
+                  },
+                  "problemType": {
+                    "description": "Classification of problem or issue source.",
+                    "default": "Not Determined",
+                    "type": "string",
+                    "enum": [
+                      "Training",
+                      "Platform",
+                      "Performance",
+                      "Mistake",
+                      "Installation",
+                      "Licensing",
+                      "Functionality",
+                      "Ease of Use",
+                      "Defect",
+                      "3rd Party",
+                      "Not Determined",
+                      "Usage Model"
+                    ]
+                  },
+                  "priority": {
+                    "description": "Relative severity of the issue.",
+                    "default": "Low",
+                    "type": "string",
+                    "enum": [
+                      "Pre-assigned",
+                      "Low",
+                      "Medium",
+                      "High",
+                      "Urgent"
+                    ]
+                  },
+                  "priorityInternal": {
+                    "description": "Internal priority ranking.",
+                    "default": "Unassigned",
+                    "type": "string",
+                    "enum": [
+                      "P3",
+                      "P2",
+                      "P1",
+                      "P0",
+                      "Unassigned"
+                    ]
+                  },
+                  "actionTaken": {
+                    "description": "Description of the action taken.",
+                    "type": "string"
+                  },
+                  "resolution": {
+                    "description": "Description of the resolution status.",
+                    "type": "string"
+                  },
+                  "steps": {
+                    "description": "Description of the steps needed to reproduce.",
+                    "type": "string"
+                  },
+                  "policy": {
+                    "description": "The policy of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modifyAccess": {
+                    "description": "Whether the user has modify access to the Project.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "deleteAccess": {
+                    "description": "Whether the user has delete access to the Project.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "project": {
+                    "description": "Collaborative Space (project) the Project was created in.",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "assignees": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/assignees"
+                    }
+                  },
+                  "ownerInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  },
+                  "originatorInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/originatorInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "programId": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          }
+        ]
+      },
+      "folders": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "accessType": {
+                    "description": "can only be specified during create",
+                    "default": "Inherited",
+                    "type": "string",
+                    "enum": [
+                      "Inherited",
+                      "Specific"
+                    ]
+                  },
+                  "folderClassification": {
+                    "description": "can only be specified during create",
+                    "default": "Shared",
+                    "type": "string",
+                    "enum": [
+                      "Shared",
+                      "Personal",
+                      "Bookmark"
+                    ]
+                  },
+                  "title": {
+                    "description": "can only be specified during create",
+                    "default": "\n",
+                    "type": "string"
+                  },
+                  "originated": {
+                    "type": "string"
+                  },
+                  "modifyAccess": {
+                    "type": "string"
+                  },
+                  "addAccess": {
+                    "type": "string"
+                  },
+                  "removeAccess": {
+                    "type": "string"
+                  },
+                  "deleteAccess": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string",
+                    "enum": [
+                      "Create",
+                      "Active",
+                      "Review",
+                      "Complete",
+                      "Archive"
+                    ]
+                  },
+                  "project": {
+                    "type": "string"
+                  },
+                  "organization": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/content"
+                    }
+                  },
+                  "sovaccess": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/sovaccess"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "content": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "revision": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "default": "\n",
+                    "type": "string"
+                  },
+                  "synopsis": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "description": "the person's first name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "description": "the person's last name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "fullname": {
+                    "description": "the person's full name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "objectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "policy": {
+                    "description": "required to support state NLS",
+                    "type": "string"
+                  },
+                  "stateNLS": {
+                    "type": "string"
+                  },
+                  "typeNLS": {
+                    "type": "string"
+                  },
+                  "collabSpace": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "collabSpaceTitle": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "organization": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "organizationTitle": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "ownerFullname": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "hasfiles": {
+                    "description": "determines whether the object has a file checked in any format",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "sovaccess": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "orgnization": {
+                    "type": "string"
+                  },
+                  "project": {
+                    "type": "string"
+                  },
+                  "person": {
+                    "type": "string"
+                  },
+                  "access": {
+                    "type": "string"
+                  },
+                  "comment": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "folderId": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "accessType": {
+                    "description": "can only be specified during create",
+                    "default": "Inherited",
+                    "type": "string",
+                    "enum": [
+                      "Inherited",
+                      "Specific"
+                    ]
+                  },
+                  "folderClassification": {
+                    "description": "can only be specified during create",
+                    "default": "Shared",
+                    "type": "string",
+                    "enum": [
+                      "Shared",
+                      "Personal",
+                      "Bookmark"
+                    ]
+                  },
+                  "title": {
+                    "description": "can only be specified during create",
+                    "default": "\n",
+                    "type": "string"
+                  },
+                  "originated": {
+                    "type": "string"
+                  },
+                  "modifyAccess": {
+                    "type": "string"
+                  },
+                  "addAccess": {
+                    "type": "string"
+                  },
+                  "removeAccess": {
+                    "type": "string"
+                  },
+                  "deleteAccess": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string",
+                    "enum": [
+                      "Create",
+                      "Active",
+                      "Review",
+                      "Complete",
+                      "Archive"
+                    ]
+                  },
+                  "project": {
+                    "type": "string"
+                  },
+                  "organization": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/content"
+                    }
+                  },
+                  "sovaccess": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/sovaccess"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "performRollup": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          }
+        ]
+      },
+      "search": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "state": {
+                    "description": "Current lifecycle state",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-folders": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/folders"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RESULTS-projects": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/projects"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RESULTS-issues": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/issues"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RESULTS-assessments": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/assessments"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RESULTS-risks": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/risks"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RESULTS-EMPTY": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              }
+            }
+          }
+        ]
+      },
+      "RESULTS-fromTemplate": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/fromTemplate"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-hold": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/hold"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-cancel": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/cancel"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-resume": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/resume"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "BASICS": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "description": "The object type.",
+            "type": "string"
+          },
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public URI.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public URI.",
+            "example": "https://3dspace.mydomain:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object.",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string"
+          }
+        }
+      },
+      "BASICS-TYPE": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "The object type.",
+            "type": "string"
+          }
+        }
+      },
+      "csrf": {
+        "description": "CSRF object is required to be sent back for update operations and typically provided with read operations.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The CSRF token name.",
+            "example": "ENO_CSRF_TOKEN",
+            "type": "string"
+          },
+          "value": {
+            "description": "The CSRF token value.",
+            "example": "EXAM-PLEW-R1CD-BNF7-G8UC-KT52-MGUA-UBE1",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request.",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-folders": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-folders"
+            }
+          }
+        }
+      },
+      "200-projects": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-projects"
+            }
+          }
+        }
+      },
+      "200-issues": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-issues"
+            }
+          }
+        }
+      },
+      "200-assessments": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-assessments"
+            }
+          }
+        }
+      },
+      "200-fromTemplate": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-fromTemplate"
+            }
+          }
+        }
+      },
+      "200-hold": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-hold"
+            }
+          }
+        }
+      },
+      "200-cancel": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-cancel"
+            }
+          }
+        }
+      },
+      "200-resume": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-resume"
+            }
+          }
+        }
+      },
+      "200-risks": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-risks"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "folders": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/folders"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "assessments": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/assessments"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "fromTemplate": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/fromTemplate"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "hold": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "resume": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "projects": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/projects"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "description": "Identifies the locale for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "description": "The ENOVIA CSRF token which is typically required for update oerations.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "include": {
+        "name": "$include",
+        "description": "Identify sub-resources that should be returned by the web request.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "fields": {
+        "name": "$fields",
+        "description": "Identify resource and sub-resource fields that should be returned by the web request.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

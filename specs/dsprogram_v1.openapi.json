@@ -1,0 +1,1043 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Program Web Services",
+    "description": "Rest Services for managing the Program modeler.",
+    "summary": "APIs to manage Programs (search, create, retrieve, update, delete)",
+    "version": "1.0.0",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3dspace"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dspm:program/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/programs": {
+      "get": {
+        "description": "",
+        "summary": "Get all users Programs.",
+        "operationId": "getUserPrograms",
+        "tags": [
+          "Program"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-programs"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "post": {
+        "description": "",
+        "summary": "Create Programs",
+        "operationId": "createPrograms",
+        "tags": [
+          "Program"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-programs"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/programs"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/programs/{programId}": {
+      "get": {
+        "description": "",
+        "summary": "Get a specific Program detail and related data.",
+        "operationId": "getProgramByID",
+        "tags": [
+          "Program"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-programs"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "programId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "description": "",
+        "summary": "Update a Program and its related data.",
+        "operationId": "modifyProgram",
+        "tags": [
+          "Program"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-programs"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/programs"
+        },
+        "parameters": [
+          {
+            "name": "programId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "delete": {
+        "description": "",
+        "summary": "Delete the given Program if it does not contain Projects.",
+        "operationId": "deleteProgram",
+        "tags": [
+          "Program"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "programId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/programs/search": {
+      "get": {
+        "description": "",
+        "summary": "Search Programs using the provided input string.",
+        "operationId": "searchPrograms",
+        "tags": [
+          "Program"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-programs"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "searchStr",
+            "description": "Search Criteria; 2 or more characters required.",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "description": "The number of objects to return; default 50; max 1000",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "description": "The number of objects to skip in case of paginating through the serach results; default 0",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/programs/{programId}/projects": {
+      "get": {
+        "description": "",
+        "summary": "Get a list of Projects associated to specific Program.",
+        "operationId": "getProgramProjects",
+        "tags": [
+          "Program"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-projects"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "programId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "description": "",
+        "summary": "Add list of Projects associated to specific Program.",
+        "operationId": "modifyProgramProjects",
+        "tags": [
+          "Program"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-projects"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/projects"
+        },
+        "parameters": [
+          {
+            "name": "programId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "programs": {
+        "$ref": "#/components/x-schemas/programs"
+      },
+      "projects": {
+        "$ref": "#/components/x-schemas/projects"
+      }
+    },
+    "x-schemas": {
+      "programs": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "(unique discriminator only, Projects and Tasks are not revisioned)",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "description": "Description of the object.",
+                    "type": "string"
+                  },
+                  "state": {
+                    "description": "Current lifecycle state",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "owner": {
+                    "description": "The current owner of the object.",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "policy": {
+                    "description": "The policy of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modifyAccess": {
+                    "description": "Whether the user has modify access to the Project.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "deleteAccess": {
+                    "description": "Whether the user has delete access to the Project.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "project": {
+                    "description": "Collaborative Space (project) the Project was created in.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "estimatedStartDate": {
+                    "description": "Project start date target",
+                    "type": "string"
+                  },
+                  "estimatedFinishDate": {
+                    "description": "Project completion date target",
+                    "type": "string"
+                  },
+                  "dueDate": {
+                    "description": "Project completion date target (depecatd)",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "actualStartDate": {
+                    "description": "Project actual start date",
+                    "type": "string"
+                  },
+                  "actualFinishDate": {
+                    "description": "Project actual completion date",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "projects": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/projects"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "projects": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "readOnly": true,
+                "properties": {
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "(unique discriminator only, Projects and Tasks are not revisioned)",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "description": "Description of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "state": {
+                    "description": "Current lifecycle state",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)",
+                    "readOnly": true
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "search": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "state": {
+                    "description": "Current lifecycle state",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-programs": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/programs"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RESULTS-projects": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/projects"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RESULTS-EMPTY": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              }
+            }
+          }
+        ]
+      },
+      "BASICS": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The object physical id or sometimes the object id.  Either id can typically be used transparently.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "relId": {
+            "description": "The relationship physical/object id  when applicable.  For data retrieved through expansion, this field should be present.",
+            "example": "11111111111111111111111111111111",
+            "type": "string"
+          },
+          "tempId": {
+            "description": "When temp id is included in the payload during a create/post operation, it is sent back for reference.  It can be specified either as tempId or id during create.",
+            "example": "client assigned temp id",
+            "type": "string"
+          },
+          "type": {
+            "description": "The data object type; typically reflects the object's business type.",
+            "type": "string"
+          },
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object.",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string"
+          },
+          "updateAction": {
+            "description": "This is relevant during an update operation to override the default HTTP method.",
+            "type": "string",
+            "writeOnly": true
+          }
+        }
+      },
+      "csrf": {
+        "description": "CSRF object is required to be sent back for update operations and typically provided with read operations.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The CSRF token name.",
+            "example": "ENO_CSRF_TOKEN",
+            "type": "string"
+          },
+          "value": {
+            "description": "The CSRF token value.",
+            "example": "EXAM-PLEW-R1CD-BNF7-G8UC-KT52-MGUA-UBE1",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request.",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-programs": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-programs"
+            }
+          }
+        }
+      },
+      "200-projects": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-projects"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "programs": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/programs"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "projects": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/projects"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context preference for this request.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "description": "Identifies the locale of the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "description": "The ENOVIA CSRF token which is typically required for update oerations.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "include": {
+        "name": "$include",
+        "description": "Determine which related data objects should be returned.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "fields": {
+        "name": "$fields",
+        "description": "Determines which data element properties should be returned.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

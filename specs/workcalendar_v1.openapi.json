@@ -1,0 +1,1271 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Work Calendars Web Services",
+    "description": "Web Services for managing Work Calendar modeler.",
+    "version": "1.0.0",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3dspace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dspm:calendar/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/workcalendars/{workcalendarId}": {
+      "get": {
+        "summary": "Get the information for a given Work Calendar object.",
+        "description": "",
+        "operationId": "getWorkCalendar",
+        "tags": [
+          "Work Calendar"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-workcalendars"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "workcalendarId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]workweek, [!]exceptions, [!]locations</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete a given Work Calendar and its related data.",
+        "description": "",
+        "operationId": "deleteWorkCalendar",
+        "tags": [
+          "Work Calendar"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "workcalendarId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/workcalendars/ids": {
+      "post": {
+        "summary": "Get the information for multiple Work Calendar object.",
+        "description": "",
+        "operationId": "getWorkCalendars",
+        "tags": [
+          "Work Calendar"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-workcalendars"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/workcalendars"
+        },
+        "parameters": [
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]workweek, [!]exceptions, [!]locations</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/workcalendars/{workcalendarId}/workweek": {
+      "get": {
+        "summary": "Get the work week settings for a given Work Calendar object.",
+        "description": "",
+        "operationId": "getWorkCalendarWorkWeek",
+        "tags": [
+          "Work Calendar"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-workweek"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "workcalendarId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/workcalendars/{workcalendarId}/exceptions": {
+      "get": {
+        "summary": "Get the exception entiries for a given Work Calendar object.",
+        "description": "",
+        "operationId": "getWorkCalendarExceptions",
+        "tags": [
+          "Work Calendar"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-exceptions"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "workcalendarId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/workcalendars": {
+      "get": {
+        "summary": "Get the Work Calendars associated to the user company.",
+        "description": "",
+        "operationId": "getCompanyWorkCalendars",
+        "tags": [
+          "Work Calendar"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-workcalendars"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]workweek, [!]exceptions, [!]locations</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create new Work Calendar(s) and associated data.",
+        "description": "",
+        "operationId": "createWorkCalendars",
+        "tags": [
+          "Work Calendar"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-workcalendars"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/workcalendars"
+        },
+        "parameters": [
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]workweek, [!]exceptions, [!]locations</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update existing Work Calendar(s) and Work Calendars related data.",
+        "description": "",
+        "operationId": "modifyWorkCalendars",
+        "tags": [
+          "Work Calendar"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-workcalendars"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/workcalendars"
+        },
+        "parameters": [
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]workweek, [!]exceptions, [!]locations</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/workcalendars/{workcalendarId}/locations": {
+      "get": {
+        "summary": "Get the locations associated to a given Work Calendar object.",
+        "description": "",
+        "operationId": "getWorkCalendarLocations",
+        "tags": [
+          "Work Calendar"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-locations"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "workcalendarId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "workcalendars": {
+        "$ref": "#/components/x-schemas/workcalendars"
+      },
+      "workweek": {
+        "$ref": "#/components/x-schemas/workweek"
+      },
+      "exceptions": {
+        "$ref": "#/components/x-schemas/exceptions"
+      },
+      "locations": {
+        "$ref": "#/components/x-schemas/locations"
+      }
+    },
+    "x-schemas": {
+      "occurrences": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {}
+        ]
+      },
+      "workweek": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dayOfWeek": {
+                "description": "The day of the week for setting work day type.",
+                "type": "string",
+                "enum": [
+                  "Sunday",
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday",
+                  "Saturday"
+                ],
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "workdayType": {
+                "type": "string",
+                "enum": [
+                  "Working",
+                  "Non Working"
+                ]
+              },
+              "workingHours": {
+                "description": "Applicable if the work day type is working",
+                "default": "",
+                "type": "string"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "locations": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "workcalendars": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "originated": {
+                "format": "date-time",
+                "type": "string",
+                "readOnly": true
+              },
+              "modified": {
+                "format": "date-time",
+                "type": "string",
+                "readOnly": true
+              },
+              "modifyAccess": {
+                "type": "string",
+                "readOnly": true
+              },
+              "deleteAccess": {
+                "type": "string",
+                "readOnly": true
+              },
+              "ownerFullName": {
+                "type": "string",
+                "readOnly": true
+              },
+              "company": {
+                "type": "string",
+                "readOnly": true
+              },
+              "workHoursPerDay": {
+                "default": "480",
+                "type": "string"
+              },
+              "defaultWorkingHours": {
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+              },
+              "workingDaysPerWeek": {
+                "description": "It provides working days per week, default being 5.",
+                "default": "5",
+                "type": "string",
+                "readOnly": true
+              },
+              "workingDaysPerMonth": {
+                "description": "It provides working days per Month.",
+                "default": "20",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "workweek": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/workweek"
+                }
+              },
+              "exceptions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/exceptions"
+                }
+              },
+              "locations": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/locations"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "exceptions": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "default": "",
+                "type": "string"
+              },
+              "notes": {
+                "default": "",
+                "type": "string"
+              },
+              "modified": {
+                "format": "date-time",
+                "type": "string",
+                "readOnly": true
+              },
+              "exceptionType": {
+                "type": "string",
+                "enum": [
+                  "Working",
+                  "Non Working"
+                ],
+                "x-ApplicableOperations": "Create (Required), Read (Yes), Modify (No)"
+              },
+              "startDate": {
+                "example": "2025-04-28T18:00:00.000",
+                "default": "",
+                "type": "string"
+              },
+              "endDate": {
+                "example": "2025-04-28T18:00:00.000",
+                "default": "",
+                "type": "string"
+              },
+              "workingHours": {
+                "description": "Applicable if the exception type is working",
+                "default": "",
+                "type": "string"
+              },
+              "frequency": {
+                "type": "string",
+                "enum": [
+                  "Daily",
+                  "Weekly",
+                  "Monthly",
+                  "Yearly"
+                ]
+              },
+              "daysOfWeek": {
+                "description": "Relevant for Weekly frequency, comma separated if multiple days required.",
+                "type": "string",
+                "enum": [
+                  "Sun",
+                  "Mon",
+                  "Tue",
+                  "Wed",
+                  "Thu",
+                  "Fri",
+                  "Sat"
+                ]
+              },
+              "weekOfMonth": {
+                "description": "Relevant for Monthly or Yearly frequency.",
+                "type": "string",
+                "enum": [
+                  "First",
+                  "Second",
+                  "Third",
+                  "Fourth",
+                  "Last"
+                ]
+              },
+              "dayOfWeek": {
+                "description": "May be relevant for Monthly or Yearly frequency when week of month specified.",
+                "type": "string",
+                "enum": [
+                  "Sunday",
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday",
+                  "Saturday"
+                ]
+              },
+              "dayOfMonth": {
+                "description": "Relevant for Monthly or Yearly frequency.",
+                "default": "0",
+                "type": "string"
+              },
+              "monthOfYear": {
+                "description": "Relevant for Yearly frequency.",
+                "type": "string",
+                "enum": [
+                  "January",
+                  "February",
+                  "March",
+                  "April",
+                  "May",
+                  "June",
+                  "July",
+                  "August",
+                  "September",
+                  "October",
+                  "November",
+                  "December"
+                ]
+              }
+            },
+            "required": [
+              "title",
+              "exceptionType",
+              "startDate"
+            ]
+          },
+          {}
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-workcalendars": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/workcalendars"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-EMPTY": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-workweek": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/workweek"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-exceptions": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/exceptions"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-locations": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/locations"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "BASICS_ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "BASICS": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "description": "The object type.",
+            "type": "string"
+          }
+        }
+      },
+      "CESTAMP": {
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object.",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "CESTAMP_REQUIRED": {
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object; required for modify operations",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string"
+          }
+        }
+      },
+      "PATCH_SUB_RESOURCE_ACTION": {
+        "type": "object",
+        "properties": {
+          "updateAction": {
+            "description": "Specify the sub-resource update action. See 6W Web Service Principles: Data Object Updates",
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "CONNECT",
+              "DISCONNECT"
+            ]
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://3dspace.mydomain:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "csrf": {
+        "description": "CSRF object is required to be sent back for update operations and may be provided with read operations.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The CSRF token name.",
+            "example": "ENO_CSRF_TOKEN",
+            "type": "string"
+          },
+          "value": {
+            "description": "The CSRF token value.",
+            "example": "EXAM-PLEW-R1CD-BNF7-G8UC-KT52-MGUA-UBE1",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request.",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-workcalendars": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-workcalendars"
+            }
+          }
+        }
+      },
+      "200-workweek": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-workweek"
+            }
+          }
+        }
+      },
+      "200-exceptions": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-exceptions"
+            }
+          }
+        }
+      },
+      "200-locations": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-locations"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "workcalendars": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/workcalendars"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "description": "Identifies the locale for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "description": "The ENOVIA CSRF token which is typically required for update operations.  Retrieve using {server}/resources/v1/application/CSRF",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "fields": {
+        "name": "$fields",
+        "description": "Specify resource and sub-resource fields that should be returned by the web request  Fields include keywords none & all plus payload fields - see schema response payload.  For more information, see 6W REST Services Principles - Refinement Section",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

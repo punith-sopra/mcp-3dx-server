@@ -1,0 +1,793 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "x-ds-copyright": "3DEXPERIENCE R2021x (c) 2020 Dassault Systemes.",
+    "title": "Request Templates Web Services",
+    "description": "Web Services for managing the Request Templates.",
+    "version": "1.0.1",
+    "x-ds-service": [
+      "3DSpace"
+    ]
+  },
+  "servers": [
+    {
+      "url": "{Sourcing}/resources/v1/modeler/dssrc",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_Sourcing"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dssrc-requesttemplates/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/requesttemplates/{id}": {
+      "get": {
+        "summary": "Get Info of Request Template.",
+        "description": "",
+        "operationId": "getRequestTemplates",
+        "tags": [
+          "Component Request Templates"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.requesttemplates"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]component-classification, [!]request-assignee</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/requesttemplates/search": {
+      "get": {
+        "summary": "Search Component Request for the provided input string.",
+        "description": "",
+        "operationId": "searchRequestTemplates",
+        "tags": [
+          "Component Request Templates"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.requesttemplates"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "searchStr",
+            "description": "Search Criteria; 2 or more characters required.",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "description": "The number of objects to return; default 50; max 1000",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "description": "The number of objects to skip in case of paginating through the serach results; default 0",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]component-classification, [!]request-assignee</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "dssrc.requesttemplates": {
+        "$ref": "#/components/x-schemas/dssrc.requesttemplates"
+      }
+    },
+    "x-schemas": {
+      "ownerInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "name": {
+                "type": "string"
+              },
+              "firstname": {
+                "default": "Unknown",
+                "type": "string"
+              },
+              "lastname": {
+                "default": "Unknown",
+                "type": "string"
+              },
+              "email": {
+                "default": "Unknown",
+                "x-IncludedByDefault": "no",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "description": "Object Owner Information",
+            "readOnly": true
+          }
+        ]
+      },
+      "request-assignee": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "username": {
+                "type": "string"
+              },
+              "firstname": {
+                "default": "Unknown",
+                "x-IncludedByDefault": "no",
+                "type": "string"
+              },
+              "lastname": {
+                "default": "Unknown",
+                "x-IncludedByDefault": "no",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "description": "The request assignee information. It is the user who will work on the component request once component request is submitted",
+            "readOnly": true
+          }
+        ]
+      },
+      "dssrc.requesttemplates": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "readOnly": true,
+                "example": "3DEF825663153B0066EBB738000000E0"
+              },
+              "type": {
+                "type": "string",
+                "readOnly": true,
+                "example": "Component Request Template"
+              },
+              "identifier": {
+                "type": "string",
+                "readOnly": true,
+                "example": "3DEF825663153B0066EBB738000000E0"
+              },
+              "source": {
+                "type": "string",
+                "readOnly": true,
+                "example": "https://server_name.dsone.3ds.com:443/3DSpace"
+              },
+              "relativePath": {
+                "type": "string",
+                "readOnly": true,
+                "example": "/resources/v1/modeler/dssrc/requesttemplates/3DEF825663153B0066EBB738000000E0"
+              },
+              "title": {
+                "description": "The title information of the request template.",
+                "default": "",
+                "type": "string",
+                "readOnly": true,
+                "example": "RT-01"
+              },
+              "state": {
+                "type": "string",
+                "readOnly": true,
+                "example": "Released"
+              },
+              "name": {
+                "type": "string",
+                "readOnly": true,
+                "example": "RT-100000"
+              },
+              "owner": {
+                "description": "The owner of the component request",
+                "type": "string",
+                "readOnly": true,
+                "example": "John"
+              },
+              "revision": {
+                "type": "string",
+                "readOnly": true,
+                "example": 1
+              },
+              "description": {
+                "description": "The description of the request template.",
+                "type": "string",
+                "example": "Request Template for Drone Component"
+              },
+              "originated": {
+                "format": "date-time",
+                "type": "string",
+                "readOnly": true
+              },
+              "RequestCategory": {
+                "default": "",
+                "type": "string",
+                "readOnly": true,
+                "example": "SRC Component Introduction Request V1",
+                "enum": [
+                  "SRC Component Introduction Request V1",
+                  "SRC Source Change Notification V1",
+                  "SRC Component Modification Request"
+                ]
+              },
+              "IsInputTypeRequired": {
+                "description": "The IsInputTypeRequired attribute information.",
+                "default": "FALSE",
+                "type": "string",
+                "readOnly": true,
+                "enum": [
+                  "FALSE",
+                  "TRUE"
+                ]
+              },
+              "ValidAnswerItemsTypes": {
+                "description": "The Valid Answer Items for the component request.",
+                "default": [
+                  "Qualification",
+                  "Document",
+                  "Engineering Item",
+                  "Manufacturer Equivalent Item",
+                  "Component Request",
+                  "Collaboration Package",
+                  "Package Publication",
+                  "Bookmark",
+                  "Issues"
+                ],
+                "type": "array",
+                "readOnly": true,
+                "items": {
+                  "type": "string",
+                  "readOnly": true,
+                  "enum": [
+                    "Qualification",
+                    "Document",
+                    "Engineering Item",
+                    "Manufacturer Equivalent Item",
+                    "Component Request",
+                    "Collaboration Package",
+                    "Package Publication",
+                    "Bookmark",
+                    "Issues"
+                  ]
+                }
+              },
+              "ValidInProcessItemsTypes": {
+                "description": "The Valid In Process Items for the component request.",
+                "default": [
+                  "Qualification",
+                  "Document",
+                  "Engineering Item",
+                  "Manufacturer Equivalent Item",
+                  "Component Request",
+                  "Collaboration Package",
+                  "Package Publication",
+                  "Bookmark",
+                  "Issues"
+                ],
+                "type": "array",
+                "readOnly": true,
+                "items": {
+                  "type": "string",
+                  "readOnly": true,
+                  "enum": [
+                    "Qualification",
+                    "Document",
+                    "Engineering Item",
+                    "Manufacturer Equivalent Item",
+                    "Component Request"
+                  ]
+                }
+              },
+              "modified": {
+                "format": "date-time",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "component-classification": {
+                "description": "The component classification information in request template.These are the active General Class objects",
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "readOnly": true,
+                "items": {
+                  "$ref": "#/components/x-schemas/component-classification"
+                }
+              },
+              "request-assignee": {
+                "type": "object",
+                "readOnly": true,
+                "x-IncludedByDefault": "no",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "readOnly": true,
+                    "example": "3DEF82568EAA180067099B420000025C"
+                  },
+                  "username": {
+                    "type": "string",
+                    "readOnly": true,
+                    "example": "John"
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "component-classification": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "readOnly": true,
+                "example": "3DEF825663153B0066EBB738000011E1"
+              },
+              "type": {
+                "type": "string",
+                "readOnly": true,
+                "example": "General Class"
+              },
+              "identifier": {
+                "type": "string",
+                "readOnly": true,
+                "example": "3DEF825663153B0066EBB738000011E1"
+              }
+            }
+          },
+          {
+            "description": "The component classification information in request template.These are the active General Class objects",
+            "readOnly": true
+          }
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-dssrc.requesttemplates": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/dssrc.requesttemplates"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "BASICS_ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "BASICS": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "description": "The object type.",
+            "type": "string"
+          }
+        }
+      },
+      "CESTAMP": {
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object.",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "CESTAMP_REQUIRED": {
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object; required for modify operations",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string"
+          }
+        }
+      },
+      "PATCH_SUB_RESOURCE_ACTION": {
+        "type": "object",
+        "properties": {
+          "updateAction": {
+            "description": "Specify the sub-resource update action. See 6W Web Service Principles: Data Object Updates",
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "CONNECT",
+              "DISCONNECT"
+            ]
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://3dspace.mydomain:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "csrf": {
+        "description": "CSRF object is required to be sent back for update operations and may be provided with read operations.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The CSRF token name.",
+            "example": "ENO_CSRF_TOKEN",
+            "type": "string"
+          },
+          "value": {
+            "description": "The CSRF token value.",
+            "example": "EXAM-PLEW-R1CD-BNF7-G8UC-KT52-MGUA-UBE1",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request.",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-dssrc.requesttemplates": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-dssrc.requesttemplates"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {},
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "description": "Identifies the locale for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "description": "The ENOVIA CSRF token which is typically required for update operations.  Retrieve using {server}/resources/v1/application/CSRF",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "fields": {
+        "name": "$fields",
+        "description": "Specify resource and sub-resource fields that should be returned by the web request  Fields include keywords none & all plus payload fields - see schema response payload.  For more information, see 6W REST Services Principles - Refinement Section",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

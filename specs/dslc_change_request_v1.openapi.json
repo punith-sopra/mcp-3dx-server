@@ -1,0 +1,2107 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Change Request Web Services",
+    "description": "Change Request Web Services",
+    "summary": "APIs to manage change request and impact analysis (create, retrieve, patch, approve and reject)",
+    "version": "1.8.0",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dscm",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3dspace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dscm:CR/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/changerequest": {
+      "post": {
+        "summary": "Creates a new Change Request.",
+        "description": "Creates a new Change Request or subtype of Change Request with elements passed in input. Elements passed in input can only be part of the core part",
+        "operationId": "POST_dscm_cr",
+        "tags": [
+          "Change Request"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/securityContextParameters"
+          },
+          {
+            "$ref": "#/components/parameters/CSRFParameters"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/createChangeRequestRequestBody"
+        },
+        "responses": {
+          "200": {
+            "description": "Change Request successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeRequestOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400KO"
+          },
+          "401": {
+            "$ref": "#/components/responses/401KO"
+          },
+          "403": {
+            "$ref": "#/components/responses/403KO"
+          },
+          "500": {
+            "$ref": "#/components/responses/500KO"
+          }
+        }
+      }
+    },
+    "/changerequest/{id}": {
+      "get": {
+        "summary": "Retrieve a Change Request.",
+        "description": "Retrieves a Change Request with the required facets. Core part is always retrieved",
+        "operationId": "GET_dscm_cr:cr_ID",
+        "tags": [
+          "Change Request"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/securityContextParameters"
+          },
+          {
+            "$ref": "#/components/parameters/crIdParameters"
+          },
+          {
+            "$ref": "#/components/parameters/crFieldsParameters"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Change Request successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeRequestOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400KO"
+          },
+          "401": {
+            "$ref": "#/components/responses/401KO"
+          },
+          "403": {
+            "$ref": "#/components/responses/403KO"
+          },
+          "404": {
+            "$ref": "#/components/responses/404KO"
+          },
+          "500": {
+            "$ref": "#/components/responses/500KO"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Modify an existing Change Request.",
+        "description": "Modify an existing Change Request. Only the elements passed in input are modified. Output will be composed of the core part as well as the modified fields.",
+        "operationId": "PATCH_dscm_cr:cr_ID",
+        "tags": [
+          "Change Request"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/securityContextParameters"
+          },
+          {
+            "$ref": "#/components/parameters/CSRFParameters"
+          },
+          {
+            "$ref": "#/components/parameters/crIdParameters"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/modifyChangeRequestRequestBody"
+        },
+        "responses": {
+          "200": {
+            "description": "Change Request successfully patched.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeRequestOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400KO"
+          },
+          "401": {
+            "$ref": "#/components/responses/401KO"
+          },
+          "403": {
+            "$ref": "#/components/responses/403KO"
+          },
+          "404": {
+            "$ref": "#/components/responses/404KO"
+          },
+          "500": {
+            "$ref": "#/components/responses/500KO"
+          }
+        }
+      }
+    },
+    "/changerequest/{id}/approve": {
+      "post": {
+        "summary": "Approve a Change Request",
+        "description": "Retrieves and approves the Change Request.",
+        "operationId": "POSTApprove_dscm_cr:cr_ID",
+        "tags": [
+          "Change Request"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/securityContextParameters"
+          },
+          {
+            "$ref": "#/components/parameters/CSRFParameters"
+          },
+          {
+            "$ref": "#/components/parameters/crIdParameters"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/approveRejectChangeRequestBody"
+        },
+        "responses": {
+          "200": {
+            "description": "Change Request successfully approved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeRequestOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400KO"
+          },
+          "401": {
+            "$ref": "#/components/responses/401KO"
+          },
+          "403": {
+            "$ref": "#/components/responses/403KO"
+          },
+          "404": {
+            "$ref": "#/components/responses/404KO"
+          },
+          "500": {
+            "$ref": "#/components/responses/500KO"
+          }
+        }
+      }
+    },
+    "/changerequest/{id}/reject": {
+      "post": {
+        "summary": "Reject a Change Request",
+        "description": "Retrieves and rejects the Change Request.",
+        "operationId": "POSTReject_dscm_cr:cr_ID",
+        "tags": [
+          "Change Request"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/securityContextParameters"
+          },
+          {
+            "$ref": "#/components/parameters/CSRFParameters"
+          },
+          {
+            "$ref": "#/components/parameters/crIdParameters"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/approveRejectChangeRequestBody"
+        },
+        "responses": {
+          "200": {
+            "description": "Change Request successfully rejected.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeRequestOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400KO"
+          },
+          "401": {
+            "$ref": "#/components/responses/401KO"
+          },
+          "403": {
+            "$ref": "#/components/responses/403KO"
+          },
+          "404": {
+            "$ref": "#/components/responses/404KO"
+          },
+          "500": {
+            "$ref": "#/components/responses/500KO"
+          }
+        }
+      }
+    },
+    "/changerequest/{id}/impactanalysis": {
+      "post": {
+        "summary": "Creates a new Impact Analysis.",
+        "description": "Creates a new Impact Analysis or subtype of Impact Analysis with elements passed in input. Elements passed in input can only be part of the core part",
+        "operationId": "POST_dscm_cr_ia",
+        "tags": [
+          "Impact Analysis"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/securityContextParameters"
+          },
+          {
+            "$ref": "#/components/parameters/crIdParameters"
+          },
+          {
+            "$ref": "#/components/parameters/CSRFParameters"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/createImpactAnalysisRequestBody"
+        },
+        "responses": {
+          "200": {
+            "description": "Impact Analysis successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImpactAnalysisOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400KO"
+          },
+          "401": {
+            "$ref": "#/components/responses/401KO"
+          },
+          "403": {
+            "$ref": "#/components/responses/403KO"
+          },
+          "404": {
+            "$ref": "#/components/responses/404KO"
+          },
+          "500": {
+            "$ref": "#/components/responses/500KO"
+          }
+        }
+      }
+    },
+    "/changerequest/{id}/impactanalysis/{pid}": {
+      "get": {
+        "summary": "Retrieve an Impact Analysis.",
+        "description": "Retrieves an Impact Analysis with the required facets. Core part is always retrieved",
+        "operationId": "GET_dscm_cr_ia:ia_ID",
+        "tags": [
+          "Impact Analysis"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/securityContextParameters"
+          },
+          {
+            "$ref": "#/components/parameters/crIdParameters"
+          },
+          {
+            "$ref": "#/components/parameters/iaIdParameters"
+          },
+          {
+            "$ref": "#/components/parameters/iaFieldsParameters"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Impact Analysis successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImpactAnalysisOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400KO"
+          },
+          "401": {
+            "$ref": "#/components/responses/401KO"
+          },
+          "403": {
+            "$ref": "#/components/responses/403KO"
+          },
+          "404": {
+            "$ref": "#/components/responses/404KO"
+          },
+          "500": {
+            "$ref": "#/components/responses/500KO"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Modify an existing Impact Analysis.",
+        "description": "Modify an existing Impact Analysis. Only the elements passed in input are modified. Output will be composed of the core part as well as the modified fields.",
+        "operationId": "PATCH_dscm_cr_ia:ia_ID",
+        "tags": [
+          "Impact Analysis"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/securityContextParameters"
+          },
+          {
+            "$ref": "#/components/parameters/crIdParameters"
+          },
+          {
+            "$ref": "#/components/parameters/iaIdParameters"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/modifyImpactAnalysisRequestBody"
+        },
+        "responses": {
+          "200": {
+            "description": "Impact Analysis successfully patched.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImpactAnalysisOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400KO"
+          },
+          "401": {
+            "$ref": "#/components/responses/401KO"
+          },
+          "403": {
+            "$ref": "#/components/responses/403KO"
+          },
+          "404": {
+            "$ref": "#/components/responses/404KO"
+          },
+          "500": {
+            "$ref": "#/components/responses/500KO"
+          }
+        }
+      }
+    },
+    "/changerequest/search": {
+      "get": {
+        "summary": "Gets a list of Change Requests from indexed search",
+        "description": "Gets a list of Change Requests. By default, returns a total of up to 50 items, can be optionally increased upto 1000 items using $top query parameter.Recommendation, Use $searchStr query parameter with a minimum of two characters for better performances.",
+        "operationId": "GETSearch_dscm_cr:CR_Search",
+        "tags": [
+          "Change Request"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$searchStr",
+            "in": "query",
+            "description": "A search text to find one or more items.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 1000.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeRequestSearchOutPut"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401KO"
+          },
+          "500": {
+            "$ref": "#/components/responses/500KO"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "ChangeRequestCreateInput": {
+        "required": [
+          "description",
+          "title"
+        ],
+        "properties": {
+          "policy": {
+            "type": "string",
+            "enum": [
+              "Change Request",
+              "External Change Request"
+            ],
+            "default": "Change Request"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "default": "name generated by autonaming"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ],
+            "default": "Low"
+          },
+          "Estimated Start Date": {
+            "type": "string",
+            "format": "date"
+          },
+          "Estimated Completion Date": {
+            "type": "string",
+            "format": "date"
+          },
+          "xmlApplicability": {
+            "type": "string",
+            "default": "undefined"
+          }
+        }
+      },
+      "ChangeRequestOutput": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "cestamp": {
+            "type": "string"
+          },
+          "policy": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "Prepare",
+              "In Work",
+              "In Approval",
+              "Approved",
+              "Complete"
+            ],
+            "description": "current state of the Change Request"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "organization": {
+            "type": "string"
+          },
+          "collabSpace": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ],
+            "default": "Low"
+          },
+          "Estimated Start Date": {
+            "type": "string",
+            "format": "date"
+          },
+          "Estimated Completion Date": {
+            "type": "string",
+            "format": "date"
+          },
+          "xmlApplicability": {
+            "type": "string"
+          },
+          "onHold": {
+            "type": "boolean"
+          },
+          "dscm:ChangeRequestEnterpriseAttributes": {
+            "$ref": "#/components/schemas/ChangeRequestEnterpriseAttributes"
+          },
+          "members": {
+            "$ref": "#/components/schemas/Members"
+          },
+          "customerAttributes": {
+            "$ref": "#/components/schemas/CustomerAttributes"
+          },
+          "implementingChanges": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ObjectReference"
+                }
+              ]
+            }
+          },
+          "answeredIssues": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ObjectReference"
+                }
+              ]
+            }
+          },
+          "impactAnalysis": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ObjectReference"
+                }
+              ]
+            }
+          },
+          "affectedItems": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ObjectReference"
+                }
+              ]
+            }
+          },
+          "reportedAgainst": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ObjectReference"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ChangeRequestModifyInput": {
+        "required": [
+          "cestamp"
+        ],
+        "properties": {
+          "cestamp": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ],
+            "default": "Low"
+          },
+          "Estimated Start Date": {
+            "type": "string",
+            "format": "date"
+          },
+          "Estimated Completion Date": {
+            "type": "string",
+            "format": "date"
+          },
+          "xmlApplicability": {
+            "type": "string"
+          },
+          "dscm:ChangeRequestEnterpriseAttributes": {
+            "$ref": "#/components/schemas/ChangeRequestEnterpriseAttributes"
+          },
+          "remove": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ChangeRequestInputElementMembers"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeRequestRemoveInputElementCustomerAttributes"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeRequestInputImplementingChange"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeRequestRemoveInputAffectedItem"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeRequestRemoveInputReportedAgaisnt"
+                }
+              ]
+            }
+          },
+          "add": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ChangeRequestInputElementMembers"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeRequestAddInputElementCustomerAttributes"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeRequestInputImplementingChange"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeRequestAddInputAffectedItem"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeRequestAddInputReportedAgaisnt"
+                }
+              ]
+            }
+          },
+          "replace": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ChangeRequestReplaceInputElementCustomerAttributes"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "approveRejectChangeRequestInput": {
+        "required": [
+          "cestamp"
+        ],
+        "properties": {
+          "cestamp": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          }
+        }
+      },
+      "ImpactAnalysisCreateInput": {
+        "required": [
+          "description",
+          "title"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "ImpactAnalysisOutput": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "cestamp": {
+            "type": "string"
+          },
+          "policy": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "In Work",
+              "In Approval",
+              "Complete"
+            ],
+            "description": "current state of the Impact Analysis"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "organization": {
+            "type": "string"
+          },
+          "collabSpace": {
+            "type": "string"
+          },
+          "onHold": {
+            "type": "boolean"
+          },
+          "dscm:ImpactAnalysisEnterpriseAttributes": {
+            "$ref": "#/components/schemas/ImpactAnalysisEnterpriseAttributes"
+          },
+          "members": {
+            "$ref": "#/components/schemas/MembersIA"
+          },
+          "customerAttributes": {
+            "$ref": "#/components/schemas/CustomerAttributes"
+          },
+          "impactBasis": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ObjectReference"
+                }
+              ]
+            }
+          },
+          "impactedItems": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ObjectReference"
+                }
+              ]
+            }
+          },
+          "implementingChanges": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ObjectReference"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ImpactAnalysisModifyInput": {
+        "required": [
+          "cestamp"
+        ],
+        "properties": {
+          "cestamp": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "dscm:ImpactAnalysisEnterpriseAttributes": {
+            "$ref": "#/components/schemas/ImpactAnalysisEnterpriseAttributes"
+          },
+          "remove": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ImpactAnalysisInputElementMembers"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeRequestRemoveInputElementCustomerAttributes"
+                },
+                {
+                  "$ref": "#/components/schemas/ImpactAnalysisInputImpactBasis"
+                },
+                {
+                  "$ref": "#/components/schemas/ImpactAnalysisInputImpactedItems"
+                },
+                {
+                  "$ref": "#/components/schemas/ImpactAnalysisImplementingChanges"
+                }
+              ]
+            }
+          },
+          "add": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ImpactAnalysisInputElementMembers"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeRequestAddInputElementCustomerAttributes"
+                },
+                {
+                  "$ref": "#/components/schemas/ImpactAnalysisInputImpactBasis"
+                },
+                {
+                  "$ref": "#/components/schemas/ImpactAnalysisInputImpactedItems"
+                },
+                {
+                  "$ref": "#/components/schemas/ImpactAnalysisImplementingChanges"
+                }
+              ]
+            }
+          },
+          "replace": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ChangeRequestReplaceInputElementCustomerAttributes"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ChangeRequestEnterpriseAttributes": {
+        "properties": {
+          "attribute1Name": {
+            "type": "string"
+          },
+          "attribute2Name": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ImpactAnalysisEnterpriseAttributes": {
+        "properties": {
+          "attribute1Name": {
+            "type": "string"
+          },
+          "attribute2Name": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ChangeRequestInputElementMembers": {
+        "properties": {
+          "members": {
+            "type": "object",
+            "properties": {
+              "changeCoordinator": {
+                "type": "string",
+                "description": "full details of a Person can be retrieved using dedicated Web Service /resources/modeler/pno/person/userX"
+              },
+              "followers": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "description": "full details of a Person can be retrieved using dedicated Web Service /resources/modeler/pno/person/userX"
+                }
+              },
+              "assignees": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "description": "full details of a Person can be retrieved using dedicated Web Service /resources/modeler/pno/person/userX"
+                }
+              },
+              "groupAssignees": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "description": "full details of a Group can be retrieved using userGroup URI"
+                }
+              },
+              "groupFollowers": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "description": "full details of a Group can be retrieved using userGroup URI"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ImpactAnalysisInputElementMembers": {
+        "properties": {
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "assignees": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "full details of a Person can be retrieved using dedicated Web Service /resources/modeler/pno/person/userX"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ChangeRequestRemoveInputElementCustomerAttributes": {
+        "properties": {
+          "customerAttributes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "One or more SpecializationExtension can be removed from object"
+            }
+          }
+        }
+      },
+      "ChangeRequestInputImplementingChange": {
+        "properties": {
+          "implementingChanges": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ObjectReference"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ChangeRequestAddInputAffectedItem": {
+        "properties": {
+          "affectedItems": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ObjectReference"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ChangeRequestAddInputReportedAgaisnt": {
+        "properties": {
+          "reportedAgainst": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ObjectReference"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ImpactAnalysisInputImpactBasis": {
+        "properties": {
+          "impactBasis": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ObjectReference"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ImpactAnalysisInputImpactedItems": {
+        "properties": {
+          "impactedItems": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ObjectReference"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ImpactAnalysisImplementingChanges": {
+        "properties": {
+          "implementingChanges": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ObjectReference"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ChangeRequestRemoveInputAffectedItem": {
+        "properties": {
+          "affectedItems": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ObjectReference"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ChangeRequestRemoveInputReportedAgaisnt": {
+        "properties": {
+          "reportedAgainst": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ObjectReference"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ChangeRequestAddInputElementCustomerAttributes": {
+        "properties": {
+          "customerAttributes": {
+            "properties": {
+              "SpecializationExtensionName": {
+                "properties": {
+                  "customerAttribute1Name": {
+                    "type": "string"
+                  },
+                  "customerAttribute2Name": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ChangeRequestReplaceInputElementCustomerAttributes": {
+        "properties": {
+          "customerAttributes": {
+            "$ref": "#/components/schemas/CustomerAttributes"
+          }
+        }
+      },
+      "Members": {
+        "properties": {
+          "changeCoordinator": {
+            "type": "string"
+          },
+          "changeOriginator": {
+            "type": "string"
+          },
+          "followers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "assignees": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "groupAssignees": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "groupFollowers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "MembersIA": {
+        "properties": {
+          "assignees": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "CustomerAttributes": {
+        "properties": {
+          "customerAttribute1Name": {
+            "type": "string"
+          },
+          "customerAttribute2Name": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "DeploymentExtensionName": {
+            "properties": {
+              "customerAttribute3Name": {
+                "type": "string"
+              },
+              "customerAttribute4Name": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "SpecializationExtensionName": {
+            "properties": {
+              "customerAttribute5Name": {
+                "type": "string"
+              },
+              "customerAttribute6Name": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ObjectReference": {
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "identifier": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          }
+        }
+      },
+      "ChangeRequestSearchOutPut": {
+        "properties": {
+          "changeRequest": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeRequestItemSearchOutPut"
+            }
+          }
+        }
+      },
+      "ChangeRequestItemSearchOutPut": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "example": "https://3dspace.mydomain:443/3dspace"
+          },
+          "type": {
+            "type": "string",
+            "example": "Change Request"
+          },
+          "identifier": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "relativePath": {
+            "type": "string",
+            "example": "/resources/v1/modeler/dscm/changerequest/F718B05686760000926EEB5BE7400900"
+          }
+        }
+      },
+      "ErrorOutput": {
+        "properties": {
+          "errorCode": {
+            "type": "string"
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "examples": {
+      "ChangeRequestCreateExample": {
+        "value": {
+          "policy": "Request For Change",
+          "type": "Change Request",
+          "title": "Title of Change Request",
+          "description": "Description of Change Request",
+          "name": "name of Change Request",
+          "severity": "Low",
+          "Estimated Start Date": "2017-06-22",
+          "Estimated Completion Date": "2017-07-22",
+          "xmlApplicability": "<configuration xml>"
+        }
+      },
+      "ImpactAnalysisCreateExample": {
+        "value": {
+          "type": "Impact Analysis",
+          "title": "Title of Impact Analysis",
+          "description": "Description of Impact Analysis"
+        }
+      },
+      "ChangeRequestOutputExample": {
+        "value": {
+          "id": "EE562168015FFCF14F940A513C63AA77",
+          "cestamp": "F718B05686760000926EEB5BE7400900",
+          "policy": "Request For Change",
+          "type": "Change Request",
+          "description": "Description of Change Request",
+          "title": "Title of Change Request",
+          "name": "name of Change Request",
+          "state": "Prepare",
+          "owner": "Identifier of the owner of the Change Request",
+          "organization": "MyCompany",
+          "collabSpace": "3DS Collab Space",
+          "severity": "Low",
+          "Estimated Start Date": "2017-06-22",
+          "Estimated Completion Date": "2017-07-22",
+          "xmlApplicability": "<configuration xml>",
+          "onHold": false,
+          "dslc:ChangeRequestEnterpriseAttributes": {
+            "attribute1Name": "attribute1Value,",
+            "attribute2Name": [
+              "attribute2Value1"
+            ]
+          },
+          "members": {
+            "changeCoordinator": "userX",
+            "changeOriginator": "userX",
+            "assignees": [
+              "userX"
+            ],
+            "followers": [
+              "userX"
+            ],
+            "groupAssignees": [
+              "groupURI"
+            ],
+            "groupFollowers": [
+              "groupURI"
+            ],
+            "routeTemplates": [
+              {
+                "source": "https://3DEXPERIENCE_3DSpace",
+                "type": "Route Template",
+                "identifier": "9927B056074E00006207389600141659",
+                "relativePath": "/resources/v1/modeler/dsrt/routetemplates/9927B056074E00006207389600141659"
+              }
+            ]
+          },
+          "customerAttributes": {
+            "customerAttribute1Name": "customerAttribute1Value",
+            "customerAttribute2Name": [
+              "customerAttribute2Value1"
+            ],
+            "DeploymentExtensionName": {
+              "customerAttribute3Name": "customerAttribute3Value",
+              "customerAttribute4Name": [
+                "customerAttribute4Value1"
+              ]
+            },
+            "SpecializationExtensionName": {
+              "customerAttribute5Name": "customerAttribute5Value",
+              "customerAttribute6Name": [
+                "customerAttribute6Value1"
+              ]
+            }
+          },
+          "implementingChanges": [
+            {
+              "source": "https://3DEXPERIENCE_3DSpace",
+              "type": "Change Order",
+              "identifier": "9927B056074E0000620738960014432",
+              "relativePath": "/resources/v1/modeler/dscm/changeorder/9927B056074E0000620738960014432"
+            }
+          ],
+          "impactAnalysis": [
+            {
+              "source": "https://3DEXPERIENCE_3DSpace",
+              "type": "Impact Analysis",
+              "identifier": "9927B056074E0000620738960049510",
+              "relativePath": "/resources/v1/modeler/dscm/changerequest/EE562168015FFCF14F940A513C63AA77/impactanalysis/9927B056074E0000620738960049510"
+            }
+          ],
+          "answeredIssues": [
+            {
+              "source": "https://3DEXPERIENCE_3DSpace",
+              "type": "Issue",
+              "identifier": "9927B056074E0000620738960017846",
+              "relativePath": "/resources/v1/modeler/dsiss/issue/9927B056074E0000620738960019126ChangeRequestOutputExample:"
+            }
+          ],
+          "affectedItems": [
+            {
+              "source": "https://3DEXPERIENCE_3DSpace",
+              "type": "VPMReference",
+              "identifier": "9927B056074E0000620738960014432",
+              "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/F718B05686760000926EEB5BE7400900ChangeRequestOutputExample"
+            }
+          ],
+          "reportedAgainst": [
+            {
+              "source": "https://3DEXPERIENCE_3DSpace",
+              "type": "VPMReference",
+              "identifier": "9927B056074E0000620738960049510",
+              "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/F718B05686760000926EEB5BE7400900ChangeRequestOutputExample"
+            }
+          ]
+        }
+      },
+      "ImpactAnalysisOutputExample": {
+        "value": {
+          "id": "EE562168015FFCF14F940A513C63AA77",
+          "cestamp": "F718B05686760000926EEB5BE7400900",
+          "policy": "Change Analysis",
+          "type": "Impact Analysis",
+          "description": "Description of Impact Analysis",
+          "title": "Title of Impact Analysis",
+          "name": "name of Impact Analysis",
+          "state": "In Work",
+          "owner": "Identifier of the owner of the Impact Analysis",
+          "organization": "MyCompany",
+          "collabSpace": "3DS Collab Space",
+          "onHold": false,
+          "dslc:ImpactAnalysisEnterpriseAttributes": {
+            "attribute1Name": "attribute1Value,",
+            "attribute2Name": [
+              "attribute2Value1"
+            ]
+          },
+          "members": {
+            "originator": "userX",
+            "assignees": [
+              "userX"
+            ]
+          },
+          "customerAttributes": {
+            "customerAttribute1Name": "customerAttribute1Value",
+            "customerAttribute2Name": [
+              "customerAttribute2Value1"
+            ],
+            "DeploymentExtensionName": {
+              "customerAttribute3Name": "customerAttribute3Value",
+              "customerAttribute4Name": [
+                "customerAttribute4Value1"
+              ]
+            },
+            "SpecializationExtensionName": {
+              "customerAttribute5Name": "customerAttribute5Value",
+              "customerAttribute6Name": [
+                "customerAttribute6Value1"
+              ]
+            }
+          },
+          "impactBasis": [
+            {
+              "source": "https://3DEXPERIENCE_3DSpace",
+              "type": "VPMReference",
+              "identifier": "F718B05686760000926EEB5BE7400900",
+              "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/F718B05686760000926EEB5BE7400900"
+            }
+          ],
+          "impactedItems": [
+            {
+              "source": "https://3DEXPERIENCE_3DSpace",
+              "type": "VPMReference",
+              "identifier": "F718B05686760000926EEB5BE7400900",
+              "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/F718B05686760000926EEB5BE7400900"
+            }
+          ],
+          "implementingChanges": [
+            {
+              "source": "https://3DEXPERIENCE_3DSpace",
+              "type": "Change Action",
+              "identifier": "9927B056074E0000620738960014432",
+              "relativePath": "/resources/v1/modeler/dslc/changaction/9927B056074E0000620738960014432"
+            }
+          ]
+        }
+      },
+      "ChangeRequestModifyExample": {
+        "value": {
+          "cestamp": "F718B05686760000926EEB5BE7400900",
+          "description": "Description of Change Request,",
+          "title": "Title of Change Request",
+          "severity": "Low",
+          "Estimated Start Date": "2017-06-22",
+          "Estimated Completion Date": "2017-07-22",
+          "xmlApplicability": "undefined",
+          "dslc:ChangeRequestEnterpriseAttributes": {
+            "attribute1Name": "attribute1Value",
+            "attribute2Name": [
+              "attribute2Value1"
+            ]
+          },
+          "remove": [
+            {
+              "members": {
+                "changeCoordinator": "userX",
+                "assignees": [
+                  "userX"
+                ],
+                "followers": [
+                  "userX"
+                ],
+                "groupAssignees": [
+                  "groupURI"
+                ],
+                "groupFollowers": [
+                  "groupURI"
+                ]
+              }
+            },
+            {
+              "routeTemplates": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "Route Template",
+                  "identifier": "9927B056074E00006207389600141659",
+                  "relativePath": "/resources/v1/modeler/dsrt/routetemplates/9927B056074E00006207389600141659"
+                }
+              ]
+            },
+            {
+              "customerAttributes": [
+                "SpecializationExtensionName"
+              ]
+            },
+            {
+              "implementingChanges": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "Change Action",
+                  "identifier": "9927B056074E00006207389600149533",
+                  "relativePath": "/resources/v1/modeler/dslc/changeaction/9927B056074E00006207389600149533"
+                },
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "Change Order",
+                  "identifier": "9927B056074E0000620738960014432",
+                  "relativePath": "/resources/v1/modeler/dscm/changeorder/9927B056074E0000620738960014432"
+                }
+              ]
+            },
+            {
+              "affectedItems": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "VPMReference",
+                  "identifier": "9927B056074E0000620738960014432",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/F718B05686760000926EEB5BE7400900"
+                }
+              ]
+            },
+            {
+              "reportedAgainst": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "VPMReference",
+                  "identifier": "9927B056074E0000620738960049510",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/F718B05686760000926EEB5BE7400900"
+                }
+              ]
+            }
+          ],
+          "add": [
+            {
+              "members": {
+                "changeCoordinator": "userX",
+                "assignees": [
+                  "userX"
+                ],
+                "followers": [
+                  "userX"
+                ],
+                "groupAssignees": [
+                  "groupURI"
+                ],
+                "groupFollowers": [
+                  "groupURI"
+                ]
+              }
+            },
+            {
+              "routeTemplates": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "Route Template",
+                  "identifier": "9927B056074E00006207389600141659",
+                  "relativePath": "/resources/v1/modeler/dsrt/routetemplates/9927B056074E00006207389600141659"
+                }
+              ]
+            },
+            {
+              "customerAttributes": {
+                "SpecializationExtensionName": {
+                  "customerAttribute1Name": "customerAttribute1Value",
+                  "customerAttribute2Name": [
+                    "customerAttribute2Value"
+                  ]
+                }
+              }
+            },
+            {
+              "implementingChanges": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "Change Action",
+                  "identifier": "9927B056074E00006207389600149533",
+                  "relativePath": "/resources/v1/modeler/dslc/changeaction/9927B056074E00006207389600149533"
+                },
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "Change Order",
+                  "identifier": "9927B056074E0000620738960014432",
+                  "relativePath": "/resources/v1/modeler/dscm/changeorder/9927B056074E0000620738960014432"
+                }
+              ]
+            },
+            {
+              "affectedItems": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "VPMReference",
+                  "identifier": "9927B056074E0000620738960014432",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/F718B05686760000926EEB5BE7400900"
+                }
+              ]
+            },
+            {
+              "reportedAgainst": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "VPMReference",
+                  "identifier": "9927B056074E0000620738960049510",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/F718B05686760000926EEB5BE7400900"
+                }
+              ]
+            }
+          ],
+          "replace": [
+            {
+              "customerAttributes": {
+                "customerAttribute1Name": "attribute1Value",
+                "customerAttribute2Name": [
+                  "attribute2Value1"
+                ],
+                "DeploymentExtensionName": {
+                  "customerAttribute3Name": "attribute3Value",
+                  "customerAttribute4Name": [
+                    "attribute4Value1"
+                  ]
+                },
+                "SpecializationExtensionName": {
+                  "customerAttribute5Name": "attribute5Value",
+                  "customerAttribute6Name": [
+                    "attribute6Value1"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "ImpactAnalysisModifyExample": {
+        "value": {
+          "cestamp": "F718B05686760000926EEB5BE7400900",
+          "description": "Description of Impact Analysis,",
+          "title": "Title of Impact Analysis",
+          "dslc:ImpactAnalysisEnterpriseAttributes": {
+            "attribute1Name": "attribute1Value",
+            "attribute2Name": [
+              "attribute2Value1"
+            ]
+          },
+          "remove": [
+            {
+              "members": {
+                "assignees": [
+                  "userX"
+                ]
+              }
+            },
+            {
+              "customerAttributes": [
+                "SpecializationExtensionName"
+              ]
+            },
+            {
+              "impactBasis": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "VPMReference",
+                  "identifier": "F718B05686760000926EEB5BE7400900",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/F718B05686760000926EEB5BE7400900"
+                }
+              ]
+            },
+            {
+              "impactedItems": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "VPMReference",
+                  "identifier": "F718B05686760000926EEB5BE7400900",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/F718B05686760000926EEB5BE7400900"
+                }
+              ]
+            },
+            {
+              "implementingChanges": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "Change Action",
+                  "identifier": "F718B05686760000926EEB5BE7400900",
+                  "relativePath": "/resources/v1/modeler/dslc/changaction/9927B056074E0000620738960014433"
+                }
+              ]
+            }
+          ],
+          "add": [
+            {
+              "members": [
+                {
+                  "changeCoordinator": "userX",
+                  "assignees": [
+                    "userX"
+                  ]
+                }
+              ]
+            },
+            {
+              "customerAttributes": {
+                "SpecializationExtensionName": {
+                  "customerAttribute1Name": "customerAttribute1Value",
+                  "customerAttribute2Name": [
+                    "customerAttribute2Value"
+                  ]
+                }
+              }
+            },
+            {
+              "impactBasis": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "VPMReference",
+                  "identifier": "F718B05686760000926EEB5BE7400900",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/F718B05686760000926EEB5BE7400900"
+                }
+              ]
+            },
+            {
+              "impactedItems": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "VPMReference",
+                  "identifier": "F718B05686760000926EEB5BE7400900",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/F718B05686760000926EEB5BE7400900"
+                }
+              ]
+            },
+            {
+              "implementingChanges": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "Change Action",
+                  "identifier": "F718B05686760000926EEB5BE7400900",
+                  "relativePath": "/resources/v1/modeler/dslc/changaction/9927B056074E0000620738960014433"
+                }
+              ]
+            }
+          ],
+          "replace": [
+            {
+              "customerAttributes": {
+                "customerAttribute1Name": "attribute1Value",
+                "customerAttribute2Name": [
+                  "attribute2Value1"
+                ],
+                "DeploymentExtensionName": {
+                  "customerAttribute3Name": "attribute3Value",
+                  "customerAttribute4Name": [
+                    "attribute4Value1"
+                  ]
+                },
+                "SpecializationExtensionName": {
+                  "customerAttribute5Name": "attribute5Value",
+                  "customerAttribute6Name": [
+                    "attribute6Value1"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "approveRejectChangeRequestExample": {
+        "value": {
+          "cestamp": "F718B05686760000926EEB5BE7400900",
+          "comment": "comment for action"
+        }
+      },
+      "ChangeActionReferenceOutput": {
+        "value": {
+          "source": "https://3DEXPERIENCE_3DSpace",
+          "type": "Change Action",
+          "identifier": "9927B056074E00006207389600149533",
+          "relativePath": "/resources/v1/modeler/dslc/changeaction/9927B056074E00006207389600149533"
+        }
+      },
+      "ChangeOrderReferenceOutput": {
+        "value": {
+          "source": "https://3DEXPERIENCE_3DSpace",
+          "type": "Change Order",
+          "identifier": "9927B056074E0000620738960014432",
+          "relativePath": "/resources/v1/modeler/dscm/changeorder/9927B056074E0000620738960014432"
+        }
+      },
+      "ChangeRequestReferenceOutput": {
+        "value": {
+          "source": "https://3DEXPERIENCE_3DSpace",
+          "type": "Change Request",
+          "identifier": "9927B056074E0000620738960017846",
+          "relativePath": "/resources/v1/modeler/dscm/changerequest/9927B056074E0000620738960017846"
+        }
+      },
+      "IssueReferenceOutput": {
+        "value": {
+          "source": "https://3DEXPERIENCE_3DSpace",
+          "type": "Issue",
+          "identifier": "9927B056074E0000620738960017846",
+          "relativePath": "/resources/v1/modeler/dsiss/issue/9927B056074E0000620738960019126"
+        }
+      },
+      "ErrorOutput": {
+        "value": {
+          "errorCode": "1",
+          "errorMessage": "Error message"
+        }
+      }
+    },
+    "requestBodies": {
+      "createChangeRequestRequestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ChangeRequestCreateInput"
+            },
+            "examples": {
+              "ChangeRequestCreateExample": {
+                "$ref": "#/components/examples/ChangeRequestCreateExample"
+              }
+            }
+          }
+        }
+      },
+      "modifyChangeRequestRequestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ChangeRequestModifyInput"
+            },
+            "examples": {
+              "ChangeRequestModifyExample": {
+                "$ref": "#/components/examples/ChangeRequestModifyExample"
+              }
+            }
+          }
+        }
+      },
+      "approveRejectChangeRequestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/approveRejectChangeRequestInput"
+            },
+            "examples": {
+              "approveRejectChangeRequestExample": {
+                "$ref": "#/components/examples/approveRejectChangeRequestExample"
+              }
+            }
+          }
+        }
+      },
+      "createImpactAnalysisRequestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ImpactAnalysisCreateInput"
+            },
+            "examples": {
+              "ImpactAnalysisCreateExample": {
+                "$ref": "#/components/examples/ImpactAnalysisCreateExample"
+              }
+            }
+          }
+        }
+      },
+      "modifyImpactAnalysisRequestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ImpactAnalysisModifyInput"
+            },
+            "examples": {
+              "ImpactAnalysisModifyExample": {
+                "$ref": "#/components/examples/ImpactAnalysisModifyExample"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "400KO": {
+        "description": "Identifier passed in input or provided JSON is invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorOutput"
+            },
+            "examples": {
+              "errorExample": {
+                "$ref": "#/components/examples/ErrorOutput"
+              }
+            }
+          }
+        }
+      },
+      "401KO": {
+        "description": "Could be linked with missing security context or licensing",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorOutput"
+            },
+            "examples": {
+              "errorExample": {
+                "$ref": "#/components/examples/ErrorOutput"
+              }
+            }
+          }
+        }
+      },
+      "403KO": {
+        "description": "Function cannot be executed as a check failed, could be linked with an invalid CSRF token or a system condition unfulfilled",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorOutput"
+            },
+            "examples": {
+              "errorExample": {
+                "$ref": "#/components/examples/ErrorOutput"
+              }
+            }
+          }
+        }
+      },
+      "404KO": {
+        "description": "Requested item cannot be found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorOutput"
+            },
+            "examples": {
+              "errorExample": {
+                "$ref": "#/components/examples/ErrorOutput"
+              }
+            }
+          }
+        }
+      },
+      "500KO": {
+        "description": "Generic issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorOutput"
+            },
+            "examples": {
+              "errorExample": {
+                "$ref": "#/components/examples/ErrorOutput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "securityContextParameters": {
+        "name": "SecurityContext",
+        "in": "header",
+        "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "CSRFParameters": {
+        "name": "ENO_CSRF_TOKEN",
+        "in": "header",
+        "description": "CSRF token could be obtained from a GET or from dedicated web service /resources/v1/application/CSRF",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "crIdParameters": {
+        "name": "id",
+        "in": "path",
+        "description": "The physical id of the Change Request",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "iaIdParameters": {
+        "name": "pid",
+        "in": "path",
+        "description": "The physical id of the Impact Analysis",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "crFieldsParameters": {
+        "name": "$fields",
+        "in": "query",
+        "description": "The parameter allowing retrieval of the Change Request's additional fields. Comma separated list of fields among members, customerAttributes, implementingChanges, answeredIssues, impactAnalysis, affectedItems, reportedAgainst",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "iaFieldsParameters": {
+        "name": "$fields",
+        "in": "query",
+        "description": "The parameter allowing retrieval of the Impact Analysis' additional fields. Comma separated list of fields among members, customerAttributes, impactBasis, impactedItems, implementingChanges",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

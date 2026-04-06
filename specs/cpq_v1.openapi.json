@@ -1,0 +1,1307 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Configure Price Quote Web Services",
+    "description": "This set of APIs supports the management of Configure, Price and Quote (CPQ) related objects within the 3DEXPERIENCE platform. It enables consumers to search and fetch quote information, facilitating seamless integration with sales, engineering and product configuration processes. These APIs provide access to detailed quote data and related metadata, ensuring consistency and accuracy across the CPQ lifecycle within the 3DEXPERIENCE environment.",
+    "version": "1.0.0",
+    "x-ds-service": [
+      "cpq"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{CPQ}/resources/v1/modeler/cpq",
+      "variables": {
+        "CPQ": {
+          "default": "https://3DEXPERIENCE_CPQ",
+          "description": "URL of the CPQ service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/cpq/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/quotes/search": {
+      "get": {
+        "tags": [
+          "Quotes"
+        ],
+        "summary": "Gets the indexed result of quotes.",
+        "description": "This service uses the indexed data to search the quotes. It will search all revisions and return matching Quotes.",
+        "operationId": "GET_QuoteSearch",
+        "parameters": [
+          {
+            "name": "$searchStr",
+            "in": "query",
+            "description": "This parameter is used for searching based on title/name. Search requires at least 3 characters.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$fields",
+            "in": "query",
+            "description": "This parameter is used for json properties returned in response. fields name separated by comma",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "This parameter is used to specify the max records to return",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip from the search result.(to be used along with $top query parameter)",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/quotes-search"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/quotes/{quoteId}": {
+      "get": {
+        "tags": [
+          "Quotes"
+        ],
+        "summary": "Get single quote details.",
+        "operationId": "cpq_QuoteInfo",
+        "parameters": [
+          {
+            "name": "quoteId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "in": "query",
+            "description": "include the related data objects i.e. quoted items",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "quotedItems"
+              ]
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/quotes"
+                },
+                "example": {
+                  "data": [
+                    {
+                      "identifier": "000000800000000C0000000000000000",
+                      "type": "Quote",
+                      "source": "https://cpq.mydomain:443/enovia",
+                      "relativePath": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+                      "title": "Quote For Supplier",
+                      "name": "Q-0000104",
+                      "description": "engineering quote",
+                      "revision": "1",
+                      "state": "Draft",
+                      "owner": "AGG2",
+                      "crmAccountTitle": "KONE FOR INDIA",
+                      "crmAccountId": 10000000001,
+                      "crmContactId": 200000005,
+                      "quotedItems": [
+                        {
+                          "identifier": "000000800000000C0000000000000000",
+                          "name": "QI-0000104",
+                          "type": "Quoted Item",
+                          "sellableItem": {
+                            "identifier": "000000800000000C0000000000000000",
+                            "type": "Sellable",
+                            "source": "https://cpq.mydomain:443/enovia or https://3dspace.mydomain:443/enovia",
+                            "relativePath": "/resources/v1/modeler/samples/000000800000000C0000000000000000"
+                          },
+                          "productConfig": {
+                            "identifier": "000000800000000C0000000000000000",
+                            "type": "Product Configuration",
+                            "source": "https://cpq.mydomain:443/enovia or https://3dspace.mydomain:443/enovia",
+                            "relativePath": "/resources/v1/modeler/samples/000000800000000C0000000000000000"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/quotes/{quoteId}/quotedItems/{quotedItemId}": {
+      "get": {
+        "tags": [
+          "Quoted Items"
+        ],
+        "summary": "Get Quoted Item details (sellableItem and productConfiguration) associated with Quote.",
+        "operationId": "cpq_QuotedItemInfo",
+        "parameters": [
+          {
+            "name": "quoteId",
+            "description": "Quote's Physical Id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "quotedItemId",
+            "description": "Quoted Item's Physical Id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "in": "query",
+            "description": "include the related data objects i.e. sellableItem/productConfiguration",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/quotedItems"
+                },
+                "example": {
+                  "data": [
+                    {
+                      "identifier": "000000800000000C0000000000000000",
+                      "type": "Quoted Item",
+                      "name": "Q-0000104",
+                      "sellableItem": {
+                        "identifier": "000000800000000C0000000000000000",
+                        "type": "Quoted Item or Product Configuration",
+                        "source": "https://cpq.mydomain:443/enovia or https://3dspace.mydomain:443/enovia",
+                        "relativePath": "/resources/v1/modeler/samples/000000800000000C0000000000000000"
+                      },
+                      "productConfiguration": {
+                        "identifier": "000000800000000C0000000000000000",
+                        "type": "Quoted Item or Product Configuration",
+                        "source": "https://cpq.mydomain:443/enovia or https://3dspace.mydomain:443/enovia",
+                        "relativePath": "/resources/v1/modeler/samples/000000800000000C0000000000000000"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/quotes/{quoteId}/quotedItems/{quotedItemId}/engineeringTwinJob": {
+      "post": {
+        "tags": [
+          "Quoted Items"
+        ],
+        "summary": "This webservice initiates the Engineering Twin Generation Job.",
+        "operationId": "cpq_engineeringTwinJob",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EngineeringTwinJobRequest"
+              },
+              "example": {
+                "csrf": {
+                  "name": "X-DS-CSRFTOKEN",
+                  "value": "0NUR-T283-RXWI-30GX-3MCR-4TZO-09MY-R59C"
+                },
+                "data": {
+                  "rootProduct": {
+                    "id": "7F0872234A47000068EC96DE000061AD",
+                    "type": "Physical Product",
+                    "source": "https://3dspace.mydomain:443/enovia",
+                    "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/7F0872234A47000068EC96DE000061AD"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "quoteId",
+            "description": "Quote's Physical Id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "quotedItemId",
+            "description": "Quoted Item's Physical Id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/quotedItems"
+                },
+                "example": {
+                  "jobId": "000000800000000C0000000000000000",
+                  "status": "ok",
+                  "statusCode": 200
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/quotes/{quoteId}/quotedItems/{quotedItemId}/engineeringTwinJob/{jobId}": {
+      "get": {
+        "tags": [
+          "Quoted Items"
+        ],
+        "summary": "This webservice checks the status of Engineering Twin Generation Job.",
+        "operationId": "cpq_engineeringTwinJobId",
+        "parameters": [
+          {
+            "name": "quoteId",
+            "description": "Quote's Physical Id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "quotedItemId",
+            "description": "Quoted Item's Physical Id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "jobId",
+            "description": "Engineering Twin Job ID",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EngineeringTwinJobResponse"
+                },
+                "example": {
+                  "jobReport": {
+                    "reportTitle": "Quoted Item for Elevator",
+                    "casUser": "joe",
+                    "creationTime": "2025-11-11T09:00:00Z",
+                    "submissionTime": "2025-11-11T09:01:00Z",
+                    "startingTime": "2025-11-11T09:02:00Z",
+                    "completionTime": "2025-11-11T09:15:00Z",
+                    "duration": "13 minutes",
+                    "message": "Job completed successfully"
+                  },
+                  "jobStatus": "successful"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "quotes": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/x-definitions/QUOTE_OBJECT_REFERENCE_WITH_QI"
+            }
+          }
+        }
+      },
+      "quotedItems": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/QUOTED_ITEM_OBJECT_REFERENCE"
+          }
+        ]
+      },
+      "quotes-search": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/QUOTE_OBJECT_REFERENCE"
+          }
+        ]
+      },
+      "EngineeringTwinJobResponse": {
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "submitted",
+              "failed",
+              "completed"
+            ]
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "EngineeringTwinJobRequest": {
+        "type": "object",
+        "properties": {
+          "csrf": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "value"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "rootProduct": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "relativePath": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "type",
+                  "source",
+                  "relativePath"
+                ]
+              }
+            },
+            "required": [
+              "rootProduct"
+            ]
+          }
+        },
+        "required": [
+          "csrf",
+          "data"
+        ]
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "quotes": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/quotes"
+            }
+          }
+        }
+      },
+      "quotedItems": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/quotedItems"
+            }
+          }
+        }
+      },
+      "quotes-search": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/quotes-search"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "in": "header",
+        "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "SecurityContext1": {
+        "name": "SecurityContext",
+        "in": "header",
+        "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "in": "header",
+        "description": "Identifies the locale of the web request.",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "in": "header",
+        "description": "The ENOVIA CSRF token which is typically required for update oerations.",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "x-schemas": {
+      "quotes": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/quotes"
+          },
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          }
+        ]
+      },
+      "quotedItems": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/quotedItems"
+          }
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-EMPTY": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          }
+        ]
+      },
+      "quotes": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/QUOTE_OBJECT_REFERENCE_WITH_QI"
+          }
+        ]
+      },
+      "quotes-search": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/QUOTE_OBJECT_REFERENCE"
+          }
+        ]
+      },
+      "quotedItems": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/QUOTED_ITEM_OBJECT_REFERENCE"
+          }
+        ]
+      },
+      "QUOTED_ITEM_OBJECT_REFERENCE": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "identifier": {
+                  "description": "Id of the Quoted Item. (Included by default: yes)",
+                  "example": "0000055455151151551515AB",
+                  "type": "string",
+                  "x-IncludedByDefault": "yes"
+                },
+                "type": {
+                  "description": "type of the Quoted Item. (Included by default: yes)",
+                  "example": "Quoted Item",
+                  "type": "string",
+                  "x-IncludedByDefault": "yes"
+                },
+                "name": {
+                  "description": "Name of the Quoted Item. (Included by default: no)",
+                  "example": "QI-0000104",
+                  "type": "string",
+                  "x-IncludedByDefault": "no"
+                },
+                "sellableItem": {
+                  "x-IncludedByDefault": "yes",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE_SELLABLE"
+                    }
+                  ]
+                },
+                "productConfiguration": {
+                  "x-IncludedByDefault": "yes",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE_SELLABLE"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "QUOTED_ITEM_OBJECT_REFERENCE_WITHOUT_DATA": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI. (Included by default: yes)",
+            "example": "000000800000000C0000000000000000",
+            "type": "string",
+            "x-IncludedByDefault": "yes"
+          },
+          "name": {
+            "description": "Name of the Quoted Item. (Included by default: no)",
+            "example": "QI-0000104",
+            "type": "string",
+            "x-IncludedByDefault": "no"
+          },
+          "sellableItem": {
+            "x-IncludedByDefault": "yes",
+            "allOf": [
+              {
+                "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE_SELLABLE"
+              }
+            ]
+          },
+          "productConfiguration": {
+            "x-IncludedByDefault": "yes",
+            "allOf": [
+              {
+                "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE_SELLABLE"
+              }
+            ]
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "identifier": {
+                  "description": "The unique object identifier when an object is represented by a Public Resource URI. (Included by default: yes)",
+                  "example": "000000800000000C0000000000000000",
+                  "type": "string"
+                },
+                "type": {
+                  "x-IncludedByDefault": "yes",
+                  "description": "Type of the object. (Included by default: yes)",
+                  "example": "Quoted Item",
+                  "type": "string"
+                },
+                "source": {
+                  "x-IncludedByDefault": "yes",
+                  "description": "The object server URL when an object is represented by a Public Resource URI. (Included by default: yes)",
+                  "example": "https://cpq.mydomain:443/enovia",
+                  "type": "string"
+                },
+                "relativePath": {
+                  "x-IncludedByDefault": "yes",
+                  "description": "The object resource path when an object is represented by a Public Resource URI. (Included by default: yes)",
+                  "example": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE_SELLABLE": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI. (Included by default: yes)",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type of the object. (Included by default: yes)",
+            "example": "Quoted Item or Product Configuration",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI. (Included by default: yes)",
+            "example": "https://cpq.mydomain:443/enovia or https://3dspace.mydomain:443/enovia",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI. (Included by default: yes)",
+            "example": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "QUOTE_OBJECT_REFERENCE": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "title": {
+                  "description": "title of the quote object. (Included by default: no)",
+                  "type": "string",
+                  "x-IncludedByDefault": "no"
+                },
+                "name": {
+                  "description": "Name of the object. (Included by default: no)",
+                  "example": "Q-0000104",
+                  "type": "string",
+                  "x-IncludedByDefault": "no"
+                },
+                "description": {
+                  "description": "description of the object. (Included by default: no)",
+                  "example": "engineering quote",
+                  "type": "string",
+                  "x-IncludedByDefault": "no"
+                },
+                "revision": {
+                  "description": "revision of the object. (Included by default: no)",
+                  "example": "1",
+                  "type": "string",
+                  "x-IncludedByDefault": "no"
+                },
+                "state": {
+                  "description": "Current state of the object. (Included by default: no)",
+                  "example": "Draft",
+                  "type": "string",
+                  "x-IncludedByDefault": "no"
+                },
+                "owner": {
+                  "description": "Owner of the Quote. (Included by default: no)",
+                  "example": "AGG2",
+                  "type": "string",
+                  "x-IncludedByDefault": "no"
+                }
+              }
+            }
+          }
+        }
+      },
+      "QUOTE_OBJECT_REFERENCE_WITH_QI": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "x-IncludedByDefault": "no",
+            "description": "title of the quote object. (Included by default: no)",
+            "example": "Quote For Supplier",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the object. (Included by default: no)",
+            "example": "Q-0000104",
+            "x-IncludedByDefault": "no",
+            "type": "string"
+          },
+          "description": {
+            "description": "description of the object. (Included by default: no)",
+            "example": "engineering quote",
+            "x-IncludedByDefault": "no",
+            "type": "string"
+          },
+          "revision": {
+            "description": "revision of the object. (Included by default: no)",
+            "example": "1",
+            "x-IncludedByDefault": "no",
+            "type": "string"
+          },
+          "state": {
+            "description": "Current state of the object. (Included by default: no)",
+            "example": "Draft",
+            "x-IncludedByDefault": "no",
+            "type": "string"
+          },
+          "owner": {
+            "description": "Owner of the Quote. (Included by default: no)",
+            "example": "AGG2",
+            "x-IncludedByDefault": "no",
+            "type": "string"
+          },
+          "crmAccountTitle": {
+            "description": "CRM Account Title for which quote is created. (Included by default: no)",
+            "example": "AGG2",
+            "type": "string",
+            "x-IncludedByDefault": "no"
+          },
+          "crmAccountId": {
+            "description": "CRM Account Id for which quote is created. (Included by default: no)",
+            "example": 1000001,
+            "type": "string",
+            "x-IncludedByDefault": "no"
+          },
+          "crmContactId": {
+            "description": "CRM Contact Id for which quote is created. (Included by default: no)",
+            "example": 20001,
+            "type": "string",
+            "x-IncludedByDefault": "no"
+          },
+          "quotedItems": {
+            "x-IncludedByDefault": "no",
+            "description": "Quoted Items information associated with Quote Object. (Included by default: no)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/x-definitions/QUOTED_ITEM_OBJECT_REFERENCE_WITHOUT_DATA"
+            }
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request.",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

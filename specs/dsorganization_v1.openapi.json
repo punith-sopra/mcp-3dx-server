@@ -1,0 +1,3852 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Organization Rest Services",
+    "description": "Rest Services for managing the Organization.",
+    "version": "1.0.0",
+    "x-ds-service": [
+      "3DSpace"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_3DSpace"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/resources/v1/modeler/organizations/host": {
+      "get": {
+        "summary": "Get the host organization",
+        "description": "",
+        "operationId": "getHostCompany",
+        "tags": [
+          "Organization"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-organizationOnlyResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update Host Company",
+        "description": "",
+        "operationId": "updateHostCompany",
+        "tags": [
+          "Organization"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-organizationOnlyResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/organizationOnlyHost"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContextForPost"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          }
+        ]
+      }
+    },
+    "/resources/v1/modeler/organizations/{orgId}/plants": {
+      "get": {
+        "summary": "Get plants under the specific organization",
+        "description": "",
+        "operationId": "getPlants",
+        "tags": [
+          "Organization"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-plants"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      }
+    },
+    "/resources/v1/modeler/organizations/{orgId}/employees": {
+      "get": {
+        "summary": "Get employees associated with the specific organization",
+        "description": "",
+        "operationId": "getEmployee",
+        "tags": [
+          "Organization"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-employees"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      }
+    },
+    "/resources/v1/modeler/organizations/{orgId}/employees/reparent": {
+      "post": {
+        "summary": "(Cloud Only) Move person or connect person as employee to a company",
+        "description": "",
+        "operationId": "updateEmployee",
+        "tags": [
+          "Organization"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-postEmployees"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/postEmployees"
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContextForPost"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          }
+        ]
+      }
+    },
+    "/resources/v1/modeler/organizations/{orgId}/businessunits": {
+      "get": {
+        "summary": "Get businessunits under the specific organization",
+        "description": "",
+        "operationId": "getBusinessunits",
+        "tags": [
+          "Organization"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-businessunits"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      }
+    },
+    "/resources/v1/modeler/organizations/{orgId}/members": {
+      "get": {
+        "summary": "Get members associated with the specific organization",
+        "description": "",
+        "operationId": "getMembers",
+        "tags": [
+          "Organization"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-employees"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Add exiting persons to an organization",
+        "description": "",
+        "operationId": "updateMember",
+        "tags": [
+          "Organization"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-postMembers"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/postMembers"
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContextForPost"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          }
+        ]
+      }
+    },
+    "/resources/v1/modeler/organizations/{orgId}/subsidiaries": {
+      "get": {
+        "summary": "Get subsidiary under the specific organization",
+        "description": "",
+        "operationId": "getCompanyByIDSub",
+        "tags": [
+          "Organization"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-subsidiaries"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      }
+    },
+    "/resources/v1/modeler/organizations/company": {
+      "post": {
+        "summary": "Create bulk companies",
+        "description": "",
+        "operationId": "createCompany",
+        "tags": [
+          "Organization"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-organizationOnlyResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/organizationOnly"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContextForPost"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          }
+        ]
+      }
+    },
+    "/resources/v1/modeler/organizations": {
+      "get": {
+        "summary": "Get all organization",
+        "description": "",
+        "operationId": "getCompany",
+        "tags": [
+          "Organization"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-organization"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/level"
+          }
+        ]
+      }
+    },
+    "/resources/v1/modeler/organizations/{orgId}": {
+      "get": {
+        "summary": "GET organization/sub-organizations by ID",
+        "description": "",
+        "operationId": "getOrganizationByID",
+        "tags": [
+          "Organization"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-organizationOnlyById"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update the specific organization",
+        "description": "",
+        "operationId": "modifyCompany",
+        "tags": [
+          "Organization"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-organization"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/organization"
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContextForPost"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          }
+        ]
+      }
+    },
+    "/resources/v1/modeler/organizations/{orgId}/suborgs": {
+      "post": {
+        "summary": "Create Suborganization in an organization",
+        "description": "",
+        "operationId": "createSuborgsPerId",
+        "tags": [
+          "Organization"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-organization"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/organization"
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContextForPost"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          }
+        ]
+      }
+    },
+    "/resources/v1/modeler/organizations/{orgId}/departments": {
+      "get": {
+        "summary": "Get departments under the specific organization",
+        "description": "",
+        "operationId": "getDepartments",
+        "tags": [
+          "Organization"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-departments"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "orgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "organization": {
+        "$ref": "#/components/x-schemas/organization"
+      },
+      "plants": {
+        "$ref": "#/components/x-schemas/plants"
+      },
+      "employees": {
+        "$ref": "#/components/x-schemas/employees"
+      },
+      "businessunits": {
+        "$ref": "#/components/x-schemas/businessunits"
+      },
+      "subsidiaries": {
+        "$ref": "#/components/x-schemas/subsidiaries"
+      },
+      "departments": {
+        "$ref": "#/components/x-schemas/departments"
+      }
+    },
+    "x-schemas": {
+      "organization": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Name of the Organization",
+                "type": "string",
+                "readOnly": true,
+                "default": "name"
+              },
+              "description": {
+                "description": "Description of the Organization",
+                "type": "string",
+                "default": "description"
+              },
+              "state": {
+                "description": "Current state of the Organization",
+                "type": "string",
+                "default": "state"
+              },
+              "created": {
+                "description": "Creation time of the Organization",
+                "format": "date-time",
+                "type": "string"
+              },
+              "modified": {
+                "description": "Last Modified Time",
+                "format": "date-time",
+                "type": "string"
+              },
+              "address": {
+                "description": "Address of the Organization",
+                "default": "address",
+                "type": "string"
+              },
+              "postalCode": {
+                "description": "Plant PostalCode",
+                "default": "123456789",
+                "type": "string"
+              },
+              "parentCompany": {
+                "description": "Parent Company name of the Subsidiary",
+                "type": "string",
+                "default": "Parent Company Name"
+              },
+              "parentCompanyId": {
+                "description": "Parent Company ID of the Subsidiary",
+                "type": "string",
+                "default": "123456789"
+              },
+              "title": {
+                "default": "title",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type of the Organization",
+                "type": "string",
+                "default": "type"
+              },
+              "organizationId": {
+                "description": "ID of the Business Unit",
+                "default": "organization Id",
+                "type": "string"
+              },
+              "dunsNumber": {
+                "description": "DUNS Number of the Business Unit",
+                "default": "123456789",
+                "type": "string"
+              },
+              "phoneNumber": {
+                "description": "Phone Number of the Business Unit",
+                "default": "1234567890",
+                "type": "string"
+              },
+              "faxNumber": {
+                "description": "Fax Number of the Business Unit",
+                "default": "1234567890",
+                "type": "string"
+              },
+              "webSite": {
+                "description": "Website of the Business Unit",
+                "default": "www.example.com",
+                "type": "string"
+              },
+              "plantId": {
+                "description": "Plant ID",
+                "default": "Plant id",
+                "type": "string"
+              },
+              "city": {
+                "description": "Plant City",
+                "default": "Plant City",
+                "type": "string"
+              },
+              "timezone": {
+                "description": "Plant TimeZone",
+                "default": "Plant Timezone",
+                "type": "string",
+                "enum": [
+                  "Pacific/Majuro",
+                  "Pacific/Apia",
+                  "Pacific/Honolulu",
+                  "America/Anchorage",
+                  "America/Los_Angeles",
+                  "America/Phoenix",
+                  "America/Denver",
+                  "GMT+6:00",
+                  "America/Chicago",
+                  "America/Mexico_City",
+                  "America/Regina",
+                  "America/Bogota",
+                  "America/New_York",
+                  "America/Indianapolis",
+                  "America/Halifax",
+                  "America/Caracas",
+                  "America/Santiago",
+                  "America/St_Johns",
+                  "America/Sao_Paulo",
+                  "America/Buenos_Aires",
+                  "America/Godthab",
+                  "Atlantic/South_Georgia",
+                  "Atlantic/Azores",
+                  "Atlantic/Cape_Verde",
+                  "Africa/Casablanca",
+                  "Europe/London",
+                  "Europe/Amsterdam",
+                  "Europe/Belgrade",
+                  "Europe/Brussels",
+                  "Africa/Libreville",
+                  "Europe/Athens",
+                  "Europe/Bucharest",
+                  "Africa/Cairo",
+                  "Africa/Harare",
+                  "Europe/Helsinki",
+                  "Asia/Jerusalem",
+                  "Asia/Baghdad",
+                  "Asia/Kuwait",
+                  "Europe/Moscow",
+                  "Africa/Nairobi",
+                  "Asia/Tehran",
+                  "Asia/Muscat",
+                  "Asia/Baku",
+                  "Asia/Kabul",
+                  "Asia/Yekaterinburg",
+                  "Asia/Karachi",
+                  "Asia/Calcutta",
+                  "Asia/Katmandu",
+                  "Asia/Almaty",
+                  "Asia/Dhaka",
+                  "Asia/Colombo",
+                  "Asia/Rangoon",
+                  "Asia/Bangkok",
+                  "Asia/Krasnoyarsk",
+                  "Asia/Shanghai",
+                  "Asia/Irkutsk",
+                  "Asia/Singapore",
+                  "Australia/Perth",
+                  "Asia/Taipei",
+                  "Asia/Tokyo",
+                  "Asia/Seoul",
+                  "Asia/Yakutsk",
+                  "Australia/Adelaide",
+                  "Australia/Darwin",
+                  "Australia/Brisbane",
+                  "Australia/Sydney",
+                  "Pacific/Guam",
+                  "Australia/Hobart",
+                  "Asia/Vladivostok",
+                  "Asia/Magadan",
+                  "Pacific/Auckland",
+                  "Pacific/Fiji",
+                  "Pacific/Tongatapu"
+                ]
+              },
+              "address1": {
+                "description": "Plant Address",
+                "default": "Address1",
+                "type": "string"
+              },
+              "address2": {
+                "description": "Plant Address",
+                "default": "Address2",
+                "type": "string"
+              },
+              "region": {
+                "description": "Plant State",
+                "default": "Region",
+                "type": "string"
+              },
+              "country": {
+                "description": "Plant Country",
+                "default": "Unassigned",
+                "type": "string",
+                "enum": [
+                  "Turks And Caicos Islands",
+                  "Tuvalu",
+                  "Uganda",
+                  "Afghanistan",
+                  "Aland Islands",
+                  "Albania",
+                  "Algeria",
+                  "American Samoa",
+                  "Andorra",
+                  "Angola",
+                  "Anguilla",
+                  "Antarctica",
+                  "Antigua And Barbuda",
+                  "Argentina",
+                  "Armenia",
+                  "Aruba",
+                  "Australia",
+                  "Austria",
+                  "Azerbaijan",
+                  "Bahamas",
+                  "Bahrain",
+                  "Bangladesh",
+                  "Barbados",
+                  "Belarus",
+                  "Belgium",
+                  "Belize",
+                  "Benin",
+                  "Bermuda",
+                  "Bhutan",
+                  "Bolivia",
+                  "Bosnia And Herzegovina",
+                  "Botswana",
+                  "Bouvet Island",
+                  "Brazil",
+                  "British Indian Ocean Territory",
+                  "Brunei Darussalam",
+                  "Bulgaria",
+                  "Burkina Faso",
+                  "Burundi",
+                  "Cambodia",
+                  "Cameroon",
+                  "Canada",
+                  "Cape Verde",
+                  "Cayman Islands",
+                  "Central African Republic",
+                  "Chad",
+                  "Chile",
+                  "China",
+                  "Christmas Island",
+                  "Cocos Islands",
+                  "Colombia",
+                  "Comoros",
+                  "Congo",
+                  "Cook Islands",
+                  "Costa Rica",
+                  "Cote D'Ivoire",
+                  "Croatia",
+                  "Cuba",
+                  "Cyprus",
+                  "Czech Republic",
+                  "Denmark",
+                  "Djibouti",
+                  "Dominica",
+                  "Dominican Republic",
+                  "Ecuador",
+                  "Egypt",
+                  "El Salvador",
+                  "Equatorial Guinea",
+                  "Eritrea",
+                  "Estonia",
+                  "Ethiopia",
+                  "Falkland Islands",
+                  "Faroe Islands",
+                  "Fiji",
+                  "Finland",
+                  "France",
+                  "French Guiana",
+                  "French Polynesia",
+                  "French Southern Territories",
+                  "Gabon",
+                  "Gambia",
+                  "Georgia",
+                  "Germany",
+                  "Ghana",
+                  "Gibraltar",
+                  "Greece",
+                  "Greenland",
+                  "Grenada",
+                  "Guadeloupe",
+                  "Guam",
+                  "Guatemala",
+                  "Guernsey",
+                  "Guinea",
+                  "Guinea-Bissau",
+                  "Guyana",
+                  "Haiti",
+                  "Heard Island And McDonald Islands",
+                  "Honduras",
+                  "Hong Kong",
+                  "Hungary",
+                  "Iceland",
+                  "India",
+                  "Indonesia",
+                  "Iran",
+                  "Iraq",
+                  "Ireland",
+                  "Isle Of Man",
+                  "Israel",
+                  "Italy",
+                  "Jamaica",
+                  "Japan",
+                  "Jersey",
+                  "Jordan",
+                  "Kazakhstan",
+                  "Kenya",
+                  "Kiribati",
+                  "Kuwait",
+                  "Kyrgyzstan",
+                  "Laos",
+                  "Latvia",
+                  "Lebanon",
+                  "Lesotho",
+                  "Liberia",
+                  "Libya",
+                  "Liechtenstein",
+                  "Lithuania",
+                  "Luxembourg",
+                  "Macao",
+                  "Macedonia",
+                  "Madagascar",
+                  "Malawi",
+                  "Malaysia",
+                  "Maldives",
+                  "Mali",
+                  "Malta",
+                  "Marshall Islands",
+                  "Martinique",
+                  "Mauritania",
+                  "Mauritius",
+                  "Mayotte",
+                  "Mexico",
+                  "Micronesia",
+                  "Moldova",
+                  "Monaco",
+                  "Mongolia",
+                  "Montenegro",
+                  "Montserrat",
+                  "Morocco",
+                  "Mozambique",
+                  "Myanmar",
+                  "Namibia",
+                  "Nauru",
+                  "Nepal",
+                  "Netherlands",
+                  "New Caledonia",
+                  "New Zealand",
+                  "Nicaragua",
+                  "Niger",
+                  "Nigeria",
+                  "Niue",
+                  "Norfolk Island",
+                  "North Korea",
+                  "Northern Mariana Islands",
+                  "Norway",
+                  "Oman",
+                  "Pakistan",
+                  "Palau",
+                  "Palestine",
+                  "Panama",
+                  "Papua New Guinea",
+                  "Paraguay",
+                  "Peru",
+                  "Philippines",
+                  "Pitcairn",
+                  "Poland",
+                  "Portugal",
+                  "Puerto Rico",
+                  "Qatar",
+                  "Romania",
+                  "Rwanda",
+                  "Saint Barthelemy",
+                  "Saint Helena",
+                  "Saint Kitts And Nevis",
+                  "Saint Lucia",
+                  "Saint Martin",
+                  "Saint Pierre And Miquelon",
+                  "Saint Vincent And The Grenadines",
+                  "Samoa",
+                  "San Marino",
+                  "Sao Tome And Principe",
+                  "Saudi Arabia",
+                  "Senegal",
+                  "Seychelles",
+                  "Sierra Leone",
+                  "Singapore",
+                  "Slovakia",
+                  "Slovenia",
+                  "Solomon Islands",
+                  "Somalia",
+                  "South Africa",
+                  "South Georgia",
+                  "South Korea",
+                  "Spain",
+                  "Sri Lanka",
+                  "Sudan",
+                  "Suriname",
+                  "Svalbard And Jan Mayen",
+                  "Swaziland",
+                  "Sweden",
+                  "Switzerland",
+                  "Syria",
+                  "Serbia",
+                  "Taiwan",
+                  "Tajikistan",
+                  "Tanzania",
+                  "Thailand",
+                  "Timor-Leste",
+                  "Togo",
+                  "Tokelau",
+                  "Tonga",
+                  "Trinidad And Tobago",
+                  "Tunisia",
+                  "Turkey",
+                  "Turkmenistan",
+                  "Ukraine",
+                  "Unassigned",
+                  "United Arab Emirates",
+                  "United Kingdom",
+                  "United States Of America",
+                  "United States Minor Outlying Islands",
+                  "Uruguay",
+                  "Uzbekistan",
+                  "Vanuatu",
+                  "Vatican City State",
+                  "Venezuela",
+                  "Vietnam",
+                  "Virgin Islands, British",
+                  "Virgin Islands, US",
+                  "Wallis And Futuna",
+                  "Western Sahara",
+                  "Yemen",
+                  "Zambia",
+                  "Zimbabwe",
+                  "Russian Federation"
+                ]
+              },
+              "nonProductionDays": {
+                "description": "Non Production Days for Plant",
+                "default": "1",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "suborgs": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/suborgs"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "organizationOnlyById": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Name of the Organization",
+                "type": "string",
+                "readOnly": true,
+                "default": "name"
+              },
+              "description": {
+                "description": "Description of the Organization",
+                "type": "string",
+                "default": "description"
+              },
+              "state": {
+                "description": "Current state of the Organization",
+                "type": "string",
+                "default": "Active"
+              },
+              "created": {
+                "description": "Creation time of the Organization",
+                "format": "date-time",
+                "type": "string"
+              },
+              "modified": {
+                "description": "Last Modified Time",
+                "format": "date-time",
+                "type": "string"
+              },
+              "address": {
+                "description": "Address of the Organization",
+                "default": "address",
+                "type": "string"
+              },
+              "postalCode": {
+                "description": "Plant PostalCode",
+                "default": "1234567",
+                "type": "string"
+              },
+              "parentCompany": {
+                "description": "Parent Company name of the Subsidiary",
+                "type": "string",
+                "default": "Parent Company Name"
+              },
+              "parentCompanyId": {
+                "description": "Parent Company ID of the Subsidiary",
+                "type": "string",
+                "default": "1234567890"
+              },
+              "title": {
+                "default": "title",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type of the Organization",
+                "type": "string",
+                "default": "type"
+              },
+              "organizationId": {
+                "description": "ID of the Business Unit",
+                "default": "organization Id",
+                "type": "string"
+              },
+              "dunsNumber": {
+                "description": "DUNS Number of the Business Unit",
+                "default": "123456789",
+                "type": "string"
+              },
+              "phoneNumber": {
+                "description": "Phone Number of the Business Unit",
+                "default": "1234567890",
+                "type": "string"
+              },
+              "faxNumber": {
+                "description": "Fax Number of the Business Unit",
+                "default": "1234567890",
+                "type": "string"
+              },
+              "webSite": {
+                "description": "Website of the Business Unit",
+                "default": "www.example.com",
+                "type": "string"
+              },
+              "plantId": {
+                "description": "Plant ID",
+                "default": "Plant Id",
+                "type": "string"
+              },
+              "city": {
+                "description": "Plant City",
+                "default": "Plant City",
+                "type": "string"
+              },
+              "timezone": {
+                "description": "Plant TimeZone",
+                "default": "Plant Timezone",
+                "type": "string",
+                "enum": [
+                  "Pacific/Majuro",
+                  "Pacific/Apia",
+                  "Pacific/Honolulu",
+                  "America/Anchorage",
+                  "America/Los_Angeles",
+                  "America/Phoenix",
+                  "America/Denver",
+                  "GMT+6:00",
+                  "America/Chicago",
+                  "America/Mexico_City",
+                  "America/Regina",
+                  "America/Bogota",
+                  "America/New_York",
+                  "America/Indianapolis",
+                  "America/Halifax",
+                  "America/Caracas",
+                  "America/Santiago",
+                  "America/St_Johns",
+                  "America/Sao_Paulo",
+                  "America/Buenos_Aires",
+                  "America/Godthab",
+                  "Atlantic/South_Georgia",
+                  "Atlantic/Azores",
+                  "Atlantic/Cape_Verde",
+                  "Africa/Casablanca",
+                  "Europe/London",
+                  "Europe/Amsterdam",
+                  "Europe/Belgrade",
+                  "Europe/Brussels",
+                  "Africa/Libreville",
+                  "Europe/Athens",
+                  "Europe/Bucharest",
+                  "Africa/Cairo",
+                  "Africa/Harare",
+                  "Europe/Helsinki",
+                  "Asia/Jerusalem",
+                  "Asia/Baghdad",
+                  "Asia/Kuwait",
+                  "Europe/Moscow",
+                  "Africa/Nairobi",
+                  "Asia/Tehran",
+                  "Asia/Muscat",
+                  "Asia/Baku",
+                  "Asia/Kabul",
+                  "Asia/Yekaterinburg",
+                  "Asia/Karachi",
+                  "Asia/Calcutta",
+                  "Asia/Katmandu",
+                  "Asia/Almaty",
+                  "Asia/Dhaka",
+                  "Asia/Colombo",
+                  "Asia/Rangoon",
+                  "Asia/Bangkok",
+                  "Asia/Krasnoyarsk",
+                  "Asia/Shanghai",
+                  "Asia/Irkutsk",
+                  "Asia/Singapore",
+                  "Australia/Perth",
+                  "Asia/Taipei",
+                  "Asia/Tokyo",
+                  "Asia/Seoul",
+                  "Asia/Yakutsk",
+                  "Australia/Adelaide",
+                  "Australia/Darwin",
+                  "Australia/Brisbane",
+                  "Australia/Sydney",
+                  "Pacific/Guam",
+                  "Australia/Hobart",
+                  "Asia/Vladivostok",
+                  "Asia/Magadan",
+                  "Pacific/Auckland",
+                  "Pacific/Fiji",
+                  "Pacific/Tongatapu"
+                ]
+              },
+              "address1": {
+                "description": "Plant Address",
+                "default": "Plant Address 1",
+                "type": "string"
+              },
+              "address2": {
+                "description": "Plant Address",
+                "default": "Plant Address 2",
+                "type": "string"
+              },
+              "region": {
+                "description": "Plant State",
+                "default": "region",
+                "type": "string"
+              },
+              "country": {
+                "description": "Plant Country",
+                "default": "Unassigned",
+                "type": "string",
+                "enum": [
+                  "Turks And Caicos Islands",
+                  "Tuvalu",
+                  "Uganda",
+                  "Afghanistan",
+                  "Aland Islands",
+                  "Albania",
+                  "Algeria",
+                  "American Samoa",
+                  "Andorra",
+                  "Angola",
+                  "Anguilla",
+                  "Antarctica",
+                  "Antigua And Barbuda",
+                  "Argentina",
+                  "Armenia",
+                  "Aruba",
+                  "Australia",
+                  "Austria",
+                  "Azerbaijan",
+                  "Bahamas",
+                  "Bahrain",
+                  "Bangladesh",
+                  "Barbados",
+                  "Belarus",
+                  "Belgium",
+                  "Belize",
+                  "Benin",
+                  "Bermuda",
+                  "Bhutan",
+                  "Bolivia",
+                  "Bosnia And Herzegovina",
+                  "Botswana",
+                  "Bouvet Island",
+                  "Brazil",
+                  "British Indian Ocean Territory",
+                  "Brunei Darussalam",
+                  "Bulgaria",
+                  "Burkina Faso",
+                  "Burundi",
+                  "Cambodia",
+                  "Cameroon",
+                  "Canada",
+                  "Cape Verde",
+                  "Cayman Islands",
+                  "Central African Republic",
+                  "Chad",
+                  "Chile",
+                  "China",
+                  "Christmas Island",
+                  "Cocos Islands",
+                  "Colombia",
+                  "Comoros",
+                  "Congo",
+                  "Cook Islands",
+                  "Costa Rica",
+                  "Cote D'Ivoire",
+                  "Croatia",
+                  "Cuba",
+                  "Cyprus",
+                  "Czech Republic",
+                  "Denmark",
+                  "Djibouti",
+                  "Dominica",
+                  "Dominican Republic",
+                  "Ecuador",
+                  "Egypt",
+                  "El Salvador",
+                  "Equatorial Guinea",
+                  "Eritrea",
+                  "Estonia",
+                  "Ethiopia",
+                  "Falkland Islands",
+                  "Faroe Islands",
+                  "Fiji",
+                  "Finland",
+                  "France",
+                  "French Guiana",
+                  "French Polynesia",
+                  "French Southern Territories",
+                  "Gabon",
+                  "Gambia",
+                  "Georgia",
+                  "Germany",
+                  "Ghana",
+                  "Gibraltar",
+                  "Greece",
+                  "Greenland",
+                  "Grenada",
+                  "Guadeloupe",
+                  "Guam",
+                  "Guatemala",
+                  "Guernsey",
+                  "Guinea",
+                  "Guinea-Bissau",
+                  "Guyana",
+                  "Haiti",
+                  "Heard Island And McDonald Islands",
+                  "Honduras",
+                  "Hong Kong",
+                  "Hungary",
+                  "Iceland",
+                  "India",
+                  "Indonesia",
+                  "Iran",
+                  "Iraq",
+                  "Ireland",
+                  "Isle Of Man",
+                  "Israel",
+                  "Italy",
+                  "Jamaica",
+                  "Japan",
+                  "Jersey",
+                  "Jordan",
+                  "Kazakhstan",
+                  "Kenya",
+                  "Kiribati",
+                  "Kuwait",
+                  "Kyrgyzstan",
+                  "Laos",
+                  "Latvia",
+                  "Lebanon",
+                  "Lesotho",
+                  "Liberia",
+                  "Libya",
+                  "Liechtenstein",
+                  "Lithuania",
+                  "Luxembourg",
+                  "Macao",
+                  "Macedonia",
+                  "Madagascar",
+                  "Malawi",
+                  "Malaysia",
+                  "Maldives",
+                  "Mali",
+                  "Malta",
+                  "Marshall Islands",
+                  "Martinique",
+                  "Mauritania",
+                  "Mauritius",
+                  "Mayotte",
+                  "Mexico",
+                  "Micronesia",
+                  "Moldova",
+                  "Monaco",
+                  "Mongolia",
+                  "Montenegro",
+                  "Montserrat",
+                  "Morocco",
+                  "Mozambique",
+                  "Myanmar",
+                  "Namibia",
+                  "Nauru",
+                  "Nepal",
+                  "Netherlands",
+                  "New Caledonia",
+                  "New Zealand",
+                  "Nicaragua",
+                  "Niger",
+                  "Nigeria",
+                  "Niue",
+                  "Norfolk Island",
+                  "North Korea",
+                  "Northern Mariana Islands",
+                  "Norway",
+                  "Oman",
+                  "Pakistan",
+                  "Palau",
+                  "Palestine",
+                  "Panama",
+                  "Papua New Guinea",
+                  "Paraguay",
+                  "Peru",
+                  "Philippines",
+                  "Pitcairn",
+                  "Poland",
+                  "Portugal",
+                  "Puerto Rico",
+                  "Qatar",
+                  "Romania",
+                  "Rwanda",
+                  "Saint Barthelemy",
+                  "Saint Helena",
+                  "Saint Kitts And Nevis",
+                  "Saint Lucia",
+                  "Saint Martin",
+                  "Saint Pierre And Miquelon",
+                  "Saint Vincent And The Grenadines",
+                  "Samoa",
+                  "San Marino",
+                  "Sao Tome And Principe",
+                  "Saudi Arabia",
+                  "Senegal",
+                  "Seychelles",
+                  "Sierra Leone",
+                  "Singapore",
+                  "Slovakia",
+                  "Slovenia",
+                  "Solomon Islands",
+                  "Somalia",
+                  "South Africa",
+                  "South Georgia",
+                  "South Korea",
+                  "Spain",
+                  "Sri Lanka",
+                  "Sudan",
+                  "Suriname",
+                  "Svalbard And Jan Mayen",
+                  "Swaziland",
+                  "Sweden",
+                  "Switzerland",
+                  "Syria",
+                  "Serbia",
+                  "Taiwan",
+                  "Tajikistan",
+                  "Tanzania",
+                  "Thailand",
+                  "Timor-Leste",
+                  "Togo",
+                  "Tokelau",
+                  "Tonga",
+                  "Trinidad And Tobago",
+                  "Tunisia",
+                  "Turkey",
+                  "Turkmenistan",
+                  "Ukraine",
+                  "Unassigned",
+                  "United Arab Emirates",
+                  "United Kingdom",
+                  "United States Of America",
+                  "United States Minor Outlying Islands",
+                  "Uruguay",
+                  "Uzbekistan",
+                  "Vanuatu",
+                  "Vatican City State",
+                  "Venezuela",
+                  "Vietnam",
+                  "Virgin Islands, British",
+                  "Virgin Islands, US",
+                  "Wallis And Futuna",
+                  "Western Sahara",
+                  "Yemen",
+                  "Zambia",
+                  "Zimbabwe",
+                  "Russian Federation"
+                ]
+              },
+              "nonProductionDays": {
+                "description": "Non Production Days for Plant",
+                "default": "1",
+                "type": "string"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "organizationOnly": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Name of the Organization",
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "description": "Description of the Organization",
+                "type": "string"
+              },
+              "address": {
+                "description": "Address of the Organization",
+                "default": "address",
+                "type": "string"
+              },
+              "postalCode": {
+                "description": "Plant PostalCode",
+                "default": "123456",
+                "type": "string"
+              },
+              "title": {
+                "default": "Title",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type of the Organization",
+                "type": "string"
+              },
+              "organizationId": {
+                "description": "ID of the Organization",
+                "default": "organizationId",
+                "type": "string"
+              },
+              "dunsNumber": {
+                "description": "DUNS Number of the Organization",
+                "default": "123456789",
+                "type": "string"
+              },
+              "phoneNumber": {
+                "description": "Phone Number of the Organization",
+                "default": "99999 99999",
+                "type": "string"
+              },
+              "faxNumber": {
+                "description": "Fax Number of the Organization",
+                "default": "12345 67890",
+                "type": "string"
+              },
+              "webSite": {
+                "description": "Website of the Organization",
+                "default": "www.example.com",
+                "type": "string"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "organizationOnlyHost": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "The unique object identifier.",
+                "example": "000000800000000C0000000000000000",
+                "type": "string"
+              },
+              "name": {
+                "description": "Name of the Organization",
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "description": "Description of the Organization",
+                "type": "string"
+              },
+              "address": {
+                "description": "Address of the Organization",
+                "default": "address",
+                "type": "string"
+              },
+              "postalCode": {
+                "description": "Plant PostalCode",
+                "default": "123456",
+                "type": "string"
+              },
+              "title": {
+                "default": "Title",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type of the Organization",
+                "type": "string"
+              },
+              "organizationId": {
+                "description": "ID of the Organization",
+                "default": "organizationId",
+                "type": "string"
+              },
+              "dunsNumber": {
+                "description": "DUNS Number of the Organization",
+                "default": "123456789",
+                "type": "string"
+              },
+              "phoneNumber": {
+                "description": "Phone Number of the Organization",
+                "default": "99999 99999",
+                "type": "string"
+              },
+              "faxNumber": {
+                "description": "Fax Number of the Organization",
+                "default": "12345 67890",
+                "type": "string"
+              },
+              "webSite": {
+                "description": "Website of the Organization",
+                "default": "www.example.com",
+                "type": "string"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "organizationOnlyResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Name of the Organization",
+                "type": "string",
+                "default": "name",
+                "readOnly": true
+              },
+              "description": {
+                "description": "Description of the Organization",
+                "type": "string",
+                "default": "Description"
+              },
+              "state": {
+                "description": "Current state of the Organization",
+                "type": "string",
+                "default": "Active"
+              },
+              "created": {
+                "description": "Creation time of the Organization",
+                "format": "date-time",
+                "type": "string"
+              },
+              "modified": {
+                "description": "Last Modified Time",
+                "format": "date-time",
+                "type": "string"
+              },
+              "address": {
+                "description": "Address of the Organization",
+                "default": "address",
+                "type": "string"
+              },
+              "postalCode": {
+                "description": "Plant PostalCode",
+                "default": "1234567",
+                "type": "string"
+              },
+              "title": {
+                "default": "title",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type of the Organization",
+                "type": "string",
+                "default": "Company"
+              },
+              "organizationId": {
+                "description": "ID of the Organization",
+                "default": "organizationId",
+                "type": "string"
+              },
+              "dunsNumber": {
+                "description": "DUNS Number of the Organization",
+                "default": "123456789",
+                "type": "string"
+              },
+              "phoneNumber": {
+                "description": "Phone Number of the Organization",
+                "default": "99999 99999",
+                "type": "string"
+              },
+              "faxNumber": {
+                "description": "Fax Number of the Organization",
+                "default": "12345 67890",
+                "type": "string"
+              },
+              "webSite": {
+                "description": "Website of the Organization",
+                "default": "www.example.com",
+                "type": "string"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "suborgs": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Name of the Organization",
+                "type": "string",
+                "readOnly": true,
+                "default": "Name"
+              },
+              "description": {
+                "description": "Description of the Organization",
+                "type": "string",
+                "default": "Description"
+              },
+              "state": {
+                "description": "Current state of the Organization",
+                "type": "string",
+                "default": "Active"
+              },
+              "created": {
+                "description": "Creation time of the Organization",
+                "format": "date-time",
+                "type": "string"
+              },
+              "modified": {
+                "description": "Last Modified Time",
+                "format": "date-time",
+                "type": "string"
+              },
+              "title": {
+                "description": "Title of the Organization",
+                "default": "title",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type of the Organization",
+                "type": "string",
+                "default": "Type"
+              },
+              "organizationId": {
+                "description": "ID of the Organization",
+                "default": "OrganizationId",
+                "type": "string"
+              },
+              "dunsNumber": {
+                "description": "DUNS of the Organization",
+                "default": "123456789",
+                "type": "string"
+              },
+              "phoneNumber": {
+                "description": "Phone Number of the Organization",
+                "default": "1234567890",
+                "type": "string"
+              },
+              "faxNumber": {
+                "default": "2345678901",
+                "type": "string"
+              },
+              "webSite": {
+                "description": "Website of the Organization",
+                "default": "www.example.com",
+                "type": "string"
+              },
+              "city": {
+                "description": "Plant City",
+                "default": "Plant City",
+                "type": "string"
+              },
+              "timezone": {
+                "description": "Plant TimeZone",
+                "default": "Plant Timezone",
+                "type": "string",
+                "enum": [
+                  "Pacific/Majuro",
+                  "Pacific/Apia",
+                  "Pacific/Honolulu",
+                  "America/Anchorage",
+                  "America/Los_Angeles",
+                  "America/Phoenix",
+                  "America/Denver",
+                  "GMT+6:00",
+                  "America/Chicago",
+                  "America/Mexico_City",
+                  "America/Regina",
+                  "America/Bogota",
+                  "America/New_York",
+                  "America/Indianapolis",
+                  "America/Halifax",
+                  "America/Caracas",
+                  "America/Santiago",
+                  "America/St_Johns",
+                  "America/Sao_Paulo",
+                  "America/Buenos_Aires",
+                  "America/Godthab",
+                  "Atlantic/South_Georgia",
+                  "Atlantic/Azores",
+                  "Atlantic/Cape_Verde",
+                  "Africa/Casablanca",
+                  "Europe/London",
+                  "Europe/Amsterdam",
+                  "Europe/Belgrade",
+                  "Europe/Brussels",
+                  "Africa/Libreville",
+                  "Europe/Athens",
+                  "Europe/Bucharest",
+                  "Africa/Cairo",
+                  "Africa/Harare",
+                  "Europe/Helsinki",
+                  "Asia/Jerusalem",
+                  "Asia/Baghdad",
+                  "Asia/Kuwait",
+                  "Europe/Moscow",
+                  "Africa/Nairobi",
+                  "Asia/Tehran",
+                  "Asia/Muscat",
+                  "Asia/Baku",
+                  "Asia/Kabul",
+                  "Asia/Yekaterinburg",
+                  "Asia/Karachi",
+                  "Asia/Calcutta",
+                  "Asia/Katmandu",
+                  "Asia/Almaty",
+                  "Asia/Dhaka",
+                  "Asia/Colombo",
+                  "Asia/Rangoon",
+                  "Asia/Bangkok",
+                  "Asia/Krasnoyarsk",
+                  "Asia/Shanghai",
+                  "Asia/Irkutsk",
+                  "Asia/Singapore",
+                  "Australia/Perth",
+                  "Asia/Taipei",
+                  "Asia/Tokyo",
+                  "Asia/Seoul",
+                  "Asia/Yakutsk",
+                  "Australia/Adelaide",
+                  "Australia/Darwin",
+                  "Australia/Brisbane",
+                  "Australia/Sydney",
+                  "Pacific/Guam",
+                  "Australia/Hobart",
+                  "Asia/Vladivostok",
+                  "Asia/Magadan",
+                  "Pacific/Auckland",
+                  "Pacific/Fiji",
+                  "Pacific/Tongatapu"
+                ]
+              },
+              "address": {
+                "description": "Address of the Organization",
+                "default": "Address",
+                "type": "string"
+              },
+              "address1": {
+                "description": "Plant Address",
+                "default": "Plant Address1",
+                "type": "string"
+              },
+              "address2": {
+                "description": "Plant Address",
+                "default": "Plant Adress2",
+                "type": "string"
+              },
+              "region": {
+                "description": "Plant State",
+                "default": "Region",
+                "type": "string"
+              },
+              "postalCode": {
+                "description": "Plant PostalCode",
+                "default": "Plant Postalcode",
+                "type": "string"
+              },
+              "country": {
+                "description": "Plant Country",
+                "default": "Unassigned",
+                "type": "string",
+                "enum": [
+                  "Turks And Caicos Islands",
+                  "Tuvalu",
+                  "Aruba",
+                  "Australia",
+                  "Austria",
+                  "Azerbaijan",
+                  "Bahamas",
+                  "Bahrain",
+                  "Bangladesh",
+                  "Barbados",
+                  "Belarus",
+                  "Belgium",
+                  "Belize",
+                  "Benin",
+                  "Bermuda",
+                  "Bhutan",
+                  "Bolivia",
+                  "Bosnia And Herzegovina",
+                  "Uganda",
+                  "Botswana",
+                  "Bouvet Island",
+                  "Brazil",
+                  "British Indian Ocean Territory",
+                  "Brunei Darussalam",
+                  "Bulgaria",
+                  "Burkina Faso",
+                  "Burundi",
+                  "Cambodia",
+                  "Cameroon",
+                  "Canada",
+                  "Cape Verde",
+                  "Cayman Islands",
+                  "Central African Republic",
+                  "Chad",
+                  "Chile",
+                  "China",
+                  "Christmas Island",
+                  "Cocos Islands",
+                  "Colombia",
+                  "Comoros",
+                  "Congo",
+                  "Cook Islands",
+                  "Costa Rica",
+                  "Cote D'Ivoire",
+                  "Croatia",
+                  "Cuba",
+                  "Cyprus",
+                  "Czech Republic",
+                  "Denmark",
+                  "Djibouti",
+                  "Dominica",
+                  "Afghanistan",
+                  "Dominican Republic",
+                  "Ecuador",
+                  "Egypt",
+                  "El Salvador",
+                  "Equatorial Guinea",
+                  "Eritrea",
+                  "Estonia",
+                  "Ethiopia",
+                  "Falkland Islands",
+                  "Faroe Islands",
+                  "Fiji",
+                  "Finland",
+                  "France",
+                  "French Guiana",
+                  "French Polynesia",
+                  "French Southern Territories",
+                  "Aland Islands",
+                  "Gabon",
+                  "Gambia",
+                  "Georgia",
+                  "Germany",
+                  "Ghana",
+                  "Gibraltar",
+                  "Greece",
+                  "Greenland",
+                  "Grenada",
+                  "Guadeloupe",
+                  "Guam",
+                  "Guatemala",
+                  "Guernsey",
+                  "Guinea",
+                  "Guinea-Bissau",
+                  "Guyana",
+                  "Albania",
+                  "Haiti",
+                  "Heard Island And McDonald Islands",
+                  "Honduras",
+                  "Hong Kong",
+                  "Hungary",
+                  "Iceland",
+                  "India",
+                  "Indonesia",
+                  "Iran",
+                  "Iraq",
+                  "Ireland",
+                  "Isle Of Man",
+                  "Israel",
+                  "Italy",
+                  "Jamaica",
+                  "Japan",
+                  "Algeria",
+                  "Jersey",
+                  "Jordan",
+                  "Kazakhstan",
+                  "Kenya",
+                  "Kiribati",
+                  "Kuwait",
+                  "Kyrgyzstan",
+                  "Laos",
+                  "Latvia",
+                  "Lebanon",
+                  "Lesotho",
+                  "Liberia",
+                  "Libya",
+                  "Liechtenstein",
+                  "Lithuania",
+                  "Luxembourg",
+                  "American Samoa",
+                  "Macao",
+                  "Macedonia",
+                  "Madagascar",
+                  "Malawi",
+                  "Malaysia",
+                  "Maldives",
+                  "Mali",
+                  "Malta",
+                  "Marshall Islands",
+                  "Martinique",
+                  "Mauritania",
+                  "Mauritius",
+                  "Mayotte",
+                  "Mexico",
+                  "Micronesia",
+                  "Moldova",
+                  "Andorra",
+                  "Monaco",
+                  "Mongolia",
+                  "Montenegro",
+                  "Montserrat",
+                  "Morocco",
+                  "Mozambique",
+                  "Myanmar",
+                  "Namibia",
+                  "Nauru",
+                  "Nepal",
+                  "Netherlands",
+                  "New Caledonia",
+                  "New Zealand",
+                  "Nicaragua",
+                  "Niger",
+                  "Nigeria",
+                  "Angola",
+                  "Niue",
+                  "Norfolk Island",
+                  "North Korea",
+                  "Northern Mariana Islands",
+                  "Norway",
+                  "Oman",
+                  "Pakistan",
+                  "Palau",
+                  "Palestine",
+                  "Panama",
+                  "Papua New Guinea",
+                  "Paraguay",
+                  "Peru",
+                  "Philippines",
+                  "Pitcairn",
+                  "Poland",
+                  "Anguilla",
+                  "Portugal",
+                  "Puerto Rico",
+                  "Qatar",
+                  "Romania",
+                  "Rwanda",
+                  "Saint Barthelemy",
+                  "Saint Helena",
+                  "Saint Kitts And Nevis",
+                  "Saint Lucia",
+                  "Saint Martin",
+                  "Saint Pierre And Miquelon",
+                  "Saint Vincent And The Grenadines",
+                  "Samoa",
+                  "San Marino",
+                  "Sao Tome And Principe",
+                  "Saudi Arabia",
+                  "Antarctica",
+                  "Senegal",
+                  "Seychelles",
+                  "Sierra Leone",
+                  "Singapore",
+                  "Slovakia",
+                  "Slovenia",
+                  "Solomon Islands",
+                  "Somalia",
+                  "South Africa",
+                  "South Georgia",
+                  "South Korea",
+                  "Spain",
+                  "Sri Lanka",
+                  "Sudan",
+                  "Suriname",
+                  "Svalbard And Jan Mayen",
+                  "Antigua And Barbuda",
+                  "Swaziland",
+                  "Sweden",
+                  "Switzerland",
+                  "Syria",
+                  "Serbia",
+                  "Taiwan",
+                  "Tajikistan",
+                  "Tanzania",
+                  "Thailand",
+                  "Timor-Leste",
+                  "Togo",
+                  "Tokelau",
+                  "Tonga",
+                  "Trinidad And Tobago",
+                  "Tunisia",
+                  "Turkey",
+                  "Argentina",
+                  "Turkmenistan",
+                  "Ukraine",
+                  "Unassigned",
+                  "United Arab Emirates",
+                  "United Kingdom",
+                  "United States Of America",
+                  "United States Minor Outlying Islands",
+                  "Uruguay",
+                  "Uzbekistan",
+                  "Vanuatu",
+                  "Vatican City State",
+                  "Venezuela",
+                  "Vietnam",
+                  "Virgin Islands, British",
+                  "Virgin Islands, US",
+                  "Wallis And Futuna",
+                  "Armenia",
+                  "Western Sahara",
+                  "Yemen",
+                  "Zambia",
+                  "Zimbabwe",
+                  "Russian Federation"
+                ]
+              },
+              "nonProductionDays": {
+                "description": "Non Production Days for Plant",
+                "default": "1",
+                "type": "string"
+              },
+              "plantId": {
+                "description": "Plant ID",
+                "default": "1234567890",
+                "type": "string"
+              },
+              "parentCompany": {
+                "description": "Parent Company name of the Subsidiary",
+                "type": "string",
+                "default": "Parent Company Name"
+              },
+              "parentCompanyId": {
+                "description": "Parent Company ID of the Subsidiary",
+                "type": "string",
+                "default": "1234567890"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "businessunits": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Name of the Business Unit",
+                "type": "string",
+                "default": "name",
+                "readOnly": true
+              },
+              "description": {
+                "description": "Description of the Business Unit",
+                "type": "string",
+                "default": "description"
+              },
+              "state": {
+                "description": "Current state of the Business Unit",
+                "type": "string",
+                "default": "Active"
+              },
+              "created": {
+                "description": "Creation time of the Business Unit",
+                "format": "date-time",
+                "type": "string"
+              },
+              "modified": {
+                "description": "Last Modified Time",
+                "format": "date-time",
+                "type": "string"
+              },
+              "title": {
+                "default": "title",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type",
+                "type": "string",
+                "default": "Business Unit"
+              },
+              "organizationId": {
+                "description": "ID of the Business Unit",
+                "default": "organizaion id",
+                "type": "string"
+              },
+              "dunsNumber": {
+                "description": "DUNS Number of the Business Unit",
+                "default": "123456789",
+                "type": "string"
+              },
+              "phoneNumber": {
+                "description": "Phone Number of the Business Unit",
+                "default": "99999 99999",
+                "type": "string"
+              },
+              "faxNumber": {
+                "description": "Fax Number of the Business Unit",
+                "default": "123456789",
+                "type": "string"
+              },
+              "webSite": {
+                "description": "Website of the Business Unit",
+                "default": "www.example.com",
+                "type": "string"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "departments": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Name of the Department",
+                "type": "string",
+                "readOnly": true,
+                "default": "name"
+              },
+              "description": {
+                "description": "Description of the Department",
+                "type": "string",
+                "default": "description"
+              },
+              "state": {
+                "description": "Current state of the Department",
+                "type": "string",
+                "default": "state"
+              },
+              "created": {
+                "description": "Creation time of the Department",
+                "format": "date-time",
+                "type": "string"
+              },
+              "modified": {
+                "description": "Last Modified Time",
+                "format": "date-time",
+                "type": "string"
+              },
+              "title": {
+                "default": "title",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type",
+                "type": "string",
+                "default": "Department"
+              },
+              "organizationId": {
+                "description": "ID of the Department",
+                "default": "organizationId",
+                "type": "string"
+              },
+              "dunsNumber": {
+                "description": "DUNS Number of the Department",
+                "default": "123456789",
+                "type": "string"
+              },
+              "phoneNumber": {
+                "description": "Phone Number of the Department",
+                "default": "9999999999",
+                "type": "string"
+              },
+              "faxNumber": {
+                "description": "Fax Number of the Department",
+                "default": "12345 67890",
+                "type": "string"
+              },
+              "webSite": {
+                "description": "Website of the Department",
+                "default": "www.example.com",
+                "type": "string"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "plants": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Name of the Plant",
+                "type": "string",
+                "readOnly": true,
+                "default": "name"
+              },
+              "description": {
+                "description": "Description of the Plant",
+                "type": "string",
+                "default": "description"
+              },
+              "state": {
+                "description": "Current state of the Plant",
+                "type": "string",
+                "default": "state"
+              },
+              "created": {
+                "description": "Creation time of the Plant",
+                "format": "date-time",
+                "type": "string"
+              },
+              "modified": {
+                "description": "Last Modified Time",
+                "format": "date-time",
+                "type": "string"
+              },
+              "title": {
+                "default": "title",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type",
+                "type": "string",
+                "default": "Plant"
+              },
+              "plantId": {
+                "description": "Plant ID",
+                "default": "1234567890",
+                "type": "string"
+              },
+              "city": {
+                "description": "Plant City",
+                "default": "city",
+                "type": "string"
+              },
+              "timezone": {
+                "description": "Plant TimeZone",
+                "default": "timezone",
+                "type": "string",
+                "enum": [
+                  "Pacific/Majuro",
+                  "Pacific/Apia",
+                  "Pacific/Honolulu",
+                  "America/Anchorage",
+                  "America/Los_Angeles",
+                  "America/Phoenix",
+                  "America/Denver",
+                  "GMT+6:00",
+                  "America/Chicago",
+                  "America/Mexico_City",
+                  "America/Regina",
+                  "America/Bogota",
+                  "America/New_York",
+                  "America/Indianapolis",
+                  "America/Halifax",
+                  "America/Caracas",
+                  "America/Santiago",
+                  "America/St_Johns",
+                  "America/Sao_Paulo",
+                  "America/Buenos_Aires",
+                  "America/Godthab",
+                  "Atlantic/South_Georgia",
+                  "Atlantic/Azores",
+                  "Atlantic/Cape_Verde",
+                  "Africa/Casablanca",
+                  "Europe/London",
+                  "Europe/Amsterdam",
+                  "Europe/Belgrade",
+                  "Europe/Brussels",
+                  "Africa/Libreville",
+                  "Europe/Athens",
+                  "Europe/Bucharest",
+                  "Africa/Cairo",
+                  "Africa/Harare",
+                  "Europe/Helsinki",
+                  "Asia/Jerusalem",
+                  "Asia/Baghdad",
+                  "Asia/Kuwait",
+                  "Europe/Moscow",
+                  "Africa/Nairobi",
+                  "Asia/Tehran",
+                  "Asia/Muscat",
+                  "Asia/Baku",
+                  "Asia/Kabul",
+                  "Asia/Yekaterinburg",
+                  "Asia/Karachi",
+                  "Asia/Calcutta",
+                  "Asia/Katmandu",
+                  "Asia/Almaty",
+                  "Asia/Dhaka",
+                  "Asia/Colombo",
+                  "Asia/Rangoon",
+                  "Asia/Bangkok",
+                  "Asia/Krasnoyarsk",
+                  "Asia/Shanghai",
+                  "Asia/Irkutsk",
+                  "Asia/Singapore",
+                  "Australia/Perth",
+                  "Asia/Taipei",
+                  "Asia/Tokyo",
+                  "Asia/Seoul",
+                  "Asia/Yakutsk",
+                  "Australia/Adelaide",
+                  "Australia/Darwin",
+                  "Australia/Brisbane",
+                  "Australia/Sydney",
+                  "Pacific/Guam",
+                  "Australia/Hobart",
+                  "Asia/Vladivostok",
+                  "Asia/Magadan",
+                  "Pacific/Auckland",
+                  "Pacific/Fiji",
+                  "Pacific/Tongatapu"
+                ]
+              },
+              "address1": {
+                "description": "Plant Address",
+                "default": "address1",
+                "type": "string"
+              },
+              "address2": {
+                "description": "Plant Address",
+                "default": "address2",
+                "type": "string"
+              },
+              "region": {
+                "description": "Plant State",
+                "default": "region",
+                "type": "string"
+              },
+              "postalCode": {
+                "description": "Plant PostalCode",
+                "default": "1234567",
+                "type": "string"
+              },
+              "country": {
+                "description": "Plant Country",
+                "default": "Unassigned",
+                "type": "string",
+                "enum": [
+                  "Turks And Caicos Islands",
+                  "Tuvalu",
+                  "Aruba",
+                  "Australia",
+                  "Austria",
+                  "Azerbaijan",
+                  "Bahamas",
+                  "Bahrain",
+                  "Bangladesh",
+                  "Barbados",
+                  "Belarus",
+                  "Belgium",
+                  "Belize",
+                  "Benin",
+                  "Bermuda",
+                  "Bhutan",
+                  "Bolivia",
+                  "Bosnia And Herzegovina",
+                  "Uganda",
+                  "Botswana",
+                  "Bouvet Island",
+                  "Brazil",
+                  "British Indian Ocean Territory",
+                  "Brunei Darussalam",
+                  "Bulgaria",
+                  "Burkina Faso",
+                  "Burundi",
+                  "Cambodia",
+                  "Cameroon",
+                  "Canada",
+                  "Cape Verde",
+                  "Cayman Islands",
+                  "Central African Republic",
+                  "Chad",
+                  "Chile",
+                  "China",
+                  "Christmas Island",
+                  "Cocos Islands",
+                  "Colombia",
+                  "Comoros",
+                  "Congo",
+                  "Cook Islands",
+                  "Costa Rica",
+                  "Cote D'Ivoire",
+                  "Croatia",
+                  "Cuba",
+                  "Cyprus",
+                  "Czech Republic",
+                  "Denmark",
+                  "Djibouti",
+                  "Dominica",
+                  "Afghanistan",
+                  "Dominican Republic",
+                  "Ecuador",
+                  "Egypt",
+                  "El Salvador",
+                  "Equatorial Guinea",
+                  "Eritrea",
+                  "Estonia",
+                  "Ethiopia",
+                  "Falkland Islands",
+                  "Faroe Islands",
+                  "Fiji",
+                  "Finland",
+                  "France",
+                  "French Guiana",
+                  "French Polynesia",
+                  "French Southern Territories",
+                  "Aland Islands",
+                  "Gabon",
+                  "Gambia",
+                  "Georgia",
+                  "Germany",
+                  "Ghana",
+                  "Gibraltar",
+                  "Greece",
+                  "Greenland",
+                  "Grenada",
+                  "Guadeloupe",
+                  "Guam",
+                  "Guatemala",
+                  "Guernsey",
+                  "Guinea",
+                  "Guinea-Bissau",
+                  "Guyana",
+                  "Albania",
+                  "Haiti",
+                  "Heard Island And McDonald Islands",
+                  "Honduras",
+                  "Hong Kong",
+                  "Hungary",
+                  "Iceland",
+                  "India",
+                  "Indonesia",
+                  "Iran",
+                  "Iraq",
+                  "Ireland",
+                  "Isle Of Man",
+                  "Israel",
+                  "Italy",
+                  "Jamaica",
+                  "Japan",
+                  "Algeria",
+                  "Jersey",
+                  "Jordan",
+                  "Kazakhstan",
+                  "Kenya",
+                  "Kiribati",
+                  "Kuwait",
+                  "Kyrgyzstan",
+                  "Laos",
+                  "Latvia",
+                  "Lebanon",
+                  "Lesotho",
+                  "Liberia",
+                  "Libya",
+                  "Liechtenstein",
+                  "Lithuania",
+                  "Luxembourg",
+                  "American Samoa",
+                  "Macao",
+                  "Macedonia",
+                  "Madagascar",
+                  "Malawi",
+                  "Malaysia",
+                  "Maldives",
+                  "Mali",
+                  "Malta",
+                  "Marshall Islands",
+                  "Martinique",
+                  "Mauritania",
+                  "Mauritius",
+                  "Mayotte",
+                  "Mexico",
+                  "Micronesia",
+                  "Moldova",
+                  "Andorra",
+                  "Monaco",
+                  "Mongolia",
+                  "Montenegro",
+                  "Montserrat",
+                  "Morocco",
+                  "Mozambique",
+                  "Myanmar",
+                  "Namibia",
+                  "Nauru",
+                  "Nepal",
+                  "Netherlands",
+                  "New Caledonia",
+                  "New Zealand",
+                  "Nicaragua",
+                  "Niger",
+                  "Nigeria",
+                  "Angola",
+                  "Niue",
+                  "Norfolk Island",
+                  "North Korea",
+                  "Northern Mariana Islands",
+                  "Norway",
+                  "Oman",
+                  "Pakistan",
+                  "Palau",
+                  "Palestine",
+                  "Panama",
+                  "Papua New Guinea",
+                  "Paraguay",
+                  "Peru",
+                  "Philippines",
+                  "Pitcairn",
+                  "Poland",
+                  "Anguilla",
+                  "Portugal",
+                  "Puerto Rico",
+                  "Qatar",
+                  "Romania",
+                  "Rwanda",
+                  "Saint Barthelemy",
+                  "Saint Helena",
+                  "Saint Kitts And Nevis",
+                  "Saint Lucia",
+                  "Saint Martin",
+                  "Saint Pierre And Miquelon",
+                  "Saint Vincent And The Grenadines",
+                  "Samoa",
+                  "San Marino",
+                  "Sao Tome And Principe",
+                  "Saudi Arabia",
+                  "Antarctica",
+                  "Senegal",
+                  "Seychelles",
+                  "Sierra Leone",
+                  "Singapore",
+                  "Slovakia",
+                  "Slovenia",
+                  "Solomon Islands",
+                  "Somalia",
+                  "South Africa",
+                  "South Georgia",
+                  "South Korea",
+                  "Spain",
+                  "Sri Lanka",
+                  "Sudan",
+                  "Suriname",
+                  "Svalbard And Jan Mayen",
+                  "Antigua And Barbuda",
+                  "Swaziland",
+                  "Sweden",
+                  "Switzerland",
+                  "Syria",
+                  "Serbia",
+                  "Taiwan",
+                  "Tajikistan",
+                  "Tanzania",
+                  "Thailand",
+                  "Timor-Leste",
+                  "Togo",
+                  "Tokelau",
+                  "Tonga",
+                  "Trinidad And Tobago",
+                  "Tunisia",
+                  "Turkey",
+                  "Argentina",
+                  "Turkmenistan",
+                  "Ukraine",
+                  "Unassigned",
+                  "United Arab Emirates",
+                  "United Kingdom",
+                  "United States Of America",
+                  "United States Minor Outlying Islands",
+                  "Uruguay",
+                  "Uzbekistan",
+                  "Vanuatu",
+                  "Vatican City State",
+                  "Venezuela",
+                  "Vietnam",
+                  "Virgin Islands, British",
+                  "Virgin Islands, US",
+                  "Wallis And Futuna",
+                  "Armenia",
+                  "Western Sahara",
+                  "Yemen",
+                  "Zambia",
+                  "Zimbabwe",
+                  "Russian Federation"
+                ]
+              },
+              "nonProductionDays": {
+                "description": "Non Production Days for Plant",
+                "default": "1",
+                "type": "string"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "subsidiaries": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Name of the Organization",
+                "type": "string",
+                "readOnly": true,
+                "default": "name"
+              },
+              "description": {
+                "description": "Description of the Organization",
+                "type": "string",
+                "default": "description"
+              },
+              "state": {
+                "description": "Current state of the Organization",
+                "type": "string",
+                "default": "state"
+              },
+              "created": {
+                "description": "Creation time of the Organization",
+                "format": "date-time",
+                "type": "string"
+              },
+              "modified": {
+                "description": "Last Modified Time",
+                "format": "date-time",
+                "type": "string"
+              },
+              "subsidiaryId": {
+                "description": "ID of the Subsidiary",
+                "default": "123456789",
+                "type": "string"
+              },
+              "parentCompany": {
+                "description": "Parent Company name of the Subsidiary",
+                "type": "string",
+                "default": "parent company name"
+              },
+              "parentCompanyId": {
+                "description": "Parent Company ID of the Subsidiary",
+                "type": "string",
+                "default": "123456789000"
+              },
+              "title": {
+                "default": "title",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type",
+                "type": "string",
+                "default": "Company"
+              },
+              "organizationId": {
+                "description": "ID of the Subsidaiary",
+                "default": "Organization id",
+                "type": "string"
+              },
+              "dunsNumber": {
+                "description": "DUNS Number of the Subsidaiary",
+                "default": "123456789",
+                "type": "string"
+              },
+              "phoneNumber": {
+                "description": "Phone Number of the Subsidaiary",
+                "default": "99999 99999",
+                "type": "string"
+              },
+              "faxNumber": {
+                "description": "Fax Number of the Subsidaiary",
+                "default": "123456789",
+                "type": "string"
+              },
+              "webSite": {
+                "description": "Website of the Business Unit",
+                "default": "www.example.com",
+                "type": "string"
+              },
+              "address": {
+                "description": "Address of the Organization",
+                "default": "address",
+                "type": "string"
+              },
+              "postalCode": {
+                "description": "Postal Code of the Organization",
+                "default": "1234567",
+                "type": "string"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "employees": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "readOnly": true
+              },
+              "source": {
+                "default": "https://3DEXPERIENCE_3DSpace",
+                "type": "string",
+                "readOnly": true
+              },
+              "type": {
+                "default": "Person",
+                "type": "string",
+                "readOnly": true
+              },
+              "relativePath": {
+                "default": "/resources/modeler/pno/person/pid:{pid}",
+                "type": "string",
+                "readOnly": true
+              },
+              "name": {
+                "description": "Name of the Person",
+                "type": "string",
+                "readOnly": true
+              },
+              "firstname": {
+                "description": "First Name of the Person",
+                "type": "string",
+                "readOnly": true
+              },
+              "lastname": {
+                "description": "Name of the Person",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "postEmployees": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Id of the Person",
+                "type": "string",
+                "readOnly": true
+              },
+              "reset": {
+                "description": "Reset Security Context",
+                "type": "string",
+                "readOnly": true,
+                "enum": [
+                  "Yes",
+                  "No"
+                ]
+              },
+              "identifier": {
+                "type": "string",
+                "readOnly": true
+              },
+              "source": {
+                "default": "https://3DEXPERIENCE_3DSpace",
+                "type": "string",
+                "readOnly": true
+              },
+              "type": {
+                "default": "Person",
+                "type": "string",
+                "readOnly": true
+              },
+              "relativePath": {
+                "default": "/resources/modeler/pno/person/pid:{pid}",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "postMembers": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Id of the Person",
+                "type": "string",
+                "readOnly": true
+              },
+              "identifier": {
+                "type": "string",
+                "readOnly": true
+              },
+              "source": {
+                "default": "https://3DEXPERIENCE_3DSpace",
+                "type": "string",
+                "readOnly": true
+              },
+              "type": {
+                "default": "Person",
+                "type": "string",
+                "readOnly": true
+              },
+              "relativePath": {
+                "default": "/resources/modeler/pno/person/pid:{pid}",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {}
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-organization": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/organization"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-organizationOnly": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/organizationOnly"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-organizationOnlyById": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/organizationOnlyById"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-organizationOnlyHost": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/organizationOnlyHost"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-organizationOnlyResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/organizationOnlyResponse"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-plants": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/plants"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-EMPTY": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-businessunits": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/businessunits"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-postEmployees": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/postEmployees"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-postMembers": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/postMembers"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-subsidiaries": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/subsidiaries"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-employees": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/employees"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-departments": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/departments"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "BASICS_ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "BASICS": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "description": "The object type.",
+            "type": "string"
+          }
+        }
+      },
+      "PATCH_SUB_RESOURCE_ACTION": {
+        "type": "object",
+        "properties": {
+          "updateAction": {
+            "description": "Specify the sub-resource update action. See 6W Web Service Principles: Data Object Updates",
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "CONNECT",
+              "DISCONNECT"
+            ]
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://3dspace.mydomain:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "csrf": {
+        "description": "CSRF object is required to be sent back for update operations and may be provided with read operations.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The CSRF token name.",
+            "example": "ENO_CSRF_TOKEN",
+            "type": "string"
+          },
+          "value": {
+            "description": "The CSRF token value.",
+            "example": "EXAM-PLEW-R1CD-BNF7-G8UC-KT52-MGUA-UBE1",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request.",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-organization": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-organization"
+            }
+          }
+        }
+      },
+      "200-organizationOnlyById": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-organizationOnlyById"
+            }
+          }
+        }
+      },
+      "200-organizationOnly": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-organizationOnly"
+            }
+          }
+        }
+      },
+      "200-organizationOnlyResponse": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-organizationOnlyResponse"
+            }
+          }
+        }
+      },
+      "200-plants": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-plants"
+            }
+          }
+        }
+      },
+      "200-employees": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-employees"
+            }
+          }
+        }
+      },
+      "200-postEmployees": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-postEmployees"
+            }
+          }
+        }
+      },
+      "200-postMembers": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-postMembers"
+            }
+          }
+        }
+      },
+      "200-businessunits": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-businessunits"
+            }
+          }
+        }
+      },
+      "200-subsidiaries": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-subsidiaries"
+            }
+          }
+        }
+      },
+      "200-departments": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-departments"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "organization": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/organization"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "organizationOnly": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/organizationOnly"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "organizationOnlyById": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/organizationOnlyById"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "organizationOnlyResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/organizationOnlyResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "organizationOnlyHost": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/organizationOnlyHost"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "postEmployees": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "description": "Id of the Person",
+                        "type": "string"
+                      },
+                      "reset": {
+                        "description": "Reset Security Context",
+                        "type": "string",
+                        "enum": [
+                          "Yes",
+                          "No"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "postMembers": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "description": "Id of the Person",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "SecurityContextForPost": {
+        "name": "SecurityContext",
+        "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "description": "Identifies the locale for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "description": "The ENOVIA CSRF token which is typically required for update operations.  Retrieve using {server}/resources/v1/application/CSRF",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "include": {
+        "name": "$include",
+        "description": "Identify sub-resources that should be returned by the web request.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "level": {
+        "name": "level",
+        "description": "Number of nested levels., When value is 0, it will fetch all sub-organizations.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "fields": {
+        "name": "$fields",
+        "description": "Identify resource and sub-resource fields that should be returned by the web request.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

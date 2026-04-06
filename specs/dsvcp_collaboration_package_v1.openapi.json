@@ -1,0 +1,991 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Collaboration Package Web Services",
+    "description": "Web Services for managing the Collaboration Package object type of Collaboration Package Management.",
+    "version": "1.0.0",
+    "x-ds-service": [
+      "3DSpace"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dsvcp/packages",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_3DSpace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsvcp/packages/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/search": {
+      "get": {
+        "summary": "Search collaboration packages for the provided input string.",
+        "description": "",
+        "operationId": "searchCollaborationPackages",
+        "tags": [
+          "Collaboration Package APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dsvcp.collaborationPackage"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "name": "searchStr",
+            "description": "Search Criteria; 2 or more characters required.",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "description": "The number of objects to return; default 50; max 1000",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "description": "The number of objects to skip in case of paginating through the serach results; default 0",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/collaborationPackageinclude"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "": {
+      "post": {
+        "summary": "Create Collaboration Package.",
+        "description": "",
+        "operationId": "createCollaborationPackage",
+        "tags": [
+          "Collaboration Package APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dsvcp.collaborationPackage"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/dsvcp.collaborationPackage-post"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/collaborationPackageinclude"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/{id}": {
+      "get": {
+        "summary": "Get Info of Collaboration Package.",
+        "description": "",
+        "operationId": "getCollaborationPackage",
+        "tags": [
+          "Collaboration Package APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dsvcp.collaborationPackage"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/collaborationPackageinclude"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Modify Collaboration Package.",
+        "description": "",
+        "operationId": "modifyCollaborationPackage",
+        "tags": [
+          "Collaboration Package APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dsvcp.collaborationPackage"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/dsvcp.collaborationPackage"
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/collaborationPackageinclude"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete Collaboration Package.",
+        "description": "",
+        "operationId": "deleteCollaborationPackage",
+        "tags": [
+          "Collaboration Package APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "dsvcp.collaborationPackage": {
+        "$ref": "#/components/x-schemas/dsvcp.collaborationPackage"
+      }
+    },
+    "x-schemas": {
+      "package-context": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "identifier": {
+                "default": "000000800000000C0000000000000000",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          }
+        ]
+      },
+      "package-content": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "default": "000000800000000C0000000000000000",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          }
+        ]
+      },
+      "dsvcp.collaborationPackage": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "readOnly": true
+              },
+              "type": {
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "identifier": {
+                "type": "string",
+                "readOnly": true
+              },
+              "title": {
+                "description": "Collaboration Package Title.",
+                "example": "Drone Package",
+                "default": "",
+                "type": "string"
+              },
+              "state": {
+                "type": "string",
+                "readOnly": true
+              },
+              "name": {
+                "type": "string",
+                "readOnly": true
+              },
+              "revision": {
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "type": "string"
+              },
+              "originated": {
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "type": "string",
+                "readOnly": true
+              },
+              "owner": {
+                "description": "The owner of the Collaboration Package",
+                "type": "string",
+                "readOnly": true
+              },
+              "modified": {
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "type": "string",
+                "readOnly": true
+              }
+            },
+            "required": [
+              "title"
+            ]
+          },
+          {
+            "$ref": "#/components/x-definitions/OPTIONAL_ATTRIBUTES"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "package-content": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/package-content"
+                }
+              },
+              "package-context": {
+                "$ref": "#/components/x-schemas/package-context"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "package-context-post": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "identifier": {
+                "default": "000000800000000C0000000000000000",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          }
+        ]
+      },
+      "package-content-post": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "default": "000000800000000C0000000000000000",
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          }
+        ]
+      },
+      "dsvcp.collaborationPackage-post": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "readOnly": true
+              },
+              "type": {
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "identifier": {
+                "type": "string",
+                "readOnly": true
+              },
+              "title": {
+                "description": "Collaboration Package Title.",
+                "example": "Drone Package",
+                "default": "",
+                "type": "string"
+              },
+              "state": {
+                "type": "string",
+                "readOnly": true
+              },
+              "name": {
+                "type": "string",
+                "readOnly": true
+              },
+              "revision": {
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "type": "string"
+              },
+              "originated": {
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "type": "string",
+                "readOnly": true
+              },
+              "owner": {
+                "description": "The owner of the Collaboration Package",
+                "type": "string",
+                "readOnly": true
+              },
+              "modified": {
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "type": "string",
+                "readOnly": true
+              }
+            },
+            "required": [
+              "title"
+            ]
+          },
+          {
+            "$ref": "#/components/x-definitions/OPTIONAL_ATTRIBUTES"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "package-content": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/package-content-post"
+                }
+              },
+              "package-context": {
+                "$ref": "#/components/x-schemas/package-context-post"
+              }
+            }
+          },
+          {}
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-dsvcp.collaborationPackage": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/dsvcp.collaborationPackage"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-EMPTY": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {}
+        ]
+      },
+      "BASICS_ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "BASICS": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "description": "The object type.",
+            "type": "string"
+          }
+        }
+      },
+      "CESTAMP": {
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object.",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "CESTAMP_REQUIRED": {
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object; required for modify operations",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string"
+          }
+        }
+      },
+      "PATCH_SUB_RESOURCE_ACTION": {
+        "type": "object",
+        "properties": {
+          "updateAction": {
+            "description": "Specify the sub-resource update action. See 6W Web Service Principles: Data Object Updates",
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "CONNECT",
+              "DISCONNECT"
+            ]
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://3dspace.mydomain:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of object."
+          }
+        }
+      },
+      "OPTIONAL_ATTRIBUTES": {
+        "type": "object",
+        "properties": {
+          "packageLevel": {
+            "description": "Represents progression of package from inception to production.",
+            "example": "Not Specified, Conceptual Level, Developmental Level, Product Level",
+            "default": "Not Specified",
+            "type": "string"
+          },
+          "exportFormats": {
+            "description": "Represents format of files expected in Package.",
+            "example": "docx, pdf, 3dpdf, step, etc...",
+            "type": "string"
+          },
+          "excludeFormats": {
+            "description": "Represents the excluded formats of export format.",
+            "example": "docx, pdf, 3dpdf, step, etc...",
+            "type": "string"
+          },
+          "elementsRequired": {
+            "description": "Represents elements required in package.",
+            "example": "string",
+            "type": "string"
+          },
+          "isContentReleased": {
+            "description": "Represents if added Contents are in Released State.",
+            "example": "FALSE, TRUE",
+            "default": "FALSE",
+            "type": "boolean"
+          },
+          "disclaimer": {
+            "description": "Represents the disclaimer text for package.",
+            "example": "",
+            "type": "string"
+          }
+        }
+      },
+      "csrf": {
+        "description": "CSRF object is required to be sent back for update operations and may be provided with read operations.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The CSRF token name.",
+            "example": "ENO_CSRF_TOKEN",
+            "type": "string"
+          },
+          "value": {
+            "description": "The CSRF token value.",
+            "example": "EXAM-PLEW-R1CD-BNF7-G8UC-KT52-MGUA-UBE1",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request.",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-dsvcp.collaborationPackage": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-dsvcp.collaborationPackage"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "dsvcp.collaborationPackage": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/dsvcp.collaborationPackage"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "dsvcp.collaborationPackage-post": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/dsvcp.collaborationPackage-post"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "description": "Identifies the locale for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "description": "The ENOVIA CSRF token which is typically required for update operations.  Retrieve using {server}/resources/v1/application/CSRF",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "collaborationPackageinclude": {
+        "name": "$include",
+        "description": "Specify sub-resources that should be returned by the web request. Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: [!]package-content, [!]package-context. For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "fields": {
+        "name": "$fields",
+        "description": "Specify resource and sub-resource fields that should be returned by the web request  Fields include keywords none & all plus payload fields - packageLevel, exportFormats, excludeFormats, elementsRequired, isContentReleased, disclaimer. See schema response payload.  For more information, see 6W REST Services Principles - Refinement Section",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

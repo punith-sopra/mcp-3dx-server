@@ -1,0 +1,1561 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Change Order Web Services",
+    "description": "Change Order Web Services",
+    "summary": "APIs to manage change orders (create, retrieve and patch)",
+    "version": "1.4.0",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dscm",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3dspace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dscm:CO/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/changeorder": {
+      "post": {
+        "summary": "Creates a new Change Order.",
+        "description": "Creates a new Change Order or subtype of Change Order with elements passed in input. Elements passed in input can only be part of the core part",
+        "operationId": "POST_dscm_co",
+        "tags": [
+          "Change Order"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/securityContextParameters"
+          },
+          {
+            "$ref": "#/components/parameters/CSRFParameters"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/createChangeOrderRequestBody"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200OKPost"
+          },
+          "400": {
+            "$ref": "#/components/responses/400KO"
+          },
+          "401": {
+            "$ref": "#/components/responses/401KO"
+          },
+          "403": {
+            "$ref": "#/components/responses/403KO"
+          },
+          "500": {
+            "$ref": "#/components/responses/500KO"
+          }
+        }
+      }
+    },
+    "/changeorder/{id}": {
+      "get": {
+        "summary": "Retrieve a Change Order.",
+        "description": "Retrieves a Change Order with the required facets. Core part is always retrieved",
+        "operationId": "GET_dscm_co:co_ID",
+        "tags": [
+          "Change Order"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/securityContextParameters"
+          },
+          {
+            "$ref": "#/components/parameters/coIdParameters"
+          },
+          {
+            "$ref": "#/components/parameters/fieldsParameters"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200OKGet"
+          },
+          "400": {
+            "$ref": "#/components/responses/400KO"
+          },
+          "401": {
+            "$ref": "#/components/responses/401KO"
+          },
+          "403": {
+            "$ref": "#/components/responses/403KO"
+          },
+          "404": {
+            "$ref": "#/components/responses/404KO"
+          },
+          "500": {
+            "$ref": "#/components/responses/500KO"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Modify an existing Change Order.",
+        "description": "Modify an existing Change Order. Only the elements passed in input are modified. Output will be composed of the core part as well as the modified fields.",
+        "operationId": "PATCH_dscm_co:co_ID",
+        "tags": [
+          "Change Order"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/securityContextParameters"
+          },
+          {
+            "$ref": "#/components/parameters/CSRFParameters"
+          },
+          {
+            "$ref": "#/components/parameters/coIdParameters"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/modifyChangeOrderRequestBody"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200OKPatch"
+          },
+          "400": {
+            "$ref": "#/components/responses/400KO"
+          },
+          "401": {
+            "$ref": "#/components/responses/401KO"
+          },
+          "403": {
+            "$ref": "#/components/responses/403KO"
+          },
+          "404": {
+            "$ref": "#/components/responses/404KO"
+          },
+          "500": {
+            "$ref": "#/components/responses/500KO"
+          }
+        }
+      }
+    },
+    "/changeorder/{id}/cancel": {
+      "post": {
+        "summary": "Cancel an existing Change Order.",
+        "description": "Cancel a Change Order",
+        "operationId": "POSTCancel_dscm_co:co_ID",
+        "tags": [
+          "Change Order"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/securityContextParameters"
+          },
+          {
+            "$ref": "#/components/parameters/CSRFParameters"
+          },
+          {
+            "$ref": "#/components/parameters/coIdParameters"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/simpleActionChangeOrderRequestBody"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200OKCancel"
+          },
+          "400": {
+            "$ref": "#/components/responses/400KO"
+          },
+          "401": {
+            "$ref": "#/components/responses/401KO"
+          },
+          "403": {
+            "$ref": "#/components/responses/403KO"
+          },
+          "404": {
+            "$ref": "#/components/responses/404KO"
+          },
+          "500": {
+            "$ref": "#/components/responses/500KO"
+          }
+        }
+      }
+    },
+    "/changeorder/{id}/hold": {
+      "post": {
+        "summary": "Set an existing Change Order on hold.",
+        "description": "Set a Change Order on hold",
+        "operationId": "POSTHold_dscm_co:co_ID",
+        "tags": [
+          "Change Order"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/securityContextParameters"
+          },
+          {
+            "$ref": "#/components/parameters/CSRFParameters"
+          },
+          {
+            "$ref": "#/components/parameters/coIdParameters"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/simpleActionChangeOrderRequestBody"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200OKOnHold"
+          },
+          "400": {
+            "$ref": "#/components/responses/400KO"
+          },
+          "401": {
+            "$ref": "#/components/responses/401KO"
+          },
+          "403": {
+            "$ref": "#/components/responses/403KO"
+          },
+          "404": {
+            "$ref": "#/components/responses/404KO"
+          },
+          "500": {
+            "$ref": "#/components/responses/500KO"
+          }
+        }
+      }
+    },
+    "/changeorder/{id}/resume": {
+      "post": {
+        "summary": "Resume an existing Change Order.",
+        "description": "Resume a Change Order",
+        "operationId": "POSTResume_dscm_co:co_ID",
+        "tags": [
+          "Change Order"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/securityContextParameters"
+          },
+          {
+            "$ref": "#/components/parameters/CSRFParameters"
+          },
+          {
+            "$ref": "#/components/parameters/coIdParameters"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/simpleActionChangeOrderRequestBody"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200OKResume"
+          },
+          "400": {
+            "$ref": "#/components/responses/400KO"
+          },
+          "401": {
+            "$ref": "#/components/responses/401KO"
+          },
+          "403": {
+            "$ref": "#/components/responses/403KO"
+          },
+          "404": {
+            "$ref": "#/components/responses/404KO"
+          },
+          "500": {
+            "$ref": "#/components/responses/500KO"
+          }
+        }
+      }
+    },
+    "/changeorder/search": {
+      "get": {
+        "summary": "Gets a list of Change Orders from indexed search",
+        "description": "Gets a list of Change Orders. By default, returns a total of up to 50 items, can be optionally increased upto 1000 items using $top query parameter.Recommendation, Use $searchStr query parameter with a minimum of two characters for better performances.",
+        "operationId": "GETSearch_dscm_co:CO_Search",
+        "tags": [
+          "Change Order"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$searchStr",
+            "in": "query",
+            "description": "A search text to find one or more items.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 1000.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeOrderSearchOutPut"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401KO"
+          },
+          "500": {
+            "$ref": "#/components/responses/500KO"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "ChangeOrderCreateInput": {
+        "required": [
+          "title",
+          "description"
+        ],
+        "properties": {
+          "policy": {
+            "type": "string",
+            "enum": [
+              "Change Order",
+              "External Change Order"
+            ],
+            "default": "Change Order"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "default": "Change Order"
+          },
+          "title": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "default": "name generated by autonaming"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ],
+            "default": "Low"
+          },
+          "Estimated Completion Date": {
+            "type": "string",
+            "format": "date"
+          },
+          "xmlApplicability": {
+            "type": "string",
+            "default": "undefined"
+          }
+        }
+      },
+      "ChangeOrderOutput": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "cestamp": {
+            "type": "string"
+          },
+          "policy": {
+            "type": "string",
+            "enum": [
+              "Change Order",
+              "External Change Order"
+            ]
+          },
+          "type": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "Prepare",
+              "In Work",
+              "In Approval",
+              "Approved",
+              "Complete",
+              "Implemented"
+            ],
+            "description": "current state of the Change Order"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "organization": {
+            "type": "string"
+          },
+          "collabSpace": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ],
+            "default": "Low"
+          },
+          "Estimated Completion Date": {
+            "type": "string",
+            "format": "date"
+          },
+          "xmlApplicability": {
+            "type": "string"
+          },
+          "onHold": {
+            "type": "boolean"
+          },
+          "dslc:ChangeOrderEnterpriseAttributes": {
+            "$ref": "#/components/schemas/ChangeOrderEnterpriseAttributes"
+          },
+          "members": {
+            "$ref": "#/components/schemas/Members"
+          },
+          "customerAttributes": {
+            "$ref": "#/components/schemas/CustomerAttributes"
+          },
+          "orchestratedChanges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectReference"
+            }
+          },
+          "governingChange": {
+            "$ref": "#/components/schemas/ObjectReference"
+          },
+          "implementedChanges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectReference"
+            }
+          },
+          "answeredIssues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectReference"
+            }
+          },
+          "prerequiredDependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectReference"
+            }
+          },
+          "prerequiringDependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectReference"
+            }
+          },
+          "corequiringDependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectReference"
+            }
+          }
+        }
+      },
+      "ChangeOrderModifyInput": {
+        "required": [
+          "cestamp"
+        ],
+        "properties": {
+          "cestamp": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ],
+            "default": "Low"
+          },
+          "Estimated Completion Date": {
+            "type": "string",
+            "format": "date"
+          },
+          "xmlApplicability": {
+            "type": "string",
+            "default": "undefined"
+          },
+          "dslc:ChangeOrderEnterpriseAttributes": {
+            "$ref": "#/components/schemas/ChangeOrderEnterpriseAttributes"
+          },
+          "remove": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ChangeOrderInputElementMembers"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeOrderRemoveInputElementCustomerAttributes"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeOrderInputElementOrchestratedChanges"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeOrderPrerequiredDependencies"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeOrderPrerequiringDependencies"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeOrderCorequiringDependencies"
+                }
+              ]
+            }
+          },
+          "add": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ChangeOrderInputElementMembers"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeOrderModifyAddInputElementCustomerAttributes"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeOrderInputElementOrchestratedChanges"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeOrderPrerequiredDependencies"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeOrderPrerequiringDependencies"
+                },
+                {
+                  "$ref": "#/components/schemas/ChangeOrderCorequiringDependencies"
+                }
+              ]
+            }
+          },
+          "replace": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ChangeOrderModifyReplaceInputElementCustomerAttributes"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ChangeOrderSimplePostAction": {
+        "required": [
+          "cestamp",
+          "comment"
+        ],
+        "properties": {
+          "cestamp": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          }
+        }
+      },
+      "ChangeOrderEnterpriseAttributes": {
+        "properties": {
+          "attribute1Name": {
+            "type": "string"
+          },
+          "attribute2Name": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ChangeOrderInputElementMembers": {
+        "properties": {
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "changeCoordinator": {
+                  "type": "string",
+                  "description": "full details of a Person can be retrieved using dedicated Web Service /resources/modeler/pno/person/userX"
+                },
+                "followers": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "full details of a Person can be retrieved using dedicated Web Service /resources/modeler/pno/person/userX"
+                  }
+                },
+                "assignees": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "full details of a Person can be retrieved using dedicated Web Service /resources/modeler/pno/person/userX"
+                  }
+                },
+                "groupFollowers": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "full details of a Person can be retrieved using group URI"
+                  }
+                },
+                "groupAssignees": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "full details of a Person can be retrieved using group URI"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ChangeOrderRemoveInputElementCustomerAttributes": {
+        "properties": {
+          "customerAttributes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "One or more SpecializationExtension can be removed from object"
+            }
+          }
+        }
+      },
+      "ChangeOrderInputElementOrchestratedChanges": {
+        "properties": {
+          "orchestratedChanges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectReference"
+            }
+          }
+        }
+      },
+      "ChangeOrderPrerequiredDependencies": {
+        "properties": {
+          "prerequiredDependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectReference"
+            }
+          }
+        }
+      },
+      "ChangeOrderPrerequiringDependencies": {
+        "properties": {
+          "prerequiringDependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectReference"
+            }
+          }
+        }
+      },
+      "ChangeOrderCorequiringDependencies": {
+        "properties": {
+          "corequiringDependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectReference"
+            }
+          }
+        }
+      },
+      "ChangeOrderModifyAddInputElementCustomerAttributes": {
+        "properties": {
+          "customerAttributes": {
+            "properties": {
+              "SpecializationExtensionName": {
+                "properties": {
+                  "customerAttribute1Name": {
+                    "type": "string"
+                  },
+                  "customerAttribute2Name": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ChangeOrderModifyReplaceInputElementCustomerAttributes": {
+        "properties": {
+          "customerAttributes": {
+            "$ref": "#/components/schemas/CustomerAttributes"
+          }
+        }
+      },
+      "Members": {
+        "properties": {
+          "changeCoordinator": {
+            "type": "string"
+          },
+          "changeOriginator": {
+            "type": "string"
+          },
+          "followers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "assignees": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "groupFollowers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "groupAssignees": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "routeTemplates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectReference"
+            }
+          }
+        }
+      },
+      "CustomerAttributes": {
+        "properties": {
+          "customerAttribute1Name": {
+            "type": "string"
+          },
+          "customerAttribute2Name": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "DeploymentExtensionName": {
+            "properties": {
+              "customerAttribute3Name": {
+                "type": "string"
+              },
+              "customerAttribute4Name": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "SpecializationExtensionName": {
+            "properties": {
+              "customerAttribute5Name": {
+                "type": "string"
+              },
+              "customerAttribute6Name": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ObjectReference": {
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "identifier": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          }
+        }
+      },
+      "ChangeOrderSearchOutPut": {
+        "properties": {
+          "changeOrder": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeOrderItemSearchOutPut"
+            }
+          }
+        }
+      },
+      "ChangeOrderItemSearchOutPut": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "example": "https://3dspace.mydomain:443/3dspace"
+          },
+          "type": {
+            "type": "string",
+            "example": "Change Order"
+          },
+          "identifier": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "relativePath": {
+            "type": "string",
+            "example": "/resources/v1/modeler/dscm/changeorder/F718B05686760000926EEB5BE7400900"
+          }
+        }
+      },
+      "ErrorOutput": {
+        "properties": {
+          "errorCode": {
+            "type": "string"
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "examples": {
+      "ChangeOrderCreateExample": {
+        "value": {
+          "policy": "Fast track Change",
+          "type": "Change Order",
+          "title": "Title of Change Order",
+          "description": "Description of Change Order",
+          "name": "name of Change Order",
+          "severity": "Low",
+          "Estimated Completion Date": "2017-07-22",
+          "xmlApplicability": "<configuration xml>"
+        }
+      },
+      "ChangeOrderOutputExample": {
+        "value": {
+          "id": "EE562168015FFCF14F940A513C63AA77",
+          "cestamp": "F718B05686760000926EEB5BE7400900",
+          "policy": "Fast track Change",
+          "type": "Change Order",
+          "description": "Description of Change Order",
+          "title": "Title of Change Order",
+          "name": "name of Change Order",
+          "state": "Prepare",
+          "owner": "MyCompany",
+          "collabSpace": "3DS Collab Space",
+          "severity": "Low",
+          "Estimated Completion Date": "2017-07-22T00:00:00.000Z",
+          "xmlApplicability": "<configuration xml>",
+          "onHold": false,
+          "dslc:ChangeOrderEnterpriseAttributes": {
+            "attribute1Name": "attribute1Value,",
+            "attribute2Name": [
+              "attribute2Value1"
+            ]
+          },
+          "members": {
+            "changeCoordinator": "userX",
+            "changeOriginator": "userX",
+            "followers": [
+              "userX"
+            ],
+            "assignees": [
+              "userX"
+            ],
+            "groupFollowers": [
+              "groupURI"
+            ],
+            "groupAssignees": [
+              "groupURI"
+            ],
+            "routeTemplates": [
+              {
+                "source": "https://3DEXPERIENCE_3DSpace",
+                "type": "Route Template",
+                "identifier": "9927B056074E00006207389600141659",
+                "relativePath": "/resources/v1/modeler/dsrt/routetemplates/9927B056074E00006207389600141659"
+              }
+            ]
+          },
+          "customerAttributes": {
+            "customerAttribute1Name": "customerAttribute1Value",
+            "customerAttribute2Name": [
+              "customerAttribute2Value1"
+            ],
+            "DeploymentExtensionName": {
+              "customerAttribute3Name": "customerAttribute3Value",
+              "customerAttribute4Name": [
+                "customerAttribute4Value1"
+              ]
+            },
+            "SpecializationExtensionName": {
+              "customerAttribute5Name": "customerAttribute5Value",
+              "customerAttribute6Name": [
+                "customerAttribute6Value1"
+              ]
+            }
+          },
+          "orchestratedChanges": [
+            {
+              "source": "https://3DEXPERIENCE_3DSpace",
+              "type": "Change Action",
+              "identifier": "9927B056074E00006207389600149533",
+              "relativePath": "/resources/v1/modeler/dslc/changeaction/9927B056074E00006207389600149533"
+            },
+            {
+              "source": "https://3DEXPERIENCE_3DSpace",
+              "type": "Change Order",
+              "identifier": "9927B056074E0000620738960014432",
+              "relativePath": "/resources/v1/modeler/dscm/changeorder/9927B056074E0000620738960014432"
+            }
+          ],
+          "governingChange": [
+            {
+              "source": "https://3DEXPERIENCE_3DSpace",
+              "type": "Change Order",
+              "identifier": "9927B056074E0000620738960014432",
+              "relativePath": "/resources/v1/modeler/dscm/changeorder/9927B056074E0000620738960014432"
+            }
+          ],
+          "implementedChanges": [
+            {
+              "source": "https://3DEXPERIENCE_3DSpace",
+              "type": "Change Request",
+              "identifier": "9927B056074E0000620738960017846",
+              "relativePath": "/resources/v1/modeler/dscm/changerequest/9927B056074E0000620738960017846"
+            }
+          ],
+          "answeredIssues": [
+            {
+              "source": "https://3DEXPERIENCE_3DSpace",
+              "type": "Issue",
+              "identifier": "9927B056074E0000620738960017846",
+              "relativePath": "/resources/v1/modeler/dsiss/issue/9927B056074E0000620738960019126"
+            }
+          ],
+          "prerequiredDependencies": [
+            {
+              "source": "https://3DEXPERIENCE_3DSpace",
+              "type": "Change Action",
+              "identifier": "9927B056074E00006207389600149533",
+              "relativePath": "/resources/v1/modeler/dslc/changeaction/9927B056074E00006207389600149533"
+            }
+          ],
+          "prerequiringDependencies": [
+            {
+              "source": "https://3DEXPERIENCE_3DSpace",
+              "type": "Change Action",
+              "identifier": "9927B056074E00006207389600149533",
+              "relativePath": "/resources/v1/modeler/dslc/changeaction/9927B056074E00006207389600149533"
+            }
+          ],
+          "corequiringDependencies": [
+            {
+              "source": "https://3DEXPERIENCE_3DSpace",
+              "type": "Change Order",
+              "identifier": "9927B056074E0000620738960014432",
+              "relativePath": "/resources/v1/modeler/dscm/changeorder/9927B056074E0000620738960014432"
+            }
+          ]
+        }
+      },
+      "ChangeOrderModifyExample": {
+        "value": {
+          "cestamp": "F718B05686760000926EEB5BE7400900",
+          "description": "Description of Change Order\",",
+          "title": "Title of Change Order",
+          "severity": "Low",
+          "Estimated Completion Date": "2022-03-22",
+          "xmlApplicability": "undefined",
+          "dslc:ChangeOrderEnterpriseAttributes": {
+            "attribute1Name": "attribute1Value",
+            "attribute2Name": [
+              "attribute2Value1"
+            ]
+          },
+          "remove": [
+            {
+              "members": [
+                {
+                  "changeCoordinator": "userX",
+                  "followers": [
+                    "userX"
+                  ],
+                  "assignees": [
+                    "userX"
+                  ],
+                  "groupAssignees": [
+                    "groupURI"
+                  ],
+                  "groupFollowers": [
+                    "groupURI"
+                  ],
+                  "routeTemplates": [
+                    {
+                      "source": "https://3DEXPERIENCE_3DSpace",
+                      "type": "Route Template",
+                      "identifier": "5DBA8256317836006409844A0016A3BC",
+                      "relativePath": "/resources/v1/modeler/dsrt/routetemplates/5DBA8256317836006409844A0016A3BC"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "customerAttributes": [
+                "SpecializationExtensionName"
+              ]
+            },
+            {
+              "orchestratedChanges": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "Change Action",
+                  "identifier": "9927B056074E00006207389600149533",
+                  "relativePath": "/resources/v1/modeler/dslc/changeaction/9927B056074E00006207389600149533"
+                }
+              ]
+            },
+            {
+              "prerequiredDependencies": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "Change Action",
+                  "identifier": "9927B056074E00006207389600149533",
+                  "relativePath": "/resources/v1/modeler/dslc/changeaction/9927B056074E00006207389600149533"
+                }
+              ]
+            },
+            {
+              "prerequiringDependencies": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "Change Action",
+                  "identifier": "9927B056074E00006207389600149533",
+                  "relativePath": "/resources/v1/modeler/dslc/changeaction/9927B056074E00006207389600149533"
+                }
+              ]
+            },
+            {
+              "corequiringDependencies": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "Change Order",
+                  "identifier": "9927B056074E0000620738960014432",
+                  "relativePath": "/resources/v1/modeler/dscm/changeorder/9927B056074E0000620738960014432"
+                }
+              ]
+            }
+          ],
+          "add": [
+            {
+              "members": [
+                {
+                  "changeCoordinator": "userX",
+                  "followers": [
+                    "userX"
+                  ],
+                  "assignees": [
+                    "userX"
+                  ],
+                  "groupAssignees": [
+                    "groupURI"
+                  ],
+                  "groupFollowers": [
+                    "groupURI"
+                  ],
+                  "routeTemplates": [
+                    {
+                      "source": "https://3DEXPERIENCE_3DSpace",
+                      "type": "Route Template",
+                      "identifier": "9927B056074E00006207389600141659",
+                      "relativePath": "/resources/v1/modeler/dsrt/routetemplates/9927B056074E00006207389600141659"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "customerAttributes": {
+                "SpecializationExtensionName": {
+                  "customerAttribute1Name": "customerAttribute1Value",
+                  "customerAttribute2Name": [
+                    "customerAttribute2Value"
+                  ]
+                }
+              }
+            },
+            {
+              "orchestratedChanges": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "Change Action",
+                  "identifier": "9927B056074E00006207389600149533",
+                  "relativePath": "/resources/v1/modeler/dslc/changeaction/9927B056074E00006207389600149533"
+                }
+              ]
+            },
+            {
+              "prerequiredDependencies": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "Change Action",
+                  "identifier": "9927B056074E00006207389600149533",
+                  "relativePath": "/resources/v1/modeler/dslc/changeaction/9927B056074E00006207389600149533"
+                }
+              ]
+            },
+            {
+              "prerequiringDependencies": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "Change Action",
+                  "identifier": "9927B056074E00006207389600149533",
+                  "relativePath": "/resources/v1/modeler/dslc/changeaction/9927B056074E00006207389600149533"
+                }
+              ]
+            },
+            {
+              "corequiringDependencies": [
+                {
+                  "source": "https://3DEXPERIENCE_3DSpace",
+                  "type": "Change Order",
+                  "identifier": "9927B056074E0000620738960014432",
+                  "relativePath": "/resources/v1/modeler/dscm/changeorder/9927B056074E0000620738960014432"
+                }
+              ]
+            }
+          ],
+          "replace": [
+            {
+              "customerAttributes": {
+                "customerAttribute1Name": "attribute1Value",
+                "customerAttribute2Name": [
+                  "attribute2Value1"
+                ],
+                "DeploymentExtensionName": {
+                  "customerAttribute3Name": "attribute3Value",
+                  "customerAttribute4Name": [
+                    "attribute4Value1"
+                  ]
+                },
+                "SpecializationExtensionName": {
+                  "customerAttribute5Name": "attribute5Value",
+                  "customerAttribute6Name": [
+                    "attribute6Value1"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "ChangeOrderSimpleActionExample": {
+        "value": {
+          "cestamp": "F718B05686760000926EEB5BE7400900",
+          "comment": "comment for action"
+        }
+      },
+      "ChangeActionReferenceOutput": {
+        "value": {
+          "source": "https://3DEXPERIENCE_3DSpace",
+          "type": "Change Action",
+          "identifier": "9927B056074E00006207389600149533",
+          "relativePath": "/resources/v1/modeler/dslc/changeaction/9927B056074E00006207389600149533"
+        }
+      },
+      "ChangeOrderReferenceOutput": {
+        "value": {
+          "source": "https://3DEXPERIENCE_3DSpace",
+          "type": "Change Order",
+          "identifier": "9927B056074E0000620738960014432",
+          "relativePath": "/resources/v1/modeler/dscm/changeorder/9927B056074E0000620738960014432"
+        }
+      },
+      "ChangeRequestReferenceOutput": {
+        "value": {
+          "source": "https://3DEXPERIENCE_3DSpace",
+          "type": "Change Request",
+          "identifier": "9927B056074E0000620738960017846",
+          "relativePath": "/resources/v1/modeler/dscm/changerequest/9927B056074E0000620738960017846"
+        }
+      },
+      "IssueReferenceOutput": {
+        "value": {
+          "source": "https://3DEXPERIENCE_3DSpace",
+          "type": "Issue",
+          "identifier": "9927B056074E0000620738960017846",
+          "relativePath": "/resources/v1/modeler/dsiss/issue/9927B056074E0000620738960019126"
+        }
+      },
+      "OrchestratedChangesExample": {
+        "value": [
+          {
+            "$ref": "#/components/examples/ChangeActionReferenceOutput"
+          },
+          {
+            "$ref": "#/components/examples/ChangeOrderReferenceOutput"
+          }
+        ]
+      },
+      "GoverningChangeExample": {
+        "value": {
+          "$ref": "#/components/examples/ChangeOrderReferenceOutput"
+        }
+      },
+      "ImplementedChangesExample": {
+        "value": [
+          {
+            "$ref": "#/components/examples/ChangeRequestReferenceOutput"
+          }
+        ]
+      },
+      "AnsweredIssuesExample": {
+        "value": [
+          {
+            "$ref": "#/components/examples/IssueReferenceOutput"
+          }
+        ]
+      },
+      "PrerequiredDependenciesExample": {
+        "value": [
+          {
+            "$ref": "#/components/examples/ChangeActionReferenceOutput"
+          },
+          {
+            "$ref": "#/components/examples/ChangeOrderReferenceOutput"
+          }
+        ]
+      },
+      "PrerequiringDependenciesExample": {
+        "value": [
+          {
+            "$ref": "#/components/examples/ChangeActionReferenceOutput"
+          },
+          {
+            "$ref": "#/components/examples/ChangeOrderReferenceOutput"
+          }
+        ]
+      },
+      "CorequiringDependenciesExample": {
+        "value": [
+          {
+            "$ref": "#/components/examples/ChangeActionReferenceOutput"
+          },
+          {
+            "$ref": "#/components/examples/ChangeOrderReferenceOutput"
+          }
+        ]
+      },
+      "ErrorOutput": {
+        "value": {
+          "errorCode": "1",
+          "errorMessage": "Error message"
+        }
+      }
+    },
+    "requestBodies": {
+      "createChangeOrderRequestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ChangeOrderCreateInput"
+            },
+            "examples": {
+              "ChangeOrderCreateExample": {
+                "$ref": "#/components/examples/ChangeOrderCreateExample"
+              }
+            }
+          }
+        }
+      },
+      "modifyChangeOrderRequestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ChangeOrderModifyInput"
+            },
+            "examples": {
+              "ChangeOrderModifyExample": {
+                "$ref": "#/components/examples/ChangeOrderModifyExample"
+              }
+            }
+          }
+        }
+      },
+      "simpleActionChangeOrderRequestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ChangeOrderSimplePostAction"
+            },
+            "examples": {
+              "ChangeOrderSimpleActionExample": {
+                "$ref": "#/components/examples/ChangeOrderSimpleActionExample"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200OKGet": {
+        "description": "Change Order successfully retrieved.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ChangeOrderOutput"
+            },
+            "examples": {
+              "ChangeOrderDetails": {
+                "$ref": "#/components/examples/ChangeOrderOutputExample"
+              }
+            }
+          }
+        }
+      },
+      "200OKPost": {
+        "description": "Change Order successfully created.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ChangeOrderOutput"
+            },
+            "examples": {
+              "ChangeOrderDetails": {
+                "$ref": "#/components/examples/ChangeOrderOutputExample"
+              }
+            }
+          }
+        }
+      },
+      "200OKPatch": {
+        "description": "Change Order successfully modified.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ChangeOrderOutput"
+            },
+            "examples": {
+              "ChangeOrderDetails": {
+                "$ref": "#/components/examples/ChangeOrderOutputExample"
+              }
+            }
+          }
+        }
+      },
+      "200OKOnHold": {
+        "description": "Change Order successfully set on hold."
+      },
+      "200OKResume": {
+        "description": "Change Order successfully resumed."
+      },
+      "200OKCancel": {
+        "description": "Change Order successfully cancelled."
+      },
+      "400KO": {
+        "description": "Identifier passed in input is not a Change Order or invalid Json passed in input",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorOutput"
+            },
+            "examples": {
+              "errorExample": {
+                "$ref": "#/components/examples/ErrorOutput"
+              }
+            }
+          }
+        }
+      },
+      "401KO": {
+        "description": "Could be linked with missing security context or licensing",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorOutput"
+            },
+            "examples": {
+              "errorExample": {
+                "$ref": "#/components/examples/ErrorOutput"
+              }
+            }
+          }
+        }
+      },
+      "403KO": {
+        "description": "Function cannot be executed as a check failed, could be linked with an invalid CSRF token or a system condition unfulfilled",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorOutput"
+            },
+            "examples": {
+              "errorExample": {
+                "$ref": "#/components/examples/ErrorOutput"
+              }
+            }
+          }
+        }
+      },
+      "404KO": {
+        "description": "Change Order id specified cannot be found or is not accessible",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorOutput"
+            },
+            "examples": {
+              "errorExample": {
+                "$ref": "#/components/examples/ErrorOutput"
+              }
+            }
+          }
+        }
+      },
+      "500KO": {
+        "description": "Generic issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorOutput"
+            },
+            "examples": {
+              "errorExample": {
+                "$ref": "#/components/examples/ErrorOutput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "securityContextParameters": {
+        "name": "SecurityContext",
+        "in": "header",
+        "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "CSRFParameters": {
+        "name": "ENO_CSRF_TOKEN",
+        "in": "header",
+        "description": "CSRF token could be obtained from a GET or from dedicated web service /resources/v1/application/CSRF",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "coIdParameters": {
+        "name": "id",
+        "in": "path",
+        "description": "The physicalid of the Change Order you want to retrieve",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "fieldsParameters": {
+        "name": "$fields",
+        "in": "query",
+        "description": "The parameter allowing retrieval of the Change Order's additional fieds. Comma separated list of fields among members, customerAttributes, orchestratedChanges, governingChange, implementedChanges, answeredIssues, dependencies",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,590 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "3DPassport Web Services",
+    "description": "This page contains some 3DPassport web service definitions. \n- For User Account, APIs are restricted to OnPremises and Private Cloud (with VPN) and cannot be used on Public Cloud or Private Cloud with VPN. Consuming those API requires specicif credentials that can be obtained using 3DPassport Control Center application.",
+    "version": "1.0.0",
+    "x-ds-service": [
+      "3DPassport"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DPassport}",
+      "variables": {
+        "3DPassport": {
+          "default": "https://3DEXPERIENCE_3DPassport"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "User Account",
+      "description": "This section describes the API to create, update or delete user accounts."
+    }
+  ],
+  "paths": {
+    "/api/private/user/register": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/dsclientid"
+        },
+        {
+          "$ref": "#/components/parameters/dsclientsecret"
+        }
+      ],
+      "post": {
+        "summary": "Creates user account",
+        "description": "The API creates a new  user account.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/userDataCreatingBody"
+        },
+        "tags": [
+          "User Account"
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/201"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/api/private/user/update": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/dsclientid"
+        },
+        {
+          "$ref": "#/components/parameters/dsclientsecret"
+        }
+      ],
+      "post": {
+        "summary": "Updates user account data",
+        "description": "The API updates the user account data. The none passed data, and already existing, are not modified.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/userDataUpdatingBody"
+        },
+        "tags": [
+          "User Account"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/api/private/user/v2/get": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/dsclientid"
+        },
+        {
+          "$ref": "#/components/parameters/dsclientsecret"
+        }
+      ],
+      "post": {
+        "summary": "Retrieves user account data",
+        "description": "The API retrieve a user account from a username or an email. \n- If the username or the email is valid, the successful response contains all known user data.\n- If the username or the email is unknown, the response is still successul because the API creates a new account. The response body is anyway shorter.\n- If both username and email are spicified as input and one or other is wrong, the response will contains the information of the correct input.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/userBody"
+        },
+        "tags": [
+          "User Account"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/api/private/user/delete": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/dsclientid"
+        },
+        {
+          "$ref": "#/components/parameters/dsclientsecret"
+        }
+      ],
+      "post": {
+        "summary": "Deletes user account",
+        "description": "The API deletes a user account.\n- If you only specify the identifier (username or email) as input, the account will be deleted but only the username will be archived (no more possible to create an account with this username).\n- If you specify the identifier and the archiveEmail as input, the account will be deleted and both username and email will be archived (no more possible to create an account with this email and username).",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/userBodyDelete"
+        },
+        "tags": [
+          "User Account"
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/204"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/api/private/user/recover": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/dsclientid"
+        },
+        {
+          "$ref": "#/components/parameters/dsclientsecret"
+        }
+      ],
+      "post": {
+        "summary": "Recovers user account",
+        "description": "The API recovers a user account.\n- If you only specify the identifier (username or email) as input, only the email will be recovered (possible to create an account with this email but not with this username).\n- If you specify the identifier and the recoverUsername as input, the account will be recovered (both username and email will be recovered).",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/userBodyRecover"
+        },
+        "tags": [
+          "User Account"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-recover"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "dsclientid": {
+        "name": "ds-client-id",
+        "description": "It is the header for passing the name created in the 3DPassport Control Center application.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "dsclientsecret": {
+        "name": "ds-client-secret",
+        "description": "It is the header for passing the string generated by 3DPassport Control Center application for the ds-client-id value.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "userBodyRequest": {
+        "description": "It is the JSON for identifying a user. \n- At least one key is mandatory. \n- No other keys than username and email are supported. ",
+        "type": "object",
+        "properties": {
+          "username": {
+            "description": "The login of the user.",
+            "type": "string"
+          },
+          "email": {
+            "description": "The email of the user. The expected format is xxx@yyy.zzz ",
+            "type": "string"
+          }
+        }
+      },
+      "userBodyRequestDelete": {
+        "description": "It is the JSON for identifying a user. \n- At least one key is mandatory. \n- No other keys than username and email are supported. ",
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The login of the user.",
+            "type": "string"
+          },
+          "archiveEmail": {
+            "description": "Its default value is False. If true, the email will be archived. ",
+            "type": "boolean"
+          }
+        }
+      },
+      "userBodyRequestRecover": {
+        "description": "It is the JSON for identifying a user. \n- At least one key is mandatory. \n- No other keys than username and email are supported. ",
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The username or email of the user.",
+            "type": "string"
+          },
+          "recoverUsername": {
+            "description": "Its default value is False. If true, the username will be recovered.  ",
+            "type": "boolean"
+          }
+        }
+      },
+      "userDetails": {
+        "description": "It is the data of a user account. When a user account is created, updated, or retrieved, the JSON response  contains the userDetails key described just below.",
+        "type": "object",
+        "required": [
+          "fields"
+        ],
+        "properties": {
+          "fields": {
+            "required": [
+              "user_uuid"
+            ],
+            "properties": {
+              "user_uuid": {
+                "description": "An uuid generated when the user account is created.",
+                "type": "string"
+              },
+              "username": {
+                "description": "The username of the user.",
+                "type": "string"
+              },
+              "email": {
+                "description": "The email of the user.",
+                "type": "string"
+              },
+              "firstName": {
+                "description": "The firstname of the user.",
+                "type": "string"
+              },
+              "lastName": {
+                "description": "The lastname of the user.",
+                "type": "string"
+              },
+              "emailConfirmed": {
+                "description": "The value is true when the user has validated the account.",
+                "type": "boolean"
+              },
+              "twoFAactive": {
+                "description": "The value is true when the second authentication factor is activated.",
+                "type": "boolean"
+              },
+              "passwordCreationTime": {
+                "description": "The count of seconds since January 1st 1970",
+                "type": "integer"
+              },
+              "sourceRepositories": {
+                "description": "The repositories where the account has been found.",
+                "type": "string"
+              },
+              "country": {
+                "description": "The iso code (iso2 or iso3) of the user country.",
+                "type": "string"
+              },
+              "city": {
+                "description": "The user city. The string cannot exceed 255 chars.",
+                "type": "string"
+              },
+              "address": {
+                "description": "The user address. The string cannot exceed 255 chars.",
+                "type": "string"
+              },
+              "zip": {
+                "description": "The user zip code. The string cannot exceed 255 chars.",
+                "type": "string"
+              },
+              "telephone": {
+                "description": "The user phone number. The string cannot exceed 255 chars.",
+                "type": "string"
+              },
+              "company": {
+                "description": "The user company. The string cannot exceed 255 chars.",
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "userDataBodyRequest": {
+        "description": "It is the JSON for creating or updating a user account.",
+        "type": "object",
+        "required": [
+          "fields"
+        ],
+        "properties": {
+          "batchCreation": {
+            "description": "The parameter enables to skip some tests valid in UI context, but useless in batch context. We recommend to set true.",
+            "type": "boolean"
+          },
+          "disableUpdateNotification": {
+            "description": "The parameter disables sending email when a user account is created, updated or deleted. We recommend to set true.",
+            "type": "boolean"
+          },
+          "fields": {
+            "description": "",
+            "type": "object",
+            "required": [
+              "firstName",
+              "lastName",
+              "username",
+              "email",
+              "country"
+            ],
+            "properties": {
+              "username": {
+                "description": "The login of the user. The platform administrator may have defined naming policy in the 3DPassport Control Center application. The string cannot exceed 255 chars.",
+                "type": "string"
+              },
+              "email": {
+                "description": "The user email. The expected format is xxx@yyy.zzz",
+                "type": "string"
+              },
+              "lastName": {
+                "description": "The user lastname. The string cannot exceed 255 chars.",
+                "type": "string"
+              },
+              "firstName": {
+                "description": "The user firstname. The string cannot exceed 255 chars.",
+                "type": "string"
+              },
+              "password": {
+                "description": "The password of the user. The platform administrator may have defined naming policy in the 3DPassport Control Center application.",
+                "type": "string"
+              },
+              "country": {
+                "description": "The iso code (iso2 or iso3) of the user country.",
+                "type": "string"
+              },
+              "city": {
+                "description": "The user city. The string cannot exceed 255 chars.",
+                "type": "string"
+              },
+              "address": {
+                "description": "The user address. The string cannot exceed 255 chars.",
+                "type": "string"
+              },
+              "zip": {
+                "description": "The user zip code. The string cannot exceed 255 chars.",
+                "type": "string"
+              },
+              "telephone": {
+                "description": "The user phone number. The string cannot exceed 255 chars.",
+                "type": "string"
+              },
+              "company": {
+                "description": "The user company. The string cannot exceed 255 chars.",
+                "type": "string"
+              },
+              "language": {
+                "description": "The user language. The string cannot exceed 255 chars.",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "userBody": {
+        "description": "The request body for  identifying the user.",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/userBodyRequest"
+            }
+          }
+        }
+      },
+      "userBodyDelete": {
+        "description": "The request body for  identifying the user.",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/userBodyRequestDelete"
+            }
+          }
+        }
+      },
+      "userBodyRecover": {
+        "description": "The request body for  identifying the user.",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/userBodyRequestRecover"
+            }
+          }
+        }
+      },
+      "userDataCreatingBody": {
+        "description": "The data for creating a user account.",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/userDataBodyRequest"
+            }
+          }
+        }
+      },
+      "userDataUpdatingBody": {
+        "description": "The data for  updating a user account.",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/userDataBodyRequest"
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Successful response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "It is the successful response. The user data are mainly described by the userDetails schema.",
+              "type": "object",
+              "required": [
+                "code",
+                "messages",
+                "userDetails"
+              ],
+              "properties": {
+                "code": {
+                  "description": "The value is \n- 0 The fields key is complete. \n- -1 The fields key  contains at least uuid_id.",
+                  "type": "integer"
+                },
+                "messages": {
+                  "description": "Information about the operation.",
+                  "type": "array",
+                  "items": {}
+                },
+                "userDetails": {
+                  "$ref": "#/components/schemas/userDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "201": {
+        "description": "Successful response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "It .",
+              "type": "object",
+              "required": [
+                "code",
+                "messages",
+                "userDetails"
+              ],
+              "properties": {
+                "code": {
+                  "description": "The value is 0 is successul operation, otherwise -1. The later case may occur in the creation case.",
+                  "type": "integer"
+                },
+                "messages": {
+                  "description": "Information about the operation.",
+                  "type": "array",
+                  "items": {}
+                },
+                "userDetails": {
+                  "$ref": "#/components/schemas/userDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "204": {
+        "description": "The user account has been successfully deleted."
+      },
+      "400": {
+        "description": "The response in case of bad inputs .",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "It .",
+              "type": "object",
+              "required": [
+                "code",
+                "messages"
+              ],
+              "properties": {
+                "code": {
+                  "description": "The value is -1",
+                  "type": "integer"
+                },
+                "messages": {
+                  "description": "",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "example": {
+              "code": -1,
+              "messages": [
+                "..."
+              ]
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "The authentication is invalid. The ds-client-id or ds-client-secret request headers are either wrong, or missing. ",
+        "content": {
+          "text": {}
+        }
+      },
+      "200-recover": {
+        "description": "Successful response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "It is the successful response.",
+              "type": "object",
+              "required": [
+                "code",
+                "messages"
+              ],
+              "properties": {
+                "code": {
+                  "description": "The value is \n- 0 The fields key is complete. \n- -1 The fields key  contains at least uuid_id.",
+                  "type": "integer"
+                },
+                "messages": {
+                  "description": "Information about the operation.",
+                  "type": "array",
+                  "items": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

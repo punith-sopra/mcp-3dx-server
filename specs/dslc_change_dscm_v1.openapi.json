@@ -1,0 +1,2569 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Change Action Web Services (Change Manager)",
+    "description": "Change Action Web Services",
+    "summary": "APIs to manage change actions (search, create, retrieve, patch, approve and reject)",
+    "version": "1.12.0",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dscm",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3dspace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dscm:CA/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/changeaction": {
+      "post": {
+        "summary": "Creates a new Change Action.",
+        "description": "Creates a new Change Action or subtype of Change Action with elements passed in input. Elements passed in input can only be part of the core part",
+        "operationId": "POST_dscm_ca",
+        "tags": [
+          "Change Action (Role: Change Manager)"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "CSRF token could be obtained from a GET or from dedicated web service /resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeActionCreateInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Change Action successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeActionOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Issue occured during creation of the Change Action. Invalid Json passed in input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Function cannot be executed as a check failed, could be linked with an invalid CSRF token or a system condition unfulfilled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/changeaction/{id}": {
+      "get": {
+        "summary": "Retrieve a Change Action.",
+        "description": "Retrieves a Change Action with the required facets. Core part is always retrieved",
+        "operationId": "GET_dscm_ca:CA_ID",
+        "tags": [
+          "Change Action (Role: Change Manager)"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The physicalid of the Change Action you want to retrieve",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$fields",
+            "in": "query",
+            "description": "The parameter allowing retrieval of the Change Action's additional fields. Comma separated list of fields among members, proposedChanges, realizedChanges, realizedActivities, referentials, contexts, flowDown, governingChanges, customerAttributes, dependencies, stacking",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Change Action successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeActionOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Issue occured during retrieval of the Change Action. Identifier passed in input is not a Change Action or Invalid Json passed in input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Modify an existing Change Action.",
+        "description": "Modify an existing Change Action. Only the elements passed in input are modified. Output will be composed of the core part as well as the modified fields. Addition of Proposed Changes is limited at 150 per call.",
+        "operationId": "PATCH_dscm_ca:CA_ID",
+        "tags": [
+          "Change Action (Role: Change Manager)"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "CSRF token could be obtained from a GET or from dedicated web service /resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The physicalid of the Change Action you want to modify",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeActionModifyInputCHG"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Change Action successfully modified.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeActionOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Identifier passed in input is not a Change Action or invalid Json passed in input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Function cannot be executed as a check failed, could be linked with an invalid CSRF token or a system condition unfulfilled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Addition of Proposed Changes is limited to 150 elements in a single call.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a Change Action.",
+        "description": "Deletes a Change Action from the system",
+        "operationId": "DELETE_dscm_ca:CA_ID",
+        "tags": [
+          "Change Action (Role: Change Manager)"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The physicalid of the Change Action you want to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "CSRF token could be obtained from a GET or from dedicated web service /resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Change Action successfully deleted"
+          },
+          "400": {
+            "description": "Identifier passed in input is not a Change Action or Invalid Json passed in input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Function cannot be executed as a check failed, could be linked with an invalid CSRF token or a system condition unfulfilled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/changeaction/{id}/cancel": {
+      "put": {
+        "summary": "Cancel an existing Change Action.",
+        "description": "Cancel a Change Action",
+        "operationId": "PUTCancel_dscm_ca:CA_ID",
+        "tags": [
+          "Change Action (Role: Change Manager)"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "CSRF token could be obtained from a GET or from dedicated web service /resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The physicalid of the Change Action you want to cancel",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeActionCancelInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Change Action successfully cancelled."
+          },
+          "400": {
+            "description": "Identifier passed in input is not a Change Action or invalid Json passed in input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Function cannot be executed as a check failed, could be linked with an invalid CSRF token or a system condition unfulfilled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/changeaction/{id}/hold": {
+      "put": {
+        "summary": "Set an existing Change Action on hold.",
+        "description": "Set a Change Action on hold",
+        "operationId": "PUTHold_dscm_ca:CA_ID",
+        "tags": [
+          "Change Action (Role: Change Manager)"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "CSRF token could be obtained from a GET or from dedicated web service /resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The physicalid of the Change Action you want to set on hold",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeActionCestampInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Change Action successfully set on hold."
+          },
+          "400": {
+            "description": "Identifier passed in input is not a Change Action or invalid Json passed in input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Function cannot be executed as a check failed, could be linked with an invalid CSRF token or a system condition unfulfilled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/changeaction/{id}/resume": {
+      "put": {
+        "summary": "Resume an existing Change Action.",
+        "description": "Resume a Change Action",
+        "operationId": "PUTResume_dscm_ca:CA_ID",
+        "tags": [
+          "Change Action (Role: Change Manager)"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "CSRF token could be obtained from a GET or from dedicated web service /resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The physicalid of the Change Action you want to resume",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeActionCestampInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Change Action successfully resumed."
+          },
+          "400": {
+            "description": "Identifier passed in input is not a Change Action or invalid Json passed in input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Function cannot be executed as a check failed, could be linked with an invalid CSRF token or a system condition unfulfilled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/changeaction/{id}/approve": {
+      "put": {
+        "summary": "Approve a Change Action",
+        "description": "Approve a Change Action",
+        "operationId": "PUTApprove_dscm_ca:CA_ID",
+        "tags": [
+          "Change Action (Role: Change Manager)"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "CSRF token could be obtained from a GET or from dedicated web service /resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The physicalid of the Change Action you want to approve",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeActionApprovalRejectionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Change Action successfully approved."
+          },
+          "400": {
+            "description": "Identifier passed in input is not a Change Action or invalid Json passed in input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Function cannot be executed as a check failed, could be linked with an invalid CSRF token or a system condition unfulfilled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Primary conditions were fulfilled, subsequent process failed due to an error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Approval of Change Action on a Cloud environment can be done only if the Change Action is impacting 30 items or less",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/changeaction/{id}/reject": {
+      "put": {
+        "summary": "Reject a Change Action",
+        "description": "Reject a Change Action",
+        "operationId": "PUTReject_dscm_ca:CA_ID",
+        "tags": [
+          "Change Action (Role: Change Manager)"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "CSRF token could be obtained from a GET or from dedicated web service /resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The physicalid of the Change Action you want to reject",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeActionApprovalRejectionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Change Action successfully rejected."
+          },
+          "400": {
+            "description": "Identifier passed in input is not a Change Action or invalid Json passed in input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Function cannot be executed as a check failed, could be linked with an invalid CSRF token or a system condition unfulfilled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Primary conditions were fulfilled, subsequent process failed due to an error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/changeaction/search": {
+      "get": {
+        "summary": "Gets a list of Change Action from indexed search",
+        "description": "Gets a list of Change Actions. By default, returns a total of up to 50 items, can be optionally increased upto 1000 items using $top query parameter.Recommendation, Use $searchStr query parameter with a minimum of two characters for better performances.",
+        "operationId": "GETSearch_dscm_ca:CA_Search",
+        "tags": [
+          "Change Action (Role: Change Manager)"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$searchStr",
+            "in": "query",
+            "description": "A search text to find one or more items.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 1000.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeActionSearchOutPut"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "ChangeActionCestampInput": {
+        "required": [
+          "cestamp"
+        ],
+        "properties": {
+          "cestamp": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          }
+        }
+      },
+      "ChangeActionApprovalRejectionInput": {
+        "required": [
+          "cestamp",
+          "comment"
+        ],
+        "properties": {
+          "cestamp": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "comment": {
+            "type": "string",
+            "example": "associated comment"
+          }
+        }
+      },
+      "ChangeActionCancelInput": {
+        "required": [
+          "cestamp",
+          "comment"
+        ],
+        "properties": {
+          "cestamp": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "resaonForCancel": {
+            "type": "string",
+            "example": "Reason for the cancel"
+          }
+        }
+      },
+      "ChangeActionCreateInput": {
+        "required": [
+          "description",
+          "title"
+        ],
+        "properties": {
+          "policy": {
+            "type": "string",
+            "enum": [
+              "Change Action",
+              "External Change Action"
+            ],
+            "default": "Change Action",
+            "example": "Change Action"
+          },
+          "description": {
+            "type": "string",
+            "example": "Description of Change Action"
+          },
+          "type": {
+            "type": "string",
+            "example": "Type of Change Action or its Sub type"
+          },
+          "title": {
+            "type": "string",
+            "example": "Title of Change Action"
+          },
+          "name": {
+            "type": "string",
+            "default": "name generated by autonaming",
+            "example": "name of Change Action"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ],
+            "default": "Low",
+            "example": "Low"
+          },
+          "Estimated Start Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-21"
+          },
+          "Estimated Completion Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-22"
+          },
+          "xmlApplicability": {
+            "type": "string",
+            "default": "undefined",
+            "example": "<configuration xml>"
+          }
+        }
+      },
+      "ChangeActionModifyInput": {
+        "required": [
+          "cestamp"
+        ],
+        "properties": {
+          "cestamp": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "description": {
+            "type": "string",
+            "example": "Description of Change Action"
+          },
+          "title": {
+            "type": "string",
+            "example": "Title of Change Action"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ],
+            "default": "Low",
+            "example": "Low"
+          },
+          "Estimated Start Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-21"
+          },
+          "Estimated Completion Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-22"
+          },
+          "xmlApplicability": {
+            "type": "string",
+            "example": "<configuration xml>"
+          },
+          "dslc:ChangeActionEnterpriseAttributes": {
+            "$ref": "#/components/schemas/ChangeActionEnterpriseAttributes"
+          },
+          "remove": {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInput"
+          },
+          "add": {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInput"
+          },
+          "replace": {
+            "$ref": "#/components/schemas/ChangeActionModifyReplaceInput"
+          }
+        }
+      },
+      "ChangeActionModifyInputCHG": {
+        "required": [
+          "cestamp"
+        ],
+        "properties": {
+          "cestamp": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "description": {
+            "type": "string",
+            "example": "Description of Change Action"
+          },
+          "title": {
+            "type": "string",
+            "example": "Title of Change Action"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ],
+            "default": "Low",
+            "example": "Low"
+          },
+          "Estimated Start Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-21"
+          },
+          "Estimated Completion Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-22"
+          },
+          "xmlApplicability": {
+            "type": "string",
+            "example": "<configuration xml>"
+          },
+          "dslc:ChangeActionEnterpriseAttributes": {
+            "$ref": "#/components/schemas/ChangeActionEnterpriseAttributes"
+          },
+          "remove": {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputCHG"
+          },
+          "add": {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputCHG"
+          },
+          "replace": {
+            "$ref": "#/components/schemas/ChangeActionModifyReplaceInput"
+          }
+        }
+      },
+      "ChangeActionEnterpriseAttributes": {
+        "properties": {
+          "attribute1Name": {
+            "type": "string",
+            "example": "attribute1Value"
+          },
+          "attribute2Name": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Value1"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyRemoveInput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElement"
+        }
+      },
+      "ChangeActionModifyRemoveInputCHG": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementCHG"
+        }
+      },
+      "ChangeActionModifyRemoveInputElement": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementMembers"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementReferentials"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementContexts"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementProposedChanges"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementIsFlowDownOf"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementCustomerAttributes"
+          }
+        ]
+      },
+      "ChangeActionModifyRemoveInputElementCHG": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementMembers"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementReferentials"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementContexts"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementProposedChanges"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementIsFlowDownOfCHG"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementPrerequiredDependencyCHG"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementPrerequiringDependencyCHG"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementCorequiringDependencyCHG"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementCustomerAttributes"
+          }
+        ]
+      },
+      "ChangeActionModifyRemoveInputElementMembers": {
+        "properties": {
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementMember"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyRemoveInputElementMember": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementMemberAssignees"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementMemberReviewers"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementMemberFollowers"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementMembergroupFollowers"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementMembergroupAssignees"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyRemoveInputElementMemberRouteTemplates"
+          }
+        ]
+      },
+      "ChangeActionModifyRemoveInputElementMemberAssignees": {
+        "properties": {
+          "assignees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyRemoveInputElementMemberReviewers": {
+        "properties": {
+          "reviewers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyRemoveInputElementMemberFollowers": {
+        "properties": {
+          "followers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyRemoveInputElementMembergroupFollowers": {
+        "properties": {
+          "groupFollowers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyRemoveInputElementMembergroupAssignees": {
+        "properties": {
+          "groupAssignees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyRemoveInputElementMemberRouteTemplates": {
+        "properties": {
+          "routeTemplates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteTemplateObject"
+            }
+          }
+        }
+      },
+      "Person": {
+        "type": "string",
+        "example": "userX",
+        "description": "full details of a Person can be retrieved using dedicated Web Service /resources/modeler/pno/person/userX"
+      },
+      "Group": {
+        "type": "string",
+        "example": "groupURI",
+        "description": "full details of a Group can be retrieved using group URI"
+      },
+      "ChangeActionModifyRemoveInputElementReferentials": {
+        "properties": {
+          "referentials": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectInput"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyRemoveInputElementContexts": {
+        "properties": {
+          "contexts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectInput"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyRemoveInputElementIsFlowDownOf": {
+        "properties": {
+          "isFlowDownOf": {
+            "deprecated": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeInput"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyRemoveInputElementIsFlowDownOfCHG": {
+        "properties": {
+          "isFlowDownOf": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeInput"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyRemoveInputElementPrerequiredDependencyCHG": {
+        "properties": {
+          "prerequiredDependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeInput"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyRemoveInputElementPrerequiringDependencyCHG": {
+        "properties": {
+          "prerequiringDependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeInput"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyRemoveInputElementCorequiringDependencyCHG": {
+        "properties": {
+          "corequiringDependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeInput"
+            }
+          }
+        }
+      },
+      "ObjectInput": {
+        "required": [
+          "identifier"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "example": "https://3DEXPERIENCE_3DSpace"
+          },
+          "type": {
+            "type": "string",
+            "example": "VPMReference"
+          },
+          "identifier": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "relativePath": {
+            "type": "string",
+            "example": "/resources/v1/modeler/dseng/dseng:EngItem/F718B05686760000926EEB5BE7400900"
+          }
+        }
+      },
+      "ChangeInput": {
+        "required": [
+          "identifier"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "example": "https://3DEXPERIENCE_3DSpace"
+          },
+          "type": {
+            "type": "string",
+            "example": "Change Action"
+          },
+          "identifier": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "relativePath": {
+            "type": "string",
+            "example": "/resources/v1/modeler/dslc/changeaction/F718B05686760000926EEB5BE7400900"
+          }
+        }
+      },
+      "RouteTemplateObject": {
+        "required": [
+          "identifier"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "example": "https://3DEXPERIENCE_3DSpace"
+          },
+          "type": {
+            "type": "string",
+            "example": "Route Template"
+          },
+          "identifier": {
+            "type": "string",
+            "example": "9927B056074E00006207389600141659"
+          },
+          "relativePath": {
+            "type": "string",
+            "example": "/resources/v1/modeler/dsrt/routetemplates/9927B056074E00006207389600141659"
+          }
+        }
+      },
+      "ChangeActionModifyRemoveInputElementProposedChanges": {
+        "properties": {
+          "proposedChanges": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "EE562168015FFCF14F940A513C63AA77",
+              "description": "the internal id of the Proposed Change or What to be deleted. When a Proposed Change is deleted all connected What are deleted too"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyRemoveInputElementCustomerAttributes": {
+        "properties": {
+          "customerAttributes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "SpecializationExtensionName",
+              "description": "One or more SpecializationExtension can be removed from object"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyAddInput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ChangeActionModifyAddInputElement"
+        }
+      },
+      "ChangeActionModifyAddInputCHG": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ChangeActionModifyAddInputElementCHG"
+        }
+      },
+      "ChangeActionModifyAddInputElement": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementMembers"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementReferentials"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementContexts"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementProposedChanges"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementIsFlowDownOf"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementCustomerAttributes"
+          }
+        ]
+      },
+      "ChangeActionModifyAddInputElementCHG": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementMembers"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementReferentials"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementContexts"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementProposedChanges"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementIsFlowDownOfCHG"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementPrerequiredDependencyCHG"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementPrerequiringDependencyCHG"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementCorequiringDependencyCHG"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementCustomerAttributes"
+          }
+        ]
+      },
+      "ChangeActionModifyAddInputElementMembers": {
+        "properties": {
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeActionModifyAddInputElementMember"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyAddInputElementMember": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementMemberAssignees"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementMemberReviewers"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementMemberFollowers"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementMembergroupFollowers"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementMembergroupAssignees"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyAddInputElementMemberRouteTemplates"
+          }
+        ]
+      },
+      "ChangeActionModifyAddInputElementMemberAssignees": {
+        "properties": {
+          "assignees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyAddInputElementMemberReviewers": {
+        "properties": {
+          "reviewers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyAddInputElementMemberFollowers": {
+        "properties": {
+          "followers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyAddInputElementMembergroupFollowers": {
+        "properties": {
+          "groupFollowers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyAddInputElementMembergroupAssignees": {
+        "properties": {
+          "groupAssignees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyAddInputElementMemberRouteTemplates": {
+        "properties": {
+          "routeTemplates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteTemplateObject"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyAddInputElementReferentials": {
+        "properties": {
+          "referentials": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectInput"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyAddInputElementContexts": {
+        "properties": {
+          "contexts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectInput"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyAddInputElementIsFlowDownOf": {
+        "properties": {
+          "isFlowDownOf": {
+            "deprecated": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeInput"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyAddInputElementIsFlowDownOfCHG": {
+        "properties": {
+          "isFlowDownOf": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeInput"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyAddInputElementPrerequiredDependencyCHG": {
+        "properties": {
+          "prerequiredDependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeInput"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyAddInputElementPrerequiringDependencyCHG": {
+        "properties": {
+          "prerequiringDependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeInput"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyAddInputElementCorequiringDependencyCHG": {
+        "properties": {
+          "corequiringDependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeInput"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyAddInputElementProposedChanges": {
+        "properties": {
+          "proposedChanges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProposedChangesInput"
+            }
+          }
+        }
+      },
+      "ProposedChangesInput": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/ProposedChangesInput1"
+          },
+          {
+            "$ref": "#/components/schemas/ProposedChangesInput2"
+          },
+          {
+            "$ref": "#/components/schemas/ProposedChangesInput3"
+          },
+          {
+            "$ref": "#/components/schemas/ProposedChangesInput4"
+          }
+        ]
+      },
+      "ProposedChangesInput1": {
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/ObjectInput"
+          },
+          "target": {
+            "type": "string",
+            "enum": [
+              "CurrentVersion",
+              "NewVersion",
+              "NewBranch"
+            ],
+            "example": "NewBranch"
+          },
+          "why": {
+            "type": "string",
+            "example": "RFC Proposed Change"
+          },
+          "arguments": {
+            "$ref": "#/components/schemas/ProposedChangesArguments"
+          },
+          "whats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WhatsInput"
+            }
+          }
+        }
+      },
+      "ProposedChangesInput2": {
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/ObjectInput"
+          },
+          "operation": {
+            "type": "string",
+            "enum": [
+              "CurrentVersion",
+              "NewVersion",
+              "NewBranch"
+            ],
+            "example": "NewBranch"
+          },
+          "arguments": {
+            "$ref": "#/components/schemas/ProposedChangesArguments"
+          }
+        }
+      },
+      "ProposedChangesInput3": {
+        "properties": {
+          "internalid": {
+            "type": "string",
+            "example": "EE562168015FFCF14F940A513C63AA77",
+            "description": "Is mandatorily an existing Proposed Change id. To be specified only if the objective is to add a What to an existing Proposed Change"
+          },
+          "whats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WhatsInput"
+            }
+          }
+        }
+      },
+      "ProposedChangesInput4": {
+        "properties": {
+          "internalid": {
+            "type": "string",
+            "example": "EE562168015FFCF14F940A513C63AA77",
+            "description": "Is mandatorily an existing Proposed Change id. To be specified only if the objective is to add Resolutions to an existing Proposed Change"
+          },
+          "resolutions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectInput"
+            }
+          }
+        }
+      },
+      "WhatsInput": {
+        "properties": {
+          "what": {
+            "type": "string",
+            "enum": [
+              "ChangeMaturityRelease",
+              "ChangeMaturityObsolete",
+              "Modify"
+            ],
+            "example": "ChangeMaturityRelease"
+          },
+          "why": {
+            "type": "string",
+            "example": "RFC Proposed Activity"
+          }
+        }
+      },
+      "ProposedChangesArguments": {
+        "properties": {
+          "duplicationString": {
+            "type": "string",
+            "example": "tst-",
+            "description": "applicable only in the context of NewBranch"
+          }
+        }
+      },
+      "ChangeActionModifyAddInputElementCustomerAttributes": {
+        "properties": {
+          "customerAttributes": {
+            "properties": {
+              "SpecializationExtensionName": {
+                "properties": {
+                  "customerAttribute1Name": {
+                    "type": "string",
+                    "example": "customerAttribute1Value"
+                  },
+                  "customerAttribute2Name": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "customerAttribute2Value"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ChangeActionModifyReplaceInput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ChangeActionModifyReplaceInputElement"
+        }
+      },
+      "ChangeActionModifyReplaceInputElement": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyReplaceInputElementProposedChanges"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyReplaceInputElementCustomerAttributes"
+          }
+        ]
+      },
+      "ChangeActionModifyReplaceInputElementProposedChanges": {
+        "properties": {
+          "proposedChanges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeActionModifyReplaceInputElementProposedChangesInput"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyReplaceInputElementProposedChangesInput": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyReplaceInputElementProposedChangesInputStatus"
+          },
+          {
+            "$ref": "#/components/schemas/ChangeActionModifyReplaceInputElementProposedChangesInputResolution"
+          }
+        ]
+      },
+      "ChangeActionModifyReplaceInputElementProposedChangesInputStatus": {
+        "properties": {
+          "internalid": {
+            "type": "string",
+            "example": "EE562168015FFCF14F940A513C63AA77",
+            "description": "Proposed Change or Proposed Activity id on which status (Proposed Change only) or why has to be changed"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Started",
+              "Complete",
+              "Rejected"
+            ],
+            "example": "Complete"
+          },
+          "why": {
+            "type": "string",
+            "example": "RFC",
+            "description": "Reason For Change"
+          }
+        }
+      },
+      "ChangeActionModifyReplaceInputElementProposedChangesInputResolution": {
+        "properties": {
+          "internalid": {
+            "type": "string",
+            "example": "EE562168015FFCF14F940A513C63AA77",
+            "description": "Is mandatorily an existing Proposed Change id on which resolutions have to be replaces. Empty to clear resolutions"
+          },
+          "resolutions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectInput"
+            }
+          }
+        }
+      },
+      "ChangeActionModifyReplaceInputElementCustomerAttributes": {
+        "properties": {
+          "customerAttributes": {
+            "$ref": "#/components/schemas/ChangeActionModifyReplaceInputElementCustomerAttributesInput"
+          }
+        }
+      },
+      "ChangeActionModifyReplaceInputElementCustomerAttributesInput": {
+        "properties": {
+          "customerAttribute1Name": {
+            "type": "string",
+            "example": "customerAttribute1Value"
+          },
+          "customerAttribute2Name": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomerAttribute2ValueOutput"
+            }
+          },
+          "DeploymentExtensionName": {
+            "properties": {
+              "customerAttribute3Name": {
+                "type": "string",
+                "example": "customerAttribute3Value"
+              },
+              "customerAttribute4Name": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CustomerAttribute4ValueOutput"
+                }
+              }
+            }
+          },
+          "SpecializationExtensionName": {
+            "properties": {
+              "customerAttribute5Name": {
+                "type": "string",
+                "example": "customerAttribute5Value"
+              },
+              "customerAttribute6Name": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CustomerAttribute6ValueOutput"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ChangeActionOutput": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "EE562168015FFCF14F940A513C63AA77"
+          },
+          "cestamp": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "policy": {
+            "type": "string",
+            "example": "Change Action"
+          },
+          "type": {
+            "type": "string",
+            "example": "Change Action"
+          },
+          "description": {
+            "type": "string",
+            "example": "Description of Change Action"
+          },
+          "title": {
+            "type": "string",
+            "example": "title of Change Action"
+          },
+          "name": {
+            "type": "string",
+            "example": "ca-17886155-00000001"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "Prepare",
+              "In Work",
+              "In Approval",
+              "Approved",
+              "Complete"
+            ],
+            "description": "current state of the Change Action",
+            "example": "Prepare"
+          },
+          "owner": {
+            "type": "string",
+            "example": "Identifier of the owner of the Change Action"
+          },
+          "organization": {
+            "type": "string",
+            "example": "MyCompany"
+          },
+          "collabSpace": {
+            "type": "string",
+            "example": "3DS Collab Space"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ],
+            "default": "Low",
+            "example": "Low"
+          },
+          "Estimated Start Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-21"
+          },
+          "Actual Start Date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-07-21T17:32:28Z"
+          },
+          "Estimated Completion Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-22"
+          },
+          "Actual Completion Date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-07-22T17:32:28Z"
+          },
+          "xmlApplicability": {
+            "type": "string",
+            "example": "<configuration xml>"
+          },
+          "onHold": {
+            "type": "boolean",
+            "example": false
+          },
+          "dslc:ChangeActionEnterpriseAttributes": {
+            "$ref": "#/components/schemas/ChangeActionEnterpriseAttributes"
+          },
+          "members": {
+            "$ref": "#/components/schemas/MembersOutput"
+          },
+          "proposedChanges": {
+            "$ref": "#/components/schemas/ProposedChangesOutput"
+          },
+          "realizedChanges": {
+            "$ref": "#/components/schemas/RealizedChangesOutput"
+          },
+          "realizedActivities": {
+            "$ref": "#/components/schemas/RealizedActivitiesOutput"
+          },
+          "referentials": {
+            "$ref": "#/components/schemas/ReferentialsOutput"
+          },
+          "contexts": {
+            "$ref": "#/components/schemas/ContextsOutput"
+          },
+          "isFlowDownOf": {
+            "$ref": "#/components/schemas/IsFlowDownOfOutput"
+          },
+          "isFlowDownIn": {
+            "$ref": "#/components/schemas/IsFlowDownInOutput"
+          },
+          "governingChanges": {
+            "$ref": "#/components/schemas/GoverningChangeOutPut"
+          },
+          "prerequiredDependencies": {
+            "$ref": "#/components/schemas/PrerequiredDependenciesOutPut"
+          },
+          "prerequiringDependencies": {
+            "$ref": "#/components/schemas/PrerequiringDependenciesOutPut"
+          },
+          "corequiringDependencies": {
+            "$ref": "#/components/schemas/CorequiringDependenciesOutPut"
+          },
+          "stackedOn": {
+            "$ref": "#/components/schemas/StackedOnOutPut"
+          },
+          "stackedUpon": {
+            "$ref": "#/components/schemas/StackedUponOutPut"
+          },
+          "customerAttributes": {
+            "$ref": "#/components/schemas/CustomerAttributesOutput"
+          }
+        }
+      },
+      "MembersOutput": {
+        "properties": {
+          "assignees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          },
+          "reviewers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          },
+          "followers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          },
+          "groupAssignees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          },
+          "groupFollowers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          },
+          "routeTemplates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteTemplateObject"
+            }
+          }
+        }
+      },
+      "ProposedChangesOutput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ProposedChangeOutput"
+        }
+      },
+      "ProposedChangeOutput": {
+        "properties": {
+          "internalid": {
+            "type": "string",
+            "example": "EE562168015FFCF14F940A513C63AA77"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Not started",
+              "Started",
+              "Complete",
+              "Rejected"
+            ],
+            "example": "Complete"
+          },
+          "why": {
+            "type": "string",
+            "example": "RFC Proposed Change"
+          },
+          "where": {
+            "$ref": "#/components/schemas/ObjectOutput"
+          },
+          "target": {
+            "type": "string",
+            "example": "NewBranch",
+            "description": "Possible values are: CurrentVersion, NewVersion, NewBranch. This list will be extended in the future"
+          },
+          "arguments": {
+            "$ref": "#/components/schemas/ProposedChangesArguments"
+          },
+          "whats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WhatsOutput"
+            }
+          },
+          "resolutions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectOutput"
+            }
+          }
+        }
+      },
+      "WhatsOutput": {
+        "properties": {
+          "internalid": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "what": {
+            "type": "string",
+            "example": "ChangeMaturityRelease",
+            "description": "Possible values are: ChangeMaturityRelease, ChangeMaturityObsolete, Modify. This list will be extended in the future"
+          },
+          "why": {
+            "type": "string",
+            "example": "RFC Proposed Activity"
+          }
+        }
+      },
+      "RealizedChangesOutput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/RealizedChangeOutput"
+        }
+      },
+      "RealizedChangeOutput": {
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/ObjectOutput"
+          },
+          "operations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Modify"
+            }
+          }
+        }
+      },
+      "RealizedActivitiesOutput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/RealizedActivityOutput"
+        }
+      },
+      "RealizedActivityOutput": {
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/ObjectOutput"
+          },
+          "activities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ActivityOutput"
+            }
+          }
+        }
+      },
+      "ActivityOutput": {
+        "properties": {
+          "before": {
+            "$ref": "#/components/schemas/ObjectOutput"
+          },
+          "after": {
+            "$ref": "#/components/schemas/ObjectOutput"
+          },
+          "operations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Modify"
+            }
+          }
+        }
+      },
+      "ObjectOutput": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "example": "https://3DEXPERIENCE_3DSpace"
+          },
+          "type": {
+            "type": "string",
+            "example": "VPMReference"
+          },
+          "identifier": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "relativePath": {
+            "type": "string",
+            "example": "/resources/v1/modeler/dseng/dseng:EngItem/F718B05686760000926EEB5BE7400900"
+          }
+        }
+      },
+      "governingOutput": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "example": "https://3DEXPERIENCE_3DSpace"
+          },
+          "type": {
+            "type": "string",
+            "example": "Change Order"
+          },
+          "identifier": {
+            "type": "string",
+            "example": "9927B056074E0000620738960014432"
+          },
+          "relativePath": {
+            "type": "string",
+            "example": "/resources/v1/modeler/dscm/changeorder/9927B056074E0000620738960014432"
+          }
+        }
+      },
+      "dependencyOutput": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "example": "https://3DEXPERIENCE_3DSpace"
+          },
+          "type": {
+            "type": "string",
+            "example": "Change Action"
+          },
+          "identifier": {
+            "type": "string",
+            "example": "9927B056074E0000620738960014432"
+          },
+          "relativePath": {
+            "example": "/resources/v1/modeler/dscl/c/9927B056074E0000620738960014432",
+            "type": "string"
+          }
+        }
+      },
+      "ReferentialsOutput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ObjectOutput"
+        }
+      },
+      "ContextsOutput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ObjectOutput"
+        }
+      },
+      "IsFlowDownOfOutput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ObjectOutput"
+        }
+      },
+      "IsFlowDownInOutput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ObjectOutput"
+        }
+      },
+      "GoverningChangeOutPut": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/governingOutput"
+        }
+      },
+      "PrerequiredDependenciesOutPut": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/dependencyOutput"
+        }
+      },
+      "PrerequiringDependenciesOutPut": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/dependencyOutput"
+        }
+      },
+      "CorequiringDependenciesOutPut": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/dependencyOutput"
+        }
+      },
+      "StackedOnOutPut": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/dependencyOutput"
+        }
+      },
+      "StackedUponOutPut": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/dependencyOutput"
+        }
+      },
+      "CustomerAttributesOutput": {
+        "properties": {
+          "customerAttribute1Name": {
+            "type": "string",
+            "example": "customerAttribute1Value"
+          },
+          "customerAttribute2Name": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomerAttribute2ValueOutput"
+            }
+          },
+          "DeploymentExtensionName": {
+            "properties": {
+              "customerAttribute3Name": {
+                "type": "string",
+                "example": "customerAttribute3Value"
+              },
+              "customerAttribute4Name": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CustomerAttribute4ValueOutput"
+                }
+              }
+            }
+          },
+          "SpecializationExtensionName": {
+            "properties": {
+              "customerAttribute5Name": {
+                "type": "string",
+                "example": "customerAttribute5Value"
+              },
+              "customerAttribute6Name": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CustomerAttribute6ValueOutput"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CustomerAttribute2ValueOutput": {
+        "type": "string",
+        "example": "customerAttribute2Value1"
+      },
+      "CustomerAttribute4ValueOutput": {
+        "type": "string",
+        "example": "customerAttribute4Value1"
+      },
+      "CustomerAttribute6ValueOutput": {
+        "type": "string",
+        "example": "customerAttribute6Value1"
+      },
+      "ErrorOutput": {
+        "properties": {
+          "errorCode": {
+            "type": "string",
+            "example": "1"
+          },
+          "errorMessage": {
+            "type": "string",
+            "example": "Error message"
+          }
+        }
+      },
+      "ChangeActionSearchOutPut": {
+        "properties": {
+          "changeAction": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeActionItemSearchOutPut"
+            }
+          }
+        }
+      },
+      "ChangeActionItemSearchOutPut": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "example": "https://3dspace.mydomain:443/3dspace"
+          },
+          "type": {
+            "type": "string",
+            "example": "Change Action"
+          },
+          "identifier": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "relativePath": {
+            "type": "string",
+            "example": "/resources/v1/modeler/dslc/changeaction/F718B05686760000926EEB5BE7400900"
+          }
+        }
+      }
+    }
+  }
+}

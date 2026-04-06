@@ -1,0 +1,495 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "x-ds-copyright": "3DEXPERIENCE R2025x (c) 2024 Dassault Systemes.",
+    "title": "Sourcing Lifecycle Web Services",
+    "description": "Sourcing Lifecycle Web Services.",
+    "version": "1.0.2",
+    "x-ds-service": [
+      "Sourcing"
+    ]
+  },
+  "servers": [
+    {
+      "url": "{Sourcing}/resources/v1/modeler/dslc",
+      "variables": {
+        "Sourcing": {
+          "default": "https://sourcing.mydomain:443/sourcing",
+          "description": "URL of the Sourcing service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dssrc-lifecycle/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/maturity/getNextStates": {
+      "post": {
+        "summary": "Get next maturity states",
+        "description": "Get the next possible maturity states for a list of objects.<br/>The request will be rejected if the total number of objects exceeds 100.",
+        "operationId": "getNextStates",
+        "tags": [
+          "Maturity"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "data"
+                ],
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "id"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "54BC825602D0190066FA10E500000AB8"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "54BC825602D0190066FA10E500000AB8",
+                            "description": "The object identifier"
+                          },
+                          "nextStates": {
+                            "description": "The next possible maturity states for the object",
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "In Work, Review, Released, Obsolete"
+                            }
+                          },
+                          "maturityState": {
+                            "type": "string",
+                            "example": "In Draft",
+                            "description": "The current maturity state of the object"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/maturity/changeState": {
+      "post": {
+        "summary": "Change maturity states",
+        "description": "Change maturity state for a list of objects.  You can change maturity to a state only along a single valid transition on the Maturity graph. To find the list of valid next states, use the web service getNextStates.<br/>The request will be rejected if the total number of objects exceeds 100.",
+        "operationId": "changeState",
+        "tags": [
+          "Maturity"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "data"
+                ],
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "id",
+                        "nextState"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "54BC825602D0190066FA10E500000AB8"
+                        },
+                        "nextState": {
+                          "type": "string",
+                          "example": "In Work"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "54BC825602D0190066FA10E500000AB8",
+                            "description": "The object identifier"
+                          },
+                          "maturityState": {
+                            "description": "The resulting maturity state for the object",
+                            "type": "string",
+                            "example": "In Work"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request:The format of the request is not correct.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorCode": {
+                      "type": "string",
+                      "description": "Error code : Can be http code or custom app code.",
+                      "example": "400"
+                    },
+                    "errorMessage": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "Maturity state In Work not allowed for object 54BC825602D0190066FA10E500000AB8."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/version/create": {
+      "post": {
+        "summary": "Revise objects",
+        "description": "Create new versions for a list of objects. <br/> 1. Versions to create are revisions :  'edgeType' keyword is missing or set to 'Revision' (default value). 'affix' keyword is optional (not used if added). <br/> 2. Versions to create are branches : 'edgeType' keyword is set to 'Branch'. 'affix' keyword is optional (used if added). <br/> The request will be rejected if the total number of objects exceeds 100.",
+        "operationId": "version",
+        "tags": [
+          "Versioning"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "data"
+                ],
+                "properties": {
+                  "edgeType": {
+                    "description": "To revise : do not use or set to 'Revise' (default).<br/>To branch : set to 'Branch'.",
+                    "type": "string",
+                    "example": "Revision"
+                  },
+                  "affix": {
+                    "description": "To revise : do not use or set to any value (not taken into account).<br/> To branch : do not use or set to desired value (taken into account).",
+                    "type": "string",
+                    "example": "_FIX_A"
+                  },
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/objectReference"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "description": "Unauthorized:Access not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorCode": {
+                      "type": "string",
+                      "description": "Error code : Can be http code or custom app code.",
+                      "example": 401
+                    },
+                    "errorMessage": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "User does not have access to revise qualification."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Bad request:The format of the request is not correct.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errorCode": {
+                  "type": "string",
+                  "description": "Error code : Can be http code or custom app code.",
+                  "example": "400"
+                },
+                "errorMessage": {
+                  "type": "string",
+                  "description": "Error message",
+                  "example": "The limit of objects allowed is exceeded."
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized:Access not allowed.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errorCode": {
+                  "type": "string",
+                  "description": "Error code : Can be http code or custom app code.",
+                  "example": "401"
+                },
+                "errorMessage": {
+                  "type": "string",
+                  "description": "Error message",
+                  "example": "Access not allowed to object 54BC825602D0190066FA10E500000AB8."
+                }
+              }
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden:This request is not authorized.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errorCode": {
+                  "type": "string",
+                  "description": "Error code : Can be http code or custom app code.",
+                  "example": "403"
+                },
+                "errorMessage": {
+                  "type": "string",
+                  "description": "Error message",
+                  "example": "Operation cannot be done as the Object is not in Private/In work State."
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errorCode": {
+                  "type": "string",
+                  "description": "Error code : Can be http code or custom app code.",
+                  "example": "500"
+                },
+                "errorMessage": {
+                  "type": "string",
+                  "description": "Error message",
+                  "example": "Internal Server Error."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "objectReference": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "54BC825602D0190066FA10E500000AB8"
+          },
+          "identifier": {
+            "type": "string",
+            "example": "54BC825602D0190066FA10E500000AB8"
+          },
+          "type": {
+            "type": "string",
+            "example": "SRC General Qualification"
+          }
+        }
+      },
+      "createOutput": {
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "54BC825602D0190066FA10E500000AB8",
+                  "description": "The identifier of the new object."
+                },
+                "identifier": {
+                  "type": "string",
+                  "example": "54BC825602D0190066FA10E500000AB8",
+                  "description": "The identifier of the new object."
+                },
+                "source": {
+                  "type": "string",
+                  "example": "https://devopseti1z13x71739-euw1-23dsw11202-sourcing.3dx-staging.3ds.com",
+                  "description": "The source of the new object."
+                },
+                "type": {
+                  "type": "string",
+                  "example": "General Qualification",
+                  "description": "The type of the new object."
+                },
+                "relativePath": {
+                  "type": "string",
+                  "example": "/resources/v1/modeler/qualifications/54BC825602D0190066FA10E500000AB8",
+                  "description": "The relative path of the new object."
+                },
+                "derivedFrom": {
+                  "type": "string",
+                  "example": "54BC825602D0190066FA10E500000AB8",
+                  "description": "The identifier of the origin object."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "xmlHttpRequestHeader": {
+        "name": "X-Requested-With",
+        "in": "header",
+        "description": "Required header. The value is XMLHttpRequest.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "XMLHttpRequest"
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

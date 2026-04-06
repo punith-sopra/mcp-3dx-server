@@ -1,0 +1,3862 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Routes Web Services",
+    "description": "REST Services for managing the Route modeler.",
+    "version": "1.0.0",
+    "x-ds-service": [
+      "3DSpace"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dsrt",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_3DSpace"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsrt/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/routes": {
+      "get": {
+        "tags": [
+          "Routes"
+        ],
+        "summary": "Search Routes.",
+        "operationId": "GET_dsrt:Routes_GET",
+        "deprecated": true,
+        "description": "Deprecated since R425, use routes/search instead",
+        "parameters": [
+          {
+            "name": "routeStateFilter",
+            "in": "query",
+            "description": "This parameter is used for searching the routes based on the state. This supports comma seperated values. E.g. Define,In Process,Complete. Default value is Define,In Process",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "This parameter is used for searching based on a keyword",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "queryLimit",
+            "in": "query",
+            "description": "This parameter is used for setting the queryLimit",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/RESULTS-routes-get"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Routes"
+        ],
+        "summary": "Create new routes.",
+        "operationId": "POST_dsrt:Routes_Create",
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "The ENOVIA CSRF token which is typically required for update oerations.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/routes"
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/RESULTS-routes-get"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routes/search": {
+      "get": {
+        "tags": [
+          "Routes"
+        ],
+        "summary": "Gets a indexed search result of route.",
+        "operationId": "GET_dsrt:Routes_Search",
+        "description": "This service uses the indexed data to search the routes. It will always return the latest revision of the route object.",
+        "parameters": [
+          {
+            "name": "routeStateFilter",
+            "in": "query",
+            "description": "This parameter is used for searching the routes based on the state e.g. Define,In Process,Complete. Default value is Define,In Process",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "searchStr",
+            "in": "query",
+            "description": "This parameter is used for searching based on a keyword",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "This parameter is used for setting the queryLimit",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/RESULTS-routes-search"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routes/{routeId}": {
+      "get": {
+        "tags": [
+          "Routes"
+        ],
+        "summary": "Get single route details.",
+        "operationId": "GET_dsrt:Route_ID",
+        "parameters": [
+          {
+            "name": "routeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "in": "query",
+            "description": "include the related data objects i.e. tasks",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/RESULTS-routes-single"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routes/ids": {
+      "post": {
+        "tags": [
+          "Routes"
+        ],
+        "summary": "Get route information of specified ids.",
+        "operationId": "POST_dsrt:Route_IDS",
+        "parameters": [
+          {
+            "name": "$include",
+            "in": "query",
+            "description": "include the related data objects i.e. tasks,contents ",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "The ENOVIA CSRF token which is typically required for update oerations.",
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/routesbulk"
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/RESULTS-routes-single-tasks-contents"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routes/{routeId}/start": {
+      "post": {
+        "tags": [
+          "Routes"
+        ],
+        "summary": "Start a route.",
+        "operationId": "POST_dsrt:Route_ID_Start",
+        "parameters": [
+          {
+            "name": "routeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "The ENOVIA CSRF token which is typically required for update oerations.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/RESULTS-routes-single"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routes/start": {
+      "post": {
+        "tags": [
+          "Routes"
+        ],
+        "summary": "Start routes.",
+        "operationId": "POST_dsrt:Route_Start",
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "The ENOVIA CSRF token which is typically required for update oerations.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/routesbulk"
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/RESULTS-routes-single"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routes/stop": {
+      "post": {
+        "tags": [
+          "Routes"
+        ],
+        "summary": "Stop routes.",
+        "operationId": "POST_dsrt:Route_Stop",
+        "parameters": [
+          {
+            "name": "demoteConnectedObject",
+            "in": "query",
+            "description": "true or false. If route connected contents need to be demoted after stopping the route.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "The ENOVIA CSRF token which is typically required for update operations.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/routesbulk"
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/RESULTS-routes-single"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routes/delete": {
+      "post": {
+        "tags": [
+          "Routes"
+        ],
+        "summary": "Delete routes.",
+        "operationId": "POST_dsrt:Route_Delete",
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "The ENOVIA CSRF token which is typically required for update oerations.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/routesbulk"
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routetemplates/search": {
+      "get": {
+        "tags": [
+          "Templates"
+        ],
+        "summary": "Search route templates.",
+        "operationId": "POST_dsrt:RouteTemplate_Search",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "input search string",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "queryLimit",
+            "in": "query",
+            "description": "query Limit",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/RESULTS-templates"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routetemplates/{templateId}": {
+      "get": {
+        "tags": [
+          "Templates"
+        ],
+        "summary": "Get template information.",
+        "operationId": "GET_dsrt:Route_Template_ID",
+        "parameters": [
+          {
+            "name": "templateId",
+            "description": "template id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "in": "query",
+            "description": "include the related data objects i.e. tasks",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/RESULTS-templates-get"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routetemplates": {
+      "post": {
+        "tags": [
+          "Templates"
+        ],
+        "summary": "Create route templates.",
+        "operationId": "POST_dsrt:Route_Templates",
+        "parameters": [
+          {
+            "name": "action",
+            "in": "query",
+            "description": "if template needs to be activated, use action=activate",
+            "required": false,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "The ENOVIA CSRF token which is typically required for update operation.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/templates"
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/RESULTS-templates-get"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routes/{routeId}/contents": {
+      "get": {
+        "tags": [
+          "Contents"
+        ],
+        "summary": "Get route contents.",
+        "operationId": "GET_dsrt:Route_ID_Content",
+        "parameters": [
+          {
+            "name": "routeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/RESULTS-contents-get"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Contents"
+        ],
+        "summary": "Connect or disconnect contents to a route.",
+        "operationId": "PUT_dsrt:Route_ID_Content",
+        "parameters": [
+          {
+            "name": "routeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Identifies the locale of the web request.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "The ENOVIA CSRF token which is typically required for update oerations.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/contents"
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/RESULTS-contents"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "CSRF Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/x-definitions/error-500"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "routes": {
+        "$ref": "#/components/x-schemas/routes"
+      },
+      "templates": {
+        "$ref": "#/components/x-schemas/templates"
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-routes": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-routes"
+            }
+          }
+        }
+      },
+      "200-routes-post": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-routes-get"
+            }
+          }
+        }
+      },
+      "200-routes-get": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-routes-get"
+            }
+          }
+        }
+      },
+      "200-routes-single": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-routes-single"
+            }
+          }
+        }
+      },
+      "200-templates": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-templates"
+            }
+          }
+        }
+      },
+      "200-templates-get": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-templates-get"
+            }
+          }
+        }
+      },
+      "200-contents": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-contents"
+            }
+          }
+        }
+      },
+      "200-contents-get": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-contents-get"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "in": "header",
+        "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "SecurityContext1": {
+        "name": "SecurityContext",
+        "in": "header",
+        "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "in": "header",
+        "description": "Identifies the locale of the web request.",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "in": "header",
+        "description": "The ENOVIA CSRF token which is typically required for update oerations.",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "requestBodies": {
+      "routes": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "title": {
+                        "description": "title of the object.",
+                        "example": "Approval Route",
+                        "type": "string"
+                      },
+                      "name": {
+                        "description": "Name of the object.",
+                        "example": "R-0000104",
+                        "type": "string"
+                      },
+                      "description": {
+                        "description": "description of the object.",
+                        "example": "engineering approval route ",
+                        "type": "string"
+                      },
+                      "routeBasePurpose": {
+                        "description": "Route base Purpose attribute.",
+                        "example": "Standard",
+                        "type": "string"
+                      },
+                      "AutoStopOnRejection": {
+                        "description": "Auto Stop On Rejection attribute.",
+                        "example": "Immediate",
+                        "type": "string"
+                      },
+                      "routeCompletionAction": {
+                        "description": "Route Completion Action attribute.",
+                        "example": "Notify Route Owner",
+                        "type": "string"
+                      },
+                      "DemoteOnRejection": {
+                        "description": "Demote content on Task rejection attribute.",
+                        "example": "No or Yes",
+                        "type": "string"
+                      },
+                      "attRestrictMembers": {
+                        "description": "Scope of the object.",
+                        "example": "Organization",
+                        "type": "string"
+                      },
+                      "preserveTaskOwner": {
+                        "description": "Revert User Group(s) Assignment attribute value.",
+                        "example": "False",
+                        "type": "string"
+                      },
+                      "requiresEsign": {
+                        "description": "Require Esign attribute value.",
+                        "example": "False",
+                        "type": "string"
+                      },
+                      "attribute[Route Base Purpose]": {
+                        "deprecated": true,
+                        "description": "Route Base Purpose attribute value. Deprecated since R425, use routeBasePurpose instead",
+                        "example": "Standard",
+                        "type": "string"
+                      },
+                      "attribute[Route Completion Action]": {
+                        "deprecated": true,
+                        "description": "Route Completion Action attribute value. Deprecated since R425, use routeCompletionAction instead",
+                        "example": "Notify Route Owner",
+                        "type": "string"
+                      },
+                      "attribute[Restrict Members]": {
+                        "deprecated": true,
+                        "description": "Deprecated since R425, use attRestrictMembers instead",
+                        "example": "Organization",
+                        "type": "string"
+                      },
+                      "attribute[Preserve Task Owner]": {
+                        "deprecated": true,
+                        "description": "Deprecated since R425, use preserveTaskOwner instead",
+                        "example": "False",
+                        "type": "string"
+                      },
+                      "attribute[Auto Stop On Rejection]": {
+                        "deprecated": true,
+                        "description": "Deprecated since R425, use AutoStopOnRejection instead",
+                        "example": "Immediate",
+                        "type": "string"
+                      },
+                      "attribute[Route Status]": {
+                        "deprecated": true,
+                        "description": "Deprecated since R425, use routeStatus instead",
+                        "example": "Not Started",
+                        "type": "string"
+                      },
+                      "templateId": {
+                        "description": "Use only if route needs to be created from template. If tasks is passed in payload, template data will be ignored",
+                        "example": "0000000000000000000008",
+                        "type": "string"
+                      },
+                      "contentIds": {
+                        "description": "Use only if content needs to be added to route at creation. there can be mulltiple ids seperated by |.",
+                        "example": "0000000000000000000008",
+                        "type": "string"
+                      },
+                      "tasks": {
+                        "description": "Tasks need to be added to Route",
+                        "type": "array",
+                        "items": {
+                          "required": [
+                            "instructions",
+                            "taskOrder",
+                            "title"
+                          ],
+                          "properties": {
+                            "allowDelegation": {
+                              "description": "Allow Delegation on Task object. Use only if value needs to be set TRUE ",
+                              "example": "TRUE or FALSE",
+                              "type": "string"
+                            },
+                            "assigneeSetDueDate": {
+                              "description": "Assignee Set Due Date on Task object. Use only if value needs to be set as Yes",
+                              "example": "Yes",
+                              "type": "string"
+                            },
+                            "instructions": {
+                              "description": "task instruction. Mandatory to pass",
+                              "example": "approve the task if all approvals are done",
+                              "type": "string"
+                            },
+                            "parallelNodeProcessionRule": {
+                              "description": " Processing Rule for same order tasks. Should be same for same order tasks. Otherwise result can be unexpected",
+                              "example": "All or Any",
+                              "type": "string"
+                            },
+                            "taskAction": {
+                              "description": "Action of the task.",
+                              "example": "Approve or Comment or Notify Only",
+                              "type": "string"
+                            },
+                            "taskOrder": {
+                              "description": "Task order in the execution.",
+                              "example": "1",
+                              "type": "string"
+                            },
+                            "title": {
+                              "description": "title of the task.",
+                              "example": "Engineering task",
+                              "type": "string"
+                            },
+                            "needsOwnerReview": {
+                              "description": "Needs Owner Review for task. Pass only if need to set as Yes ",
+                              "example": "Yes or No",
+                              "type": "string"
+                            },
+                            "taskAssigneeUsername": {
+                              "description": "person's user name of the task assignee. if task is route owner task or assignee is user group, then no need to pass in the payload",
+                              "example": "username",
+                              "type": "string"
+                            },
+                            "assigneeId": {
+                              "description": "id of the assignee. Use contextUser as id value if task is route owner task. If task needs to be assigned to User Group, pass the user group id.",
+                              "example": "contextUser or 0000000000000000000002",
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "routeTemplate": {
+                        "description": "Use only if route needs to be created from template. If tasks is passed in payload, template data will be ignored. Deprecated since R425, use templateId instead.",
+                        "type": "array",
+                        "deprecated": true,
+                        "items": {
+                          "properties": {
+                            "identifier": {
+                              "description": "Physical id of the template.",
+                              "example": "1D8F82562C3F150062836C9B00053058",
+                              "type": "string"
+                            },
+                            "type": {
+                              "description": "type of Route Template",
+                              "example": "Route Template",
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "templates": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "title": {
+                        "description": "title of the object.",
+                        "example": "Approval Route Template",
+                        "type": "string"
+                      },
+                      "name": {
+                        "description": "Name of the object. Use only if name value needs to be specify.",
+                        "example": "RT-0000104",
+                        "type": "string"
+                      },
+                      "description": {
+                        "description": "description of the object.",
+                        "example": "engineering approval route template",
+                        "type": "string"
+                      },
+                      "routeBasePurpose": {
+                        "description": "Route base Purpose attribute.",
+                        "example": "Standard",
+                        "type": "string"
+                      },
+                      "AutoStopOnRejection": {
+                        "description": "Auto Stop On Rejection attribute.",
+                        "example": "Immediate",
+                        "type": "string"
+                      },
+                      "selectUsersFromUserGroup": {
+                        "description": "Select users from user group attribute.",
+                        "example": "True or False",
+                        "type": "string"
+                      },
+                      "attRestrictMembers": {
+                        "description": "Scope of the object.",
+                        "example": "Organization",
+                        "type": "string"
+                      },
+                      "preserveTaskOwner": {
+                        "description": "Revert User Group(s) Assignment attribute value.",
+                        "example": "False",
+                        "type": "string"
+                      },
+                      "routeRequiresESign": {
+                        "description": "Require Esign attribute value.",
+                        "example": "False",
+                        "type": "string"
+                      },
+                      "taskEditSetting": {
+                        "description": "Task Edit Setting attribute.",
+                        "example": "Modify/Delete Task List",
+                        "type": "string"
+                      },
+                      "linkedRouteTemplate": {
+                        "description": "Start Route on Completion template Id.",
+                        "example": "0000000000000000000CDD0000",
+                        "type": "string"
+                      },
+                      "DemoteOnRejection": {
+                        "description": "Pass only if linkedRouteTemplate is specified.Possible value is Yes/No. Default value is No. This attribute is used for Link Template.",
+                        "example": "Yes",
+                        "type": "string"
+                      },
+                      "routeCompletionAction": {
+                        "description": "Pass only if linkedRouteTemplate is specified. Possible value is Promote Connected Object/Notify Route Owner.Default value is Notify Route Owner. This attribute is used for Link Template.",
+                        "example": "Notify Route Owner",
+                        "type": "string"
+                      },
+                      "completionAction": {
+                        "description": "Route Completion action on template. Possible values are Promote Connected Object/Notify Route Owner.Default value is Notify Route Owner. This attribute is used for template.",
+                        "example": "Notify Route Owner",
+                        "type": "string"
+                      },
+                      "attribute[Route Base Purpose]": {
+                        "deprecated": true,
+                        "description": "Route Base Purpose attribute value. Deprecated since R425, use routeBasePurpose instead",
+                        "example": "Standard",
+                        "type": "string"
+                      },
+                      "attribute[Restrict Members]": {
+                        "deprecated": true,
+                        "description": "Deprecated since R425, use attRestrictMembers instead",
+                        "example": "Organization",
+                        "type": "string"
+                      },
+                      "attribute[Preserve Task Owner]": {
+                        "deprecated": true,
+                        "description": "Deprecated since R425, use preserveTaskOwner instead",
+                        "example": "False",
+                        "type": "string"
+                      },
+                      "attribute[Auto Stop On Rejection]": {
+                        "deprecated": true,
+                        "description": "Deprecated since R425, use AutoStopOnRejection instead",
+                        "example": "Immediate",
+                        "type": "string"
+                      },
+                      "tasks": {
+                        "description": "Tasks related to Route Template",
+                        "type": "array",
+                        "items": {
+                          "required": [
+                            "taskOrder",
+                            "title",
+                            "instructions"
+                          ],
+                          "properties": {
+                            "assigneeType": {
+                              "description": "Assignee type. Please pass as Person or User Group.",
+                              "example": "User Group",
+                              "type": "string"
+                            },
+                            "assigneeId": {
+                              "description": "Assignee Id. Use taskAssigneeUsername if id is not known.",
+                              "example": "User Group",
+                              "type": "string"
+                            },
+                            "taskOrder": {
+                              "description": "Task order in the execution.",
+                              "example": "1",
+                              "type": "string"
+                            },
+                            "taskAssigneeUsername": {
+                              "description": "user name of the assignee. If id is known, use assigneeId instead in payload.",
+                              "example": "username",
+                              "type": "string"
+                            },
+                            "needsOwnerReview": {
+                              "description": "Needs Owner Review for task. Pass only if need to set as Yes",
+                              "example": "Yes or No",
+                              "type": "string"
+                            },
+                            "routeOwnerTask": {
+                              "description": "Use only if task is a Route owner task.",
+                              "example": "TRUE",
+                              "type": "string"
+                            },
+                            "chooseUsersFromUg": {
+                              "description": "Use only if assignee needs to be selected from specific user group.",
+                              "example": "true",
+                              "type": "string"
+                            },
+                            "routeOwnerUGChoice": {
+                              "description": "Use only if chooseUsersFromUg is set as true. Specify the user group id.",
+                              "example": "usergroup name",
+                              "type": "string"
+                            },
+                            "title": {
+                              "description": "Title of the Task.",
+                              "example": "Task For Engineering Items",
+                              "type": "string"
+                            },
+                            "allowDelegation": {
+                              "description": "Use only if Allow Delegation value needs to set as true.",
+                              "example": "TRUE",
+                              "type": "string"
+                            },
+                            "taskAction": {
+                              "description": "Action of the task. Use it to create specific type of task",
+                              "example": "Approve",
+                              "type": "string"
+                            },
+                            "instructions": {
+                              "description": "Intructions. to approve the task.",
+                              "example": "approve it",
+                              "type": "string"
+                            },
+                            "taskDueDate": {
+                              "description": "Use only if due date needs to set. default assigneeSetDueDate is considered.",
+                              "example": "4/23/2022 11:37:42 AM",
+                              "type": "string"
+                            },
+                            "assigneeSetDueDate": {
+                              "description": "Assignee Set Due Date attribute value.",
+                              "example": "Yes",
+                              "type": "string"
+                            },
+                            "dateOffsetFrom": {
+                              "description": "Date Offset From attribute value.",
+                              "example": "Route Start Date",
+                              "type": "string"
+                            },
+                            "dueDateOffset": {
+                              "description": "Due Date Offset attribute value.",
+                              "example": "2",
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "routesbulk": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "description": "array of route ids.",
+                  "type": "array",
+                  "items": {
+                    "required": [
+                      "id"
+                    ],
+                    "properties": {
+                      "id": {
+                        "description": "content object id.",
+                        "example": "857FEB80000045FC5994CC0A00000012",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "contents": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "required": [
+                      "identifier",
+                      "updateAction",
+                      "RouteBaseState",
+                      "RouteTargetState"
+                    ],
+                    "properties": {
+                      "identifier": {
+                        "description": "content object id.",
+                        "example": "857FEB80000045FC5994CC0A00000012",
+                        "type": "string"
+                      },
+                      "type": {
+                        "description": "type of the content.",
+                        "example": "Document",
+                        "type": "string"
+                      },
+                      "source": {
+                        "description": "Source URL.",
+                        "example": "https://3dspace.com/3dspace",
+                        "type": "string"
+                      },
+                      "relativePath": {
+                        "description": "URI of the content if more information needs to be retrieved.",
+                        "example": "/resources/v1/modeler/documents/857FEB80000045FC5994CC0A00000012",
+                        "type": "string"
+                      },
+                      "updateAction": {
+                        "description": "To add, modify or remove the contents.",
+                        "example": "CREATE OR MODIFY OR DELETE",
+                        "type": "string"
+                      },
+                      "RouteBaseState": {
+                        "description": "To update route blocking/base state value. Provide symbolic name of the base state or 'Ad Hoc' to set the blocking state as None. Optional for CREATE and DELETE actions and mandatory for MODIFY action.",
+                        "example": "state_IN_WORK",
+                        "type": "string"
+                      },
+                      "RouteTargetState": {
+                        "description": "To update route target state value. Provide symbolic name of the target state or ' ' i.e. Empty String when RouteBaseState is 'Ad Hoc'. Optional for CREATE and DELETE actions and mandatory for MODIFY action.",
+                        "example": "state_FROZEN",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "x-schemas": {
+      "routes": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/RESULTS-routes-get"
+          }
+        ]
+      },
+      "templates": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/RESULTS-templates"
+          }
+        ]
+      },
+      "start": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/RESULTS-routes-get"
+          }
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-EMPTY": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          }
+        ]
+      },
+      "RESULTS-routes": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          }
+        ]
+      },
+      "RESULTS-routes-single": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "id": {
+                  "description": "The object physical id or sometimes the object id.  Either id can typically be used transparently.",
+                  "example": "000000800000000C0000000000000000",
+                  "type": "string"
+                },
+                "type": {
+                  "description": "The object Route.",
+                  "example": "Route",
+                  "type": "string"
+                },
+                "identifier": {
+                  "description": "The object's physical id.",
+                  "example": "000000800000000C0000000000000000",
+                  "type": "string"
+                },
+                "source": {
+                  "description": "Source URL",
+                  "example": "https://3dspace.com/3dspace",
+                  "type": "string"
+                },
+                "relativePath": {
+                  "description": "Path of object if more information needs to be retrieved.",
+                  "example": "/resources/v1/modeler/dsrt/routes/1D8F82560A950B006296200B0007A6BA",
+                  "type": "string"
+                },
+                "cestamp": {
+                  "description": "The Concurrent Engineering (CESTAMP) of the object.",
+                  "example": "1D8F82560A950B006296200B00065DDA",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Name of the object.",
+                  "example": "R-0000104",
+                  "type": "string"
+                },
+                "title": {
+                  "description": "title of the object.",
+                  "example": "Approval Route",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "description of the object.",
+                  "example": "engineering approval route ",
+                  "type": "string"
+                },
+                "revision": {
+                  "description": "revision of the object.",
+                  "example": "1",
+                  "type": "string"
+                },
+                "isLatestRevision": {
+                  "description": "True if the provided route is the latest revision, otherwise False.",
+                  "example": "TRUE",
+                  "type": "string",
+                  "readOnly": "true"
+                },
+                "state": {
+                  "description": "Current state of the object.",
+                  "example": "Define",
+                  "type": "string"
+                },
+                "routeStatus": {
+                  "description": "Route Status attribute.",
+                  "example": "Not Started",
+                  "type": "string"
+                },
+                "routeBasePurpose": {
+                  "description": "Route base Purpose attribute.",
+                  "example": "Standard",
+                  "type": "string"
+                },
+                "AutoStopOnRejection": {
+                  "description": "Auto Stop On Rejection attribute.",
+                  "example": "Immediate",
+                  "type": "string"
+                },
+                "routeCompletionAction": {
+                  "description": "Route Completion Action attribute.",
+                  "example": "Notify Route Owner",
+                  "type": "string"
+                },
+                "DemoteOnRejection": {
+                  "description": "Demote content on Task rejection attribute.",
+                  "example": "No or Yes",
+                  "type": "string"
+                },
+                "owner": {
+                  "description": "owner of object.",
+                  "example": "username",
+                  "type": "string"
+                },
+                "attRestrictMembers": {
+                  "description": "Scope of the object.",
+                  "example": "Organization",
+                  "type": "string"
+                },
+                "preserveTaskOwner": {
+                  "description": "Revert User Group(s) Assignment attribute value.",
+                  "example": "False",
+                  "type": "string"
+                },
+                "requiresEsign": {
+                  "description": "Require Esign attribute value.",
+                  "example": "False",
+                  "type": "string"
+                },
+                "attrScope": {
+                  "description": "Scope of the object. if scope is not organization or all, first value will be the type, second is name and third id of the object.",
+                  "example": "False",
+                  "type": "array"
+                },
+                "activityState": {
+                  "description": "activity state of the object.",
+                  "example": "Not Started",
+                  "type": "string"
+                },
+                "attribute[Route Base Purpose]": {
+                  "deprecated": true,
+                  "description": "Route Base Purpose attribute value. Deprecated since R425, use routeBasePurpose instead",
+                  "example": "Standard",
+                  "type": "string"
+                },
+                "attribute[Route Completion Action]": {
+                  "deprecated": true,
+                  "description": "Route Completion Action attribute value. Deprecated since R425, use routeCompletionAction instead",
+                  "example": "Notify Route Owner",
+                  "type": "string"
+                },
+                "attribute[Restrict Members]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use attRestrictMembers instead",
+                  "example": "Organization",
+                  "type": "string"
+                },
+                "attribute[Preserve Task Owner]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use preserveTaskOwner instead",
+                  "example": "False",
+                  "type": "string"
+                },
+                "attribute[Auto Stop On Rejection]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use AutoStopOnRejection instead",
+                  "example": "Immediate",
+                  "type": "string"
+                },
+                "attribute[Route Status]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use routeStatus instead",
+                  "example": "Not Started",
+                  "type": "string"
+                },
+                "ownerFullName": {
+                  "description": "object's full owner name",
+                  "example": "Mr John",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "RESULTS-routes-single-tasks-contents": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "id": {
+                  "description": "The object physical id or sometimes the object id.  Either id can typically be used transparently.",
+                  "example": "000000800000000C0000000000000000",
+                  "type": "string"
+                },
+                "type": {
+                  "description": "The object Route.",
+                  "example": "Route",
+                  "type": "string"
+                },
+                "identifier": {
+                  "description": "The object's physical id.",
+                  "example": "000000800000000C0000000000000000",
+                  "type": "string"
+                },
+                "source": {
+                  "description": "Source URL",
+                  "example": "https://3dspace.com/3dspace",
+                  "type": "string"
+                },
+                "relativePath": {
+                  "description": "Path of object if more information needs to be retrieved.",
+                  "example": "/resources/v1/modeler/dsrt/routes/1D8F82560A950B006296200B0007A6BA",
+                  "type": "string"
+                },
+                "cestamp": {
+                  "description": "The Concurrent Engineering (CESTAMP) of the object.",
+                  "example": "1D8F82560A950B006296200B00065DDA",
+                  "type": "string"
+                },
+                "title": {
+                  "description": "title of the object.",
+                  "example": "Approval Route",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Name of the object.",
+                  "example": "R-0000104",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "description of the object.",
+                  "example": "engineering approval route ",
+                  "type": "string"
+                },
+                "revision": {
+                  "description": "revision of the object.",
+                  "example": "1",
+                  "type": "string"
+                },
+                "isLatestRevision": {
+                  "description": "True if the provided route is the latest revision, otherwise False.",
+                  "example": "TRUE",
+                  "type": "string",
+                  "readOnly": "true"
+                },
+                "state": {
+                  "description": "Current state of the object.",
+                  "example": "Define",
+                  "type": "string"
+                },
+                "routeStatus": {
+                  "description": "Route Status attribute.",
+                  "example": "Not Started",
+                  "type": "string"
+                },
+                "routeBasePurpose": {
+                  "description": "Route base Purpose attribute.",
+                  "example": "Standard",
+                  "type": "string"
+                },
+                "AutoStopOnRejection": {
+                  "description": "Auto Stop On Rejection attribute.",
+                  "example": "Immediate",
+                  "type": "string"
+                },
+                "routeCompletionAction": {
+                  "description": "Route Completion Action attribute.",
+                  "example": "Notify Route Owner",
+                  "type": "string"
+                },
+                "DemoteOnRejection": {
+                  "description": "Demote content on Task rejection attribute.",
+                  "example": "No or Yes",
+                  "type": "string"
+                },
+                "owner": {
+                  "description": "owner of object.",
+                  "example": "username",
+                  "type": "string"
+                },
+                "attRestrictMembers": {
+                  "description": "Scope of the object.",
+                  "example": "Organization",
+                  "type": "string"
+                },
+                "preserveTaskOwner": {
+                  "description": "Revert User Group(s) Assignment attribute value.",
+                  "example": "False",
+                  "type": "string"
+                },
+                "requiresEsign": {
+                  "description": "Require Esign attribute value.",
+                  "example": "False",
+                  "type": "string"
+                },
+                "attrScope": {
+                  "description": "Scope of the object. if scope is not organization or all, first value will be the type, second is name and third id of the object.",
+                  "example": "False",
+                  "type": "array"
+                },
+                "activityState": {
+                  "description": "activity state of the object.",
+                  "example": "Not Started",
+                  "type": "string"
+                },
+                "attribute[Route Base Purpose]": {
+                  "deprecated": true,
+                  "description": "Route Base Purpose attribute value. Deprecated since R425, use routeBasePurpose instead",
+                  "example": "Standard",
+                  "type": "string"
+                },
+                "attribute[Route Completion Action]": {
+                  "deprecated": true,
+                  "description": "Route Completion Action attribute value. Deprecated since R425, use routeCompletionAction instead",
+                  "example": "Notify Route Owner",
+                  "type": "string"
+                },
+                "attribute[Restrict Members]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use attRestrictMembers instead",
+                  "example": "Organization",
+                  "type": "string"
+                },
+                "attribute[Preserve Task Owner]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use preserveTaskOwner instead",
+                  "example": "False",
+                  "type": "string"
+                },
+                "attribute[Auto Stop On Rejection]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use AutoStopOnRejection instead",
+                  "example": "Immediate",
+                  "type": "string"
+                },
+                "attribute[Route Status]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use routeStatus instead",
+                  "example": "Not Started",
+                  "type": "string"
+                },
+                "ownerFullName": {
+                  "description": "object's full owner name",
+                  "example": "Mr John",
+                  "type": "string"
+                },
+                "tasks": {
+                  "description": "Tasks related to Route",
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "description": "Id of the task",
+                        "example": "1D8F8256B05C3400629659CD000269A9",
+                        "type": "string"
+                      },
+                      "type": {
+                        "description": "type of the object. it can either be Route Node or Inbox Task.",
+                        "example": "Route Node",
+                        "type": "string"
+                      },
+                      "relId": {
+                        "description": "relationship id between Route and Task/Route Node.",
+                        "example": "1D8F8256B05C3400629659CD000269A3",
+                        "type": "string"
+                      },
+                      "assigneeTitle": {
+                        "description": "Title of the assignee. Use in case of User Group.",
+                        "example": "user group title",
+                        "type": "string"
+                      },
+                      "assigneeType": {
+                        "description": "Assignee type.",
+                        "example": "User Group",
+                        "type": "string"
+                      },
+                      "taskAssignee": {
+                        "description": "Task assignee.",
+                        "example": "user name",
+                        "type": "string"
+                      },
+                      "taskOrder": {
+                        "description": "Task order in the execution.",
+                        "example": "1",
+                        "type": "string"
+                      },
+                      "taskAssigneeUsername": {
+                        "description": "user name of the assignee.",
+                        "example": "username",
+                        "type": "string"
+                      },
+                      "needsOwnerReview": {
+                        "description": "Needs Owner Review for task. Pass only if need to set as Yes ",
+                        "example": "Yes or No",
+                        "type": "string"
+                      },
+                      "routeOwnerTask": {
+                        "description": "Route owner task attribute value.",
+                        "example": "TRUE",
+                        "type": "string"
+                      },
+                      "chooseUsersFromUg": {
+                        "description": "Use only if assignee needs to be selected from specific user group.",
+                        "example": "true",
+                        "type": "string"
+                      },
+                      "routeOwnerUGChoice": {
+                        "description": "Use only if routeOwnerTask is set as true. Specify the user group id.",
+                        "example": "usergroup name",
+                        "type": "string"
+                      },
+                      "current": {
+                        "description": "Current state of the Object.",
+                        "example": "Draft",
+                        "type": "string"
+                      },
+                      "title": {
+                        "description": "Title of the object.",
+                        "example": "Task For Engineering Items",
+                        "type": "string"
+                      },
+                      "allowDelegation": {
+                        "description": "Allow Delegation attribute value.",
+                        "example": "TRUE",
+                        "type": "string"
+                      },
+                      "taskAction": {
+                        "description": "Action of the task.",
+                        "example": "Approve",
+                        "type": "string"
+                      },
+                      "instructions": {
+                        "description": "Task intructions.",
+                        "example": "approve it",
+                        "type": "string"
+                      },
+                      "taskDueDate": {
+                        "description": "Due date attribute value.",
+                        "example": "4/23/2022 11:37:42 AM",
+                        "type": "string"
+                      },
+                      "assigneeSetDueDate": {
+                        "description": "Assignee Set Due Date attribute value.",
+                        "example": "Yes",
+                        "type": "string"
+                      },
+                      "approvalStatus": {
+                        "description": "Approval Status attribute value.",
+                        "example": "Approved",
+                        "type": "string"
+                      },
+                      "comments": {
+                        "description": "Comment on the task.",
+                        "example": "task approved",
+                        "type": "string"
+                      },
+                      "reviewersComments": {
+                        "description": "Reviewers Comments on the task.",
+                        "example": "review completed",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "contents": {
+                  "description": "Tasks related to Route",
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "description": "content object id.",
+                        "example": "857FEB80000045FC5994CC0A00000012",
+                        "type": "string"
+                      },
+                      "identifier": {
+                        "description": "content physical object id.",
+                        "example": "857FEB80000045FC5994CC0A00000012",
+                        "type": "string"
+                      },
+                      "type": {
+                        "description": "type of the content.",
+                        "example": "Document",
+                        "type": "string"
+                      },
+                      "source": {
+                        "description": "Source URL.",
+                        "example": "https://3dspace.com/3dspace",
+                        "type": "string"
+                      },
+                      "relativePath": {
+                        "description": "URI of the content if more information needs to be retrieved.",
+                        "example": "/resources/v1/modeler/dsrt/routes/857FEB80000045FC5994CC0A00000012",
+                        "type": "string"
+                      },
+                      "relId": {
+                        "description": "Connection ID between Route and Content.",
+                        "example": "1D8F82564A3C2F006297301F0016FB2C",
+                        "type": "string"
+                      },
+                      "RouteBaseState": {
+                        "description": "Route Base State rel attribute value. Shows the blocking state name",
+                        "example": "state_IN_WORK",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "RESULTS-routes-get": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "id": {
+                  "description": "The object physical id or sometimes the object id.  Either id can typically be used transparently.",
+                  "example": "000000800000000C0000000000000000",
+                  "type": "string"
+                },
+                "type": {
+                  "description": "The object Route.",
+                  "example": "Route",
+                  "type": "string"
+                },
+                "identifier": {
+                  "description": "The object's physical id.",
+                  "example": "000000800000000C0000000000000000",
+                  "type": "string"
+                },
+                "source": {
+                  "description": "Source URL",
+                  "example": "https://3dspace.com/3dspace",
+                  "type": "string"
+                },
+                "relativePath": {
+                  "description": "Path of object if more information needs to be retrieved.",
+                  "example": "/resources/v1/modeler/dsrt/routes/1D8F82560A950B006296200B0007A6BA",
+                  "type": "string"
+                },
+                "cestamp": {
+                  "description": "The Concurrent Engineering (CESTAMP) of the object.",
+                  "example": "1D8F82560A950B006296200B00065DDA",
+                  "type": "string"
+                },
+                "title": {
+                  "description": "title of the object.",
+                  "example": "Approval Route",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Name of the object.",
+                  "example": "R-0000104",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "description of the object.",
+                  "example": "engineering approval route ",
+                  "type": "string"
+                },
+                "revision": {
+                  "description": "revision of the object.",
+                  "example": "1",
+                  "type": "string"
+                },
+                "isLatestRevision": {
+                  "description": "True if the provided route is the latest revision, otherwise False.",
+                  "example": "TRUE",
+                  "type": "string",
+                  "readOnly": "true"
+                },
+                "state": {
+                  "description": "Current state of the object.",
+                  "example": "Define",
+                  "type": "string"
+                },
+                "routeStatus": {
+                  "description": "Route Status attribute.",
+                  "example": "Not Started",
+                  "type": "string"
+                },
+                "routeBasePurpose": {
+                  "description": "Route base Purpose attribute.",
+                  "example": "Standard",
+                  "type": "string"
+                },
+                "AutoStopOnRejection": {
+                  "description": "Auto Stop On Rejection attribute.",
+                  "example": "Immediate",
+                  "type": "string"
+                },
+                "routeCompletionAction": {
+                  "description": "Route Completion Action attribute.",
+                  "example": "Notify Route Owner",
+                  "type": "string"
+                },
+                "DemoteOnRejection": {
+                  "description": "Demote content on Task rejection attribute.",
+                  "example": "No or Yes",
+                  "type": "string"
+                },
+                "owner": {
+                  "description": "owner of object.",
+                  "example": "username",
+                  "type": "string"
+                },
+                "attRestrictMembers": {
+                  "description": "Scope of the object.",
+                  "example": "Organization",
+                  "type": "string"
+                },
+                "preserveTaskOwner": {
+                  "description": "Revert User Group(s) Assignment attribute value.",
+                  "example": "False",
+                  "type": "string"
+                },
+                "requiresEsign": {
+                  "description": "Require Esign attribute value.",
+                  "example": "False",
+                  "type": "string"
+                },
+                "attrScope": {
+                  "description": "Scope of the object. if scope is not organization or all, first value will be the type, second is name and third id of the object.",
+                  "example": "False",
+                  "type": "array"
+                },
+                "activityState": {
+                  "description": "activity state of the object.",
+                  "example": "Not Started",
+                  "type": "string"
+                },
+                "attribute[Route Base Purpose]": {
+                  "deprecated": true,
+                  "description": "Route Base Purpose attribute value. Deprecated since R425, use routeBasePurpose instead",
+                  "example": "Standard",
+                  "type": "string"
+                },
+                "attribute[Route Completion Action]": {
+                  "deprecated": true,
+                  "description": "Route Completion Action attribute value. Deprecated since R425, use routeCompletionAction instead",
+                  "example": "Notify Route Owner",
+                  "type": "string"
+                },
+                "attribute[Restrict Members]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use attRestrictMembers instead",
+                  "example": "Organization",
+                  "type": "string"
+                },
+                "attribute[Preserve Task Owner]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use preserveTaskOwner instead",
+                  "example": "False",
+                  "type": "string"
+                },
+                "attribute[Auto Stop On Rejection]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use AutoStopOnRejection instead",
+                  "example": "Immediate",
+                  "type": "string"
+                },
+                "attribute[Route Status]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use routeStatus instead",
+                  "example": "Not Started",
+                  "type": "string"
+                },
+                "ownerFullName": {
+                  "description": "object's full owner name",
+                  "example": "Mr John",
+                  "type": "string"
+                },
+                "tasks": {
+                  "description": "Tasks related to Route",
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "description": "Id of the task",
+                        "example": "1D8F8256B05C3400629659CD000269A9",
+                        "type": "string"
+                      },
+                      "type": {
+                        "description": "type of the object. it can either be Route Node or Inbox Task.",
+                        "example": "Route Node",
+                        "type": "string"
+                      },
+                      "relId": {
+                        "description": "relationship id between Route and Task/Route Node.",
+                        "example": "1D8F8256B05C3400629659CD000269A9",
+                        "type": "string"
+                      },
+                      "assigneeTitle": {
+                        "description": "Title of the assignee. Use in case of User Group.",
+                        "example": "user group title",
+                        "type": "string"
+                      },
+                      "assigneeType": {
+                        "description": "Assignee type.",
+                        "example": "User Group",
+                        "type": "string"
+                      },
+                      "taskAssignee": {
+                        "description": "Task assignee.",
+                        "example": "user name",
+                        "type": "string"
+                      },
+                      "taskOrder": {
+                        "description": "Task order in the execution.",
+                        "example": "1",
+                        "type": "string"
+                      },
+                      "taskAssigneeUsername": {
+                        "description": "user name of the assignee.",
+                        "example": "username",
+                        "type": "string"
+                      },
+                      "needsOwnerReview": {
+                        "description": "Needs Owner Review for task. Pass only if need to set as Yes ",
+                        "example": "Yes or No",
+                        "type": "string"
+                      },
+                      "routeOwnerTask": {
+                        "description": "Route owner task attribute value.",
+                        "example": "TRUE",
+                        "type": "string"
+                      },
+                      "chooseUsersFromUg": {
+                        "description": "Use only if assignee needs to be selected from specific user group.",
+                        "example": "true",
+                        "type": "string"
+                      },
+                      "routeOwnerUGChoice": {
+                        "description": "Use only if routeOwnerTask is set as true. Specify the user group id.",
+                        "example": "usergroup name",
+                        "type": "string"
+                      },
+                      "current": {
+                        "description": "Current state of the Object.",
+                        "example": "Draft",
+                        "type": "string"
+                      },
+                      "title": {
+                        "description": "Title of the object.",
+                        "example": "Task For Engineering Items",
+                        "type": "string"
+                      },
+                      "allowDelegation": {
+                        "description": "Allow Delegation attribute value.",
+                        "example": "TRUE",
+                        "type": "string"
+                      },
+                      "taskAction": {
+                        "description": "Action of the task.",
+                        "example": "Approve",
+                        "type": "string"
+                      },
+                      "instructions": {
+                        "description": "Task intructions.",
+                        "example": "approve it",
+                        "type": "string"
+                      },
+                      "taskDueDate": {
+                        "description": "Due date attribute value.",
+                        "example": "4/23/2022 11:37:42 AM",
+                        "type": "string"
+                      },
+                      "assigneeSetDueDate": {
+                        "description": "Assignee Set Due Date attribute value.",
+                        "example": "Yes",
+                        "type": "string"
+                      },
+                      "approvalStatus": {
+                        "description": "Approval Status attribute value.",
+                        "example": "Approved",
+                        "type": "string"
+                      },
+                      "comments": {
+                        "description": "Comment on the task.",
+                        "example": "task approved",
+                        "type": "string"
+                      },
+                      "reviewersComments": {
+                        "description": "Reviewers Comments on the task.",
+                        "example": "review completed",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "RESULTS-routes-search": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "id": {
+                  "description": "The object physical id or sometimes the object id.  Either id can typically be used transparently.",
+                  "example": "000000800000000C0000000000000000",
+                  "type": "string"
+                },
+                "type": {
+                  "description": "The object Route.",
+                  "example": "Route",
+                  "type": "string"
+                },
+                "identifier": {
+                  "description": "The object's physical id.",
+                  "example": "000000800000000C0000000000000000",
+                  "type": "string"
+                },
+                "source": {
+                  "description": "Source URL",
+                  "example": "https://3dspace.com/3dspace",
+                  "type": "string"
+                },
+                "relativePath": {
+                  "description": "Path of object if more information needs to be retrieved.",
+                  "example": "/resources/v1/modeler/dsrt/routes/1D8F82560A950B006296200B0007A6BA",
+                  "type": "string"
+                },
+                "cestamp": {
+                  "description": "The Concurrent Engineering (CESTAMP) of the object.",
+                  "example": "1D8F82560A950B006296200B00065DDA",
+                  "type": "string"
+                },
+                "title": {
+                  "description": "title of the object.",
+                  "example": "Approval Route",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Name of the object.",
+                  "example": "R-0000104",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "description of the object.",
+                  "example": "engineering approval route ",
+                  "type": "string"
+                },
+                "revision": {
+                  "description": "revision of the object.",
+                  "example": "1",
+                  "type": "string"
+                },
+                "isLatestRevision": {
+                  "description": "True if the provided route is the latest revision, otherwise False.",
+                  "example": "TRUE",
+                  "type": "string",
+                  "readOnly": "true"
+                },
+                "state": {
+                  "description": "Current state of the object.",
+                  "example": "Define",
+                  "type": "string"
+                },
+                "routeStatus": {
+                  "description": "Route Status attribute.",
+                  "example": "Not Started",
+                  "type": "string"
+                },
+                "routeBasePurpose": {
+                  "description": "Route base Purpose attribute.",
+                  "example": "Standard",
+                  "type": "string"
+                },
+                "AutoStopOnRejection": {
+                  "description": "Auto Stop On Rejection attribute.",
+                  "example": "Immediate",
+                  "type": "string"
+                },
+                "routeCompletionAction": {
+                  "description": "Route Completion Action attribute.",
+                  "example": "Notify Route Owner",
+                  "type": "string"
+                },
+                "DemoteOnRejection": {
+                  "description": "Demote content on Task rejection attribute.",
+                  "example": "No or Yes",
+                  "type": "string"
+                },
+                "owner": {
+                  "description": "owner of object.",
+                  "example": "username",
+                  "type": "string"
+                },
+                "attRestrictMembers": {
+                  "description": "Scope of the object.",
+                  "example": "Organization",
+                  "type": "string"
+                },
+                "preserveTaskOwner": {
+                  "description": "Revert User Group(s) Assignment attribute value.",
+                  "example": "False",
+                  "type": "string"
+                },
+                "requiresEsign": {
+                  "description": "Require Esign attribute value.",
+                  "example": "False",
+                  "type": "string"
+                },
+                "attrScope": {
+                  "description": "Scope of the object. if scope is not organization or all, first value will be the type, second is name and third id of the object.",
+                  "example": "False",
+                  "type": "array"
+                },
+                "activityState": {
+                  "description": "activity state of the object.",
+                  "example": "Not Started",
+                  "type": "string"
+                },
+                "attribute[Route Base Purpose]": {
+                  "deprecated": true,
+                  "description": "Route Base Purpose attribute value. Deprecated since R425, use routeBasePurpose instead",
+                  "example": "Standard",
+                  "type": "string"
+                },
+                "attribute[Route Completion Action]": {
+                  "deprecated": true,
+                  "description": "Route Completion Action attribute value. Deprecated since R425, use routeCompletionAction instead",
+                  "example": "Notify Route Owner",
+                  "type": "string"
+                },
+                "attribute[Restrict Members]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use attRestrictMembers instead",
+                  "example": "Organization",
+                  "type": "string"
+                },
+                "attribute[Preserve Task Owner]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use preserveTaskOwner instead",
+                  "example": "False",
+                  "type": "string"
+                },
+                "attribute[Auto Stop On Rejection]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use AutoStopOnRejection instead",
+                  "example": "Immediate",
+                  "type": "string"
+                },
+                "attribute[Route Status]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use routeStatus instead",
+                  "example": "Not Started",
+                  "type": "string"
+                },
+                "ownerFullName": {
+                  "description": "object's full owner name",
+                  "example": "Mr John",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "RESULTS-templates-get": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "id": {
+                  "description": "The object physical id or sometimes the object id.  Either id can typically be used transparently.",
+                  "example": "000000800000000C0000000000000000",
+                  "type": "string"
+                },
+                "type": {
+                  "description": "type value of Route Template.",
+                  "example": "Route Template",
+                  "type": "string"
+                },
+                "identifier": {
+                  "description": "The object's physical id.",
+                  "example": "000000800000000C0000000000000000",
+                  "type": "string"
+                },
+                "source": {
+                  "description": "Source URL",
+                  "example": "https://3dspace.com/3dspace",
+                  "type": "string"
+                },
+                "relativePath": {
+                  "description": "Path of object if more information needs to be retrieved.",
+                  "example": "/resources/v1/modeler/dsrt/routetemplates/1D8F82560A950B006296200B0007A6BA",
+                  "type": "string"
+                },
+                "cestamp": {
+                  "description": "The Concurrent Engineering (CESTAMP) of the object.",
+                  "example": "1D8F82560A950B006296200B00065DDA",
+                  "type": "string"
+                },
+                "title": {
+                  "description": "title of the object.",
+                  "example": "Approval Route Template",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Name of the object.",
+                  "example": "RT-0000104",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "description of the object.",
+                  "example": "engineering approval route template",
+                  "type": "string"
+                },
+                "revision": {
+                  "description": "revision of the object.",
+                  "example": "1",
+                  "type": "string"
+                },
+                "isLatestRevision": {
+                  "description": "True if the provided route template is the latest revision, otherwise False.",
+                  "example": "TRUE",
+                  "type": "string",
+                  "readOnly": "true"
+                },
+                "state": {
+                  "description": "Current state of the object.",
+                  "example": "Active",
+                  "type": "string"
+                },
+                "routeBasePurpose": {
+                  "description": "Route base Purpose attribute.",
+                  "example": "Standard",
+                  "type": "string"
+                },
+                "AutoStopOnRejection": {
+                  "description": "Auto Stop On Rejection attribute.",
+                  "example": "Immediate",
+                  "type": "string"
+                },
+                "routeCompletionAction": {
+                  "description": "Route Completion Action attribute defined for link route template.",
+                  "example": "Notify Route Owner",
+                  "type": "string"
+                },
+                "completionAction": {
+                  "description": "Route Completion action defined on template.",
+                  "example": "Notify Route Owner",
+                  "type": "string"
+                },
+                "DemoteOnRejection": {
+                  "description": "Demote content on Task rejection attribute.",
+                  "example": "No or Yes",
+                  "type": "string"
+                },
+                "selectUsersFromUserGroup": {
+                  "description": "Select users from user group attribute.",
+                  "example": "True or False",
+                  "type": "string"
+                },
+                "owner": {
+                  "description": "owner of object.",
+                  "example": "username",
+                  "type": "string"
+                },
+                "attRestrictMembers": {
+                  "description": "Scope of the object.",
+                  "example": "Organization",
+                  "type": "string"
+                },
+                "preserveTaskOwner": {
+                  "description": "Revert User Group(s) Assignment attribute value.",
+                  "example": "False",
+                  "type": "string"
+                },
+                "routeRequiresESign": {
+                  "description": "Revert User Group(s) Assignment attribute value.",
+                  "example": "False",
+                  "type": "string"
+                },
+                "owningCompany": {
+                  "description": "Owning company name of template.",
+                  "example": "Company Name",
+                  "type": "string"
+                },
+                "taskEditSetting": {
+                  "description": "Task Edit Setting attribute.",
+                  "example": "Modify/Delete Task List",
+                  "type": "string"
+                },
+                "attribute[Route Base Purpose]": {
+                  "deprecated": true,
+                  "description": "Route Base Purpose attribute value. Deprecated since R425, use routeBasePurpose instead",
+                  "example": "Standard",
+                  "type": "string"
+                },
+                "attribute[Restrict Members]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use attRestrictMembers instead",
+                  "example": "Organization",
+                  "type": "string"
+                },
+                "attribute[Preserve Task Owner]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use preserveTaskOwner instead",
+                  "example": "False",
+                  "type": "string"
+                },
+                "attribute[Auto Stop On Rejection]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use AutoStopOnRejection instead",
+                  "example": "Immediate",
+                  "type": "string"
+                },
+                "tasks": {
+                  "description": "Tasks related to Route Template",
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "description": "Id of the task",
+                        "example": "1D8F8256B05C3400629659CD000269A9",
+                        "type": "string"
+                      },
+                      "type": {
+                        "description": "type of the object. it can either be Route Node or Inbox Task.",
+                        "example": "Route Node",
+                        "type": "string"
+                      },
+                      "relId": {
+                        "description": "relationship id between Route and Task/Route Node.",
+                        "example": "1D8F8256B05C3400629659CD000269A9",
+                        "type": "string"
+                      },
+                      "assigneeTitle": {
+                        "description": "Title of the assignee. Use in case of User Group.",
+                        "example": "user group title",
+                        "type": "string"
+                      },
+                      "assigneeType": {
+                        "description": "Assignee type.",
+                        "example": "User Group",
+                        "type": "string"
+                      },
+                      "taskAssignee": {
+                        "description": "Task assignee.",
+                        "example": "user name",
+                        "type": "string"
+                      },
+                      "taskOrder": {
+                        "description": "Task order in the execution.",
+                        "example": "1",
+                        "type": "string"
+                      },
+                      "taskAssigneeUsername": {
+                        "description": "user name of the assignee.",
+                        "example": "username",
+                        "type": "string"
+                      },
+                      "needsOwnerReview": {
+                        "description": "Needs Owner Review for task. Pass only if need to set as Yes ",
+                        "example": "Yes or No",
+                        "type": "string"
+                      },
+                      "routeOwnerTask": {
+                        "description": "Route owner task attribute value.",
+                        "example": "TRUE",
+                        "type": "string"
+                      },
+                      "chooseUsersFromUg": {
+                        "description": "Use only if assignee needs to be selected from specific user group.",
+                        "example": "true",
+                        "type": "string"
+                      },
+                      "routeOwnerUGChoice": {
+                        "description": "Use only if routeOwnerTask is set as true. Specify the user group id.",
+                        "example": "usergroup name",
+                        "type": "string"
+                      },
+                      "current": {
+                        "description": "Current state of the Object.",
+                        "example": "Draft",
+                        "type": "string"
+                      },
+                      "title": {
+                        "description": "Title of the object.",
+                        "example": "Task For Engineering Items",
+                        "type": "string"
+                      },
+                      "allowDelegation": {
+                        "description": "Allow Delegation attribute value.",
+                        "example": "TRUE",
+                        "type": "string"
+                      },
+                      "taskAction": {
+                        "description": "Action of the task.",
+                        "example": "Approve",
+                        "type": "string"
+                      },
+                      "instructions": {
+                        "description": "Task intructions.",
+                        "example": "approve it",
+                        "type": "string"
+                      },
+                      "taskDueDate": {
+                        "description": "Due date attribute value.",
+                        "example": "4/23/2022 11:37:42 AM",
+                        "type": "string"
+                      },
+                      "assigneeSetDueDate": {
+                        "description": "Assignee Set Due Date attribute value.",
+                        "example": "Yes",
+                        "type": "string"
+                      },
+                      "dateOffsetFrom": {
+                        "description": "Date Offset From attribute value.",
+                        "example": "Route Start Date",
+                        "type": "string"
+                      },
+                      "dueDateOffset": {
+                        "description": "Due Date Offset attribute value.",
+                        "example": "2",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "RESULTS-templates": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "id": {
+                  "description": "The object physical id or sometimes the object id.  Either id can typically be used transparently.",
+                  "example": "000000800000000C0000000000000000",
+                  "type": "string"
+                },
+                "type": {
+                  "description": "type value of Route Template.",
+                  "example": "Route Template",
+                  "type": "string"
+                },
+                "identifier": {
+                  "description": "The object's physical id.",
+                  "example": "000000800000000C0000000000000000",
+                  "type": "string"
+                },
+                "source": {
+                  "description": "Source URL",
+                  "example": "https://3dspace.com/3dspace",
+                  "type": "string"
+                },
+                "relativePath": {
+                  "description": "Path of object if more information needs to be retrieved.",
+                  "example": "/resources/v1/modeler/dsrt/routetemplates/1D8F82560A950B006296200B0007A6BA",
+                  "type": "string"
+                },
+                "cestamp": {
+                  "description": "The Concurrent Engineering (CESTAMP) of the object.",
+                  "example": "1D8F82560A950B006296200B00065DDA",
+                  "type": "string"
+                },
+                "title": {
+                  "description": "title of the object.",
+                  "example": "Approval Route Template",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Name of the object.",
+                  "example": "RT-0000104",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "description of the object.",
+                  "example": "engineering approval route template",
+                  "type": "string"
+                },
+                "revision": {
+                  "description": "revision of the object.",
+                  "example": "1",
+                  "type": "string"
+                },
+                "isLatestRevision": {
+                  "description": "True if the provided route template is the latest revision, otherwise False.",
+                  "example": "TRUE",
+                  "type": "string",
+                  "readOnly": "true"
+                },
+                "state": {
+                  "description": "Current state of the object.",
+                  "example": "Active",
+                  "type": "string"
+                },
+                "routeBasePurpose": {
+                  "description": "Route base Purpose attribute.",
+                  "example": "Standard",
+                  "type": "string"
+                },
+                "AutoStopOnRejection": {
+                  "description": "Auto Stop On Rejection attribute.",
+                  "example": "Immediate",
+                  "type": "string"
+                },
+                "routeCompletionAction": {
+                  "description": "Route Completion Action attribute defined for link route template.",
+                  "example": "Notify Route Owner",
+                  "type": "string"
+                },
+                "completionAction": {
+                  "description": "Route Completion action defined on template.",
+                  "example": "Notify Route Owner",
+                  "type": "string"
+                },
+                "DemoteOnRejection": {
+                  "description": "Demote content on Task rejection attribute.",
+                  "example": "No or Yes",
+                  "type": "string"
+                },
+                "selectUsersFromUserGroup": {
+                  "description": "Select users from user group attribute.",
+                  "example": "True or False",
+                  "type": "string"
+                },
+                "owner": {
+                  "description": "owner of object.",
+                  "example": "username",
+                  "type": "string"
+                },
+                "attRestrictMembers": {
+                  "description": "Scope of the object.",
+                  "example": "Organization",
+                  "type": "string"
+                },
+                "preserveTaskOwner": {
+                  "description": "Revert User Group(s) Assignment attribute value.",
+                  "example": "False",
+                  "type": "string"
+                },
+                "routeRequiresESign": {
+                  "description": "Revert User Group(s) Assignment attribute value.",
+                  "example": "False",
+                  "type": "string"
+                },
+                "owningCompany": {
+                  "description": "Owning company name of template.",
+                  "example": "Company Name",
+                  "type": "string"
+                },
+                "taskEditSetting": {
+                  "description": "Task Edit Setting attribute.",
+                  "example": "Modify/Delete Task List",
+                  "type": "string"
+                },
+                "attribute[Route Base Purpose]": {
+                  "deprecated": true,
+                  "description": "Route Base Purpose attribute value. Deprecated since R425, use routeBasePurpose instead",
+                  "example": "Standard",
+                  "type": "string"
+                },
+                "attribute[Restrict Members]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use attRestrictMembers instead",
+                  "example": "Organization",
+                  "type": "string"
+                },
+                "attribute[Preserve Task Owner]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use preserveTaskOwner instead",
+                  "example": "False",
+                  "type": "string"
+                },
+                "attribute[Auto Stop On Rejection]": {
+                  "deprecated": true,
+                  "description": "Deprecated since R425, use AutoStopOnRejection instead",
+                  "example": "Immediate",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "RESULTS-contents": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "id": {
+                  "description": "content object id.",
+                  "example": "857FEB80000045FC5994CC0A00000012",
+                  "type": "string"
+                },
+                "identifier": {
+                  "description": "content physical object id.",
+                  "example": "857FEB80000045FC5994CC0A00000012",
+                  "type": "string"
+                },
+                "type": {
+                  "description": "type of the content.",
+                  "example": "Document",
+                  "type": "string"
+                },
+                "source": {
+                  "description": "Source URL.",
+                  "example": "https://3dspace.com/3dspace",
+                  "type": "string"
+                },
+                "relativePath": {
+                  "description": "URI of the content if more information needs to be retrieved.",
+                  "example": "/resources/v1/modeler/dsrt/routes/857FEB80000045FC5994CC0A00000012",
+                  "type": "string"
+                },
+                "relId": {
+                  "description": "Connection ID between Route and Content if content is added to Route.",
+                  "example": "1D8F82564A3C2F006297301F0016FB2C",
+                  "type": "string"
+                },
+                "RouteBaseState": {
+                  "description": "Route Base State rel attribute value. Shows the blocking state name",
+                  "example": "state_IN_WORK",
+                  "type": "string"
+                },
+                "RouteTargetState": {
+                  "description": "Route Target State rel attribute value. Shows the target state name",
+                  "example": "state_FROZEN",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "RESULTS-contents-get": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "data": {
+            "example": [
+              {
+                "id": "000000800000000C0000000000000000",
+                "type": "Document",
+                "identifier": "000000800000000C0000000000000000",
+                "source": "https://3dspace.dsone.3ds.com:443/3DSpace",
+                "relativePath": "/resources/v1/modeler/documents/000000800000000C0000000000000000",
+                "relId": "1D8F82564A3C2F006297301F0016FB2C",
+                "RouteBaseState": "state_IN_WORK",
+                "RouteTargetState": "state_FROZEN"
+              },
+              {
+                "id": "000000800000000C0000000000000002",
+                "type": "Document",
+                "identifier": "000000800000000C0000000000000002",
+                "source": "https://3dspace.dsone.3ds.com:443/3DSpace",
+                "relativePath": "/resources/v1/modeler/documents/000000800000000C0000000000000002",
+                "relId": "1D8F82564A3C2F006297301F0016FB7C",
+                "RouteBaseState": "state_IN_WORK",
+                "RouteTargetState": "state_FROZEN"
+              }
+            ]
+          }
+        }
+      },
+      "BASICS": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The object physical id or sometimes the object id.  Either id can typically be used transparently.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "relId": {
+            "description": "The relationship physical/object id  when applicable.  For data retrieved through expansion, this field should be present.",
+            "example": "11111111111111111111111111111111",
+            "type": "string"
+          },
+          "tempId": {
+            "description": "When temp id is included in the payload during a create/post operation, it is sent back for reference.  It can be specified either as tempId or id during create.",
+            "example": "client assigned temp id",
+            "type": "string"
+          },
+          "type": {
+            "description": "The data object type; typically reflects the object's business type.",
+            "type": "string"
+          },
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object.",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string"
+          },
+          "updateAction": {
+            "description": "This is relevant during an update operation to override the default HTTP method.",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request.",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

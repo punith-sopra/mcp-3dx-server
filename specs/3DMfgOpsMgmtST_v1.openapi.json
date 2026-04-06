@@ -1,0 +1,4094 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "3D Manufacturing Operations Management Web Services",
+    "description": "REST Services for integrating the 3DEXPERIENCE Platform with ERP systems through the 3DEXPERIENCE Manufacturing Operations Management Services.",
+    "version": "1.0.0",
+    "x-ds-service": [
+      "3D Manufacturing Operations Management"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3D Manufacturing Operations Management}/resources/v1",
+      "variables": {
+        "3D Manufacturing Operations Management": {
+          "default": "https://3DEXPERIENCE_3dmfgopsmgmtst"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/3dmfgopsmgmtst/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/receivingOrder/{OrderKey}": {
+      "get": {
+        "description": "Gets the details of a Receiving Order including parameters of the order as well as the status of its operations.",
+        "summary": "Gets the Receiving Order.",
+        "operationId": "getReceivingOrder",
+        "tags": [
+          "Receiving Order"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-receiving-get"
+          },
+          "400": {
+            "$ref": "#/components/responses/400-get"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404-receiving"
+          },
+          "500": {
+            "$ref": "#/components/responses/500-receiving"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrderKeyReceiving"
+          }
+        ]
+      }
+    },
+    "/receivingOrder": {
+      "post": {
+        "description": "Creates a new Receiving Order based on the request body object.\n\n## Object Structure\n\nRequest body object JSON has a hierarchical form consisting of several sections:\n\n1.  Order header\n\n2.  Order lines\n\n3.  Order containerization – this section is only available and mandatory for the order type 17 - ASN Inbound Delivery Order\n\nIf an imported order has the status New, Released or Held, it is possible to replace it with a new order with the same ```OrderNo``` and ```OrderType```. For orders that currently have a different status, if you try to import the same order, an error will be returned.\n\nThe Unit of Measure (UOM) in an order line should be consistent with the manufacturing item's unit or product’s UOM:\n- **Continuous Manufactured Material**: Use the unit defined for the item (e.g., KILOGRAM, METER, METER2, or METER3).\n- **Continuous Provided Material**: Use the default unit based on its magnitude:\n  - KILOGRAM for mass\n  - METER for length\n  - METER2 for area\n  - METER3 for volume\n- **All other item types**: Use EA (Each).\n- **Product that has been created in the MODM app**: Use the UOM defined for the product.\n\nAll translated content during import should be created in the language in which the endpoint is called (a user context needs to be available).\n\n***note:** Accepted order types are 16 – Purchase Order and 17 - ASN Inbound Delivery Order. All others will be rejected with an internal server error.*\n\n***note:** Supplier (partner) should be created before an order is imported. The imported order will have status 1-New.*\n\n***note:** At least one of the following parameters must be provided: ManufacturingItemId, ManufacturingItemEin, or ProductNo. If both ManufacturingItemId and ManufacturingItemEin are provided, ManufacturingItemId will be used to retrieve the manufacturing item's properties.*\n\n***note:** Either the ToWarehouseId, or both ToFacility and ToWarehouse must be provided. If all three are provided, ToWarehouseId is used.*\n",
+        "summary": "Creates a new Receiving Order.",
+        "operationId": "postReceivingOrder",
+        "tags": [
+          "Receiving Order"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-receiving-post"
+          },
+          "400": {
+            "$ref": "#/components/responses/400-post"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500-receiving"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/receivingPost"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/csrf"
+          }
+        ]
+      }
+    },
+    "/issueOrder/{OrderKey}": {
+      "get": {
+        "description": "Gets the details of a Issue Order including parameters of the order as well as the status of its operations.",
+        "summary": "Gets the Issue Order.",
+        "operationId": "getIssueOrder",
+        "tags": [
+          "Issue Order"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-issue-get"
+          },
+          "400": {
+            "$ref": "#/components/responses/400-get"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404-issue"
+          },
+          "500": {
+            "$ref": "#/components/responses/500-issue"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrderKeyIssue"
+          }
+        ]
+      }
+    },
+    "/issueOrder": {
+      "post": {
+        "description": "Creates a new Issue Order based on the request body object.\n\n## Object Structure\n\nRequest body object JSON has a hierarchical form consisting of several sections:\n\n1.  Order header\n\n2.  Order lines\n\nIf an imported order has the status New, Released or Held, it is possible to replace it with a new order with the same ```OrderNo``` and ```OrderType```. For orders that currently have a different status, if you try to import the same order, an error will be returned. \n\nThe Unit of Measure (UOM) in an order line should be consistent with the manufacturing item's unit or product’s UOM:\n- **Continuous Manufactured Material**: Use the unit defined for the item (e.g., KILOGRAM, METER, METER2, or METER3).\n- **Continuous Provided Material**: Use the default unit based on its magnitude:\n  - KILOGRAM for mass\n  - METER for length\n  - METER2 for area\n  - METER3 for volume\n- **All other item types**: Use EA (Each).\n- **Product that has been created in the MODM app**: Use the UOM defined for the product.\n\nAll translated content during import should be created in the language in which the endpoint is called (a user context needs to be available).\n\n***note:** Accepted order types are 7 - Delivery Order and 24 – Production Picking Order. All others will be rejected with an internal server error.*\n\n***note:** Customer (partner) should be created before an order is imported. The imported order will have status 1-New.*\n\n***note:** At least one of the following parameters must be provided: ManufacturingItemId, ManufacturingItemEin, or ProductNo. If both ManufacturingItemId and ManufacturingItemEin are provided, ManufacturingItemId will be used to retrieve the manufacturing item's properties.*\n\n***note:** Either FromWarehouseId, or both FromFacility and FromWarehouse must be provided. If all are provided, FromWarehouseId is used. Similarly, either ToWarehouseId, or both ToFacility and ToWarehouse must be provided. If all are provided, ToWarehouseId is used.*\n",
+        "summary": "Creates a new Issue Order.",
+        "operationId": "postIssueOrder",
+        "tags": [
+          "Issue Order"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-issue-post"
+          },
+          "400": {
+            "$ref": "#/components/responses/400-post"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500-issue"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/issuePost"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/csrf"
+          }
+        ]
+      }
+    },
+    "/inventoryChange/{OrderKey}": {
+      "get": {
+        "description": "Gets the details of warehouse inventory change events for a given completed or closed order.\n\nIn some cases, when one or more properties have changed for existing inventory (for example, when inventory is moved between two warehouses, or the inventory status is changed), the details list in the response body object JSON will contain two objects for the inventory: one with its previous properties and quantity less than zero, and one with its new properties and quantity greater than zero.\n",
+        "summary": "Gets changes to inventory.",
+        "operationId": "getInventoryChangeOrderKey",
+        "tags": [
+          "Inventory"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-inventory-change-get"
+          },
+          "400": {
+            "$ref": "#/components/responses/400-inventory-change-orderkey"
+          },
+          "403": {
+            "$ref": "#/components/responses/403-inventory-change"
+          },
+          "404": {
+            "$ref": "#/components/responses/404-inventory-change-orderkey"
+          },
+          "500": {
+            "$ref": "#/components/responses/500-inventory-change-orderkey"
+          },
+          "501": {
+            "$ref": "#/components/responses/501-inventory-change"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/OrderKeyInventoryChange"
+          }
+        ]
+      }
+    },
+    "/inventoryChange/{InventoryHistoryID}": {
+      "get": {
+        "description": "Gets the details of warehouse inventory change events for a given inventory history identifier.\n\nIn some cases, when one or more properties have changed for existing inventory (for example, when inventory is moved between two warehouses, or the inventory status is changed, or in some cases during counting reconciliation), the details list in the response body object JSON will contain two objects for the inventory: one with its previous properties and quantity less than zero, and one with its new properties and quantity greater than zero.\n",
+        "summary": "Gets changes to inventory.",
+        "operationId": "getInventoryChangeInventoryHistoryID",
+        "tags": [
+          "Inventory"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-inventory-change-get"
+          },
+          "400": {
+            "$ref": "#/components/responses/400-inventory-change-id"
+          },
+          "403": {
+            "$ref": "#/components/responses/403-inventory-change"
+          },
+          "404": {
+            "$ref": "#/components/responses/404-inventory-change-id"
+          },
+          "500": {
+            "$ref": "#/components/responses/500-inventory-change-id"
+          },
+          "501": {
+            "$ref": "#/components/responses/501-inventory-change"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/InventoryHistoryIDInventoryChange"
+          }
+        ]
+      }
+    },
+    "/application/machineoperations/readings": {
+      "post": {
+        "description": "The endpoint will be used to send readings from asset and persist such a series as data collect readings within the context of a single operation in the 3DEXPERIENCE MOM Service database for the purpose of monitoring of production equipment behavior. The asset will pass the data in the JSON format. The corresponding input JSON variable will consist of two logical parts:\n\n1. Properties that allow the identification of the resource assetRef section or assetSerial.\n2. The collection of the asset readings, each described up to name, data type, values, and timestamp.\n\nUpon endpoint call with these specified data, the MOM Service will first identify the asset based on the provided assetRef or assetSerial. If the asset is successfully identified, then the 3DEXPERIENCE MOM Service will try to find the right production operation, and serialized manufacturing item. For this purpose, the production operation must be started and the asset (resource) usage confirmed in the operation for the serialized manufacturing item by the Operator.\n\nProperties that allow the identification of the resource assetRef or assetSerial, where:\n- If an asset has been defined in the process - it can be referenced via section assetRef or assetSerial. Serial Number is the unique serial number defined in 3DSpace for this resource.\n- If resource classes have been defined in the process, it is necessary to use an asset linked to this class and added under the same work center as the operation.\n\nThe found triple of objects (confirmed asset, started operation, serialized manufacturing item) needs to be only one. Otherwise (if the asset cannot be identified, or multiple such data have been found) then exceptions will be raised. Once the triple is successfully identified, the MOM Service tries to match the asset readings (by the name sent in the assetReadings section) to the data collects rows in the operation. When the appropriate data collects rows are identified, then the system will persist the asset readings as data collect readings for the identified serialized manufacturing item. At this point, the operator sees a message about the new data and the part of the screen corresponding to the collected reading data (Data Collect) refreshes automatically. When at least one asset reading are not mapped to the operation data collect properly then exceptions will be raised.\n",
+        "summary": "Creates new machine operations readings.",
+        "operationId": "postMachineOperationsReadings",
+        "tags": [
+          "Machine Operations"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-machine-operations"
+          },
+          "400": {
+            "$ref": "#/components/responses/400-machine-operations"
+          },
+          "401": {
+            "$ref": "#/components/responses/401-machine-operations"
+          },
+          "403": {
+            "$ref": "#/components/responses/403-machine-operations"
+          },
+          "404": {
+            "$ref": "#/components/responses/404-machine-operations"
+          },
+          "500": {
+            "$ref": "#/components/responses/500-machine-operations"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/machineOperationsPost"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/csrf"
+          }
+        ]
+      }
+    },
+    "/printRequest/{PrintRequestID}": {
+      "get": {
+        "description": "Gets the details of a print request based on the provided ID.",
+        "summary": "Gets a print request.",
+        "operationId": "getPrintRequest",
+        "tags": [
+          "Printing"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PrintRequestID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-print-get"
+          },
+          "400": {
+            "$ref": "#/components/responses/400-print-get"
+          },
+          "403": {
+            "$ref": "#/components/responses/403-print-get"
+          },
+          "404": {
+            "$ref": "#/components/responses/404-print-get"
+          },
+          "500": {
+            "$ref": "#/components/responses/500-print-get"
+          },
+          "501": {
+            "$ref": "#/components/responses/501-print-get"
+          }
+        }
+      }
+    },
+    "/application/CSRF": {
+      "get": {
+        "description": "Generates a CSRF token required for web services using the verb PUT, PATCH, POST, or DELETE. The token is valid for the session. After a newlogin the token is no longer valid.\n",
+        "summary": "Creates a new CSRF token.",
+        "operationId": "postCSRFToken",
+        "tags": [
+          "Common"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-csrf-get"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "x-definitions": {
+      "response-base": {
+        "type": "object",
+        "properties": {
+          "Message": {
+            "description": "A message describing the request.",
+            "example": "Success",
+            "type": "string"
+          }
+        }
+      },
+      "response-base-camel": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "description": "A message describing the request.",
+            "example": "Success",
+            "type": "string"
+          }
+        }
+      },
+      "response-order-mixin": {
+        "type": "object",
+        "properties": {
+          "OrderType": {
+            "description": "The requested Order Type.",
+            "type": "integer"
+          },
+          "OrderNo": {
+            "description": "The requested Order No.",
+            "type": "string"
+          }
+        }
+      },
+      "response-order-mixin-camel": {
+        "type": "object",
+        "properties": {
+          "orderType": {
+            "description": "The requested Order Type.",
+            "type": "integer"
+          },
+          "orderNo": {
+            "description": "The requested Order No.",
+            "type": "string"
+          }
+        }
+      },
+      "success-order-post-base": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base"
+          },
+          {
+            "$ref": "#/components/x-definitions/response-order-mixin"
+          }
+        ]
+      },
+      "success-production-post": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success-order-post-base"
+          }
+        ],
+        "properties": {
+          "OrderNo": {
+            "example": "WO01"
+          },
+          "OrderType": {
+            "example": 10001
+          }
+        }
+      },
+      "success-receiving-post": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success-order-post-base"
+          }
+        ],
+        "properties": {
+          "OrderNo": {
+            "example": "RCV102"
+          },
+          "OrderType": {
+            "example": 16
+          }
+        }
+      },
+      "success-issue-post": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success-order-post-base"
+          }
+        ],
+        "properties": {
+          "OrderNo": {
+            "example": "PPO01"
+          },
+          "OrderType": {
+            "example": 7
+          }
+        }
+      },
+      "success-production-get": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base"
+          },
+          {
+            "$ref": "#/components/x-definitions/response-order-mixin"
+          }
+        ],
+        "properties": {
+          "OrderNo": {
+            "example": "WO01"
+          },
+          "OrderType": {
+            "example": 10001
+          },
+          "ProductNo": {
+            "description": "The assembled product.",
+            "example": "Turbofan",
+            "type": "string"
+          },
+          "ProductRevision": {
+            "description": "The version of the product.",
+            "example": "1.0",
+            "type": "string"
+          },
+          "OrderedQuantity": {
+            "description": "The quantity of the order.",
+            "example": 2,
+            "type": "integer"
+          },
+          "CompletedQuantity": {
+            "description": "The quantity of the order that has been completed.",
+            "example": 1,
+            "type": "integer"
+          },
+          "UOM": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UOM"
+              }
+            ]
+          },
+          "OrderProgress": {
+            "description": "The percentage process of an order.",
+            "example": 0.73,
+            "type": "number"
+          },
+          "OrderStatus": {
+            "description": "The status of an order.",
+            "example": "Started",
+            "type": "string"
+          },
+          "ListOfSerials": {
+            "description": "The product serial numbers.",
+            "example": [
+              "S-00001",
+              "S-00002"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "Operations": {
+            "description": "The order operations.",
+            "type": "array",
+            "items": {
+              "properties": {
+                "OperationSeqNo": {
+                  "description": "The sequence number of an operation.",
+                  "example": "0010",
+                  "type": "string"
+                },
+                "OperationStatus": {
+                  "description": "The status of an operation.",
+                  "example": "Started",
+                  "type": "string"
+                },
+                "OperationProgress": {
+                  "description": "The percentage process of an operation.",
+                  "example": 0.73,
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      "success-warehouse-get": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base"
+          },
+          {
+            "$ref": "#/components/x-definitions/response-order-mixin"
+          }
+        ],
+        "properties": {
+          "OrderStatus": {
+            "description": "The status of an order.",
+            "example": "Released",
+            "type": "string"
+          },
+          "OrderLinesCount": {
+            "description": "The number of order lines.",
+            "example": 1,
+            "type": "number"
+          },
+          "OrderLines": {
+            "description": "The order lines.",
+            "type": "array",
+            "items": {
+              "properties": {
+                "OrderLineNo": {
+                  "description": "The number of an order line.",
+                  "example": 10,
+                  "type": "integer"
+                },
+                "ProductNo": {
+                  "description": "The product for an order line.",
+                  "example": "MM1-13/0045",
+                  "type": "string",
+                  "deprecated": true
+                },
+                "ProductRevision": {
+                  "description": "The product revision for an order line.",
+                  "example": "1.0",
+                  "type": "string",
+                  "deprecated": true
+                },
+                "ManufacturingItemId": {
+                  "description": "The physical ID of the Manufacturing Item.",
+                  "example": "289C82568F1E3700655C5BB80002F543",
+                  "type": "string",
+                  "maxLength": 100
+                },
+                "ManufacturingItemEin": {
+                  "description": "The EIN (Part Number) of the Manufacturing Item.",
+                  "example": 12345,
+                  "type": "string",
+                  "maxLength": 80
+                },
+                "OrderedQuantity": {
+                  "description": "The ordered quantity of an order line.",
+                  "example": 20,
+                  "type": "integer"
+                },
+                "CompletedQuantity": {
+                  "description": "The quantity of an order line that has been completed.",
+                  "example": 0,
+                  "type": "integer"
+                },
+                "OrderLineStatus": {
+                  "description": "The status of an order line.",
+                  "example": "Released",
+                  "type": "string"
+                },
+                "UOM": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Unit"
+                    },
+                    {
+                      "$ref": "#/components/schemas/UOM"
+                    }
+                  ],
+                  "description": "Unit or UOM is used depending on how the manufacturing item or product was identified.\n\n- Unit: ManufacturingItemId or ManufacturingItemEin\n- UOM: ProductNo and ProductRevision\n"
+                }
+              }
+            }
+          }
+        }
+      },
+      "success-receiving-get": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success-warehouse-get"
+          }
+        ],
+        "properties": {
+          "OrderNo": {
+            "example": "RCV102"
+          },
+          "OrderType": {
+            "example": 16
+          }
+        }
+      },
+      "success-issue-get": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success-warehouse-get"
+          }
+        ],
+        "properties": {
+          "OrderNo": {
+            "example": "PPO01"
+          },
+          "OrderType": {
+            "example": 24
+          }
+        }
+      },
+      "success-csrf-get": {
+        "type": "object",
+        "properties": {
+          "csrf": {
+            "description": "A container for CSRF details.",
+            "allOf": [
+              {
+                "$ref": "#/components/x-definitions/csrf"
+              }
+            ]
+          }
+        }
+      },
+      "error-400-get": {
+        "description": "The response data when the request fails with a 400 error.",
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base"
+          }
+        ],
+        "type": "object",
+        "properties": {
+          "Message": {
+            "example": "The format of provided OrderKey is not correct."
+          }
+        }
+      },
+      "error-400-post": {
+        "description": "The response data when the request fails with a 400 error.",
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base"
+          }
+        ],
+        "type": "object",
+        "properties": {
+          "Message": {
+            "example": "Request body is empty or incorrect JSON format."
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with a 403 error.",
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base"
+          }
+        ],
+        "properties": {
+          "Message": {
+            "description": "An error message describing the user is not allowed to make the request.",
+            "example": "The currently logged in employee does not have the necessary roles to access the provided Web Service."
+          }
+        }
+      },
+      "error-403-camel": {
+        "description": "The response data when the request fails with a 403 error.",
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base-camel"
+          }
+        ],
+        "properties": {
+          "message": {
+            "description": "An error message describing the user is not allowed to make the request.",
+            "example": "The currently logged in employee does not have the necessary roles to access the provided Web Service."
+          }
+        }
+      },
+      "error-404": {
+        "description": "The response data when the request fails with a 404 error.",
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base"
+          },
+          {
+            "$ref": "#/components/x-definitions/response-order-mixin"
+          }
+        ],
+        "properties": {
+          "Message": {
+            "description": "An error message describing the specified entity was not found."
+          }
+        }
+      },
+      "error-404-camel": {
+        "description": "The response data when the request fails with a 404 error.",
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base-camel"
+          },
+          {
+            "$ref": "#/components/x-definitions/response-order-mixin-camel"
+          }
+        ],
+        "properties": {
+          "message": {
+            "description": "An error message describing the specified entity was not found."
+          }
+        }
+      },
+      "error-404-production": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/error-404"
+          }
+        ],
+        "properties": {
+          "Message": {
+            "example": "Provided OrderNo WO01 does not exist for OrderType 10001."
+          },
+          "OrderNo": {
+            "example": "WO01"
+          },
+          "OrderType": {
+            "example": 10001
+          }
+        }
+      },
+      "error-404-receiving": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/error-404"
+          }
+        ],
+        "properties": {
+          "Message": {
+            "example": "Provided OrderNo RCV102 does not exist for OrderType 16."
+          },
+          "OrderNo": {
+            "example": "RCV102"
+          },
+          "OrderType": {
+            "example": 16
+          }
+        }
+      },
+      "error-404-issue": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/error-404"
+          }
+        ],
+        "properties": {
+          "Message": {
+            "example": "Provided OrderNo PPO01 does not exist for OrderType 24."
+          },
+          "OrderNo": {
+            "example": "PPO01"
+          },
+          "OrderType": {
+            "example": 24
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with a 500 error.",
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base"
+          },
+          {
+            "$ref": "#/components/x-definitions/response-order-mixin"
+          }
+        ],
+        "properties": {
+          "Message": {
+            "description": "An error message describing the error in system processing. It may be generic or precise depending on the nature of the error.",
+            "example": "An error occurred while processing this request."
+          }
+        }
+      },
+      "error-500-camel": {
+        "description": "The response data when the request fails with a 500 error.",
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base-camel"
+          },
+          {
+            "$ref": "#/components/x-definitions/response-order-mixin-camel"
+          }
+        ],
+        "properties": {
+          "message": {
+            "description": "An error message describing the error in system processing. It may be generic or precise depending on the nature of the error.",
+            "example": "An error occurred while processing this request."
+          }
+        }
+      },
+      "error-500-production": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/error-500"
+          }
+        ],
+        "properties": {
+          "Message": {
+            "example": "Tool 'Tool44_MW' has already different Resource Class assigned 'Tools44'"
+          },
+          "OrderNo": {
+            "example": "WO01"
+          },
+          "OrderType": {
+            "example": 10001
+          }
+        }
+      },
+      "error-500-receiving": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/error-500"
+          }
+        ],
+        "properties": {
+          "OrderNo": {
+            "example": "RCV102"
+          },
+          "OrderType": {
+            "example": 16
+          }
+        }
+      },
+      "error-500-issue": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/error-500"
+          }
+        ],
+        "properties": {
+          "OrderNo": {
+            "example": "PPO01"
+          },
+          "OrderType": {
+            "example": 24
+          }
+        }
+      },
+      "error-501": {
+        "description": "The response data when the request fails with a 501 error.",
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base"
+          }
+        ],
+        "properties": {
+          "Message": {
+            "description": "An error message describing the error in system configuration.",
+            "example": "The system is not configured for this request."
+          }
+        }
+      },
+      "error-501-camel": {
+        "description": "The response data when the request fails with a 501 error.",
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base-camel"
+          }
+        ],
+        "properties": {
+          "message": {
+            "description": "An error message describing the error in system configuration.",
+            "example": "The system is not configured for this request."
+          }
+        }
+      },
+      "production-post": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/transaction-create-production-order"
+          }
+        ]
+      },
+      "receiving-post": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/create-receiving-order"
+          }
+        ]
+      },
+      "issue-post": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/create-issue-order"
+          }
+        ]
+      },
+      "transaction-create-production-order": {
+        "type": "object",
+        "properties": {
+          "Order": {
+            "description": "```Facility``` must exist in the target system when the order is imported. Otherwise, the request will fail with an internal server error.\n\nOnly orders of type 10001 are accepted.\n\nAll string values, have to be given in the quotation marks to be correctly read.\n",
+            "allOf": [
+              {
+                "$ref": "#/components/x-definitions/order"
+              }
+            ]
+          }
+        }
+      },
+      "create-warehouse-order-base": {
+        "type": "object",
+        "properties": {
+          "OrderNo": {
+            "description": "Defines order number",
+            "type": "string",
+            "example": "O-0001",
+            "maxLength": 20
+          },
+          "OrderType": {
+            "description": "Order type",
+            "type": "integer",
+            "example": 7
+          },
+          "OrderDate": {
+            "description": "Order scheduled start date",
+            "type": "string",
+            "format": "date-time"
+          },
+          "Partner": {
+            "description": "Supplier number",
+            "type": "string",
+            "example": "PolyCon",
+            "maxLength": 40
+          }
+        },
+        "required": [
+          "OrderNo",
+          "OrderType",
+          "OrderDate",
+          "Supplier",
+          "Partner"
+        ]
+      },
+      "create-warehouse-order-line-base": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/quantity-mixin"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "OrderLineNo": {
+                "description": "Order line number",
+                "type": "integer",
+                "example": 10,
+                "maxLength": 10
+              },
+              "ProductNo": {
+                "description": "Product number",
+                "type": "string",
+                "example": "FT00451/0325",
+                "maxLength": 80,
+                "deprecated": true
+              },
+              "ManufacturingItemId": {
+                "description": "The physical ID of the Manufacturing Item.",
+                "example": "289C82568F1E3700655C5BB80002F543",
+                "type": "string",
+                "maxLength": 100
+              },
+              "ManufacturingItemEin": {
+                "description": "The EIN (Part Number) of the Manufacturing Item.",
+                "example": 12345,
+                "type": "string",
+                "maxLength": 80
+              },
+              "UOM": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Unit"
+                  },
+                  {
+                    "$ref": "#/components/schemas/UOM"
+                  }
+                ],
+                "description": "Unit or UOM is used depending on how the manufacturing item or product was identified.\n\n- Unit: ManufacturingItemId or ManufacturingItemEin\n- UOM: ProductNo and ProductRevision\n"
+              },
+              "ToFacility": {
+                "description": "Facility where inventory is delivered and staged",
+                "type": "string",
+                "example": "IC1",
+                "maxLength": 40,
+                "deprecated": true
+              },
+              "ToWarehouse": {
+                "description": "Warehouse where inventory is delivered and staged",
+                "type": "string",
+                "example": "RawMat",
+                "maxLength": 10,
+                "deprecated": true
+              },
+              "ToWarehouseLocation": {
+                "description": "Warehouse location where inventory is delivered and staged",
+                "type": "string",
+                "example": "PIC-050-00",
+                "maxLength": 80,
+                "deprecated": true
+              },
+              "UnderTolerance": {
+                "description": "Tolerance by which completed quantity can be lower than ordered quantity. 0.1 means a tolerance of 10% against the requested quantity.",
+                "type": "number",
+                "example": 0
+              },
+              "OverTolerance": {
+                "description": "Tolerance by which completed quantity can exceed ordered quantity. 0.1 means a tolerance of 10% against the requested quantity.",
+                "type": "number",
+                "example": 0.05
+              },
+              "Quantity": {
+                "description": "Requested quantity of the product",
+                "example": 6
+              },
+              "ToWarehouseId": {
+                "description": "The physical ID of the Warehouse.",
+                "type": "string",
+                "example": "289C82568F1E3700655C5BB80002F543",
+                "maxLength": 255
+              },
+              "ToWarehouseLocationId": {
+                "description": "The physical ID of the Location.",
+                "type": "string",
+                "example": "289C82568F1E3700655C5BB80002F541",
+                "maxLength": 255
+              }
+            },
+            "required": [
+              "OrderLineNo",
+              "Quantity"
+            ]
+          }
+        ]
+      },
+      "create-warehouse-order-container-base": {
+        "description": "A collection of container descriptors.",
+        "type": "object",
+        "properties": {
+          "Container": {
+            "description": "The name of the container.",
+            "type": "string",
+            "example": "10AS100501CH1",
+            "maxLength": 40
+          },
+          "OrderLineNo": {
+            "description": "The name of the order line from the OrderLines collection.",
+            "type": "integer",
+            "example": 10,
+            "maxLength": 10
+          },
+          "Quantity": {
+            "description": "The quantity of the product.",
+            "type": "integer",
+            "example": 6
+          },
+          "ParentContainer": {
+            "description": "The name of the parent container.",
+            "type": "string",
+            "example": "10AS10050P1",
+            "maxLength": 40
+          },
+          "LotNo": {
+            "description": "The product lot. Required if lot tracked.",
+            "type": "string",
+            "example": "LX5667",
+            "maxLength": 40
+          },
+          "SerialNo": {
+            "description": "The product serial number. Required if serial tracked.",
+            "type": "string",
+            "example": "S0001",
+            "maxLength": 40
+          }
+        },
+        "required": [
+          "Container",
+          "OrderLineNo",
+          "Quantity"
+        ]
+      },
+      "create-receiving-order-line": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/create-warehouse-order-line-base"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ToFacility": {
+                "description": "Facility where inventory is received",
+                "example": "IC1"
+              },
+              "ToWarehouse": {
+                "description": "Warehouse where inventory is received",
+                "example": "RawMat"
+              },
+              "ToWarehouseLocation": {
+                "description": "Warehouse location where inventory is received",
+                "example": "PIC-050-00"
+              },
+              "UnderTolerance": {
+                "example": 0
+              },
+              "OverTolerance": {
+                "example": 0.05
+              }
+            }
+          }
+        ]
+      },
+      "create-receiving-order": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/create-warehouse-order-base"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "OrderType": {
+                "description": "Accepted types of orders\n\n* `16` - Purchase Order\n* `17` - ASN Inbound Delivery Order\n",
+                "enum": [
+                  16,
+                  17
+                ],
+                "example": 16
+              },
+              "OrderLines": {
+                "description": "A collection of order lines.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/x-definitions/create-receiving-order-line"
+                    }
+                  ]
+                }
+              },
+              "OrderContainerization": {
+                "description": "A collection of container descriptors.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/x-definitions/create-warehouse-order-container-base"
+                    }
+                  ]
+                }
+              },
+              "OrderNo": {
+                "example": "RCV102"
+              },
+              "Partner": {
+                "example": "PolyCon"
+              }
+            },
+            "required": [
+              "OrderLines"
+            ]
+          }
+        ]
+      },
+      "create-issue-order-line": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/create-warehouse-order-line-base"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "FromFacility": {
+                "description": "Facility from which inventory is picked",
+                "type": "string",
+                "example": "IC2",
+                "maxLength": 40,
+                "deprecated": true
+              },
+              "FromWarehouse": {
+                "description": "Warehouse from which inventory is picked",
+                "type": "string",
+                "example": "RawMat2",
+                "maxLength": 10,
+                "deprecated": true
+              },
+              "FromZone": {
+                "description": "Zone from which inventory is picked",
+                "type": "string",
+                "example": "ZN-0002",
+                "maxLength": 20,
+                "deprecated": true
+              },
+              "FromWarehouseLocation": {
+                "description": "Warehouse location from which inventory is picked",
+                "type": "string",
+                "example": "STOR-020-03",
+                "maxLength": 80,
+                "deprecated": true
+              },
+              "FromWarehouseId": {
+                "description": "The physical ID of the Warehouse.",
+                "type": "string",
+                "example": "289C82568F1E3700655C5BB80002F543",
+                "maxLength": 255
+              },
+              "FromWarehouseLocationId": {
+                "description": "The physical ID of the Location.",
+                "type": "string",
+                "example": "289C82568F1E3700655C5BB80002F541",
+                "maxLength": 255
+              }
+            }
+          }
+        ]
+      },
+      "create-issue-order": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/create-warehouse-order-base"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "OrderNo": {
+                "example": "PPO01"
+              },
+              "OrderType": {
+                "description": "Accepted types of orders\n\n* `7` - Delivery Order\n* `24` - Production Picking Order\n",
+                "enum": [
+                  7,
+                  24
+                ],
+                "example": 24
+              },
+              "OrderLines": {
+                "description": "A collection of order lines.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/x-definitions/create-issue-order-line"
+                    }
+                  ]
+                }
+              }
+            },
+            "required": [
+              "OrderLines"
+            ]
+          }
+        ]
+      },
+      "scheduled-mixin": {
+        "type": "object",
+        "properties": {
+          "ScheduledStartDate": {
+            "type": "string",
+            "description": "Scheduled start date",
+            "format": "date-time",
+            "example": "2023-08-01T21:00:00.000Z"
+          },
+          "ScheduledEndDate": {
+            "type": "string",
+            "description": "Scheduled end date",
+            "format": "date-time",
+            "example": "2023-08-02T21:00:00.000Z"
+          }
+        },
+        "required": [
+          "ScheduledStartDate"
+        ]
+      },
+      "quantity-mixin": {
+        "type": "object",
+        "properties": {
+          "Quantity": {
+            "type": "integer",
+            "description": "The quantity.",
+            "example": 1
+          }
+        }
+      },
+      "quantity-uom-mixin": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/quantity-mixin"
+          }
+        ],
+        "type": "object",
+        "properties": {
+          "UOM": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UOM"
+              }
+            ]
+          }
+        }
+      },
+      "sequenced-mixin": {
+        "type": "object",
+        "properties": {
+          "Sequence": {
+            "description": "The order in which the component is used.",
+            "type": "integer",
+            "example": 1
+          }
+        },
+        "required": [
+          "Sequence"
+        ]
+      },
+      "versioned-mixin": {
+        "type": "object",
+        "properties": {
+          "Revision": {
+            "type": "string",
+            "description": "A versioning identifier. Product revision that is created does not get any updates.",
+            "example": "1.0",
+            "maxLength": 20
+          }
+        },
+        "required": [
+          "Revision"
+        ]
+      },
+      "product-mixin": {
+        "type": "object",
+        "properties": {
+          "ProductNo": {
+            "description": "The product name or number.",
+            "type": "string",
+            "example": 3210421034,
+            "maxLength": 80
+          },
+          "ProductRevision": {
+            "description": "The revision of the product.",
+            "example": "1.0",
+            "type": "string",
+            "maxLength": 20
+          }
+        }
+      },
+      "quantity-mixin-pascal": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "integer",
+            "description": "The quantity.",
+            "example": 1
+          }
+        }
+      },
+      "quantity-uom-mixin-camel": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/quantity-mixin-pascal"
+          }
+        ],
+        "type": "object",
+        "properties": {
+          "uom": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Unit"
+              },
+              {
+                "$ref": "#/components/schemas/UOM"
+              }
+            ],
+            "description": "Unit or UOM is used depending on how the manufacturing item or product was identified.\n\n- Unit: ManufacturingItemId or ManufacturingItemEin\n- UOM: ProductNo and ProductRevision\n"
+          }
+        }
+      },
+      "quantity-unit-mixin-camel": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/quantity-mixin-pascal"
+          }
+        ],
+        "type": "object",
+        "properties": {
+          "uom": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Unit"
+              }
+            ]
+          }
+        }
+      },
+      "product-mixin-camel": {
+        "type": "object",
+        "properties": {
+          "productNo": {
+            "description": "The product name or number.",
+            "type": "string",
+            "example": 3210421034,
+            "maxLength": 80,
+            "deprecated": true
+          },
+          "manufacturingItemId": {
+            "description": "The physical ID of the Manufacturing Item.",
+            "example": "289C82568F1E3700655C5BB80002F543",
+            "type": "string",
+            "maxLength": 100
+          },
+          "manufacturingItemEin": {
+            "description": "The EIN (Part Number) of the Manufacturing Item.",
+            "example": 12345,
+            "type": "string",
+            "maxLength": 80
+          }
+        }
+      },
+      "product-revision-mixin-camel": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/product-mixin-camel"
+          }
+        ],
+        "type": "object",
+        "properties": {
+          "productNo": {
+            "description": "The product name or number.",
+            "type": "string",
+            "example": 3210421034,
+            "maxLength": 80
+          },
+          "productRevision": {
+            "description": "The revision of the product.",
+            "example": "1.0",
+            "type": "string",
+            "maxLength": 20
+          }
+        }
+      },
+      "order": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/scheduled-mixin"
+          },
+          {
+            "$ref": "#/components/x-definitions/quantity-mixin"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "OrderNo": {
+                "type": "string",
+                "description": "Defines order number",
+                "example": "WO01",
+                "maxLength": 40
+              },
+              "OrderType": {
+                "type": "integer",
+                "description": "Defines the type of order.\n\nOnly orders of type 10001 are accepted.\n",
+                "example": 10001,
+                "format": "int16"
+              },
+              "Rank": {
+                "type": "string",
+                "description": "Rank of the order (ex. identifier of a final good for which the part is built)",
+                "example": "Boeing737",
+                "maxLength": 40
+              },
+              "Project": {
+                "type": "string",
+                "description": "Project of the order (ex. type/model of a final good for which the part is built)",
+                "example": "DEFAULT",
+                "maxLength": 40
+              },
+              "Priority": {
+                "type": "integer",
+                "description": "Order priority",
+                "example": 1,
+                "default": 0
+              },
+              "Description": {
+                "type": "string",
+                "description": "A description of order.",
+                "example": "Urgent order for the customer",
+                "maxLength": 255
+              },
+              "Facility": {
+                "type": "string",
+                "description": "The facility in which the order is executed.\n\n```Facility``` must exist in the target system when the order is imported. Otherwise, the request will fail with an internal server error.\n",
+                "example": "C1P1",
+                "maxLength": 40
+              },
+              "Serials": {
+                "description": "List of serial numbers that will be built within an order",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "maxLength": 40
+                },
+                "example": [
+                  "S001"
+                ]
+              },
+              "Product": {
+                "description": "The Product is always created as serial-tracked and non-lot-tracked. Each time a product is assigned to an order, it is checked whether the product's facility matches the order's facility. If the product does not have a linked facility, the link is created.\n",
+                "allOf": [
+                  {
+                    "$ref": "#/components/x-definitions/product"
+                  }
+                ]
+              },
+              "Operations": {
+                "type": "array",
+                "description": "Order operations",
+                "items": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/x-definitions/operation"
+                    }
+                  ]
+                }
+              },
+              "OrderRouting": {
+                "type": "array",
+                "description": "Order routing (dependencies between operations)\n\nWhen you import orders with cycled routing, their operations are not visible on the task list. Cycled routing happens when you route operation A to operation B and the other way round.\n",
+                "items": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/x-definitions/routing"
+                    }
+                  ]
+                },
+                "example": []
+              },
+              "DueDate": {
+                "type": "string",
+                "description": "Date for which the order is due",
+                "format": "date-time"
+              },
+              "Quantity": {
+                "description": "Quantity of an order"
+              },
+              "ScheduledStartDate": {
+                "description": "Order scheduled start date"
+              },
+              "ScheduledEndDate": {
+                "description": "Order scheduled end date"
+              }
+            },
+            "required": [
+              "OrderNo",
+              "OrderType",
+              "Product",
+              "Operations",
+              "Facility",
+              "Quantity"
+            ]
+          }
+        ]
+      },
+      "operation-base": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "string",
+            "description": "A name for the object.",
+            "example": "Assembly",
+            "maxLength": 255
+          },
+          "Components": {
+            "type": "array",
+            "description": "The component usage under the operation.\nIf a component does not exist, it will be created.\n",
+            "items": {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/components/x-definitions/component"
+                }
+              ]
+            }
+          },
+          "Resources": {
+            "type": "array",
+            "description": "The resource usage requests under the operation.\nIf a resource does not exist, it will be created – the created tool should be of \"Tool\" type.\n",
+            "items": {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/components/x-definitions/resource"
+                }
+              ]
+            }
+          },
+          "Characteristics": {
+            "type": "array",
+            "description": "The characteritics of the operation.\nIf a characteristic does not exist, it will be created. Both value and attribute characteristics can be assigned. For value characteristics limits (specification, control, coherence) can be defined. A minimum of two limits must be defined. For attribute characteristics, a list of attributes can be provided with an indication of conformity.\n",
+            "items": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "$ref": "#/components/x-definitions/wi-characteristic-attribute"
+                },
+                {
+                  "$ref": "#/components/x-definitions/wi-characteristic-value"
+                }
+              ]
+            }
+          },
+          "WorkInstructions": {
+            "type": "array",
+            "description": "The work instructions of the operation. If a work instruction does not exist, it will be created.",
+            "items": {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/components/x-definitions/wi-instruction"
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "Name"
+        ]
+      },
+      "operation": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/operation-base"
+          },
+          {
+            "$ref": "#/components/x-definitions/scheduled-mixin"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "OperationSeq": {
+                "type": "string",
+                "description": "Operation sequence no",
+                "example": "0010",
+                "maxLength": 20
+              },
+              "WorkCenter": {
+                "type": "string",
+                "description": "The location of executing the operation. If the given work center does not exist, it will be created (within a facility of the order). If there exists a work center with the same name but in a different facility the request will fail with an internal server error.",
+                "example": "AEWC1",
+                "maxLength": 40
+              },
+              "Duration": {
+                "type": "integer",
+                "description": "Duration in minutes",
+                "example": 10,
+                "default": 60
+              },
+              "Description": {
+                "type": "string",
+                "description": "Operation description",
+                "example": "Validate assembly setup",
+                "maxLength": 2000
+              },
+              "OperationSteps": {
+                "type": "array",
+                "description": "The steps of the operation.",
+                "items": {
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/x-definitions/step"
+                    }
+                  ]
+                },
+                "example": []
+              },
+              "Name": {
+                "description": "Operation name",
+                "maxLength": 80
+              },
+              "ScheduledStartDate": {
+                "description": "Operation scheduled start date",
+                "example": "2023-08-01T21:00:00.000Z"
+              },
+              "ScheduledEndDate": {
+                "description": "Operation scheduled end date",
+                "example": "2023-08-01T21:10:00.000Z"
+              }
+            },
+            "required": [
+              "OperationSeq"
+            ]
+          }
+        ]
+      },
+      "step": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/operation-base"
+          },
+          {
+            "$ref": "#/components/x-definitions/sequenced-mixin"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "Sequence": {
+                "description": "The sequence of the step within the operation."
+              },
+              "Name": {
+                "description": "The name of the step in the operation",
+                "maxLength": 80
+              },
+              "Components": {
+                "description": "The component usage under the step.\nIf a component does not exist, it will be created.\n"
+              },
+              "Resources": {
+                "description": "The resource usage requests under the step.\nIf a resource does not exist, it will be created – the created tool should be of \"Tool\" type.\n"
+              },
+              "Characteristics": {
+                "description": "The characteritics of the step.\nIf a characteristic does not exist, it will be created. Both value and attribute characteristics can be assigned. For value characteristics limits (specification, control, coherence) can be defined. A minimum of two limits must be defined. For attribute characteristics, a list of attributes can be provided with an indication of conformity.\n"
+              },
+              "WorkInstructions": {
+                "description": "The work instructions of the step. If a work instruction does not exist, it will be created."
+              }
+            },
+            "required": [
+              "Sequence"
+            ]
+          }
+        ]
+      },
+      "routing": {
+        "type": "object",
+        "properties": {
+          "FromOperationSeq": {
+            "type": "string",
+            "description": "Preceeding operation",
+            "example": "0010",
+            "maxLength": 20
+          },
+          "ToOperationSeq": {
+            "type": "string",
+            "description": "Succeeding operation",
+            "example": "0020",
+            "maxLength": 20
+          },
+          "Quality": {
+            "type": "string",
+            "description": "The outcome from executing the operation.",
+            "default": "GOOD",
+            "enum": [
+              "GOOD",
+              "FAILED",
+              "SCRAPPED"
+            ],
+            "maxLength": 10
+          },
+          "ReasonCode": {
+            "type": "string",
+            "description": "Reason code used for routing of a product over the order operations routing",
+            "example": "MRB",
+            "maxLength": 20
+          },
+          "MergeGroup": {
+            "type": "integer",
+            "description": "Merge group attribute used to descripe parallel routings.\n\nIn the case of parallel routing, to set the correct order routing, operations merging into one need to have the same value of the additional Merge Group parameter. Parallel routing happens when an operation is completed and the succeeding parallel operations require the same status code.\n",
+            "example": 1
+          }
+        },
+        "required": [
+          "FromOperationSeq",
+          "ToOperationSeq"
+        ]
+      },
+      "product-base": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/versioned-mixin"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "Description": {
+                "type": "string",
+                "description": "Product description",
+                "example": "MWS8Bell",
+                "maxLength": 2000
+              },
+              "UOM": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UOM"
+                  }
+                ],
+                "default": "EA"
+              }
+            }
+          }
+        ]
+      },
+      "product": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/product-base"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ProductNo": {
+                "type": "string",
+                "description": "Product number",
+                "example": "3210421034",
+                "maxLength": 80
+              },
+              "Revision": {
+                "description": "Product revision If the Product does not exist, this revision will become the default"
+              }
+            },
+            "required": [
+              "ProductNo"
+            ]
+          }
+        ]
+      },
+      "component": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/product-base"
+          },
+          {
+            "$ref": "#/components/x-definitions/sequenced-mixin"
+          },
+          {
+            "$ref": "#/components/x-definitions/quantity-mixin"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ComponentNo": {
+                "type": "string",
+                "description": "Component number",
+                "example": "1325763873",
+                "maxLength": 80
+              },
+              "IsLotTracked": {
+                "type": "boolean",
+                "description": "Flag to set the component tracked in lots",
+                "example": false,
+                "default": false
+              },
+              "IsSerialTracked": {
+                "type": "boolean",
+                "description": "Flag to set the component tracked in serials",
+                "example": false,
+                "default": false
+              },
+              "Quantity": {
+                "description": "The quantity of a component is a total quantity of a component required to execute the whole order. So quantity for a single product unit will be equal to the ratio of a Quantity and an Order.Quantity.",
+                "type": "integer",
+                "example": 2
+              },
+              "Revision": {
+                "description": "Component revision"
+              },
+              "Description": {
+                "description": "Component description"
+              }
+            },
+            "required": [
+              "ComponentNo",
+              "Quantity"
+            ]
+          }
+        ]
+      },
+      "resource": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/quantity-mixin"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "Class": {
+                "type": "string",
+                "description": "Class of a required resource",
+                "example": "TOOL_DEVICE",
+                "maxLength": 80
+              },
+              "Name": {
+                "type": "string",
+                "description": "Name of a required resource",
+                "example": "Hammer",
+                "maxLength": 80
+              },
+              "Quantity": {
+                "default": 1
+              }
+            },
+            "required": [
+              "Class"
+            ]
+          }
+        ]
+      },
+      "wi-base": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/versioned-mixin"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "Name": {
+                "type": "string",
+                "description": "The name of the work instruction.",
+                "example": "Work Instruction",
+                "maxLength": 40
+              }
+            },
+            "required": [
+              "Name"
+            ]
+          }
+        ]
+      },
+      "wi-instruction": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/wi-base"
+          },
+          {
+            "$ref": "#/components/x-definitions/sequenced-mixin"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "Text": {
+                "type": "string",
+                "description": "Content of a work instruction",
+                "example": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"><html lang=\"en\" xml:lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\"><head><title>Html export</title></head><body><p>Step1</p></body></html>"
+              },
+              "Name": {
+                "description": "Name of a work instruction"
+              },
+              "Revision": {
+                "description": "Revision of a work instruction"
+              },
+              "Sequence": {
+                "description": "The order in which the work instruction is used"
+              }
+            },
+            "required": [
+              "Text"
+            ]
+          }
+        ]
+      },
+      "wi-characteristic-base": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/wi-base"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "Name": {
+                "description": "The name of the characteristic"
+              },
+              "Revision": {
+                "description": "Characteristic revision"
+              },
+              "Description": {
+                "type": "string",
+                "description": "Characteristic description",
+                "maxLength": 2000,
+                "example": "Torque for carriage bolt"
+              },
+              "Type": {
+                "type": "string",
+                "description": "Type of characteristic.\n\n* `INT` - Value-type characteristics\n* `ATTR` - Attribute-type characteristics\n",
+                "enum": [
+                  "INT",
+                  "ATTR"
+                ]
+              }
+            },
+            "required": [
+              "Description",
+              "Type"
+            ]
+          }
+        ]
+      },
+      "wi-characteristic-value": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/wi-characteristic-base"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "Name": {
+                "example": "Temperature 23F3"
+              },
+              "Revision": {
+                "example": "A"
+              },
+              "Type": {
+                "example": "INT"
+              },
+              "UOM": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UOM"
+                  }
+                ],
+                "description": "Unit of measure code, only for value-type characteristics",
+                "example": "MMT"
+              },
+              "LHL": {
+                "type": "string",
+                "description": "Lower Coherence Limit, only for value-type characteristics",
+                "example": -15
+              },
+              "LSL": {
+                "type": "string",
+                "description": "Lower Specification Limit, only for value-type characteristics",
+                "example": -5
+              },
+              "LCL": {
+                "type": "string",
+                "description": "Lower Control Limit, only for value-type characteristics",
+                "example": 0
+              },
+              "TargetValue": {
+                "type": "string",
+                "description": "Target Value, only for value-type characteristics",
+                "example": 25
+              },
+              "UCL": {
+                "type": "string",
+                "description": "Upper Control Limit, only for value-type characteristics",
+                "example": 30
+              },
+              "USL": {
+                "type": "string",
+                "description": "Upper Specification Limit, only for value-type characteristics",
+                "example": 35
+              },
+              "UHL": {
+                "type": "string",
+                "description": "Upper Coherence Limit, only for value-type characteristics",
+                "example": 50
+              }
+            },
+            "required": [
+              "UOM"
+            ]
+          }
+        ]
+      },
+      "wi-characteristic-attribute": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/wi-characteristic-base"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "Name": {
+                "example": "Size of the box 23F3"
+              },
+              "Type": {
+                "example": "ATTR"
+              },
+              "Description": {
+                "example": "Select the size"
+              },
+              "PossibleValues": {
+                "type": "array",
+                "description": "List of possible values",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "Value": {
+                      "type": "string",
+                      "description": "Name of the value.",
+                      "example": "S"
+                    },
+                    "Conf": {
+                      "type": "boolean",
+                      "description": "Whether or not the value is configured.",
+                      "example": false
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "PossibleValues"
+            ]
+          }
+        ]
+      },
+      "success-inventory-change-get": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base-camel"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "detailsCount": {
+                "description": "A count of items in the Details array.",
+                "type": "integer",
+                "example": 1
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/x-definitions/inventory-change"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      "inventory-change": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/product-mixin-camel"
+          },
+          {
+            "$ref": "#/components/x-definitions/quantity-uom-mixin-camel"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "facility": {
+                "description": "Facility for the warehouse.",
+                "type": "string",
+                "example": "IC2",
+                "maxLength": 40,
+                "deprecated": true
+              },
+              "warehouse": {
+                "description": "Warehouse where the invetory change took place.",
+                "type": "string",
+                "example": "WH01",
+                "maxLength": 10,
+                "deprecated": true
+              },
+              "lotNo": {
+                "description": "The product lot. Present if lot tracked.",
+                "type": "string",
+                "example": "LX5667",
+                "maxLength": 40
+              },
+              "serialNo": {
+                "description": "The product serial number. Present if serial tracked.",
+                "type": "string",
+                "example": "S0001",
+                "maxLength": 40
+              },
+              "inventoryStatus": {
+                "description": "Status descriptor of the change.",
+                "type": "string",
+                "enum": [
+                  "",
+                  "Unrestricted use",
+                  "Quality inspection",
+                  "Blocked",
+                  "Picked inventory",
+                  "Packed inventory",
+                  "Not active",
+                  "Restricted use",
+                  "Loaded inventory"
+                ],
+                "example": "Unrestricted use",
+                "maxLength": 255
+              },
+              "warehouseId": {
+                "description": "The physical ID of the Warehouse.",
+                "type": "string",
+                "example": "289C82568F1E3700655C5BB80002F543",
+                "maxLength": 255
+              }
+            }
+          }
+        ]
+      },
+      "400-inventory-change-id": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base-camel"
+          }
+        ],
+        "properties": {
+          "message": {
+            "example": "Provided ID of inventory change is not correct."
+          }
+        }
+      },
+      "400-inventory-change-orderkey": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base-camel"
+          }
+        ],
+        "properties": {
+          "message": {
+            "example": "The format of provided OrderKey is not correct."
+          }
+        }
+      },
+      "404-inventory-change-id": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base-camel"
+          }
+        ],
+        "properties": {
+          "message": {
+            "example": "Provided ID of inventory change does not exist."
+          }
+        }
+      },
+      "404-inventory-change-orderkey": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/error-404-camel"
+          }
+        ],
+        "properties": {
+          "message": {
+            "example": "Provided orderNo RCV102 does not exist for orderType 16"
+          },
+          "orderNo": {
+            "example": "RCV102"
+          },
+          "orderType": {
+            "example": 16
+          }
+        }
+      },
+      "500-inventory-change-id": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base-camel"
+          }
+        ],
+        "properties": {
+          "message": {
+            "example": "Internal server error."
+          }
+        }
+      },
+      "500-inventory-change-orderkey": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/error-500-camel"
+          }
+        ],
+        "properties": {
+          "message": {
+            "example": "Internal server error."
+          },
+          "orderNo": {
+            "example": "RCV102"
+          },
+          "orderType": {
+            "example": 16
+          }
+        }
+      },
+      "csrf": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the header the CSRF token is applicable.",
+            "type": "string",
+            "example": "X-CSRF-APRISO"
+          },
+          "token": {
+            "description": "Value of the CSRF token.",
+            "type": "string",
+            "example": "CfDJ8OsKvU8DNUlHjye9M85B..."
+          }
+        }
+      },
+      "machine-operations-post": {
+        "type": "object",
+        "properties": {
+          "readings": {
+            "type": "array",
+            "description": "Array of assets and their readings.",
+            "items": {
+              "type": "object",
+              "description": "An object containing either assetRef or assetSerial and related readings.",
+              "oneOf": [
+                {
+                  "properties": {
+                    "assetRef": {
+                      "type": "object",
+                      "description": "Reference details of the asset.",
+                      "properties": {
+                        "source": {
+                          "type": "string",
+                          "description": "URL source for the asset reference.",
+                          "example": "<3DSpace_URL>"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "Type of asset reference.",
+                          "example": "VPMReference"
+                        },
+                        "identifier": {
+                          "type": "string",
+                          "description": "Unique identifier for the asset.",
+                          "example": "E76315E0000064A86645F7030000E171"
+                        },
+                        "relativePath": {
+                          "type": "string",
+                          "description": "Relative path to the asset resource.",
+                          "example": "/resources/v1/modeler/dsrsc/dsrsc:Resource/E76315E0000064A86645F7030000E171"
+                        }
+                      },
+                      "required": [
+                        "source",
+                        "type",
+                        "identifier",
+                        "relativePath"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "assetRef"
+                  ]
+                },
+                {
+                  "properties": {
+                    "assetSerial": {
+                      "type": "string",
+                      "description": "Unique Serial number of the asset as defined in 3DSpace.",
+                      "example": "serial-XYZ789",
+                      "maxLength": 100
+                    }
+                  },
+                  "required": [
+                    "assetSerial"
+                  ]
+                }
+              ],
+              "properties": {
+                "assetReadings": {
+                  "type": "array",
+                  "description": "Array of readings related to the asset.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the reading parameter.",
+                        "example": "operating_speed",
+                        "minLength": 1,
+                        "maxLength": 80
+                      },
+                      "dataType": {
+                        "type": "string",
+                        "description": "Data type of the reading.",
+                        "enum": [
+                          "integer",
+                          "real",
+                          "string"
+                        ],
+                        "example": "integer"
+                      },
+                      "values": {
+                        "type": "array",
+                        "description": "Array of values for the reading parameter.",
+                        "items": {
+                          "type": "integer"
+                        },
+                        "example": [
+                          1500,
+                          1502,
+                          1503
+                        ]
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp for the reading.",
+                        "example": "2024-09-20T15:30:00Z"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "dataType",
+                      "values"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "assetReadings"
+              ]
+            }
+          }
+        },
+        "required": [
+          "readings"
+        ],
+        "examples": {
+          "Mixed": {
+            "value": {
+              "readings": [
+                {
+                  "assetRef": {
+                    "source": "<3DSpace_URL>",
+                    "type": "VPMReference",
+                    "identifier": "E76315E0000064A86645F7030000E171",
+                    "relativePath": "/resources/v1/modeler/dsrsc/dsrsc:Resource/E76315E0000064A86645F7030000E171"
+                  },
+                  "assetReadings": [
+                    {
+                      "name": "operating_speed",
+                      "dataType": "real",
+                      "values": [
+                        10.45,
+                        20.02
+                      ],
+                      "timestamp": "2024-09-20T15:30:00Z"
+                    }
+                  ]
+                },
+                {
+                  "assetSerial": "serial-XYZ789",
+                  "assetReadings": [
+                    {
+                      "name": "operating_temperature",
+                      "dataType": "integer",
+                      "values": [
+                        24
+                      ],
+                      "timestamp": "2024-09-20T15:33:00Z"
+                    },
+                    {
+                      "name": "motor_power",
+                      "dataType": "string",
+                      "values": [
+                        "max"
+                      ],
+                      "timestamp": "2024-09-20T15:34:00Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            "summary": "Mixed Assets"
+          },
+          "MultipleSerial": {
+            "value": {
+              "readings": [
+                {
+                  "assetSerial": "serial-XYZ789",
+                  "assetReadings": [
+                    {
+                      "name": "operating_speed",
+                      "dataType": "real",
+                      "values": [
+                        10.45,
+                        20.02
+                      ],
+                      "timestamp": "2024-09-20T15:30:00Z"
+                    }
+                  ]
+                },
+                {
+                  "assetSerial": "serial-ABC123",
+                  "assetReadings": [
+                    {
+                      "name": "operating_temperature",
+                      "dataType": "integer",
+                      "values": [
+                        24
+                      ],
+                      "timestamp": "2024-09-20T15:33:00Z"
+                    },
+                    {
+                      "name": "motor_power",
+                      "dataType": "string",
+                      "values": [
+                        "max"
+                      ],
+                      "timestamp": "2024-09-20T15:34:00Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            "summary": "Multiple Asset Serials"
+          },
+          "Reference": {
+            "value": {
+              "readings": [
+                {
+                  "assetRef": {
+                    "source": "<3DSpace_URL>",
+                    "type": "VPMReference",
+                    "identifier": "E76315E0000064A86645F7030000E171",
+                    "relativePath": "/resources/v1/modeler/dsrsc/dsrsc:Resource/E76315E0000064A86645F7030000E171"
+                  },
+                  "assetReadings": [
+                    {
+                      "name": "operating_speed",
+                      "dataType": "real",
+                      "values": [
+                        10.45,
+                        20.02
+                      ],
+                      "timestamp": "2024-09-20T15:30:00Z"
+                    },
+                    {
+                      "name": "operating_temperature",
+                      "dataType": "integer",
+                      "values": [
+                        24
+                      ],
+                      "timestamp": "2024-09-20T15:33:00Z"
+                    },
+                    {
+                      "name": "motor_power",
+                      "dataType": "string",
+                      "values": [
+                        "max"
+                      ],
+                      "timestamp": "2024-09-20T15:34:00Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            "summary": "Asset Reference"
+          }
+        }
+      },
+      "response-machine-operations-base": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-base-camel"
+          }
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "HTTP status.",
+            "example": "Success",
+            "type": "integer"
+          }
+        }
+      },
+      "200-machine-operations": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-machine-operations-base"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "example": 200
+              },
+              "message": {
+                "example": "The single triple: the asset, the production operation, the serialized manufacturing item has been identified and all the asset readings have been successfully mapped to data collects. The corresponding asset readings have been persisted in the MOM Service database as data collect readings concerning the identified serialized manufacturing item."
+              }
+            }
+          }
+        ]
+      },
+      "400-machine-operations": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-machine-operations-base"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "example": 400
+              },
+              "message": {
+                "example": "Incorrect JSON format of the payload."
+              }
+            }
+          }
+        ]
+      },
+      "401-machine-operations": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-machine-operations-base"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "example": 401
+              },
+              "message": {
+                "example": "User is not authorized to access this resource."
+              }
+            }
+          }
+        ]
+      },
+      "403-machine-operations": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-machine-operations-base"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "example": 403
+              },
+              "message": {
+                "example": "The currently logged in employee does not have the necessary roles to access the provided Web Service."
+              }
+            }
+          }
+        ]
+      },
+      "404-machine-operations": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-machine-operations-base"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "example": 404
+              },
+              "message": {
+                "example": "The single triple (the asset, the production operation, the serialized manufacturing item) has not been identified (either none or multiple operations found), or at least one asset reading has not been mapped to the operation data collect properly."
+              }
+            }
+          }
+        ]
+      },
+      "500-machine-operations": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/response-machine-operations-base"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "example": 500
+              },
+              "message": {
+                "example": "Internal server error."
+              }
+            }
+          }
+        ]
+      },
+      "200-print-get": {
+        "type": "string",
+        "description": "The response data when the request succeeds with 200 status code.\n\n* `ContainerNo` - **string** \n\nContainer number\n\nExample=\"C1\"\n\n* `ProductNo` - **string**\n\nThe product name or number\n\nExample\"MM1-13/0045\"\n\n* `ProductDesc` - **string**\n\nThe product description\n\nExample=\"Product desription\"\n\n* `LotNo` - **string**\n\nLot number\n\nExample=\"LX5667\"\n* `SerialNo` - **string**\n\nSerial number\n\nExample=\"S0001\"\n\n* `Quantity` - **number**\n\nProduct quantity\n\nExample=10.5\n\n* `Facility` - **string**\n\nFacility\n\nExample=\"F1\"\n\n* `Warehouse` - **string**\n\nWarehouse\n\nExample=\"W1\"\n\n* `Location` - **string**\n\nWarehouse Location in format Name+Revision\n\nExample=\"L11\"\n\n* `Employee` - **string**\n\nEmployee who prints label\n\nExample=\"Emp01\"\n\n* `PrintType` - **string**\n\nType of labeling or barcode printing method used for the identifier (e.g., ContainerNo, ProductNo) of the product or container.\n\nPossible Values: \n\n- \"PRINT_CONTAINER\"\n- \"PRINT_PRODUCT\" ",
+        "example": "ContainerNo,ProductNo,ProductDesc,LotNo,SerialNo,Quantity,Facility,Warehouse,Location,Employee,PrintType\n\"CT001\",\"PR0010\",\"Product A\",\"LOT001\",\"\",50,\"Facility1\",\"WarehouseA\",\"Aisle1\",\"Employee1\",\"PRINT_PRODUCT\""
+      },
+      "400-print-get": {
+        "type": "string",
+        "example": "The format of provided PrintRequestID is not correct."
+      },
+      "403-print-get": {
+        "type": "string",
+        "example": "The currently logged in employee does not have the necessary roles to access the provided Web Service."
+      },
+      "404-print-get": {
+        "type": "string",
+        "example": "Print request not found."
+      },
+      "500-print-get": {
+        "type": "string",
+        "example": "An error occurred while processing this request."
+      },
+      "501-print-get": {
+        "type": "string",
+        "example": "The system is not configured for this request."
+      }
+    },
+    "responses": {
+      "403": {
+        "description": "Authorization issue.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "501": {
+        "description": "Not implemented.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-501"
+            }
+          }
+        }
+      },
+      "400-get": {
+        "description": "Bad request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400-get"
+            }
+          }
+        }
+      },
+      "400-post": {
+        "description": "Bad request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400-post"
+            }
+          }
+        }
+      },
+      "200-production-post": {
+        "description": "Successful request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/success-production-post"
+            }
+          }
+        }
+      },
+      "200-production-get": {
+        "description": "Successful request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/success-production-get"
+            }
+          }
+        }
+      },
+      "404-production": {
+        "description": "Not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-404-production"
+            }
+          }
+        }
+      },
+      "500-production": {
+        "description": "Internal server error.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500-production"
+            }
+          }
+        }
+      },
+      "200-receiving-post": {
+        "description": "Successful request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/success-receiving-post"
+            }
+          }
+        }
+      },
+      "200-receiving-get": {
+        "description": "Successful request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/success-receiving-get"
+            }
+          }
+        }
+      },
+      "404-receiving": {
+        "description": "Not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-404-receiving"
+            }
+          }
+        }
+      },
+      "500-receiving": {
+        "description": "Internal server error.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500-receiving"
+            }
+          }
+        }
+      },
+      "200-issue-get": {
+        "description": "Successful request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/success-issue-get"
+            }
+          }
+        }
+      },
+      "200-issue-post": {
+        "description": "Successful request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/success-issue-post"
+            }
+          }
+        }
+      },
+      "404-issue": {
+        "description": "Not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-404-issue"
+            }
+          }
+        }
+      },
+      "500-issue": {
+        "description": "Internal server error.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500-issue"
+            }
+          }
+        }
+      },
+      "200-inventory-change-get": {
+        "description": "Successful request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/success-inventory-change-get"
+            }
+          }
+        }
+      },
+      "400-inventory-change-id": {
+        "description": "Bad request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/400-inventory-change-id"
+            }
+          }
+        }
+      },
+      "400-inventory-change-orderkey": {
+        "description": "Bad request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/400-inventory-change-orderkey"
+            }
+          }
+        }
+      },
+      "403-inventory-change": {
+        "description": "Authorization issue.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403-camel"
+            }
+          }
+        }
+      },
+      "404-inventory-change-id": {
+        "description": "Not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/404-inventory-change-id"
+            }
+          }
+        }
+      },
+      "404-inventory-change-orderkey": {
+        "description": "Not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/404-inventory-change-orderkey"
+            }
+          }
+        }
+      },
+      "500-inventory-change-id": {
+        "description": "Internal server error.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/500-inventory-change-id"
+            }
+          }
+        }
+      },
+      "500-inventory-change-orderkey": {
+        "description": "Internal server error.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/500-inventory-change-orderkey"
+            }
+          }
+        }
+      },
+      "501-inventory-change": {
+        "description": "Not implemented.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-501-camel"
+            }
+          }
+        }
+      },
+      "200-csrf-get": {
+        "description": "Successful request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/success-csrf-get"
+            }
+          }
+        }
+      },
+      "200-machine-operations": {
+        "description": "Successful request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/200-machine-operations"
+            }
+          }
+        }
+      },
+      "400-machine-operations": {
+        "description": "Bad request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/400-machine-operations"
+            }
+          }
+        }
+      },
+      "401-machine-operations": {
+        "description": "Unauthorized user.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/401-machine-operations"
+            }
+          }
+        }
+      },
+      "403-machine-operations": {
+        "description": "Access denied.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/403-machine-operations"
+            }
+          }
+        }
+      },
+      "404-machine-operations": {
+        "description": "Not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/404-machine-operations"
+            }
+          }
+        }
+      },
+      "500-machine-operations": {
+        "description": "Internal server error.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/500-machine-operations"
+            }
+          }
+        }
+      },
+      "200-print-get": {
+        "description": "Successful request.",
+        "content": {
+          "text/csv": {
+            "schema": {
+              "$ref": "#/components/x-definitions/200-print-get"
+            }
+          }
+        }
+      },
+      "400-print-get": {
+        "description": "Bad request.",
+        "content": {
+          "text/csv": {
+            "schema": {
+              "$ref": "#/components/x-definitions/400-print-get"
+            }
+          }
+        }
+      },
+      "403-print-get": {
+        "description": "Access denied.",
+        "content": {
+          "text/csv": {
+            "schema": {
+              "$ref": "#/components/x-definitions/403-print-get"
+            }
+          }
+        }
+      },
+      "404-print-get": {
+        "description": "Not found.",
+        "content": {
+          "text/csv": {
+            "schema": {
+              "$ref": "#/components/x-definitions/404-print-get"
+            }
+          }
+        }
+      },
+      "500-print-get": {
+        "description": "Internal server error.",
+        "content": {
+          "text/csv": {
+            "schema": {
+              "$ref": "#/components/x-definitions/500-print-get"
+            }
+          }
+        }
+      },
+      "501-print-get": {
+        "description": "Not implemented.",
+        "content": {
+          "text/csv": {
+            "schema": {
+              "$ref": "#/components/x-definitions/501-print-get"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "productionPost": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/production-post"
+            }
+          }
+        }
+      },
+      "receivingPost": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/receiving-post"
+            }
+          }
+        }
+      },
+      "issuePost": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/issue-post"
+            }
+          }
+        }
+      },
+      "machineOperationsPost": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/machine-operations-post"
+            },
+            "examples": {
+              "Reference": {
+                "$ref": "#/components/x-definitions/machine-operations-post/examples/Reference"
+              },
+              "Mixed": {
+                "$ref": "#/components/x-definitions/machine-operations-post/examples/Mixed"
+              },
+              "MultipleSerial": {
+                "$ref": "#/components/x-definitions/machine-operations-post/examples/MultipleSerial"
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "OrderKey": {
+        "name": "OrderKey",
+        "description": "The unique identifier for an order. A composite key comprised of the type and name of an order separated with a hyphen.",
+        "example": "10001-WO01",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "OrderKeyReceiving": {
+        "name": "OrderKey",
+        "description": "The unique identifier for an order. A composite key comprised of the type and name of an order separated with a hyphen.",
+        "example": "16-RCV102",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "OrderKeyIssue": {
+        "name": "OrderKey",
+        "description": "The unique identifier for an order. A composite key comprised of the type and name of an order separated with a hyphen.",
+        "example": "24-PPO01",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "OrderKeyInventoryChange": {
+        "name": "OrderKey",
+        "description": "The unique identifier for an order. A composite key comprised of the type and name of an order separated with a hyphen.",
+        "example": "16-RCV102",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "InventoryHistoryIDInventoryChange": {
+        "name": "InventoryHistoryID",
+        "description": "The unique identifier for an inventory history record.",
+        "example": 12345,
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "number"
+        }
+      },
+      "csrf": {
+        "name": "X-CSRF-APRISO",
+        "description": "The CSRF token which is required for update operations. Retrieve using /resources/v1/application/CSRF.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "CfDJ8OsKvU8DNUlHjye9M85B..."
+        }
+      },
+      "PrintRequestID": {
+        "name": "PrintRequestID",
+        "description": "The unique identifier for a print request.",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "example": 12345
+        }
+      }
+    },
+    "schemas": {
+      "Unit": {
+        "type": "string",
+        "example": "EA",
+        "maxLength": 10,
+        "enum": [
+          "EA – Each",
+          "KILOGRAM – Kilogram",
+          "METER – Meter",
+          "METER2 – Square Meter",
+          "METER3 – Cubic Meter"
+        ],
+        "description": "Unit name.\n* `EA` - Each\n* `KILOGRAM` - Kilogram\n* `METER` - Meter\n* `METER2` - Square Meter\n* `METER3` - Cubic Meter\n"
+      },
+      "UOM": {
+        "type": "string",
+        "example": "EA",
+        "maxLength": 10,
+        "enum": [
+          5,
+          6,
+          8,
+          10,
+          11,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          "1B",
+          "1C",
+          "1D",
+          "1E",
+          "1G",
+          "1I",
+          "1L",
+          "1X",
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          "2C",
+          "2J",
+          "2K",
+          "2L",
+          "2M",
+          "2N",
+          "2P",
+          "2Q",
+          "2R",
+          "2U",
+          "2V",
+          "2W",
+          "2X",
+          "2Y",
+          31,
+          32,
+          35,
+          36,
+          37,
+          38,
+          "3E",
+          "3G",
+          "3H",
+          "3I",
+          40,
+          41,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          "4A",
+          "4B",
+          "4C",
+          "4E",
+          "4G",
+          "4H",
+          "4K",
+          "4L",
+          "4M",
+          "4N",
+          "4O",
+          "4T",
+          "4U",
+          "4W",
+          "4X",
+          53,
+          54,
+          56,
+          57,
+          58,
+          59,
+          "5A",
+          "5B",
+          "5C",
+          "5E",
+          "5F",
+          "5G",
+          "5H",
+          "5I",
+          "5K",
+          "5P",
+          "5Q",
+          61,
+          64,
+          66,
+          69,
+          73,
+          77,
+          80,
+          81,
+          84,
+          87,
+          89,
+          91,
+          94,
+          95,
+          96,
+          97,
+          98,
+          "A11",
+          "A12",
+          "A14",
+          "A15",
+          "A16",
+          "A17",
+          "A18",
+          "A19",
+          "A24",
+          "A25",
+          "A26",
+          "A27",
+          "A28",
+          "A29",
+          "A30",
+          "A31",
+          "A32",
+          "A33",
+          "A34",
+          "A35",
+          "A36",
+          "A37",
+          "A38",
+          "A39",
+          "A40",
+          "A42",
+          "A43",
+          "A44",
+          "A45",
+          "A47",
+          "A49",
+          "A50",
+          "A69",
+          "A71",
+          "A73",
+          "A75",
+          "A76",
+          "A77",
+          "A78",
+          "A79",
+          "A80",
+          "A81",
+          "A82",
+          "A83",
+          "A84",
+          "A86",
+          "A87",
+          "A88",
+          "A91",
+          "A93",
+          "A94",
+          "A95",
+          "A96",
+          "A98",
+          "AA",
+          "AB",
+          "ACR",
+          "AD",
+          "AI",
+          "AJ",
+          "AK",
+          "AL",
+          "AM",
+          "AP",
+          "APZ",
+          "AQ",
+          "AR",
+          "ARE",
+          "AS",
+          "ASM",
+          "ASU",
+          "AV",
+          "AW",
+          "AY",
+          "B1",
+          "B2",
+          "B25",
+          "B26",
+          "B27",
+          "B28",
+          "B3",
+          "B34",
+          "B35",
+          "B4",
+          "B45",
+          "B46",
+          "B49",
+          "B5",
+          "B50",
+          "B51",
+          "B53",
+          "B54",
+          "B56",
+          "B57",
+          "B58",
+          "B59",
+          "B6",
+          "B60",
+          "B61",
+          "B62",
+          "B63",
+          "B64",
+          "B65",
+          "B66",
+          "B67",
+          "B69",
+          "B7",
+          "B70",
+          "B72",
+          "B75",
+          "B76",
+          "B77",
+          "B83",
+          "B84",
+          "B85",
+          "B86",
+          "B87",
+          "B88",
+          "B89",
+          "B9",
+          "B90",
+          "B91",
+          "B94",
+          "B95",
+          "B99",
+          "BAR",
+          "BB",
+          "BD",
+          "BE",
+          "BG",
+          "BH",
+          "BIL",
+          "BJ",
+          "BK",
+          "BL",
+          "BLD",
+          "BLL",
+          "BO",
+          "BP",
+          "BQL",
+          "BR",
+          "BT",
+          "BUA",
+          "BUI",
+          "BW",
+          "BX",
+          "C0",
+          "C1",
+          "C10",
+          "C11",
+          "C12",
+          "C13",
+          "C14",
+          "C16",
+          "C17",
+          "C18",
+          "C19",
+          "C2",
+          "C23",
+          "C27",
+          "C28",
+          "C33",
+          "C34",
+          "C35",
+          "C36",
+          "C38",
+          "C39",
+          "C4",
+          "C40",
+          "C41",
+          "C42",
+          "C43",
+          "C44",
+          "C45",
+          "C46",
+          "C50",
+          "C51",
+          "C52",
+          "C59",
+          "C6",
+          "C60",
+          "C61",
+          "C62",
+          "C63",
+          "C69",
+          "C7",
+          "C70",
+          "C71",
+          "C72",
+          "C73",
+          "C77",
+          "C8",
+          "C80",
+          "C85",
+          "C86",
+          "C87",
+          "C89",
+          "C9",
+          "C92",
+          "C93",
+          "C95",
+          "CA",
+          "CCT",
+          "CDL",
+          "CEN",
+          "CG",
+          "CGM",
+          "CH",
+          "CJ",
+          "CK",
+          "CKG",
+          "CL",
+          "CLF",
+          "CLT",
+          "CMK",
+          "CMQ",
+          "CMT",
+          "CNP",
+          "CNT",
+          "CO",
+          "COU",
+          "CQ",
+          "CR",
+          "CS",
+          "CT",
+          "CTM",
+          "CU",
+          "CUR",
+          "CV",
+          "CWA",
+          "CWI",
+          "CY",
+          "CZ",
+          "D10",
+          "D12",
+          "D13",
+          "D14",
+          "D15",
+          "D16",
+          "D17",
+          "D20",
+          "D21",
+          "D22",
+          "D23",
+          "D24",
+          "D25",
+          "D26",
+          "D27",
+          "D28",
+          "D29",
+          "D34",
+          "D40",
+          "D41",
+          "D43",
+          "D44",
+          "D5",
+          "D59",
+          "D6",
+          "D60",
+          "D63",
+          "D64",
+          "D65",
+          "D66",
+          "D69",
+          "D7",
+          "D74",
+          "D77",
+          "D79",
+          "D8",
+          "D86",
+          "D87",
+          "D88",
+          "D89",
+          "D90",
+          "D91",
+          "D92",
+          "D96",
+          "D97",
+          "D98",
+          "D99",
+          "DAA",
+          "DB",
+          "DC",
+          "DE",
+          "DG",
+          "DI",
+          "DJ",
+          "DLT",
+          "DMK",
+          "DMQ",
+          "DMT",
+          "DPC",
+          "DPR",
+          "DPT",
+          "DQ",
+          "DR",
+          "DRA",
+          "DRI",
+          "DRL",
+          "DRM",
+          "DS",
+          "DT",
+          "DTN",
+          "DWT",
+          "DY",
+          "DZN",
+          "DZP",
+          "E2",
+          "E3",
+          "E4",
+          "E5",
+          "EA",
+          "EB",
+          "EC",
+          "EP",
+          "EQ",
+          "EV",
+          "F1",
+          "F9",
+          "FAR",
+          "FB",
+          "FC",
+          "FD",
+          "FF",
+          "FG",
+          "FH",
+          "FL",
+          "FM",
+          "FOT",
+          "FP",
+          "FR",
+          "FS",
+          "FTK",
+          "FTQ",
+          "G2",
+          "G3",
+          "G7",
+          "GB",
+          "GBQ",
+          "GC",
+          "GD",
+          "GE",
+          "GF",
+          "GFI",
+          "GGR",
+          "GH",
+          "GIA",
+          "GII",
+          "GJ",
+          "GK",
+          "GL",
+          "GLD",
+          "GLI",
+          "GLL",
+          "GM",
+          "GN",
+          "GO",
+          "GP",
+          "GQ",
+          "GRM",
+          "GRN",
+          "GRO",
+          "GRT",
+          "GT",
+          "GW",
+          "GY",
+          "GZ",
+          "H1",
+          "H2",
+          "HA",
+          "HAR",
+          "HBA",
+          "HBX",
+          "HC",
+          "HD",
+          "HE",
+          "HF",
+          "HGM",
+          "HH",
+          "HI",
+          "HIU",
+          "HK",
+          "HL",
+          "HLT",
+          "HM",
+          "HMQ",
+          "HMT",
+          "HO",
+          "HPA",
+          "HS",
+          "HTZ",
+          "HY",
+          "IC",
+          "IE",
+          "IF",
+          "II",
+          "IL",
+          "IM",
+          "INH",
+          "INK",
+          "INQ",
+          "IP",
+          "IT",
+          "IU",
+          "IV",
+          "JB",
+          "JG",
+          "JO",
+          "JR",
+          "K2",
+          "K6",
+          "KA",
+          "KB",
+          "KBA",
+          "KD",
+          "KF",
+          "KG",
+          "KGM",
+          "KGS",
+          "KHZ",
+          "KI",
+          "KJ",
+          "KL",
+          "KMH",
+          "KMK",
+          "KMQ",
+          "KNI",
+          "KNS",
+          "KNT",
+          "KO",
+          "KPH",
+          "KPO",
+          "KPP",
+          "KR",
+          "KS",
+          "KSD",
+          "KSH",
+          "KT",
+          "KTM",
+          "KTN",
+          "KUR",
+          "KVR",
+          "KW",
+          "KX",
+          "L2",
+          "LA",
+          "LBR",
+          "LBT",
+          "LC",
+          "LD",
+          "LE",
+          "LEF",
+          "LF",
+          "LI",
+          "LJ",
+          "LK",
+          "LM",
+          "LN",
+          "LO",
+          "LP",
+          "LPA",
+          "LR",
+          "LS",
+          "LTN",
+          "LTR",
+          "LUM",
+          "LUX",
+          "LX",
+          "LY",
+          "M0",
+          "M1",
+          "M4",
+          "M5",
+          "M7",
+          "MA",
+          "MAL",
+          "MAM",
+          "MBE",
+          "MBF",
+          "MBR",
+          "MC",
+          "MCU",
+          "MD",
+          "MF",
+          "MGM",
+          "MHZ",
+          "MIK",
+          "MIL",
+          "MIO",
+          "MIU",
+          "MK",
+          "MLD",
+          "MLT",
+          "MMK",
+          "MMQ",
+          "MMT",
+          "MQ",
+          "MQH",
+          "MQS",
+          "MSK",
+          "MT",
+          "MTK",
+          "MTQ",
+          "MTR",
+          "MTS",
+          "MV",
+          "N2",
+          "N3",
+          "NA",
+          "NAR",
+          "NB",
+          "NBB",
+          "NC",
+          "NCL",
+          "ND",
+          "NE",
+          "NF",
+          "NG",
+          "NH",
+          "NI",
+          "NIU",
+          "NJ",
+          "NL",
+          "NMI",
+          "NMP",
+          "NN",
+          "NPL",
+          "NPR",
+          "NPT",
+          "NQ",
+          "NR",
+          "NRL",
+          "NT",
+          "NTT",
+          "NV",
+          "NX",
+          "NY",
+          "OA",
+          "OHM",
+          "ON",
+          "ONZ",
+          "OP",
+          "Other",
+          "OZ",
+          "OZA",
+          "OZI",
+          "P0",
+          "P1",
+          "P2",
+          "P3",
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9",
+          "PA",
+          "PD",
+          "PE",
+          "PF",
+          "PG",
+          "PGL",
+          "PI",
+          "PK",
+          "PL",
+          "PN",
+          "PO",
+          "PQ",
+          "PR",
+          "PT",
+          "PTD",
+          "PTI",
+          "PTL",
+          "PU",
+          "PV",
+          "PW",
+          "PY",
+          "PZ",
+          "Q3",
+          "QA",
+          "QB",
+          "QD",
+          "QK",
+          "QR",
+          "QT",
+          "QTD",
+          "QTI",
+          "QTL",
+          "QTR",
+          "R1",
+          "R9",
+          "RA",
+          "RD",
+          "RG",
+          "RK",
+          "RL",
+          "RM",
+          "RN",
+          "RO",
+          "RP",
+          "RPM",
+          "RPS",
+          "RS",
+          "RU",
+          "S3",
+          "S4",
+          "S5",
+          "S6",
+          "S7",
+          "S8",
+          "SA",
+          "SCO",
+          "SD",
+          "SE",
+          "SET",
+          "SG",
+          "SHT",
+          "SIE",
+          "SK",
+          "SL",
+          "SMI",
+          "SN",
+          "SO",
+          "SP",
+          "SQ",
+          "SR",
+          "SS",
+          "SST",
+          "ST",
+          "STI",
+          "STN",
+          "SV",
+          "SW",
+          "SX",
+          "T0",
+          "T1",
+          "T3",
+          "T4",
+          "T5",
+          "T6",
+          "T7",
+          "T8",
+          "TA",
+          "TC",
+          "TE",
+          "TF",
+          "TI",
+          "TJ",
+          "TK",
+          "TL",
+          "TN",
+          "TNE",
+          "TP",
+          "TPR",
+          "TQ",
+          "TQD",
+          "TR",
+          "TRL",
+          "TS",
+          "TSD",
+          "TSH",
+          "TT",
+          "TU",
+          "TV",
+          "TW",
+          "TY",
+          "U1",
+          "U2",
+          "UA",
+          "UB",
+          "UC",
+          "UF",
+          "UH",
+          "UM",
+          "VI",
+          "VQ",
+          "VS",
+          "W2",
+          "WB",
+          "WCD",
+          "WE",
+          "WEB",
+          "WG",
+          "WH",
+          "WI",
+          "WR",
+          "WSD",
+          "WW",
+          "X1",
+          "YDK",
+          "YDQ",
+          "YL",
+          "YRD",
+          "YT",
+          "Z1",
+          "Z2",
+          "Z3",
+          "Z4",
+          "Z5",
+          "Z6",
+          "Z8",
+          "ZP",
+          "ZZ"
+        ],
+        "description": "Unit of measure code.\n\n* `05` - Lift\n* `06` - Small Spray\n* `08` - Heat Lot\n* `10` - Group\n* `11` - Outfit\n* `13` - Ration\n* `14` - Shot\n* `15` - Stick\n* `16` - Hundred Fifteen Kilogramme Drum\n* `17` - Hundred Pound Drum\n* `18` - Fifty-Five Gallon (US) Drum\n* `19` - Tank Truck\n* `1B` - Car Count\n* `1C` - Locomotive Count\n* `1D` - Caboose Count\n* `1E` - Empty Car\n* `1G` - Fuel Usage Gallon (US)\n* `1I` - Fixed Rate\n* `1L` - Total Car Count\n* `1X` - Quarter Mile\n* `20` - Twenty Foot Container\n* `21` - Forty Foot Container\n* `22` - Decilitre per Gramme\n* `23` - Gramme per Cubic Centimetre\n* `24` - Theoretical Pound\n* `25` - Gramme per Square Centimetre\n* `26` - Actual Ton\n* `27` - Theoretical Ton\n* `28` - Kilogramme per Square Metre\n* `29` - Pound per Thousand Square Feet\n* `2C` - Rontgen\n* `2J` - Cubic Centimetre per Second\n* `2K` - Cubic Foot per Hour\n* `2L` - Cubic Foot per Minute\n* `2M` - Centimetre per Second\n* `2N` - Decibel\n* `2P` - Kilobyte\n* `2Q` - Kilobecquerel\n* `2R` - Kilocurie\n* `2U` - Megagramme\n* `2V` - Megagramme per Hour\n* `2W` - Bin\n* `2X` - Metre per Minute\n* `2Y` - Millirontgen\n* `31` - Catch Weight\n* `32` - Kilogramme per Air Dry Metric Ton\n* `35` - Millilitres per Square Centimetre Second\n* `36` - Cubic Feet per Minute per Square Foot\n* `37` - Ounce per Square Foot\n* `38` - Ounces per Square Foot per 0.01 Inch\n* `3E` - Pound per Pound of Product\n* `3G` - Pound per Piece of Product\n* `3H` - Kilogramme per Kilogramme of Product\n* `3I` - Kilogramme per Piece of Product\n* `40` - Millilitre per Second\n* `41` - Millilitre per Minute\n* `43` - Super Bulk Bag\n* `44` - Five Hundred Kilogramme Bulk Bag\n* `45` - Three Hundred Kilogramme Bulk Bag\n* `46` - Fifty Lb Bulk Bag\n* `47` - Fifty Lb Bag\n* `48` - Bulk Car Load\n* `4A` - Bobbin\n* `4B` - Cap\n* `4C` - Centistokes\n* `4E` - Twenty Pack\n* `4G` - Microlitre\n* `4H` - Micrometre (Micron)\n* `4K` - Milliampere\n* `4L` - Megabyte\n* `4M` - Milligramme per Hour\n* `4N` - Megabecquerel\n* `4O` - Microfarad\n* `4T` - Picofarad\n* `4U` - Pound per Hour\n* `4W` - Ton (US) per Hour\n* `4X` - Kilolitre per Hour\n* `53` - Theoretical Kilogrammes\n* `54` - Theoretical Ton\n* `56` - Sitas\n* `57` - Mesh\n* `58` - Net Kilogramme\n* `59` - Part per Million\n* `5A` - Barrel per Minute\n* `5B` - Batch\n* `5C` - Gallon (US) per Thousand\n* `5E` - MMSCF/Day\n* `5F` - Pounds per Thousand\n* `5G` - Pump\n* `5H` - Stage\n* `5I` - Standard Cubic Foot\n* `5K` - Count per Minute\n* `5P` - Seismic Level\n* `5Q` - Seismic Line\n* `61` - Part per Billion (US)\n* `64` - Pound per Square Inch, Gauge\n* `66` - Oersted\n* `69` - Test Specific Scale\n* `73` - Ampere Tum per Centimetre\n* `77` - Milli-Inch\n* `80` - Pounds per Square Inch Absolute\n* `81` - Henry\n* `84` - Kilopound per Square Inch\n* `87` - Pound per Cubic Foot\n* `89` - Poise\n* `91` - Stokes\n* `94` - Curl Unit\n* `95` - Twenty Thousand Gallon (US) Tankcar\n* `96` - Ten Thousand Gallon (US) Tankcar\n* `97` - Ten Kg Drum\n* `98` - Fifteen Kg Drum\n* `A11` - Angstrom\n* `A12` - Astronomical Unit\n* `A14` - Barn\n* `A15` - Barn per Electron Volt\n* `A16` - Barn per Steradian Electron Volt,\n* `A17` - Barn per Sterdian\n* `A18` - Becquerel per Kilogramme\n* `A19` - Becquerel per Metre Cubed\n* `A24` - Candela per Square Metre\n* `A25` - Cheval Vapeur\n* `A26` - Coulomb Metre\n* `A27` - Coulomb Metre Squared per Volt\n* `A28` - Coulomb per Cubic Centimetre\n* `A29` - Coulomb per Cubic Metre\n* `A30` - Coulomb per Cubic Millimetre\n* `A31` - Coulomb per Kilogramme Second\n* `A32` - Coulomb per Mole\n* `A33` - Coulomb per Square Centimetre\n* `A34` - Coulomb per Square Metre\n* `A35` - Coulomb per Square Millimetre\n* `A36` - Cubic Centimetre per Mole\n* `A37` - Cubic Decimetre per Mole\n* `A38` - Cubic Metre per Coulomb\n* `A39` - Cubic Metre per Kilogramme\n* `A40` - Cubic Metre per Mole\n* `A42` - Curie per Kilogramme\n* `A43` - Deadweight Tonage\n* `A44` - Decalitre\n* `A45` - Decametre\n* `A47` - Decitex\n* `A49` - Denier\n* `A50` - Dyn Second per Cubic Centimetre\n* `A69` - Farad per Metre\n* `A71` - Femtometre\n* `A73` - Foot per Second Squared\n* `A75` - Freight Ton\n* `A76` - Gal\n* `A77` - Gaussian CGS Unit of Displacement\n* `A78` - Gaussian CGS Unit of Electric Current\n* `A79` - Gaussian CGS Unit of Electric Charge\n* `A80` - Gaussian CGS Unit of Electric Field Strength\n* `A81` - Gaussian CGS Unit of Electric Polarization\n* `A82` - Gaussian CGS Unit of Electric Potential\n* `A83` - Gaussian CGS Unit of Magnetization\n* `A84` - Gigacoulomb per Cubic Metre\n* `A86` - Gigahertz\n* `A87` - Gigaohm\n* `A88` - Gigaohm Metre\n* `A91` - Gon\n* `A93` - Gramme per Cubic Metre\n* `A94` - Gramme per Mole\n* `A95` - Gray\n* `A96` - Gray per Second\n* `A98` - Henry per Metre\n* `AA` - Ball\n* `AB` - Bulk Pack\n* `ACR` - Acre\n* `AD` - Byte\n* `AI` - Average Minute per Call\n* `AJ` - Cop\n* `AK` - Fathom\n* `AL` - Access Line\n* `AM` - Ampoule\n* `AP` - Aluminium Pound Only\n* `APZ` - Troy Ounce or Apothecaries' Ounce\n* `AQ` - Anti-Hemophilic Factor (AHF) Unit\n* `AR` - Suppository\n* `ARE` - Are\n* `AS` - Assortment\n* `ASM` - Alcoholic Strength by Mass\n* `ASU` - Alcoholic Strength by Volume\n* `AV` - Capsule\n* `AW` - Powder Filled Vial\n* `AY` - Assembly\n* `B1` - Barrel (US) per Day\n* `B2` - Bunk\n* `B25` - Kilobecquerel per Kilogramme\n* `B26` - Kilocoulomb\n* `B27` - Kilocoulomb per Cubic Metre\n* `B28` - Kilocoulomb per Square Metre\n* `B3` - Batting Pound\n* `B34` - Kilogramme per Cubic Decimetre\n* `B35` - Kilogramme per Litre\n* `B4` - Barrel, Imperial\n* `B45` - Kilomole\n* `B46` - Kilomole per Cubic Metre\n* `B49` - Kiloohm\n* `B5` - Billet\n* `B50` - Kiloohm Metre\n* `B51` - Kilopound\n* `B53` - Kilosiemens\n* `B54` - Kilosiemens per Metre\n* `B56` - Kiloweber per Metre\n* `B57` - Light Year\n* `B58` - Litre per Mole\n* `B59` - Lumen Hour\n* `B6` - Bun\n* `B60` - Lumen per Square Metre\n* `B61` - Lumen per Watt\n* `B62` - Lumen Second\n* `B63` - Lux Hour\n* `B64` - Lux Second\n* `B65` - Maxwell\n* `B66` - Megaampere per Square Metre\n* `B67` - Megabecquerel per Kilogramme\n* `B69` - Megacoulomb per Cubic Metre\n* `B7` - Cycle\n* `B70` - Megacoulomb per Square Metre\n* `B72` - Megagramme per Cubic Metre\n* `B75` - Megaohm\n* `B76` - Megaohm Metre\n* `B77` - Megasiemens per Metre\n* `B83` - Metre to the Fourth Power\n* `B84` - Microampere\n* `B85` - Microbar\n* `B86` - Microcoulomb\n* `B87` - Microcoulomb per Cubic Metre\n* `B88` - Microcoulomb per Square Metre\n* `B89` - Microfarad per Metre\n* `B9` - Batt\n* `B90` - Microhenry\n* `B91` - Microhenry per Metre\n* `B94` - Microohm\n* `B95` - Microohm Metre\n* `B99` - Microsiemens\n* `BAR` - Bar\n* `BB` - Base Box\n* `BD` - Board\n* `BE` - Bundle\n* `BG` - Bag\n* `BH` - Brush\n* `BIL` - Billion (EUR) or Trillion (US)\n* `BJ` - Bucket\n* `BK` - Basket\n* `BL` - Bale\n* `BLD` - Dry Barrel (US)\n* `BLL` - Barrel (US) (Petroleum Etc.)\n* `BO` - Bottle\n* `BP` - Hundred Board Feet\n* `BQL` - Becquerel\n* `BR` - Bar\n* `BT` - Bolt\n* `BUA` - Bushel (US)\n* `BUI` - Bushel (UK)\n* `BW` - Base Weight\n* `BX` - Box\n* `C0` - Call\n* `C1` - Composite Product Pound (Total Weight)\n* `C10` - Millifarad\n* `C11` - Milligal\n* `C12` - Milligramme per Metre\n* `C13` - Milligray\n* `C14` - Millihenry\n* `C16` - Millimetre per Second\n* `C17` - Millimetre Squared per Second\n* `C18` - Millimole\n* `C19` - Mole per Kilogramme\n* `C2` - Carset\n* `C23` - Milliohm Metre\n* `C27` - Millisiemens\n* `C28` - Millisievert\n* `C33` - Milliweber\n* `C34` - Mole\n* `C35` - Mole per Cubic Decimetre\n* `C36` - Mole per Cubic Metre\n* `C38` - Mole per Litre\n* `C39` - Nanoampere\n* `C4` - Carload\n* `C40` - Nanocoulomb\n* `C41` - Nanofarad\n* `C42` - Nanofarad per Metre\n* `C43` - Nanohenry\n* `C44` - Nanohenry per Metre\n* `C45` - Nanometre\n* `C46` - Nanoohm Metre\n* `C50` - Neper\n* `C51` - Neper per Second\n* `C52` - Picometre\n* `C59` - Octave\n* `C6` - Cell\n* `C60` - Ohm Centimetre\n* `C61` - Ohm Metre\n* `C62` - Piece\n* `C63` - Parsec\n* `C69` - Phon\n* `C7` - Centipoise\n* `C70` - Picoampere\n* `C71` - Picocoulomb\n* `C72` - Picofarad per Metre\n* `C73` - Picohenry\n* `C77` - Pound Gage\n* `C8` - Millicoulomb per Kilogramme\n* `C80` - Rad\n* `C85` - Reciprocal Angstrom\n* `C86` - Reciprocal Cubic Metre\n* `C87` - Reciprocal Cubic Metre per Second\n* `C89` - Reciprocal Henry\n* `C9` - Coil Group\n* `C92` - Reciprocal Metre\n* `C93` - Reciprocal Square Metre\n* `C95` - Reciprocal Mole\n* `CA` - Can\n* `CCT` - Carrying Capacity in Metric Ton\n* `CDL` - Candela\n* `CEN` - Hundred\n* `CG` - Card\n* `CGM` - Centigramme\n* `CH` - Container\n* `CJ` - Cone\n* `CK` - Connector\n* `CKG` - Coulomb per Kilogramme\n* `CL` - Coil\n* `CLF` - Hundred Leave\n* `CLT` - Centilitre\n* `CMK` - Square Centimetre\n* `CMQ` - Cubic Centimetre\n* `CMT` - Centimetre\n* `CNP` - Hundred Pack\n* `CNT` - Cental (UK)\n* `CO` - Carboy\n* `COU` - Coulomb\n* `CQ` - Cartridge\n* `CR` - Crate\n* `CS` - Case\n* `CT` - Carton\n* `CTM` - Metric Carat\n* `CU` - Cup\n* `CUR` - Curie\n* `CV` - Cover\n* `CWA` - Hundred Pounds (Cwt)/Hundred Weight (US)\n* `CWI` - Hundred Weight (UK)\n* `CY` - Cylinder\n* `CZ` - Combo\n* `D10` - Siemens per Metre\n* `D12` - Siemens Square Metre per Mole\n* `D13` - Sievert\n* `D14` - Thousand Linear Yard\n* `D15` - Sone\n* `D16` - Square Centimetre per Erg\n* `D17` - Square Centimetre per Steradian Erg\n* `D20` - Square Metre per Joule\n* `D21` - Square Metre per Kilogramme\n* `D22` - Square Metre per Mole\n* `D23` - Pen Gramme (Protein)\n* `D24` - Square Metre per Steradian\n* `D25` - Square Metre per Steradian Joule\n* `D26` - Square Metre per Volt Second\n* `D27` - Steradian\n* `D28` - Syphon\n* `D29` - Terahertz\n* `D34` - Tex\n* `D40` - Thousand Litre\n* `D41` - Ton per Cubic Metre\n* `D43` - Unified Atomic Mass Unit\n* `D44` - Var\n* `D5` - Kilogramme per Square Centimetre\n* `D59` - Weber per Metre\n* `D6` - Rontgen per Second\n* `D60` - Weber per Millimetre\n* `D63` - Book\n* `D64` - Block\n* `D65` - Round\n* `D66` - Cassette\n* `D69` - Inch to the Fourth Power\n* `D7` - Sandwich\n* `D74` - Kilogramme per Mole\n* `D77` - Megacoulomb\n* `D79` - Beam\n* `D8` - Draize Score\n* `D86` - Millicoulomb\n* `D87` - Millimole per Kilogramme\n* `D88` - Millicoulomb per Cubic Metre\n* `D89` - Millicoulomb per Square Metre\n* `D90` - Cubic Metre (Net)\n* `D91` - Rem\n* `D92` - Band\n* `D96` - Pound Gross\n* `D97` - Pallet/Unit Load\n* `D98` - Mass Pound\n* `D99` - Sleeve\n* `DAA` - Decare\n* `DB` - Dry Pound\n* `DC` - Disk (Disc)\n* `DE` - Deal\n* `DG` - Decigramme\n* `DI` - Dispenser\n* `DJ` - Decagramme\n* `DLT` - Decilitre\n* `DMK` - Square Decimetre\n* `DMQ` - Cubic Decimetre\n* `DMT` - Decimetre\n* `DPC` - Dozen Piece\n* `DPR` - Dozen Pair\n* `DPT` - Displacement Tonage\n* `DQ` - Data Record\n* `DR` - Drum\n* `DRA` - Dram (US)\n* `DRI` - Dram (UK)\n* `DRL` - Dozen Roll\n* `DRM` - Drachm (UK)\n* `DS` - Display\n* `DT` - Dry Ton\n* `DTN` - Deciton\n* `DWT` - Pennyweight\n* `DY` - Directory Book\n* `DZN` - Dozen\n* `DZP` - Dozen Pack\n* `E2` - Belt\n* `E3` - Trailer\n* `E4` - Gross Kilogramme\n* `E5` - Metric Long Ton\n* `EA` - Each\n* `EB` - Electronic Mail Box\n* `EC` - Each per Month\n* `EP` - Eleven Pack\n* `EQ` - Equivalent Gallon\n* `EV` - Envelope\n* `F1` - Thousand Cubic Feet per Day\n* `F9` - Fibre per Cubic Centimetre of Air\n* `FAR` - Farad\n* `FB` - Field\n* `FC` - Thousand Cubic Feet\n* `FD` - Million Particle per Cubic Foot\n* `FF` - Hundred Cubic Metre\n* `FG` - Transdermal Patch\n* `FH` - Micromole\n* `FL` - Flake Ton\n* `FM` - Million Cubic Feet\n* `FOT` - Foot\n* `FP` - Pound per Square Foot\n* `FR` - Foot per Minute\n* `FS` - Foot per Second\n* `FTK` - Square Foot\n* `FTQ` - Cubic Foot\n* `G2` - US Gallon per Minute\n* `G3` - Imperial Gallon per Minute\n* `G7` - Microfiche Sheet\n* `GB` - Gallon (US) per Day\n* `GBQ` - Gigabecquerel\n* `GC` - Gramme per 100 Gramme\n* `GD` - Gross Barrel\n* `GE` - Pound per Gallon (US)\n* `GF` - Gramme per Metre (Gramme per 100 Centimetres)\n* `GFI` - Gramme of Fissile Isotope\n* `GGR` - Great Gross\n* `GH` - Half Gallon (US)\n* `GIA` - Gill (US)\n* `GII` - Gill (UK)\n* `GJ` - Gramme per Millilitre\n* `GK` - Gramme per Kilogramme\n* `GL` - Gramme per Litre\n* `GLD` - Dry Gallon (US)\n* `GLI` - Gallon (UK)\n* `GLL` - Gallon (US)\n* `GM` - Gramme per Square Metre\n* `GN` - Gross Gallon\n* `GO` - Milligrammes per Square Metre\n* `GP` - Milligramme per Cubic Metre\n* `GQ` - Microgramme per Cubic Meter\n* `GRM` - Gramme\n* `GRN` - Grain\n* `GRO` - Gross\n* `GRT` - Gross Register Ton\n* `GT` - Gross Ton\n* `GW` - Gallon per Thousand Cubic Feet\n* `GY` - Gross Yard\n* `GZ` - Gage System\n* `H1` - Half Page - Electronic\n* `H2` - Half Litre\n* `HA` - Hank\n* `HAR` - Hectare\n* `HBA` - Hectobar\n* `HBX` - Hundred Boxes\n* `HC` - Hundred Count\n* `HD` - Half Dozen\n* `HE` - Hundredth of A Carat\n* `HF` - Hundred Feet\n* `HGM` - Hectogramme\n* `HH` - Hundred Cubic Feet\n* `HI` - Hundred Sheet\n* `HIU` - Hundred International Unit\n* `HK` - Hundred Kilogramme\n* `HL` - Hundred Feet (Linear)\n* `HLT` - Hectolitre\n* `HM` - Mile per Hour\n* `HMQ` - Million Cubic Metre\n* `HMT` - Hectometre\n* `HO` - Hundred Troy Ounce\n* `HPA` - Hectolitre of Pure Alcohol\n* `HS` - Hundred Square Feet\n* `HTZ` - Hertz\n* `HY` - Hundred Yard\n* `IC` - Count per Inch\n* `IE` - Person\n* `IF` - Inches of Water\n* `II` - Column Inch\n* `IL` - Inch per Minute\n* `IM` - Impression\n* `INH` - Inch\n* `INK` - Square Inch\n* `INQ` - Cubic Inch\n* `IP` - Insurance Policy\n* `IT` - Count per Centimetre\n* `IU` - Inch per Second\n* `IV` - Inch per Second Squared\n* `JB` - Jumbo\n* `JG` - Jug\n* `JO` - Joint\n* `JR` - Jar\n* `K2` - Kilovolt Ampere Reactive Demand\n* `K6` - Kilolitre\n* `KA` - Cake\n* `KB` - Kilocharacter\n* `KBA` - Kilobar\n* `KD` - Kilogramme Decimal\n* `KF` - Kilopacket\n* `KG` - Keg\n* `KGM` - Kilogramme\n* `KGS` - Kilogramme per Second\n* `KHZ` - Kilohertz\n* `KI` - Kilogramme per Millimetre Width\n* `KJ` - Kilosegment\n* `KL` - Kilogramme per Metre\n* `KMH` - Kilometre per Hour\n* `KMK` - Square Kilometre\n* `KMQ` - Kilogramme per Cubic Metre\n* `KNI` - Kilogramme of Nitrogen\n* `KNS` - Kilogramme Named Substance\n* `KNT` - Knot\n* `KO` - Milliequivalence Caustic Potash per Gramme of Product\n* `KPH` - Kilogramme of Potassium Hydroxide (Caustic Potash)\n* `KPO` - Kilogramme of Potassium Oxide\n* `KPP` - Kilogramme of Phosphorus Pentoxide (Phosphoric Anhydride)\n* `KR` - Kilorontgen\n* `KS` - Thousand Pound per Square Inch\n* `KSD` - Kilogramme of Substance 90% Dry\n* `KSH` - Kilogramme of Sodium Hydroxide (Caustic Soda)\n* `KT` - Kit\n* `KTM` - Kilometre\n* `KTN` - Kiloton\n* `KUR` - Kilogramme of Uranium\n* `KVR` - Kilovar\n* `KW` - Kilogrammes per Millimetre\n* `KX` - Millilitre per Kilogramme\n* `L2` - Litre per Minute\n* `LA` - Pound per Cubic Inch\n* `LBR` - Pound\n* `LBT` - Troy Pound (US)\n* `LC` - Linear Centimetre\n* `LD` - Litre per Day\n* `LE` - Lite\n* `LEF` - Leaf\n* `LF` - Linear Foot\n* `LI` - Linear Inch\n* `LJ` - Large Spray\n* `LK` - Link\n* `LM` - Linear Metre\n* `LN` - Length\n* `LO` - Lot\n* `LP` - Liquid Pound\n* `LPA` - Litre of Pure Alcohol\n* `LR` - Layer\n* `LS` - Lump Sum\n* `LTN` - Ton (UK) or Longton (US)\n* `LTR` - Litre\n* `LUM` - Lumen\n* `LUX` - Lux\n* `LX` - Linear Yard per Pound\n* `LY` - Linear Yard\n* `M0` - Magnetic Tape\n* `M1` - Milligrammes per Litre\n* `M4` - Monetary Value\n* `M5` - Microcurie\n* `M7` - Micro-Inch\n* `MA` - Machine per Unit\n* `MAL` - Mega Litre\n* `MAM` - Megametre\n* `MBE` - Thousand Standard Brick Equivalent\n* `MBF` - Thousand Board Feet\n* `MBR` - Millibar\n* `MC` - Microgramme\n* `MCU` - Millicurie\n* `MD` - Air Dry Metric Ton\n* `MF` - Milligramme per Square Foot per Side\n* `MGM` - Milligramme\n* `MHZ` - Megahertz\n* `MIK` - Square Mile\n* `MIL` - Thousand\n* `MIO` - Million\n* `MIU` - Million International Unit\n* `MK` - Milligramme per Square Inch\n* `MLD` - Milliard or Billion (US)\n* `MLT` - Millilitre\n* `MMK` - Square Millimetre\n* `MMQ` - Cubic Millimetre\n* `MMT` - Millimetre\n* `MQ` - Thousand Metre\n* `MQH` - Cubic Metre per Hour\n* `MQS` - Cubic Metre per Second\n* `MSK` - Metre per Second Squared\n* `MT` - Mat\n* `MTK` - Square Metre\n* `MTQ` - Cubic Metre\n* `MTR` - Metre\n* `MTS` - Metre per Second\n* `MV` - Number of Mults\n* `N2` - Number of Lines\n* `N3` - Print Point\n* `NA` - Milligramme per Kilogramme\n* `NAR` - Number of Articles\n* `NB` - Barge\n* `NBB` - Number of Bobbins\n* `NC` - Car\n* `NCL` - Number of Cells\n* `ND` - Net Barrel\n* `NE` - Net Litre\n* `NF` - Message\n* `NG` - Net Gallon (US)\n* `NH` - Message Hour\n* `NI` - Net Imperial Gallon\n* `NIU` - Number of International Units\n* `NJ` - Number of Screens\n* `NL` - Load\n* `NMI` - Nautical Mile\n* `NMP` - Number of Packs\n* `NN` - Train\n* `NPL` - Number of Parcels\n* `NPR` - Number of Pairs\n* `NPT` - Number of Parts\n* `NQ` - Mho\n* `NR` - Micromho\n* `NRL` - Number of Rolls\n* `NT` - Net Ton\n* `NTT` - Net Register Ton\n* `NV` - Vehicle\n* `NX` - Part per Thousand\n* `NY` - Pound per Air Dry Metric Ton\n* `OA` - Panel\n* `OHM` - Ohm\n* `ON` - Ounce per Square Yard\n* `ONZ` - Ounce\n* `OP` - Two Pack\n* `Other` - Other\n* `OZ` - Ounce Av\n* `OZA` - Fluid Ounce (US)\n* `OZI` - Fluid Ounce (UK)\n* `P0` - Page - Electronic\n* `P1` - Percent\n* `P2` - Pound per Foot\n* `P3` - Three Pack\n* `P4` - Four Pack\n* `P5` - Five Pack\n* `P6` - Six Pack\n* `P7` - Seven Pack\n* `P8` - Eight Pack\n* `P9` - Nine Pack\n* `PA` - Packet\n* `PD` - Pad\n* `PE` - Pound Equivalent\n* `PF` - Pallet (Lift)\n* `PG` - Plate\n* `PGL` - Proof Gallon\n* `PI` - Pitch\n* `PK` - Package\n* `PL` - Pail\n* `PN` - Pound Net\n* `PO` - Pound per Inch of Length\n* `PQ` - Page per Inch\n* `PR` - Pair\n* `PT` - Pint (US)\n* `PTD` - Dry Pint (US)\n* `PTI` - Pint (UK)\n* `PTL` - Liquid Pint (US)\n* `PU` - Tray / Tray Pack\n* `PV` - Half Pint (US)\n* `PW` - Pound per Inch of Width\n* `PY` - Peck Dry (US)\n* `PZ` - Peck Dry (UK)\n* `Q3` - Meal\n* `QA` - Page - Facsimile\n* `QB` - Page - Hardcopy\n* `QD` - Quarter Dozen\n* `QK` - Quarter Kilogramme\n* `QR` - Quire\n* `QT` - Quart (US)\n* `QTD` - Dry Quart (US)\n* `QTI` - Quart (UK)\n* `QTL` - Liquid Quart (US)\n* `QTR` - Quarter (UK)\n* `R1` - Pica\n* `R9` - Thousand Cubic Metre\n* `RA` - Rack\n* `RD` - Rod\n* `RG` - Ring\n* `RK` - Roll Metric Measure\n* `RL` - Reel\n* `RM` - Ream\n* `RN` - Ream Metric Measure\n* `RO` - Roll\n* `RP` - Pound per Ream\n* `RPM` - Revolutions per Minute\n* `RPS` - Revolutions per Second\n* `RS` - Reset\n* `RU` - Run\n* `S3` - Square Foot per Second\n* `S4` - Square Metre per Second\n* `S5` - Sixty Fourths of An Inch\n* `S6` - Session\n* `S7` - Storage Unit\n* `S8` - Standard Advertising Unit\n* `SA` - Sack\n* `SCO` - Score\n* `SD` - Solid Pound\n* `SE` - Section\n* `SET` - Set\n* `SG` - Segment\n* `SHT` - Shipping Ton\n* `SIE` - Siemens\n* `SK` - Split Tanktruck\n* `SL` - Slipsheet\n* `SMI` - Mile (Statute Mile)\n* `SN` - Square Rod\n* `SO` - Spool\n* `SP` - Shelf Package\n* `SQ` - Square\n* `SR` - Strip\n* `SS` - Sheet Metric Measure\n* `SST` - Short Standard\n* `ST` - Sheet\n* `STI` - Stone (UK)\n* `STN` - Ton (US) or Short Ton (UK/US)\n* `SV` - Skid\n* `SW` - Skein\n* `SX` - Shipment\n* `T0` - Telecommunication Line in Service\n* `T1` - Thousand Pound Gross\n* `T3` - Thousand Piece\n* `T4` - Thousand Bag\n* `T5` - Thousand Casing\n* `T6` - Thousand Gallon (US)\n* `T7` - Thousand Impression\n* `T8` - Thousand Linear Inch\n* `TA` - Tenth Cubic Foot\n* `TC` - Truckload\n* `TE` - Tote\n* `TF` - Ten Square Yard\n* `TI` - Thousand Square Inch\n* `TJ` - Thousand Square Centimetre\n* `TK` - Tank, Rectangular\n* `TL` - Thousand Feet (Linear)\n* `TN` - Tin\n* `TNE` - Metric Ton\n* `TP` - Ten Pack\n* `TPR` - Ten Pair\n* `TQ` - Thousand Feet\n* `TQD` - Thousand Cubic Metre per Day\n* `TR` - Ten Square Feet\n* `TRL` - Trillion (EUR)\n* `TS` - Thousand Square Feet\n* `TSD` - Ton of Substance 90% Dry\n* `TSH` - Ton of Steam per Hour\n* `TT` - Thousand Linear Metre\n* `TU` - Tube\n* `TV` - Thousand Kilogramme\n* `TW` - Thousand Sheet\n* `TY` - Tank, Cylindrical\n* `U1` - Treatment\n* `U2` - Tablet\n* `UA` - Torr\n* `UB` - Telecommunication Line in Service Average\n* `UC` - Telecommunication Port\n* `UF` - Usage per Telecommunication Line Average\n* `UH` - Ten Thousand Yard\n* `UM` - Million Unit\n* `VI` - Vial\n* `VQ` - Bulk\n* `VS` - Visit\n* `W2` - Wet Kilo\n* `WB` - Wet Pound\n* `WCD` - Cord\n* `WE` - Wet Ton\n* `WEB` - Weber\n* `WG` - Wine Gallon\n* `WH` - Wheel\n* `WI` - Weight per Square Inch\n* `WR` - Wrap\n* `WSD` - Standard\n* `WW` - Millilitre of Water\n* `X1` - Chain\n* `YDK` - Square Yard\n* `YDQ` - Cubic Yard\n* `YL` - Hundred Linear Yard\n* `YRD` - Yard\n* `YT` - Ten Yard\n* `Z1` - Lift Van\n* `Z2` - Chest\n* `Z3` - Cask\n* `Z4` - Hogshead\n* `Z5` - Lug\n* `Z6` - Conference Point\n* `Z8` - Newspage Agate Line\n* `ZP` - Page\n* `ZZ` - Mutually Defined\n"
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

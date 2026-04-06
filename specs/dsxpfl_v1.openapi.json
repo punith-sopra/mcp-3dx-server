@@ -1,0 +1,1626 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "Web services to manage Product Category objects from 3DPortfolio service.",
+    "version": "1.0.0",
+    "title": "3DPortfolio Web Services",
+    "x-ds-service": [
+      "3DPortfolio"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DPortfolio}/3drdfpersist/resources/v1/modeler/dsxpfl",
+      "variables": {
+        "3DPortfolio": {
+          "default": "https://3DEXPERIENCE_3DPortfolio"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsxpfl/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/dsxpfl:PortfolioVersion": {
+      "post": {
+        "tags": [
+          "Portfolio Version"
+        ],
+        "summary": "Create a Portfolio",
+        "description": "Create Portfolio with its first Version",
+        "operationId": "dsxpfl:CreatePortfolio",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createPortfolioInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Portfolio created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadPflVersionMask"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Portfolio Version"
+        ],
+        "summary": "Get Portfolios",
+        "description": "Get all the portfolios accessible to the user",
+        "operationId": "dsxpfl:GetPortfolios",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Number of portfolio versions to skip. Default value is 0.",
+            "schema": {
+              "type": "integer",
+              "example": "10"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Number of portfolio versions to fetch. Default is 50 and max is 1000.",
+            "schema": {
+              "type": "integer",
+              "example": "10"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Portfolios returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "Collection"
+                    },
+                    "totalItems": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ReadPflVersionMask"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/dsxpfl:PortfolioVersion/{ID}": {
+      "patch": {
+        "tags": [
+          "Portfolio Version"
+        ],
+        "summary": "Update Portfolio attributes",
+        "description": "Update the attributes values of a Portfolio Version",
+        "operationId": "dsxpfl:UpdatePortfolioAttributes",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updatePortfolioInput"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "IF-MATCH",
+            "in": "header",
+            "description": "etag value",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "ab68c6df-c129-48c8-a168-31ae128f3843",
+              "description": "The entity tag value that should be matched for a successful update."
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a portfolio version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Portfolio updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadPflVersionMask"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "412": {
+            "description": "The passed If-Match header doesn't match the current etag value.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@code": {
+                      "type": "string",
+                      "description": "Error code.",
+                      "example": "412"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "You don't have the last version of the portfolio version."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Portfolio Version"
+        ],
+        "summary": "Get Portfolio",
+        "description": "Get portfolio details",
+        "operationId": "dsxpfl:GetPortfolioAttributes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a portfolio version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Portfolio version",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadPflVersionMask"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Portfolio Version"
+        ],
+        "summary": "Delete Portfolio",
+        "description": "Delete a portfolio version",
+        "operationId": "dsxpfl:DeletePortfolio",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a portfolio version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Portfolio version",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "Collection"
+                    },
+                    "totalItems": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "member": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string",
+                          "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/dsxpfl:PortfolioVersion/{ID}/items": {
+      "patch": {
+        "tags": [
+          "Portfolio Items"
+        ],
+        "summary": "Add/Remove item",
+        "description": "Add or remove an item in the portfolio. Portfolio items are restricted to Portfolio Versions and Models.",
+        "operationId": "dsxpfl:AddRemoveItemsToPortfolio",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "IF-MATCH",
+            "in": "header",
+            "description": "etag value",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "ab68c6df-c129-48c8-a168-31ae128f3843",
+              "description": "The entity tag value that should be matched for a successful update."
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a portfolio version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "add": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string",
+                          "description": "The ds6w:resourceUid of the item accessible in the federated search.",
+                          "example": "3F24EAB12009000061525913001467AB"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "The item type.",
+                          "example": "Model"
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "The source URL.",
+                          "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dspace.3dx-staging.3ds.com"
+                        },
+                        "relativePath": {
+                          "type": "string",
+                          "description": "The relative path to the item.",
+                          "example": "/resources/v1/modeler/dspfl/dspfl:Model/3F24EAB12009000061525913001467AB"
+                        }
+                      },
+                      "required": [
+                        "identifier",
+                        "type",
+                        "source",
+                        "relativePath"
+                      ]
+                    }
+                  },
+                  "remove": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string",
+                          "description": "The ds6w:resourceUid of the item accessible in the federated search.",
+                          "example": "3F24EAB12009000061525913001467AF"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "The item type.",
+                          "example": "Model"
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "The source URL.",
+                          "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dspace.3dx-staging.3ds.com"
+                        },
+                        "relativePath": {
+                          "type": "string",
+                          "description": "The relative path to the item.",
+                          "example": "/resources/v1/modeler/dspfl/dspfl:Model/3F24EAB12009000061525913001467AF"
+                        }
+                      },
+                      "required": [
+                        "identifier",
+                        "type",
+                        "source",
+                        "relativePath"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Portfolio items added and removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "added": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "description": "The ds6w:resourceUid of the item accessible in the federated search.",
+                            "example": "3F24EAB12009000061525913001467AB"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "The item type.",
+                            "example": "Model"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The source URL.",
+                            "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dspace.3dx-staging.3ds.com"
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "description": "The relative path to the item.",
+                            "example": "/resources/v1/modeler/dspfl/dspfl:Model/3F24EAB12009000061525913001467AB"
+                          }
+                        }
+                      }
+                    },
+                    "removed": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "description": "The ds6w:resourceUid of the item accessible in the federated search.",
+                            "example": "3F24EAB12009000061525913001467AF"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "The item type.",
+                            "example": "Model"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The source URL.",
+                            "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dspace.3dx-staging.3ds.com"
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "description": "The relative path to the item.",
+                            "example": "/resources/v1/modeler/dspfl/dspfl:Model/3F24EAB12009000061525913001467AF"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "412": {
+            "description": "The passed If-Match header doesn't match the current etag value.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@code": {
+                      "type": "string",
+                      "description": "Error code.",
+                      "example": "412"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "You don't have the last version of the portfolio version."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Portfolio Items"
+        ],
+        "summary": "Get items",
+        "description": "Get items of a portfolio",
+        "operationId": "dsxpfl:GetItemsOfPortfolio",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a portfolio version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Portfolio items returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "Collection"
+                    },
+                    "totalItems": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "description": "The ds6w:resourceUid of the item accessible in the federated search.",
+                            "example": "3F24EAB12009000061525913001467AB"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "The item type.",
+                            "example": "Model"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The source URL.",
+                            "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dspace.3dx-staging.3ds.com"
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "description": "The relative path to the item.",
+                            "example": "/resources/v1/modeler/dspfl/dspfl:Model/3F24EAB12009000061525913001467AB"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/dsxpfl:PortfolioVersion/{ID}/commercialItems": {
+      "patch": {
+        "tags": [
+          "Portfolio Items"
+        ],
+        "summary": "Add or Remove effective sellable items to a Product Category",
+        "description": "Set and unset effective sellable items to a Product Category. Sellable Items passed in payload here should be of a model present in the current Product Category; otherwise, the API execution will fail.",
+        "operationId": "dsxpfl:AddRemoveCommercialItemsToPortfolio",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "IF-MATCH",
+            "in": "header",
+            "description": "etag value",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "ab68c6df-c129-48c8-a168-31ae128f3843",
+              "description": "The entity tag value that should be matched for a successful update."
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a product category",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "add": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string",
+                          "example": "uuid:8636c658-cf96-4b29-ab0a-65095b9668f2"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "Should be dscpfl:SellableItem if it is not of the custom type.",
+                          "example": "dscpfl:SellableItem"
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "The source URL.",
+                          "example": "https://3DEXPERIENCE_3DPortfolio"
+                        },
+                        "relativePath": {
+                          "type": "string",
+                          "description": "The relative path to the Sellable Item.",
+                          "example": "/3drdfpersist/resources/v1/modeler/dscpfl/dscpfl:SellableItem/uuid:8636c658-cf96-4b29-ab0a-65095b9668f2"
+                        }
+                      },
+                      "required": [
+                        "identifier",
+                        "type",
+                        "source",
+                        "relativePath"
+                      ]
+                    }
+                  },
+                  "remove": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string",
+                          "example": "uuid:8636c658-cf96-4b29-ab0a-65095b9668f3"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "Should be dscpfl:SellableItem if it is not of the custom type.",
+                          "example": "dscpfl:SellableItem"
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "The source URL.",
+                          "example": "https://3DEXPERIENCE_3DPortfolio"
+                        },
+                        "relativePath": {
+                          "type": "string",
+                          "description": "The relative path to the Sellable Item.",
+                          "example": "/3drdfpersist/resources/v1/modeler/dscpfl/dscpfl:SellableItem/uuid:8636c658-cf96-4b29-ab0a-65095b9668f3"
+                        }
+                      },
+                      "required": [
+                        "identifier",
+                        "type",
+                        "source",
+                        "relativePath"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Effective sellable items added and removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "added": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "example": "uuid:8636c658-cf96-4b29-ab0a-65095b9668f2"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "Should be dscpfl:SellableItem if it is not of the custom type.",
+                            "example": "dscpfl:SellableItem"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The source URL.",
+                            "example": "https://3DEXPERIENCE_3DPortfolio"
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "description": "The relative path to the Sellable Item.",
+                            "example": "/3drdfpersist/resources/v1/modeler/dscpfl/dscpfl:SellableItem/uuid:8636c658-cf96-4b29-ab0a-65095b9668f2"
+                          }
+                        }
+                      }
+                    },
+                    "removed": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "example": "uuid:8636c658-cf96-4b29-ab0a-65095b9668f3"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "Should be dscpfl:SellableItem if it is not of the custom type.",
+                            "example": "dscpfl:SellableItem"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The source URL.",
+                            "example": "https://3DEXPERIENCE_3DPortfolio"
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "description": "The relative path to the Sellable Item.",
+                            "example": "/3drdfpersist/resources/v1/modeler/dscpfl/dscpfl:SellableItem/uuid:8636c658-cf96-4b29-ab0a-65095b9668f3"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request:The format of the request is not correct.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@code": {
+                      "type": "string",
+                      "description": "Error code : Can be http code or custom app code.",
+                      "example": "400"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "The model of Sellable Item  uuid:8636c658-cf96-4b29-ab0a-65095b9668f2, is not part of the Product Category uuid:8636c658-cf96-4b29-ab0a-65095b9668a1."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "412": {
+            "description": "The passed If-Match header doesn't match the current etag value.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@code": {
+                      "type": "string",
+                      "description": "Error code.",
+                      "example": "412"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "You don't have the last version of the product category."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Portfolio Items"
+        ],
+        "summary": "Get effective sellable items of a Product Category",
+        "description": "Get effective sellable items of a Product Category",
+        "operationId": "dsxpfl:GetCommercialItemsOfPortfolio",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a product category",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sellable items returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "Collection"
+                    },
+                    "totalItems": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "example": "uuid:8636c658-cf96-4b29-ab0a-65095b9668f3"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "Should be dscpfl:SellableItem if it is not of the custom type.",
+                            "example": "dscpfl:SellableItem"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The source URL.",
+                            "example": "https://3DEXPERIENCE_3DPortfolio"
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "description": "The relative path to the Sellable Item.",
+                            "example": "/3drdfpersist/resources/v1/modeler/dscpfl/dscpfl:SellableItem/uuid:8636c658-cf96-4b29-ab0a-65095b9668f3"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsxpfl:PortfolioVersion/{ID}/referencedDocuments": {
+      "patch": {
+        "tags": [
+          "Portfolio Documents"
+        ],
+        "summary": "Add/Remove documents",
+        "description": "Add or remove documents into a portfolio",
+        "operationId": "dsxpfl:AddRemoveDocumentsToPortfolio",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a portfolio version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "add": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string",
+                          "description": "The ds6w:resourceUid of the document accessible in the federated search.",
+                          "example": "ABED148A6BCA8925FFF874A8D"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "The document type.",
+                          "example": "Document"
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "The source URL.",
+                          "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dspace.3dx-staging.3ds.com/"
+                        },
+                        "relativePath": {
+                          "type": "string",
+                          "description": "The relative path to the document.",
+                          "example": "/relative/path/for/ABED148A6BCA8925FFF874A8D"
+                        }
+                      },
+                      "required": [
+                        "identifier",
+                        "type",
+                        "source",
+                        "relativePath"
+                      ]
+                    }
+                  },
+                  "remove": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string",
+                          "description": "The ds6w:resourceUid of the document accessible in the federated search.",
+                          "example": "ABED148A6BCA8925FFF874A8D"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "The document type.",
+                          "example": "Document"
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "The source URL.",
+                          "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dspace.3dx-staging.3ds.com/"
+                        },
+                        "relativePath": {
+                          "type": "string",
+                          "description": "The relative path to the document.",
+                          "example": "/relative/path/for/ABED148A6BCA8925FFF874A8D"
+                        }
+                      },
+                      "required": [
+                        "identifier",
+                        "type",
+                        "source",
+                        "relativePath"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Portfolio document added or removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "added": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "description": "The ds6w:resourceUid of the document accessible in the federated search.",
+                            "example": "ABED148A6BCA8925FFF874A8D"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "The document type.",
+                            "example": "Document"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The source URL.",
+                            "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dspace.3dx-staging.3ds.com/"
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "description": "The relative path to the document.",
+                            "example": "/relative/path/for/ABED148A6BCA8925FFF874A8D"
+                          }
+                        }
+                      }
+                    },
+                    "removed": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "description": "The ds6w:resourceUid of the document accessible in the federated search.",
+                            "example": "ABED148A6BCA8925FFF874A8D"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "The document type.",
+                            "example": "Document"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The source URL.",
+                            "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dspace.3dx-staging.3ds.com/"
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "description": "The relative path to the document.",
+                            "example": "/relative/path/for/ABED148A6BCA8925FFF874A8D"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Portfolio Documents"
+        ],
+        "summary": "Get portfolio documents",
+        "description": "Get documents attached to a portfolio",
+        "operationId": "dsxpfl:GetPortfolioDocuments",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a portfolio version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Portfolio documents returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "Collection"
+                    },
+                    "totalItems": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "description": "The ds6w:resourceUid of the document accessible in the federated search.",
+                            "example": "ABED148A6BCA8925FFF874A8D"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "The document type.",
+                            "example": "Picture"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The source URL.",
+                            "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dspace.3dx-staging.3ds.com/"
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "description": "The relative path to the document.",
+                            "example": "/relative/path/for/ABED148A6BCA8925FFF874A8D"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/dsxpfl:PortfolioVersion/{ID}/setGoverningProject": {
+      "post": {
+        "tags": [
+          "Portfolio Version Governing Project"
+        ],
+        "summary": "Set Governing Project",
+        "description": "Set Governing Project for a Portfolio Version. If a governing project is already set, it will be replaced.",
+        "operationId": "dsxpfl:SetGoverningProjectOfPortfolio",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Portfolio Version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "identifier": {
+                    "type": "string",
+                    "description": "The ds6w:resourceUid of the Project accessible in the federated search.",
+                    "example": "uuid:b5674451-bec6-4605-aa2d-48c90a1f6ca8"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "The Project type.",
+                    "example": "dsplan:Project"
+                  },
+                  "source": {
+                    "type": "string",
+                    "description": "The source URL.",
+                    "example": "https://mydomain-3dplan.3dx-staging.3ds.com/"
+                  },
+                  "relativePath": {
+                    "type": "string",
+                    "description": "The relative path to the project.",
+                    "example": "/relative/path/for/uuid:b5674451-bec6-4605-aa2d-48c90a1f6ca8"
+                  }
+                },
+                "required": [
+                  "identifier",
+                  "type",
+                  "source",
+                  "relativePath"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "set Governing Project",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "description": "The ds6w:resourceUid of the Project accessible in the federated search.",
+                      "example": "uuid:b5674451-bec6-4605-aa2d-48c90a1f6ca8"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "The Project type.",
+                      "example": "dsplan:Project"
+                    },
+                    "source": {
+                      "type": "string",
+                      "description": "The source URL.",
+                      "example": "https://mydomain-3dplan.3dx-staging.3ds.com/"
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "description": "The relative path to the Project.",
+                      "example": "/relative/path/for/uuid:b5674451-bec6-4605-aa2d-48c90a1f6ca8"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "412": {
+            "description": "The passed If-Match header doesn't match the current etag value.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@code": {
+                      "type": "integer",
+                      "description": "Error code.",
+                      "example": "412"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "You don't have the last version of the portfolio version."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsxpfl:PortfolioVersion/{ID}/removeGoverningProject": {
+      "post": {
+        "tags": [
+          "Portfolio Version Governing Project"
+        ],
+        "summary": "Remove Governing Project",
+        "description": "Remove Governing Project for a Portfolio Version",
+        "operationId": "dsxpfl:RemoveGoverningProjectOfPortfolio",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Portfolio Version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blank response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "412": {
+            "description": "The passed If-Match header doesn't match the current etag value.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@code": {
+                      "type": "integer",
+                      "description": "Error code.",
+                      "example": "412"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "You don't have the last version of the portfolio version."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsxpfl:PortfolioVersion/{ID}/governingProject": {
+      "get": {
+        "tags": [
+          "Portfolio Version Governing Project"
+        ],
+        "summary": "Get Governing Project",
+        "description": "Get Governing Project of the Portfolio Version",
+        "operationId": "dsxpfl:GetGoverningProjectOfPortfolio",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Portfolio Version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Portfolio Version Governing Project returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "description": "The ds6w:resourceUid of the Project accessible in the federated search.",
+                      "example": "uuid:b5674451-bec6-4605-aa2d-48c90a1f6ca8"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "The Project type.",
+                      "example": "dsplan:Project"
+                    },
+                    "source": {
+                      "type": "string",
+                      "description": "The source URL.",
+                      "example": "https://mydomain-3dplan.3dx-staging.3ds.com/"
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "description": "The relative path to the Project.",
+                      "example": "/relative/path/for/uuid:b5674451-bec6-4605-aa2d-48c90a1f6ca8"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ReadPflVersionMask": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+          },
+          "type": {
+            "type": "string",
+            "description": "Should be dsxpfl:PortfolioVersion if the portfolio is not of custom type.",
+            "example": "dsxpfl:PortfolioVersion"
+          },
+          "source": {
+            "type": "string",
+            "description": "The source URL.",
+            "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dportfolio.3dx-staging.3ds.com"
+          },
+          "relativePath": {
+            "type": "string",
+            "description": "The relative path to the portfolio version.",
+            "example": "/3drdfpersist/resources/v1/modeler/dsxpfl/dsxpfl:PortfolioVersion/uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+          },
+          "title": {
+            "type": "string",
+            "description": "The name of the portfolio",
+            "example": "Autonomous cars"
+          },
+          "description": {
+            "type": "string",
+            "description": "The purpose of the portfolio",
+            "example": "Portfolio of autonomous cars of the company."
+          },
+          "image": {
+            "type": "string",
+            "description": "A Base64 encoded image.",
+            "example": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD//gAyUHJ..."
+          },
+          "revision": {
+            "type": "string",
+            "description": "The version of the portfolio",
+            "example": "1_A"
+          },
+          "state": {
+            "type": "string",
+            "description": "The maturity state of the portfolio.",
+            "example": "Private"
+          },
+          "modified": {
+            "type": "string",
+            "description": "Last modification date",
+            "example": "2020-10-14T12:56:16.53Z"
+          },
+          "created": {
+            "type": "string",
+            "description": "Creation date",
+            "example": "2020-10-14T12:56:16.53Z"
+          },
+          "@etag": {
+            "type": "string",
+            "description": "Entity tag",
+            "example": "ab68c6df-c129-48c8-a168-31ae128f3843"
+          },
+          "owner": {
+            "type": "object",
+            "description": "Owner of the portfolio version",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "description": "The URI of the owner.",
+                "example": "iam:rde1"
+              },
+              "type": {
+                "type": "string",
+                "description": "The type.",
+                "example": "pno:Person"
+              },
+              "source": {
+                "type": "string",
+                "description": "The URL of the source.",
+                "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dswym.3dx-staging.3ds.com"
+              },
+              "relativePath": {
+                "type": "string",
+                "description": "The relative path to the person.",
+                "example": "/api/user/find/login/rde1"
+              }
+            }
+          }
+        }
+      },
+      "createPortfolioInput": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The name of the portfolio",
+            "example": "Autonomous cars"
+          },
+          "description": {
+            "type": "string",
+            "description": "The purpose of the portfolio",
+            "example": "Portfolio of autonomous cars of the company."
+          },
+          "image": {
+            "type": "string",
+            "description": "A Base64 encoded image. The maximum allowed size of the image is 100kb.",
+            "example": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD//gAyUHJ..."
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "updatePortfolioInput": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The name of the portfolio",
+            "example": "Autonomous cars"
+          },
+          "description": {
+            "type": "string",
+            "description": "The purpose of the portfolio",
+            "example": "Portfolio of autonomous cars of the company."
+          },
+          "image": {
+            "type": "string",
+            "description": "A Base64 encoded image. The maximum allowed size of the image is 100kb.",
+            "example": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD//gAyUHJ..."
+          }
+        }
+      }
+    },
+    "parameters": {
+      "xmlHttpRequestHeader": {
+        "name": "X-Requested-With",
+        "in": "header",
+        "description": "Required header. The value is XMLHttpRequest.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "XMLHttpRequest"
+        }
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Bad request:The format of the request is not correct.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "@code": {
+                  "type": "string",
+                  "description": "Error code : Can be http code or custom app code.",
+                  "example": "400"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Error message",
+                  "example": "Portfolio version uri is missing in you request."
+                }
+              }
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden:This request is not authorized.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "@code": {
+                  "type": "string",
+                  "description": "Error code : Can be http code or custom app code.",
+                  "example": "403"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Error message",
+                  "example": "Operation cannot be done as the Portfolio is not in Private/In work State."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

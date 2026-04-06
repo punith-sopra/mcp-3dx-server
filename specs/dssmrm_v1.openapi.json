@@ -1,0 +1,3155 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Services provided in 3DSpace service for SheetMetal RawMaterial.",
+    "version": "1.0.0",
+    "title": "Sheet Metal Raw Material Web Services.",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_3DSpace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/resources/v1/modeler/dssmrm/dssmrm:SheetMetalRawMaterial/{ID}": {
+      "patch": {
+        "summary": "Modifies the Sheet Metal Raw Material attributes",
+        "description": "Modifies the Sheet Metal Raw Material attributes",
+        "operationId": "PATCH_dssmrm:SheetMetalRawMaterial_ID",
+        "tags": [
+          "dssmrm:SheetMetalRawMaterial"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DS-Change-Authoring-Context",
+            "in": "header",
+            "description": "Its value must be a json containing the key source, identifier, type and relative path. For example: {\"source\":\"$service_owning_changeaction\",relativePath\": \"/resources/v1/modeler/dslc/changeaction/$id\", \"type\":\"Change Action\",\"identifier\":\"$id\"}. WARNING: THE VALUE FORMAT \"pid=xxx\" IS DEPRECATED",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dssmrm:SheetMetalRawMaterial object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dssmrm:SheetMetalRawMaterialMask.Common",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dssmrm:SheetMetalRawMaterialMask.Common",
+                "dssmrm:SheetMetalRawMaterialMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dssmrm_SheetMetalRawMaterial_PATCH"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dssmrm_SheetMetalRawMaterialMask.Common_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dssmrm_SheetMetalRawMaterialMask.Details_WithCEStamp"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Gets a Sheet Metal Raw Material",
+        "description": "Gets a Sheet Metal Raw Material",
+        "operationId": "GET_dssmrm:SheetMetalRawMaterial_ID",
+        "tags": [
+          "dssmrm:SheetMetalRawMaterial"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dssmrm:SheetMetalRawMaterial object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dssmrm:SheetMetalRawMaterialMask.Common",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dssmrm:SheetMetalRawMaterialMask.Common",
+                "dssmrm:SheetMetalRawMaterialMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dssmrm_SheetMetalRawMaterialMask.Common_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dssmrm_SheetMetalRawMaterialMask.Details_WithCEStamp"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a Sheet Metal Raw Material",
+        "description": "Delete a Sheet Metal Raw Material",
+        "operationId": "DELETE_dssmrm:SheetMetalRawMaterial_ID",
+        "tags": [
+          "dssmrm:SheetMetalRawMaterial"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DS-Change-Authoring-Context",
+            "in": "header",
+            "description": "Its value must be a json containing the key source, identifier, type and relative path. For example: {\"source\":\"$service_owning_changeaction\",relativePath\": \"/resources/v1/modeler/dslc/changeaction/$id\", \"type\":\"Change Action\",\"identifier\":\"$id\"}. WARNING: THE VALUE FORMAT \"pid=xxx\" IS DEPRECATED",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dssmrm:SheetMetalRawMaterial object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resources/v1/modeler/dssmrm/dssmrm:SheetMetalRawMaterial/search": {
+      "get": {
+        "summary": "Gets a list of Sheet Metal Raw Materials from indexed search ",
+        "description": "Gets a list of Sheet Metal Raw Materials. By default, returns a total of up to 50 items, can be optionally increased up to 1000 items using $top query parameter. Recommendation: Use $searchStr query parameter for better performances",
+        "operationId": "GETSearch_dssmrm:SheetMetalRawMaterial_Search",
+        "tags": [
+          "dssmrm:SheetMetalRawMaterial"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$searchStr",
+            "in": "query",
+            "description": "Provide a 3DEXPERIENCE search expression with a minimum of two characters. Note that this will run on indexed data only.</br>Example1 searchStr=\"FYD\" OR (modified&gt;\"2021-09-01T00:00:00Z\" AND modified&lt;\"2021-09-23T00:00:00Z\")</br>Example2 searchStr=[ds6wg:XP_VPMReference_Ext.Materiau]:(zinc)</br>Example3 searchStr=\"ARB\" AND modified&lt;\"2019-03-19T08:00:00.000Z\"",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dssmrm:SheetMetalRawMaterialMask.Common",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dssmrm:SheetMetalRawMaterialMask.Common",
+                "dssmrm:SheetMetalRawMaterialMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 1000.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dssmrm_SheetMetalRawMaterialMask.Common_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dssmrm_SheetMetalRawMaterialMask.Details_WithCEStamp"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resources/v1/modeler/dssmrm/dssmrm:SheetMetalRawMaterial": {
+      "post": {
+        "summary": "Creates Sheet Metal Raw Material items.",
+        "description": "Creates Sheet Metal Raw Material item (default values type:Raw_Material_SheetMetal, dimensionType:Mass, thickness:0.003, bendradius:0.004 and kfactor:0.5). Maximum of 20 items can be passed in payload for creation.",
+        "operationId": "dssmrm:SheetMetalRawMaterial",
+        "tags": [
+          "dssmrm:SheetMetalRawMaterial"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DS-Change-Authoring-Context",
+            "in": "header",
+            "description": "Its value must be a json containing the key source, identifier, type and relative path. For example: {\"source\":\"$service_owning_changeaction\",relativePath\": \"/resources/v1/modeler/dslc/changeaction/$id\", \"type\":\"Change Action\",\"identifier\":\"$id\"}. WARNING: THE VALUE FORMAT \"pid=xxx\" IS DEPRECATED",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dssmrm:SheetMetalRawMaterialMask.Common",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dssmrm:SheetMetalRawMaterialMask.Common",
+                "dssmrm:SheetMetalRawMaterialMask.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createSMRawMaterial"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dssmrm_SheetMetalRawMaterialMask.Common_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dssmrm_SheetMetalRawMaterialMask.Details_WithCEStamp"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resources/v1/modeler/dssmrm/dssmrm:SheetMetalRawMaterial/{ID}/dslc:changeControl": {
+      "post": {
+        "summary": "Activate Change Control",
+        "description": "Activate Change Control. Once object is change controlled, a change is required to perform any modification on the object.",
+        "operationId": "dssmrm:SheetMetalRawMaterial_ID_dslc:changeControl",
+        "tags": [
+          "dslc:changeControl"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dssmrm:SheetMetalRawMaterial object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/activateChangeControl"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Gets a Change Control of an dssmrm:SheetMetalRawMaterial",
+        "description": "Gets a Change Control of an dssmrm:SheetMetalRawMaterial",
+        "operationId": "GET_dssmrm:SheetMetalRawMaterial_ID_dslc:changeControl",
+        "tags": [
+          "dslc:changeControl"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dssmrm:SheetMetalRawMaterial object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvlc:ChangeControlMask.Status",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvlc:ChangeControlMask.Status"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvlc_ChangeControlMask.Status"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a Change Control",
+        "description": "Delete a Change Control",
+        "operationId": "DELETE_dssmrm:SheetMetalRawMaterial_ID_dslc:changeControl",
+        "tags": [
+          "dslc:changeControl"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dssmrm:SheetMetalRawMaterial object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resources/v1/modeler/dssmrm/dssmrm:SheetMetalRawMaterial/{ID}/dseng:EnterpriseReference": {
+      "post": {
+        "summary": "Adding Enterprise Reference to an Engineering Item",
+        "description": "Adding Enterprise Reference to an Engineering Item",
+        "operationId": "dssmrm:SheetMetalRawMaterial_ID_dseng:EnterpriseReference",
+        "tags": [
+          "dseng:EnterpriseReference"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dssmrm:SheetMetalRawMaterial object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmveng:EnterpriseReference.Details",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveng:EnterpriseReference.Details"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addEnterpriseReference"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmveng_EnterpriseReference.Details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Modifies the Enterprise Reference of an dssmrm:SheetMetalRawMaterial attributes",
+        "description": "Modifies the Enterprise Reference of an dssmrm:SheetMetalRawMaterial attributes",
+        "operationId": "PATCH_dssmrm:SheetMetalRawMaterial_ID_dseng:EnterpriseReference",
+        "tags": [
+          "dseng:EnterpriseReference"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dssmrm:SheetMetalRawMaterial object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmveng:EnterpriseReference.Details",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveng:EnterpriseReference.Details"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dseng_EnterpriseReference_PATCH"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmveng_EnterpriseReference.Details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Gets a Enterprise Reference of an dssmrm:SheetMetalRawMaterial",
+        "description": "Gets a Enterprise Reference of an dssmrm:SheetMetalRawMaterial",
+        "operationId": "GET_dssmrm:SheetMetalRawMaterial_ID_dseng:EnterpriseReference",
+        "tags": [
+          "dseng:EnterpriseReference"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dssmrm:SheetMetalRawMaterial object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmveng:EnterpriseReference.Details",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveng:EnterpriseReference.Details"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmveng_EnterpriseReference.Details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "dslc_changeControl": {},
+      "dslc_changeControl_PATCH": {},
+      "dseng_EnterpriseReference": {
+        "properties": {}
+      },
+      "dseng_EnterpriseReference_PATCH": {
+        "properties": {
+          "partNumber": {
+            "type": "string",
+            "example": "1234.."
+          }
+        }
+      },
+      "dssmrm_EnterpriseAttributes": {
+        "properties": {
+          "XP_Raw_Material_SheetMetal_Ext.MyDBAttr4": {
+            "$ref": "#/components/schemas/anyValue"
+          }
+        }
+      },
+      "dssmrm_EnterpriseAttributes_PATCH": {
+        "properties": {
+          "XP_Raw_Material_SheetMetal_Ext.MyDBAttr4": {
+            "$ref": "#/components/schemas/anyValue"
+          }
+        }
+      },
+      "dssmrm_SheetMetalRawMaterial": {
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "Raw Material Description"
+          },
+          "title": {
+            "type": "string",
+            "example": "Title of the RM"
+          },
+          "dimensionType": {
+            "type": "string",
+            "example": "Dimension Type"
+          },
+          "thickness": {
+            "type": "string",
+            "example": "Thickness"
+          },
+          "bendradius": {
+            "type": "string",
+            "example": "Bend Radius"
+          },
+          "kfactor": {
+            "type": "string",
+            "example": "KFactor"
+          },
+          "customerAttributes": {
+            "type": "object",
+            "properties": {
+              "DBCustomType.MyDBAttr1": {
+                "$ref": "#/components/schemas/anyValue"
+              },
+              "DBcustomExtension": {
+                "properties": {
+                  "DBcustomExtension.MyDBAttr2": {}
+                }
+              },
+              "DBcustomAttributesGroup": {
+                "properties": {
+                  "DBcustomAttributesGroup.MyDBAttr3": {}
+                }
+              }
+            }
+          },
+          "dslc:changeControl": {
+            "$ref": "#/components/schemas/dslc_changeControl"
+          },
+          "dseng:EnterpriseReference": {
+            "$ref": "#/components/schemas/dseng_EnterpriseReference"
+          },
+          "dssmrm:EnterpriseAttributes": {
+            "$ref": "#/components/schemas/dssmrm_EnterpriseAttributes"
+          }
+        }
+      },
+      "dssmrm_SheetMetalRawMaterial_PATCH": {
+        "required": [
+          "cestamp"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "Raw Material Description"
+          },
+          "title": {
+            "type": "string",
+            "example": "Title of the RM"
+          },
+          "dimensionType": {
+            "type": "string",
+            "example": "Dimension Type"
+          },
+          "thickness": {
+            "type": "string",
+            "example": "Thickness"
+          },
+          "bendradius": {
+            "type": "string",
+            "example": "Bend Radius"
+          },
+          "kfactor": {
+            "type": "string",
+            "example": "KFactor"
+          },
+          "cestamp": {
+            "type": "string",
+            "example": "Timestamp id"
+          },
+          "customerAttributes": {
+            "type": "object",
+            "properties": {
+              "DBCustomType.MyDBAttr1": {
+                "$ref": "#/components/schemas/anyValue"
+              },
+              "DBcustomExtension": {
+                "properties": {
+                  "DBcustomExtension.MyDBAttr2": {}
+                }
+              },
+              "DBcustomAttributesGroup": {
+                "properties": {
+                  "DBcustomAttributesGroup.MyDBAttr3": {}
+                }
+              }
+            }
+          },
+          "dslc:changeControl": {
+            "$ref": "#/components/schemas/dslc_changeControl"
+          },
+          "dseng:EnterpriseReference": {
+            "$ref": "#/components/schemas/dseng_EnterpriseReference"
+          },
+          "dssmrm:EnterpriseAttributes": {
+            "$ref": "#/components/schemas/dssmrm_EnterpriseAttributes"
+          }
+        }
+      },
+      "createSMRawMaterial": {
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "customType"
+                },
+                "attributes": {
+                  "$ref": "#/components/schemas/dssmrm_SheetMetalRawMaterial"
+                }
+              }
+            }
+          }
+        }
+      },
+      "deactivateChangeControl": {
+        "properties": {}
+      },
+      "activateChangeControl": {
+        "properties": {}
+      },
+      "activateChangeControlOnContent": {
+        "properties": {}
+      },
+      "deactivateChangeControlOnContent": {
+        "properties": {}
+      },
+      "addEnterpriseReference": {
+        "properties": {
+          "partNumber": {
+            "type": "string",
+            "example": "my Part Number2"
+          }
+        }
+      },
+      "addGetItems": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "example": [
+          "EE512F4A015FE57B4F940A513C63AA77",
+          "EE5211D2015FF9F94F940A513C63AA77"
+        ]
+      },
+      "addEmpty": {},
+      "addLinks": {
+        "properties": {
+          "fromID": {
+            "type": "string",
+            "example": "EE5211D2015FF9F94F940A513C63AA77"
+          },
+          "toID": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "EE562168015FFCF14F940A513C63AA77"
+            }
+          }
+        }
+      },
+      "addVersions": {
+        "properties": {
+          "versionName": {
+            "type": "string",
+            "example": "A.1"
+          },
+          "parents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "parentID": {
+                  "type": "string",
+                  "example": "EE4FBDEA015FEC3D4F940A513C63AA77"
+                },
+                "scemantic": {
+                  "type": "string",
+                  "example": "fix"
+                }
+              }
+            }
+          }
+        }
+      },
+      "POST_BULK_UPDATE": {
+        "type": "array",
+        "items": {
+          "properties": {
+            "id": {
+              "description": "Physical ID",
+              "type": "string",
+              "example": "CF446630000051C46023F7630004F39F"
+            },
+            "attr1": {
+              "description": "Attribute Name1",
+              "type": "string",
+              "example": "Attribute Value"
+            },
+            "attr2": {
+              "description": "Attribute Name2",
+              "type": "string",
+              "example": "Attribute Value"
+            },
+            "cestamp": {
+              "description": "cestamp ID",
+              "type": "string",
+              "example": "CF446630000051C460123453E8123C"
+            },
+            "dsxxx:xxxEnterpriseAttributes": {
+              "properties": {
+                "attr3": {
+                  "description": "Attribute Name3",
+                  "type": "string",
+                  "example": "Attribute Value"
+                },
+                "attr4": {
+                  "description": "Attribute Name4",
+                  "type": "string",
+                  "example": "Attribute Value"
+                }
+              }
+            },
+            "customerAttributes": {
+              "properties": {
+                "attr5": {
+                  "description": "Attribute Name5",
+                  "type": "string",
+                  "example": "Attribute Value"
+                },
+                "attr6": {
+                  "description": "Attribute Name6",
+                  "type": "string",
+                  "example": "Attribute Value"
+                },
+                "customerAttributeGroups": {
+                  "properties": {
+                    "attr7": {
+                      "description": "Attribute Name7",
+                      "type": "string",
+                      "example": "Attribute Value"
+                    },
+                    "attr8": {
+                      "description": "Attribute Name8",
+                      "type": "string",
+                      "example": "Attribute Value"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "POST_BulkFetch": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "example": [
+          "EE512F4A015FE57B4F940A513C63AA77",
+          "EE5211D2015FF9F94F940A513C63AA77"
+        ]
+      },
+      "dsmvsmrm_EnterpriseAttributes": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "dssmrm:EnterpriseAttributes": {
+                  "properties": {
+                    "Attribute DB Name": {
+                      "$ref": "#/components/schemas/anyValue"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "dssmrm_SheetMetalRawMaterialMask.Details": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "source": {
+                  "type": "string",
+                  "example": "$3DSpace"
+                },
+                "relativePath": {
+                  "type": "string",
+                  "example": "/resources/v1/modeler/dssmrm/dssmrm:SheetMetalRawMaterial/C9AD8256....."
+                },
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "dimensionType": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "thickness": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "bendradius": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "kfactor": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "dseng:EnterpriseReference": {
+                  "properties": {
+                    "partNumber": {
+                      "description": "partNumber manually entered value",
+                      "type": "string",
+                      "example": "partNumber value"
+                    }
+                  }
+                },
+                "dssmrm:EnterpriseAttributes": {
+                  "properties": {
+                    "Attribute DB Name": {
+                      "$ref": "#/components/schemas/anyValue"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dssmrm_SheetMetalRawMaterialMask.Details_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "source": {
+                  "type": "string",
+                  "example": "$3DSpace"
+                },
+                "relativePath": {
+                  "type": "string",
+                  "example": "/resources/v1/modeler/dssmrm/dssmrm:SheetMetalRawMaterial/C9AD8256....."
+                },
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "dimensionType": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "thickness": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "bendradius": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "kfactor": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "dseng:EnterpriseReference": {
+                  "properties": {
+                    "partNumber": {
+                      "description": "partNumber manually entered value",
+                      "type": "string",
+                      "example": "partNumber value"
+                    }
+                  }
+                },
+                "dssmrm:EnterpriseAttributes": {
+                  "properties": {
+                    "Attribute DB Name": {
+                      "$ref": "#/components/schemas/anyValue"
+                    }
+                  }
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvlc_ChangeControlMask.Status": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Change Control Status": {
+                  "type": "string",
+                  "example": "[NONE, ANY, ID OR MANY]"
+                },
+                "Controlling Changes": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "source": {
+                        "description": "source",
+                        "type": "string",
+                        "example": "https://ServerName:443/3DSpace"
+                      },
+                      "type": {
+                        "description": "MetaType or DB Type",
+                        "type": "string",
+                        "example": "dsxxx:xxxItem / VPMReference"
+                      },
+                      "identifier": {
+                        "description": "identifier value",
+                        "type": "string",
+                        "example": "CF446630000051C460123453E8123C"
+                      },
+                      "relativePath": {
+                        "description": "Relative Path",
+                        "type": "string",
+                        "example": "/resources/v1/modeler/dsxxx/dsxxx:xxxItem/$id"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "dsmvlc_ChangeControlMask.Status_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Change Control Status": {
+                  "type": "string",
+                  "example": "[NONE, ANY, ID OR MANY]"
+                },
+                "Controlling Changes": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "source": {
+                        "description": "source",
+                        "type": "string",
+                        "example": "https://ServerName:443/3DSpace"
+                      },
+                      "type": {
+                        "description": "MetaType or DB Type",
+                        "type": "string",
+                        "example": "dsxxx:xxxItem / VPMReference"
+                      },
+                      "identifier": {
+                        "description": "identifier value",
+                        "type": "string",
+                        "example": "CF446630000051C460123453E8123C"
+                      },
+                      "relativePath": {
+                        "description": "Relative Path",
+                        "type": "string",
+                        "example": "/resources/v1/modeler/dsxxx/dsxxx:xxxItem/$id"
+                      }
+                    }
+                  }
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "dsmveng_EnterpriseReference.Details": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "partNumber": {
+                  "type": "string",
+                  "example": "Part Number Value"
+                }
+              }
+            }
+          }
+        }
+      },
+      "dsmveng_EnterpriseReference.Details_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "partNumber": {
+                  "type": "string",
+                  "example": "Part Number Value"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "dssmrm_SheetMetalRawMaterialMask.Common": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "source": {
+                  "type": "string",
+                  "example": "$3DSpace"
+                },
+                "relativePath": {
+                  "type": "string",
+                  "example": "/resources/v1/modeler/dssmrm/dssmrm:SheetMetalRawMaterial/C9AD8256....."
+                },
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "dimensionType": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "thickness": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "bendradius": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "kfactor": {
+                  "type": "string",
+                  "example": "string"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dssmrm_SheetMetalRawMaterialMask.Common_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "source": {
+                  "type": "string",
+                  "example": "$3DSpace"
+                },
+                "relativePath": {
+                  "type": "string",
+                  "example": "/resources/v1/modeler/dssmrm/dssmrm:SheetMetalRawMaterial/C9AD8256....."
+                },
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "dimensionType": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "thickness": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "bendradius": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "kfactor": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultBusMask.public": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultBusMask.public_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultRelMask.public": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "name": {
+                  "description": "Instance name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "description": {
+                  "description": "Instance description value",
+                  "type": "string",
+                  "example": "My description"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultRelMask.public_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "name": {
+                  "description": "Instance name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "description": {
+                  "description": "Instance description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultExtensionMask.public": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultExtensionMask.public_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              }
+            }
+          }
+        }
+      },
+      "anyValue": {
+        "example": "My Value, true, 3.14, [My value 1, My value 2], [12,45,85]",
+        "description": "The value for the attributes (Expand to review type specifications)",
+        "oneOf": [
+          {
+            "type": "string",
+            "example": "my value"
+          },
+          {
+            "type": "integer",
+            "example": "36352"
+          },
+          {
+            "type": "number",
+            "example": "3.14"
+          },
+          {
+            "type": "boolean",
+            "example": "true"
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "[my value 1,my value 2,my value 3]"
+            }
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "example": "[36352,475,6719]"
+            }
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "example": "[3.14,6.28,12.56]"
+            }
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "boolean",
+              "example": "[true,false,false]"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

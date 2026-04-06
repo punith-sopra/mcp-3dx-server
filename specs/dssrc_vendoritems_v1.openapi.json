@@ -1,0 +1,1144 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "x-ds-copyright": "3DEXPERIENCE R2024x (c) 2023 Dassault Systemes.",
+    "title": "Vendor Item Web Services",
+    "description": "Web Services for managing the Vendor Items.",
+    "version": "1.0.2",
+    "x-ds-service": [
+      "MyService"
+    ]
+  },
+  "servers": [
+    {
+      "url": "{Sourcing}/resources/v1/modeler/dssrc",
+      "variables": {
+        "Sourcing": {
+          "default": "https://sourcing.mydomain:443/sourcing"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dssrc-vendorItems/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/vendorItems/search": {
+      "get": {
+        "summary": "Search Vendor Items for the provided input string.",
+        "description": "",
+        "operationId": "searchVendorItems",
+        "tags": [
+          "Vendor Items"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.vendorItems"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "searchStr",
+            "description": "Search Criteria; 2 or more characters required.",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "description": "The number of objects to return; default 50; max 1000",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "description": "The number of objects to skip in case of paginating through the serach results; default 0",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      }
+    },
+    "/vendorItems/{id}": {
+      "get": {
+        "summary": "Get Info of Vendor Item.",
+        "description": "",
+        "operationId": "getVendorItem",
+        "tags": [
+          "Vendor Items"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.vendorItems"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update Vendor Item.",
+        "description": "",
+        "operationId": "updateVendorItem",
+        "tags": [
+          "Vendor Items"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.vendorItems"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/updateVendorItem"
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete Vendor Item.",
+        "description": "",
+        "operationId": "deleteVendorItem",
+        "tags": [
+          "Vendor Items"
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/204"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          }
+        ]
+      }
+    },
+    "/vendorItems": {
+      "post": {
+        "summary": "Create Vendor Items.",
+        "description": "",
+        "operationId": "createVendorItem",
+        "tags": [
+          "Vendor Items"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.vendorItems"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/createVendorItem"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "dssrc.vendoritemcloud": {
+        "$ref": "#/components/x-schemas/dssrc.vendoritemcloud"
+      },
+      "dssrc.vendoritempremise": {
+        "$ref": "#/components/x-schemas/dssrc.vendoritempremise"
+      }
+    },
+    "x-schemas": {
+      "manufacturer-company": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "example": "Company"
+              },
+              "identifier": {
+                "type": "string",
+                "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+                "example": "000000800000000C0000000000000000"
+              }
+            }
+          }
+        ],
+        "required": [
+          "type",
+          "identifier",
+          {}
+        ]
+      },
+      "manufacturer-equivalent-item": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "example": "Manufacturer Equivalent Item"
+              },
+              "identifier": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "required": [
+          "identifier",
+          "source",
+          "type",
+          "relativePath",
+          {}
+        ]
+      },
+      "dssrc.vendoritempremise": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASIC_SCHEMA_FIELD"
+          },
+          {
+            "type": "object",
+            "title": "dssrc.vendoritempremise",
+            "properties": {
+              "manufacturer-company": {
+                "$ref": "#/components/x-schemas/manufacturer-company"
+              },
+              "manufacturer-equivalent-item": {
+                "$ref": "#/components/x-schemas/manufacturer-equivalent-item"
+              }
+            },
+            "required": [
+              "title",
+              "type",
+              "manufacturer-company",
+              "partnumber",
+              "manufacturer-equivalent-item"
+            ]
+          },
+          {}
+        ]
+      },
+      "dssrc.vendoritemcloud": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASIC_SCHEMA_FIELD"
+          },
+          {
+            "type": "object",
+            "title": "dssrc.vendoritemcloud",
+            "properties": {
+              "manufacturer-company": {
+                "$ref": "#/components/x-definitions/MANUFACTURER_COMPANY_CLOUD"
+              },
+              "manufacturer-equivalent-item": {
+                "$ref": "#/components/x-schemas/manufacturer-equivalent-item"
+              }
+            },
+            "required": [
+              "title",
+              "type",
+              "manufacturer-company",
+              "partnumber",
+              "manufacturer-equivalent-item"
+            ]
+          },
+          {}
+        ]
+      },
+      "updateVendorItem": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "description": "Vendor Item Title.",
+                "example": "Drone Vendor Item",
+                "default": "",
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "unitofmeasure": {
+                "description": "Unit of Measure Info",
+                "format": "String",
+                "example": "IN (inch)",
+                "default": "",
+                "type": "string",
+                "readOnly": false
+              },
+              "currency": {
+                "description": "Currency of the Vendor Item",
+                "format": "String",
+                "example": "Dollar",
+                "default": "",
+                "type": "string"
+              },
+              "partsource": {
+                "description": "Vendor Item Part Source",
+                "example": "3ds part source",
+                "default": "",
+                "type": "string"
+              },
+              "partsourceurl": {
+                "description": "Vendor Item Part Source URL",
+                "example": "www.3ds.com",
+                "default": "",
+                "type": "string"
+              },
+              "partnumber": {
+                "description": "Vendor Item Part Number",
+                "example": "ABC345",
+                "default": "",
+                "type": "string"
+              },
+              "standardpackagequantity": {
+                "description": "Standard Package Quantity",
+                "example": "2",
+                "default": "",
+                "type": "Number"
+              },
+              "catalogpricesource": {
+                "description": "Catalog Price Source",
+                "example": "3ds",
+                "default": "",
+                "type": "String"
+              },
+              "catalogprice": {
+                "description": "Catalog Price",
+                "example": "10",
+                "default": "",
+                "type": "Number"
+              }
+            }
+          },
+          {}
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-EMPTY": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {}
+        ]
+      },
+      "BASICS_ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "MANUFACTURER_COMPANY_CLOUD": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://3DEXPERIENCE_3DSupplyNetwork",
+            "default": ""
+          },
+          "type": {
+            "type": "string",
+            "example": "SupplierCompany"
+          },
+          "id": {
+            "type": "string",
+            "description": "Manufacturer UUID",
+            "example": "uuid:d4edef75-1441-4aee-ac03-65b770602415"
+          },
+          "identifier": {
+            "type": "string",
+            "description": "Manufacturer UUID",
+            "example": "uuid:d4edef75-1441-4aee-ac03-65b770602415"
+          },
+          "relativePath": {
+            "type": "string",
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/3drdfpersist/resources/v1/modeler/dsvnp/dsvnp:SupplierCompany/uuid:d4edef75-1441-4aee-ac03-65b770602415"
+          }
+        },
+        "required": [
+          "source",
+          "type",
+          "identifier",
+          "relativePath"
+        ]
+      },
+      "BASIC_SCHEMA_FIELD": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "readOnly": true
+          },
+          "type": {
+            "type": "string",
+            "example": "Vendor Item",
+            "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+          },
+          "identifier": {
+            "type": "string",
+            "readOnly": true
+          },
+          "title": {
+            "description": "Vendor Item Title.",
+            "example": "Drone Vendor Item",
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "readOnly": true
+          },
+          "revision": {
+            "type": "string",
+            "readOnly": true
+          },
+          "description": {
+            "type": "string"
+          },
+          "originated": {
+            "format": "date-time",
+            "example": "2021-01-01T07:24:11.000Z",
+            "type": "string",
+            "readOnly": true
+          },
+          "owner": {
+            "description": "The owner of the Vendor Item",
+            "type": "string",
+            "readOnly": true
+          },
+          "modified": {
+            "format": "date-time",
+            "example": "2021-01-01T07:24:11.000Z",
+            "type": "string",
+            "readOnly": true
+          },
+          "unitofmeasure": {
+            "description": "Unit of Measure Info",
+            "format": "String",
+            "example": "Inch",
+            "default": "",
+            "type": "string",
+            "readOnly": false
+          },
+          "currency": {
+            "description": "Currency of the Vendor Item",
+            "format": "String",
+            "example": "Dollar",
+            "default": "",
+            "type": "string"
+          },
+          "partsource": {
+            "description": "Vendor Item Part Source",
+            "example": "3ds part source",
+            "default": "",
+            "type": "string"
+          },
+          "partsourceurl": {
+            "description": "Vendor Item Part Source URL",
+            "example": "www.3ds.com",
+            "default": "",
+            "type": "string"
+          },
+          "partnumber": {
+            "description": "Vendor Item Part Number",
+            "example": "ABC345",
+            "default": "",
+            "type": "string"
+          },
+          "standardpackagequantity": {
+            "description": "Standard Package Quantity",
+            "example": "2",
+            "default": "",
+            "type": "Number"
+          },
+          "catalogpricesource": {
+            "description": "Catalog Price Source",
+            "example": "3ds",
+            "default": "",
+            "type": "String"
+          },
+          "catalogprice": {
+            "description": "Catalog Price",
+            "example": "10",
+            "default": "",
+            "type": "Number"
+          }
+        }
+      },
+      "PATCH_SUB_RESOURCE_ACTION": {
+        "type": "object",
+        "properties": {
+          "op": {
+            "description": "Specify the sub-resource update action. See 6W Web Service Principles: Data Object Updates",
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "add",
+              "remove"
+            ]
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://3dspace.mydomain:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "object",
+            "properties": {
+              "success": {
+                "description": "Reflects true to indicate successful request.",
+                "example": true,
+                "type": "boolean"
+              },
+              "status": {
+                "description": "The HTTP response code.",
+                "example": 200,
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "successful_delete": {
+        "description": "The response data for successful delete request.",
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "object",
+            "properties": {
+              "success": {
+                "description": "Reflects true to indicate successful request.",
+                "example": true,
+                "type": "boolean"
+              },
+              "status": {
+                "description": "The HTTP response code.",
+                "example": 204,
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "Unique identifier of the error type.",
+            "example": "errors:3dx:invalidRequest",
+            "type": "string"
+          },
+          "status": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "title": {
+            "description": "Short Description of the Error.",
+            "example": "Bad Request",
+            "type": "string"
+          },
+          "detail": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "Unique identifier of the error type.",
+            "example": "errors:3dx:invalidRequest",
+            "type": "string"
+          },
+          "status": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "title": {
+            "description": "Short Description of the Error.",
+            "example": "Bad Request",
+            "type": "string"
+          },
+          "detail": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "Unique identifier of the error type.",
+            "example": "errors:3dx:invalidRequest",
+            "type": "string"
+          },
+          "status": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "title": {
+            "description": "Short Description of the Error.",
+            "example": "Bad Request",
+            "type": "string"
+          },
+          "detail": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "Unique identifier of the error type.",
+            "example": "errors:3dx:invalidRequest",
+            "type": "string"
+          },
+          "status": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "title": {
+            "description": "Short Description of the Error.",
+            "example": "Bad Request",
+            "type": "string"
+          },
+          "detail": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "204": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-dssrc.vendorItems": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/x-schemas/dssrc.vendoritemcloud",
+                    "title": "Vendor items response from cloud"
+                  },
+                  {
+                    "$ref": "#/components/x-schemas/dssrc.vendoritempremise",
+                    "title": "Vendor items response from premise"
+                  }
+                ]
+              }
+            },
+            "examples": {
+              "On-Cloud": {
+                "$ref": "#/components/examples/onCloudResponse"
+              },
+              "On-Premise": {
+                "$ref": "#/components/examples/onPremiseResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "updateVendorItem": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/updateVendorItem"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "createVendorItem": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/x-schemas/dssrc.vendoritemcloud",
+                    "title": "Vendor items response from cloud"
+                  },
+                  {
+                    "$ref": "#/components/x-schemas/dssrc.vendoritempremise",
+                    "title": "Vendor items response from premise"
+                  }
+                ]
+              }
+            },
+            "examples": {
+              "On-Cloud": {
+                "$ref": "#/components/examples/onCloudPayload"
+              },
+              "On-Premise": {
+                "$ref": "#/components/examples/onPremisePayload"
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "example": "en-US",
+        "description": "Identifies the locale for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "X-Requested-With": {
+        "name": "X-Requested-With",
+        "example": "XMLHttpRequest",
+        "description": "Required header for non GET operations; use value XMLHttpRequest.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "examples": {
+      "onCloudPayload": {
+        "value": {
+          "data": [
+            {
+              "type": "Vendor Item",
+              "title": "Drone Vendor Item",
+              "description": "string",
+              "unitofmeasure": "IN (inch)",
+              "currency": "Dollar",
+              "partsource": "3ds part source",
+              "partsourceurl": "www.3ds.com",
+              "partnumber": "ABC345",
+              "standardpackagequantity": 2,
+              "catalogpricesource": "3ds",
+              "catalogprice": 10,
+              "manufacturer-company": {
+                "source": "https://3DEXPERIENCE_3DSupplyNetwork",
+                "type": "SupplierCompany",
+                "id": "uuid:d4edef75-1441-4aee-ac03-65b770602415",
+                "identifier": "uuid:d4edef75-1441-4aee-ac03-65b770602415",
+                "relativePath": "/3drdfpersist/resources/v1/modeler/dsvnp/dsvnp:SupplierCompany/uuid:d4edef75-1441-4aee-ac03-65b770602415"
+              },
+              "manufacturer-equivalent-item": {
+                "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                "type": "Manufacturer Equivalent Item",
+                "id": "19F882564FE2380066D562ED00000005",
+                "identifier": "19F882564FE2380066D562ED00000005",
+                "relativePath": "/resources/v1/modeler/dssrc/dssrc:ManufacturerEquivalentItems/19F882564FE2380066D562ED00000005"
+              }
+            }
+          ]
+        }
+      },
+      "onPremisePayload": {
+        "value": {
+          "data": [
+            {
+              "type": "Vendor Item",
+              "title": "Drone Vendor Item",
+              "description": "string",
+              "unitofmeasure": "IN (inch)",
+              "currency": "Dollar",
+              "partsource": "3ds part source",
+              "partsourceurl": "www.3ds.com",
+              "partnumber": "ABC345",
+              "standardpackagequantity": 2,
+              "catalogpricesource": "3ds",
+              "catalogprice": 10,
+              "manufacturer-company": {
+                "type": "Company",
+                "id": "000000800000000C0000000000000000",
+                "identifier": "000000800000000C0000000000000000"
+              },
+              "manufacturer-equivalent-item": {
+                "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                "type": "Manufacturer Equivalent Item",
+                "id": "19F882564FE2380066D562ED00000005",
+                "identifier": "19F882564FE2380066D562ED00000005",
+                "relativePath": "/resources/v1/modeler/dssrc/dssrc:ManufacturerEquivalentItems/19F882564FE2380066D562ED00000005"
+              }
+            }
+          ]
+        }
+      },
+      "onCloudResponse": {
+        "value": {
+          "data": [
+            {
+              "identifier": "000000800000000C0000000000000000",
+              "source": "https://3dspace.mydomain:443/3dspace",
+              "relativePath": "/resources/v1/modeler/dssrc/vendorItems/000000800000000C0000000000000000",
+              "id": "000000800000000C0000000000000000",
+              "type": "Vendor Item",
+              "title": "Drone Vendor Item",
+              "state": "string",
+              "name": "string",
+              "revision": "string",
+              "description": "string",
+              "originated": "2021-01-01T07:24:11.000Z",
+              "owner": "string",
+              "modified": "2021-01-01T07:24:11.000Z",
+              "unitofmeasure": "IN (inch)",
+              "currency": "Dollar",
+              "partsource": "3ds part source",
+              "partsourceurl": "www.3ds.com",
+              "partnumber": "ABC345",
+              "standardpackagequantity": 2,
+              "catalogpricesource": "3ds",
+              "catalogprice": 10,
+              "manufacturer-company": {
+                "source": "https://3DEXPERIENCE_3DSupplyNetwork",
+                "type": "SupplierCompany",
+                "id": "uuid:d4edef75-1441-4aee-ac03-65b770602415",
+                "identifier": "uuid:d4edef75-1441-4aee-ac03-65b770602415",
+                "relativePath": "/3drdfpersist/resources/v1/modeler/dsvnp/dsvnp:SupplierCompany/uuid:d4edef75-1441-4aee-ac03-65b770602415"
+              },
+              "manufacturer-equivalent-item": {
+                "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                "type": "Manufacturer Equivalent Item",
+                "id": "19F882564FE2380066D562ED00000005",
+                "identifier": "19F882564FE2380066D562ED00000005",
+                "relativePath": "/resources/v1/modeler/dssrc/dssrc:ManufacturerEquivalentItems/19F882564FE2380066D562ED00000005"
+              }
+            }
+          ]
+        }
+      },
+      "onPremiseResponse": {
+        "value": {
+          "data": [
+            {
+              "identifier": "000000800000000C0000000000000000",
+              "source": "https://3dspace.mydomain:443/3dspace",
+              "relativePath": "/resources/v1/modeler/dssrc/vendorItems/000000800000000C0000000000000000",
+              "id": "000000800000000C0000000000000000",
+              "type": "Vendor Item",
+              "title": "Drone Vendor Item",
+              "state": "string",
+              "name": "string",
+              "revision": "string",
+              "description": "string",
+              "originated": "2021-01-01T07:24:11.000Z",
+              "owner": "string",
+              "modified": "2021-01-01T07:24:11.000Z",
+              "unitofmeasure": "IN (inch)",
+              "currency": "Dollar",
+              "partsource": "3ds part source",
+              "partsourceurl": "www.3ds.com",
+              "partnumber": "ABC345",
+              "standardpackagequantity": 2,
+              "catalogpricesource": "3ds",
+              "catalogprice": 10,
+              "manufacturer-company": {
+                "type": "Company",
+                "id": "000000800000000C0000000000000000",
+                "identifier": "000000800000000C0000000000000000"
+              },
+              "manufacturer-equivalent-item": {
+                "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                "type": "Manufacturer Equivalent Item",
+                "id": "19F882564FE2380066D562ED00000005",
+                "identifier": "19F882564FE2380066D562ED00000005",
+                "relativePath": "/resources/v1/modeler/dssrc/dssrc:ManufacturerEquivalentItems/19F882564FE2380066D562ED00000005"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

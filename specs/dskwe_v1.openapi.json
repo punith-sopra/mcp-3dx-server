@@ -1,0 +1,1380 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "Web Services for managing the Knowledge Engineering modeler.",
+    "version": "1.0.1",
+    "title": "Knowledge Engineering Web Services.",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dskwe",
+      "variables": {
+        "3DSpace": {
+          "default": "https://my3DEXPERIENCE-3DSpace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dskwe/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dskwe/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/dskwe:ComponentFamily/locate": {
+      "post": {
+        "summary": "Navigates to Component Family Id from connected Generic Model / Resolved Item physical ID",
+        "description": "Navigates to Component Family Id from connected Generic Model / Resolved Item physical ID. Maximum 100 objects in payload can be navigated.",
+        "operationId": "LOCATE_dskwe:ComponentFamily_LOCATE",
+        "tags": [
+          "dskwe:ComponentFamily"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/navigateComponentFamily"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "totalItems": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "7FE982569CE620006544826E000676E9",
+                            "description": "The Physical ID of the Generic Model or Component Family Item for which locate is called."
+                          },
+                          "ComponentFamily": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "example": "649F032E0000355C6542F4480000ED8C",
+                                "description": "The Physical ID of the Component Family."
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dskwe:ComponentFamily/{ID}": {
+      "get": {
+        "summary": "Gets a Component family root",
+        "description": "Gets a Component family root",
+        "operationId": "GET_dskwe:ComponentFamily_ID",
+        "tags": [
+          "dskwe:ComponentFamily"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dskwe:ComponentFamily object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvkwe:ComponentFamilyMask.default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvkwe:ComponentFamilyMask.default"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvkwe_ComponentFamilyMask.default_WithCEStamp",
+                      "title": "Component Family information"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dskwe:ComponentFamily/search": {
+      "get": {
+        "summary": "Gets a list of Component family roots from indexed search ",
+        "description": "Gets a list of Component family roots. By default, returns a total of up to 50 items, can be optionally increased up to 1000 items using $top query parameter. Recommendation: Use $searchStr query parameter for better performances",
+        "operationId": "GETSearch_dskwe:ComponentFamily_Search",
+        "tags": [
+          "dskwe:ComponentFamily"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$searchStr",
+            "in": "query",
+            "description": "Provide a 3DEXPERIENCE search expression with a minimum of two characters. Note that this will run on indexed data only.</br>Example1 searchStr=\"FYD\" OR (modified&gt;\"2021-09-01T00:00:00Z\" AND modified&lt;\"2021-09-23T00:00:00Z\")</br>Example2 searchStr=[ds6wg:XP_VPMReference_Ext.Materiau]:(zinc)</br>Example3 searchStr=\"ARB\" AND modified&lt;\"2019-03-19T08:00:00.000Z\"",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvkwe:ComponentFamilyMask.default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvkwe:ComponentFamilyMask.default"
+              ]
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 1000.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvkwe_ComponentFamilyMask.default_WithCEStamp",
+                      "title": "Component Family information"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dskwe:KnowledgeVPMRepresentation/{ID}": {
+      "get": {
+        "summary": "Gets a Knowledgware Representation Reference",
+        "description": "Gets a Knowledgware Representation Reference model",
+        "operationId": "GET_dskwe:KnowledgeVPMRepresentation_ID",
+        "tags": [
+          "dskwe:KnowledgeVPMRepresentation"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dskwe:KnowledgeVPMRepresentation object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvkwe:KnowledgeVPMRepresentation.default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvkwe:KnowledgeVPMRepresentation.default",
+                "dsmvkwe:KnowledgeVPMRepresentation.ParentEngItems"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvkwe_KnowledgeVPMRepresentation.default_WithCEStamp",
+                      "title": "Knowledgeware Representation reference information"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvkwe_KnowledgeVPMRepresentation.ParentEngItems_WithCEStamp",
+                      "title": "Knowledgeware Representaion reference information with Parent Engineering Item details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "navigateComponentFamily": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "7FE982569CE620006544826E000676E9",
+              "description": "The Physical ID of the Generic Model or the Component Family Item for which locate is called"
+            },
+            "relativePath": {
+              "type": "string",
+              "example": "/resources/v1/modeler/dseng/dseng:EngItem/7FE982569CE620006544826E000676E9",
+              "description": "Uri of the item"
+            },
+            "type": {
+              "type": "string",
+              "example": "VPMReference",
+              "description": "Entity type"
+            },
+            "Source": {
+              "type": "string",
+              "example": "https://vdevpril881dsy.com/3DSpace",
+              "description": "Source of the item"
+            },
+            "InputType": {
+              "type": "string",
+              "example": "GenericModel",
+              "description": "Optional Input : 1) GenericModel, 2) ComponentFamilyItem. The type of Input object to help optimize  the search. If not set, the locate API navigates to Component Family ID, first by GenericModel connection and then by Component Family Item connection."
+            }
+          }
+        }
+      },
+      "dsmvkwe_ComponentFamilyMask.default": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2021-10-19T10:58:01Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2021-10-11T10:58:01Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "NumberOfComponentFamilyItems": {
+                  "description": "To get the number of Items of Component Family",
+                  "type": "string",
+                  "example": "string"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvkwe_ComponentFamilyMask.default_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2021-10-19T10:58:01Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2021-10-11T10:58:01Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "NumberOfComponentFamilyItems": {
+                  "description": "To get the number of Items of Component Family",
+                  "type": "string",
+                  "example": "string"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvkwe_KnowledgeVPMRepresentation.ParentEngItems": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2021-10-19T10:58:01Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2021-10-11T10:58:01Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "Parent": {
+                  "type": "object",
+                  "properties": {
+                    "totalItems": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "referencedObjects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "source": {
+                            "description": "source",
+                            "type": "string",
+                            "example": "$3DSpace"
+                          },
+                          "type": {
+                            "description": "type",
+                            "type": "string",
+                            "example": "VPMReference"
+                          },
+                          "id": {
+                            "description": "identifier",
+                            "type": "string",
+                            "example": "EE562168015FFCF14F940A513C63AA77"
+                          },
+                          "relativePath": {
+                            "description": "relativePath",
+                            "type": "string",
+                            "example": "resource/v1/ds3sh/ds3sh:3DShape/EE562168015FFCF14F940A513C63AA77"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvkwe_KnowledgeVPMRepresentation.ParentEngItems_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2021-10-19T10:58:01Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2021-10-11T10:58:01Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "Parent": {
+                  "type": "object",
+                  "properties": {
+                    "totalItems": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "referencedObjects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "source": {
+                            "description": "source",
+                            "type": "string",
+                            "example": "$3DSpace"
+                          },
+                          "type": {
+                            "description": "type",
+                            "type": "string",
+                            "example": "VPMReference"
+                          },
+                          "id": {
+                            "description": "identifier",
+                            "type": "string",
+                            "example": "EE562168015FFCF14F940A513C63AA77"
+                          },
+                          "relativePath": {
+                            "description": "relativePath",
+                            "type": "string",
+                            "example": "resource/v1/ds3sh/ds3sh:3DShape/EE562168015FFCF14F940A513C63AA77"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvkwe_KnowledgeVPMRepresentation.default": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2021-10-19T10:58:01Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2021-10-11T10:58:01Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvkwe_KnowledgeVPMRepresentation.default_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2021-10-19T10:58:01Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2021-10-11T10:58:01Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "anyValue": {
+        "example": "My Value, true, 3.14, [My value 1, My value 2], [12,45,85]",
+        "description": "The value for the attributes (Expand to review type specifications)",
+        "oneOf": [
+          {
+            "type": "string",
+            "example": "my value"
+          },
+          {
+            "type": "integer",
+            "example": "36352"
+          },
+          {
+            "type": "number",
+            "example": "3.14"
+          },
+          {
+            "type": "boolean",
+            "example": "true"
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "[my value 1,my value 2,my value 3]"
+            }
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "example": "[36352,475,6719]"
+            }
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "example": "[3.14,6.28,12.56]"
+            }
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "boolean",
+              "example": "[true,false,false]"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

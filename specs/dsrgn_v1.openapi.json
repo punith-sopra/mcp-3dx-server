@@ -1,0 +1,2383 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "x-ds-copyright": "3DEXPERIENCE R2026x (c) 2025 Dassault Systemes.",
+    "title": "Report Generation Web Services",
+    "description": "REST Services for managing the Report Generation modeler.",
+    "version": "1.1.0",
+    "x-ds-service": [
+      "3DSpace"
+    ]
+  },
+  "tags": [
+    {
+      "name": "Report",
+      "description": "Operations on Report data"
+    },
+    {
+      "name": "Template",
+      "description": "Operations on Report Template data"
+    },
+    {
+      "name": "Output Format",
+      "description": "Operations on Output Format data"
+    }
+  ],
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dsrgn",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3DSpace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsrgn/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/outputformat": {
+      "post": {
+        "operationId": "post-output-formats",
+        "summary": "Create Output Formats",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/OutputFormatCreationRequestBody"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OutputFormatCreationSuccessResponse"
+          },
+          "207": {
+            "$ref": "#/components/responses/OutputFormatCreationPartialSuccessResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/SimpleInvalidRequestResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/SimpleAuthenticationIssueResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/SimpleInvalidCSRFTokenResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ManagedObjectCreationServerErrorResponse"
+          }
+        },
+        "tags": [
+          "Output Format"
+        ]
+      }
+    },
+    "/outputformat/{id}": {
+      "get": {
+        "operationId": "get-output-format-by-id",
+        "summary": "Get the Output Format using its id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/IdPathParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OutputFormatSuccessResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/SimpleInvalidRequestResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/SimpleAuthenticationIssueResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ManagedObjectIdServerErrorResponse"
+          }
+        },
+        "tags": [
+          "Output Format"
+        ]
+      },
+      "patch": {
+        "operationId": "patch-output-format-by-id",
+        "summary": "Update the Output Format",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/IdPathParam"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/OutputFormatUpdateRequestBody"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OutputFormatSuccessResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/SimpleInvalidRequestResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/SimpleAuthenticationIssueResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/SimpleInvalidCSRFTokenResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ManagedObjectIdServerErrorResponse"
+          }
+        },
+        "tags": [
+          "Output Format"
+        ]
+      },
+      "delete": {
+        "operationId": "delete-output-format-by-id",
+        "summary": "Delete Output Format",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/IdPathParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SimpleSuccessResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/SimpleInvalidRequestResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/SimpleAuthenticationIssueResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/SimpleInvalidCSRFTokenResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ManagedObjectIdServerErrorResponse"
+          }
+        },
+        "tags": [
+          "Output Format"
+        ]
+      }
+    },
+    "/outputformat/library": {
+      "get": {
+        "operationId": "get-output-format-library",
+        "summary": "Get the Output Format available library Output Formats",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OutputFormatLibrarySuccessResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/SimpleAuthenticationIssueResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/SimpleServerErrorResponse"
+          }
+        },
+        "tags": [
+          "Output Format"
+        ]
+      }
+    },
+    "/report": {
+      "post": {
+        "operationId": "post-reports",
+        "summary": "Create Reports",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ReportCreationRequestBody"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ReportCreationSuccessResponse"
+          },
+          "207": {
+            "$ref": "#/components/responses/ReportCreationPartialSuccessResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ReportInvalidRequestResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/SimpleAuthenticationIssueResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/SimpleInvalidCSRFTokenResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ManagedObjectCreationServerErrorResponse"
+          }
+        },
+        "tags": [
+          "Report"
+        ]
+      }
+    },
+    "/report/{id}": {
+      "get": {
+        "operationId": "get-report-by-id",
+        "summary": "Gets the Report information",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdPathParam"
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ReportSuccessResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ReportInvalidRequestResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/SimpleAuthenticationIssueResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ManagedObjectIdServerErrorResponse"
+          }
+        },
+        "tags": [
+          "Report"
+        ]
+      },
+      "patch": {
+        "operationId": "patch-report-by-id",
+        "summary": "Update the report information with given content",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdPathParam"
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ReportUpdateRequestBody"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ReportSuccessResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ReportInvalidRequestResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/SimpleAuthenticationIssueResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/SimpleInvalidCSRFTokenResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ManagedObjectIdServerErrorResponse"
+          }
+        },
+        "tags": [
+          "Report"
+        ]
+      },
+      "delete": {
+        "operationId": "del-report-by-id",
+        "summary": "Delete a report using its id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdPathParam"
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SimpleSuccessResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ReportInvalidRequestResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/SimpleAuthenticationIssueResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/SimpleInvalidCSRFTokenResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ManagedObjectIdServerErrorResponse"
+          }
+        },
+        "tags": [
+          "Report"
+        ]
+      }
+    },
+    "/report/generate": {
+      "post": {
+        "operationId": "post-report-generate",
+        "summary": "Generate the reports which parameters are in body",
+        "description": "For performance concern, a limit of 5 concurrent generations is applied. AcceptLanguage header can be used to set the language used for report generation.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/WithChanges"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ReportIdentificationListRequestBody"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ReportGenerationSuccessResponse"
+          },
+          "207": {
+            "$ref": "#/components/responses/ReportGenerationPartialSuccessResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ReportInvalidRequestResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/SimpleAuthenticationIssueResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/SimpleInvalidCSRFTokenResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ManagedObjectIdServerErrorResponse"
+          }
+        },
+        "tags": [
+          "Report"
+        ]
+      }
+    },
+    "/report/generation/status": {
+      "post": {
+        "operationId": "post-generation-status",
+        "summary": "Gives the generation status for reports specified in request body",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ReportIdentificationListRequestBody"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ReportGenerationStatusSuccessResponse"
+          },
+          "207": {
+            "$ref": "#/components/responses/ReportGenerationStatusPartialSuccessResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ReportInvalidRequestResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/SimpleAuthenticationIssueResponse"
+          },
+          "429": {
+            "$ref": "#/components/responses/SimpleTooManyRequestIssue"
+          },
+          "500": {
+            "$ref": "#/components/responses/ManagedObjectIdServerErrorResponse"
+          }
+        },
+        "tags": [
+          "Report"
+        ]
+      }
+    },
+    "/template": {
+      "post": {
+        "operationId": "post-templates",
+        "summary": "Create Report Templates",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/TemplateCreationRequestBody"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/TemplateCreationSuccessResponse"
+          },
+          "207": {
+            "$ref": "#/components/responses/TemplateCreationPartialSuccessResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/SimpleInvalidRequestResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/SimpleAuthenticationIssueResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/SimpleInvalidCSRFTokenResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ManagedObjectCreationServerErrorResponse"
+          }
+        },
+        "tags": [
+          "Template"
+        ]
+      }
+    },
+    "/template/{id}": {
+      "get": {
+        "operationId": "get-template-by-id",
+        "summary": "Get the Report Template using its id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/IdPathParam"
+          },
+          {
+            "$ref": "#/components/parameters/ModelCompression"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/TemplateSuccessResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/SimpleInvalidRequestResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/SimpleAuthenticationIssueResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ManagedObjectIdServerErrorResponse"
+          }
+        },
+        "tags": [
+          "Template"
+        ]
+      },
+      "patch": {
+        "operationId": "patch-template-by-id",
+        "summary": "Update the Report Template",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/IdPathParam"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/TemplateUpdateRequestBody"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/TemplateSuccessResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/SimpleInvalidRequestResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/SimpleAuthenticationIssueResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/SimpleInvalidCSRFTokenResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ManagedObjectIdServerErrorResponse"
+          }
+        },
+        "tags": [
+          "Template"
+        ]
+      },
+      "delete": {
+        "operationId": "delete-template-by-id",
+        "summary": "Delete Report Template",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/IdPathParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SimpleSuccessResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/SimpleInvalidRequestResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/SimpleAuthenticationIssueResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/SimpleInvalidCSRFTokenResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ManagedObjectIdServerErrorResponse"
+          }
+        },
+        "tags": [
+          "Template"
+        ]
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "AcceptLanguage": {
+        "in": "header",
+        "name": "Accept-Language",
+        "description": "The language to use (default will be session language)",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "example": "en-US"
+      },
+      "ENO_CSRF_TOKEN": {
+        "in": "header",
+        "name": "ENO_CSRF_TOKEN",
+        "description": "The CSFR Token to use for this request can be generated by URL: <3DSpaceBaseURL>/resources/v1/application/CSRF",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "example": "D3KG-QXIU-MTS9-6490-STAL-9WTZ-BQBU-E5Y1"
+      },
+      "SecurityContext": {
+        "in": "header",
+        "name": "SecurityContext",
+        "description": "The Security Context to use for this request.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "example": "ctx::VPLMProjectLeader.MyCompany.3DS Collab Space"
+      },
+      "IdPathParam": {
+        "in": "path",
+        "name": "id",
+        "description": "A physicalid that identifies an object to manipulate",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "F5FFB056AE1E000063483FBD0005D65C"
+        }
+      },
+      "WithChanges": {
+        "in": "query",
+        "name": "withChanges",
+        "description": "To produce change metadata information from a report to another",
+        "required": false,
+        "schema": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "ModelCompression": {
+        "in": "query",
+        "name": "modelCompression",
+        "description": "The expected format of the reportModelData attribute in exported data",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "gzip+b64",
+            "none"
+          ],
+          "default": "gzip+b64"
+        }
+      }
+    },
+    "requestBodies": {
+      "OutputFormatCreationRequestBody": {
+        "description": "Use libraryFilename for sample output format otherwise use Document REST API to push a custom file.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OutputFormatCreation"
+              }
+            }
+          }
+        }
+      },
+      "OutputFormatUpdateRequestBody": {
+        "description": "Properties to modify.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/OutputFormatUpdate"
+            }
+          }
+        }
+      },
+      "ReportCreationRequestBody": {
+        "description": "It is mandatory to provide input values for each parameter of the template.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ReportCreation"
+              }
+            }
+          }
+        }
+      },
+      "ReportUpdateRequestBody": {
+        "description": "Properties to modify.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ReportUpdate"
+            }
+          }
+        }
+      },
+      "ReportIdentificationListRequestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ReportPhysicalId"
+              }
+            }
+          }
+        }
+      },
+      "TemplateCreationRequestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TemplateCreation"
+              }
+            }
+          }
+        }
+      },
+      "TemplateUpdateRequestBody": {
+        "description": "Properties to modify.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TemplateUpdate"
+            }
+          }
+        }
+      },
+      "TemplateIdentificationRequestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TemplatePhysicalId"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "OutputFormatCreationSuccessResponse": {
+        "description": "Response sent when the request was completely executed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "outputFormats": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OutputFormat"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "OutputFormatCreationPartialSuccessResponse": {
+        "description": "Response sent when the request was partially executed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/ManagedObjectCreationPartialSuccess"
+                },
+                "outputFormats": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OutputFormat"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "SimpleSuccessResponse": {
+        "description": "Response sent when the request was successfully executed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ReportCreationSuccessResponse": {
+        "description": "Response sent when the request was completely executed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "reports": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Report"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ReportCreationPartialSuccessResponse": {
+        "description": "Response sent when the request was partially executed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/ManagedObjectCreationPartialSuccess"
+                },
+                "reports": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Report"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ReportSuccessResponse": {
+        "description": "Response sent when the request was successfully executed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "reports": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Report"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "TemplateCreationSuccessResponse": {
+        "description": "Response sent when the request was completely executed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "templates": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Template"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "TemplateCreationPartialSuccessResponse": {
+        "description": "Response sent when the request was partially executed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/ManagedObjectCreationPartialSuccess"
+                },
+                "templates": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Template"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "TemplateSuccessResponse": {
+        "description": "Response sent when the request was successfully executed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "templates": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Template"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "OutputFormatSuccessResponse": {
+        "description": "Response sent when the request was successfully executed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "outputFormats": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OutputFormat"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "OutputFormatLibrarySuccessResponse": {
+        "description": "Response sent when the request was successfully executed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "outputFormats": {
+                  "$ref": "#/components/schemas/OutputFormatLibraryFileNames"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ReportGenerationStatusSuccessResponse": {
+        "description": "Response sent when the request was completely executed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "reports": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportGenerationStatus"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ReportGenerationStatusPartialSuccessResponse": {
+        "description": "Response sent when the request was partially executed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/ManagedObjectIdPartialSuccess"
+                },
+                "reports": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportGenerationStatus"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ReportGenerationSuccessResponse": {
+        "description": "Response sent when the request was completely executed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "reports": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Report"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ReportGenerationPartialSuccessResponse": {
+        "description": "Response sent when the request was partially executed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/ManagedObjectIdPartialSuccess"
+                },
+                "reports": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Report"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ReportInvalidRequestResponse": {
+        "description": "The request is not correct",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/BasicStatus400"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "oneOf": [
+                            {
+                              "$ref": "#/components/schemas/MessageInvalidId"
+                            },
+                            {
+                              "$ref": "#/components/schemas/MessageInvalidKeyInObject"
+                            },
+                            {
+                              "$ref": "#/components/schemas/MessageRequestBodyExpectation"
+                            },
+                            {
+                              "$ref": "#/components/schemas/MessageTooManyReports"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "SimpleInvalidRequestResponse": {
+        "description": "The request is not correct",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/BasicStatus400"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "oneOf": [
+                            {
+                              "$ref": "#/components/schemas/MessageInvalidId"
+                            },
+                            {
+                              "$ref": "#/components/schemas/MessageInvalidKeyInObject"
+                            },
+                            {
+                              "$ref": "#/components/schemas/MessageRequestBodyExpectation"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "ManagedObjectIdServerErrorResponse": {
+        "description": "An unexpected error occurred at server side",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/BasicStatus500"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "details": {
+                          "$ref": "#/components/schemas/ManagedObjectIdFailureDetails"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "ManagedObjectCreationServerErrorResponse": {
+        "description": "An unexpected error occurred at server side",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/BasicStatus500"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "details": {
+                          "$ref": "#/components/schemas/ManagedObjectCreationFailureDetails"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "SimpleServerErrorResponse": {
+        "description": "An unexpected error occurred at server side",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/BasicStatus500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SimpleTooManyRequestIssue": {
+        "description": "This request has been launched too many times. The server shall treat the previous requests before accepting new ones.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "$ref": "#/components/schemas/SuccessFalse"
+                    },
+                    "code": {
+                      "$ref": "#/components/schemas/ErrorCode429"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "The server received too many request"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "SimpleInvalidCSRFTokenResponse": {
+        "description": "The ENO_CSRF_TOKEN is missing or incorrect",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/InvalidCSRFTokenStatus"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SimpleAuthenticationIssueResponse": {
+        "description": "Element are missing or incorrect to authentify the user.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/components/schemas/AuthenticationIssueStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ManagedObjectCreationPartialSuccess": {
+        "description": "Success response but with data that could not be treated",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BasicPartialSuccess"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "details": {
+                "$ref": "#/components/schemas/ManagedObjectCreationFailureDetails"
+              }
+            }
+          }
+        ]
+      },
+      "ManagedObjectIdPartialSuccess": {
+        "description": "Success response but with data that could not be treated",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BasicPartialSuccess"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "details": {
+                "$ref": "#/components/schemas/ManagedObjectIdFailureDetails"
+              }
+            }
+          }
+        ]
+      },
+      "AuthenticationIssueStatus": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "$ref": "#/components/schemas/SuccessFalse"
+          },
+          "code": {
+            "$ref": "#/components/schemas/ErrorCode401"
+          },
+          "message": {
+            "oneOf": [
+              {
+                "type": "string",
+                "example": "Invalid license for user"
+              },
+              {
+                "type": "string",
+                "example": "Missing security context in request"
+              }
+            ]
+          }
+        }
+      },
+      "Configuration": {
+        "description": "Object which id shall be the physicalid of a Product Configuration or a Predefined Configuration. The filterView parameter allows to define the view applied to filtered navigations",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "F5FFB0565A78000063564EE50013FC36"
+          },
+          "filterView": {
+            "type": "string",
+            "enum": [
+              "official",
+              "projected"
+            ],
+            "default": "official"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "CsrfFilled": {
+        "description": "CSRF Token obtained from the server",
+        "title": "CSRF",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "ENO_CSRF_TOKEN"
+          },
+          "value": {
+            "type": "string",
+            "example": "1RO1-I4LF-5VYR-SBTQ-X9YA-2QEG-3VFM-TUO"
+          }
+        }
+      },
+      "ErrorCode401": {
+        "type": "integer",
+        "enum": [
+          401
+        ]
+      },
+      "ErrorCode403": {
+        "type": "integer",
+        "enum": [
+          403
+        ]
+      },
+      "ErrorCode429": {
+        "type": "integer",
+        "enum": [
+          429
+        ]
+      },
+      "BasicStatus400": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "$ref": "#/components/schemas/SuccessFalse"
+          },
+          "code": {
+            "type": "integer",
+            "enum": [
+              400
+            ]
+          }
+        }
+      },
+      "BasicStatus500": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "$ref": "#/components/schemas/SuccessFalse"
+          },
+          "code": {
+            "type": "integer",
+            "enum": [
+              500
+            ]
+          },
+          "message": {
+            "$ref": "#/components/schemas/MessageOperationFailed"
+          }
+        }
+      },
+      "InvalidCSRFTokenStatus": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "$ref": "#/components/schemas/SuccessFalse"
+          },
+          "code": {
+            "$ref": "#/components/schemas/ErrorCode403"
+          },
+          "message": {
+            "type": "string",
+            "example": "CSRF Token validation failed"
+          }
+        }
+      },
+      "MessageOperationFailed": {
+        "type": "string",
+        "example": "Message that describes the operation that was not executed or the failure."
+      },
+      "MessageInvalidId": {
+        "type": "string",
+        "example": "The identifier format is not correct: <theId>"
+      },
+      "MessageInvalidKeyInObject": {
+        "type": "string",
+        "example": "An unexpected key has been found in request body: <theKey>"
+      },
+      "MessageRequestBodyExpectation": {
+        "description": "A message that indicates request body content does not match expectations such as something is missing or something was not expected.",
+        "type": "string",
+        "example": "No xxx found in request body"
+      },
+      "MessageTooManyReports": {
+        "type": "string",
+        "example": "Too many reports for concurrent generation (limit: 5)"
+      },
+      "OutputFormat": {
+        "description": "An Output Format object description",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/OutputFormatPhysicalId"
+          },
+          "type": {
+            "$ref": "#/components/schemas/OutputFormatType"
+          },
+          "name": {
+            "$ref": "#/components/schemas/OutputFormatName"
+          },
+          "title": {
+            "$ref": "#/components/schemas/OutputFormatTitle"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/PersonIdentifier"
+          },
+          "revision": {
+            "$ref": "#/components/schemas/OutputFormatRevision"
+          },
+          "current": {
+            "$ref": "#/components/schemas/ReportModelCurrent"
+          },
+          "description": {
+            "$ref": "#/components/schemas/OutputFormatDescription"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/OutputFormatPolicy"
+          },
+          "fileName": {
+            "$ref": "#/components/schemas/OutputFormatFileName"
+          }
+        }
+      },
+      "OutputFormatCommonAuthoring": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/OutputFormatName"
+          },
+          "description": {
+            "$ref": "#/components/schemas/OutputFormatDescription"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/OutputFormatPolicy"
+          }
+        }
+      },
+      "OutputFormatCreation": {
+        "description": "A schema definition to create an Output Format.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/OutputFormatCommonAuthoring"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "$ref": "#/components/schemas/OutputFormatTitle"
+              },
+              "libraryFilename": {
+                "$ref": "#/components/schemas/OutputFormatLibraryFileName"
+              }
+            },
+            "required": [
+              "title"
+            ]
+          }
+        ]
+      },
+      "OutputFormatUpdate": {
+        "description": "A schema definition to update an Output Format.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/OutputFormatCommonAuthoring"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "$ref": "#/components/schemas/OutputFormatTitle"
+              }
+            }
+          }
+        ],
+        "example": {
+          "title": "Modified title"
+        }
+      },
+      "OutputFormatDescription": {
+        "type": "string",
+        "example": "The Output Format description."
+      },
+      "OutputFormatId": {
+        "description": "Physicalid of a Report Output Format.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "F5FFB05636150000634FB2E900194D0C"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "OutputFormatFileName": {
+        "description": "An Output Format file which is not necessarily from the library (it can be checked-in by user)",
+        "type": "string",
+        "example": "portrait.docx"
+      },
+      "OutputFormatLibraryFileName": {
+        "description": "Use one of library output format provided by installation. See also GET /resources/v1/modeler/dsrgn/outputformat/library",
+        "type": "string",
+        "example": "portrait.docx"
+      },
+      "OutputFormatLibraryFileNames": {
+        "description": "Sample Output format files provided by installation.",
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "example": [
+          "default.xlsx",
+          "default_with_page_break.xlsx",
+          "default.html.zip",
+          "default.xml",
+          "landscape.pdf.zip",
+          "portrait.docx",
+          "portrait.pdf.zip",
+          "portrait.rtf"
+        ]
+      },
+      "OutputFormatName": {
+        "description": "The Output Format name. An autoname will be set when this value is missing in case of creation.",
+        "type": "string",
+        "example": "RT-0000001"
+      },
+      "OutputFormatPhysicalId": {
+        "description": "The Output Format physicalid",
+        "type": "string",
+        "example": "CE80B0567958050062F0BA3D001D9E80"
+      },
+      "OutputFormatPolicy": {
+        "description": "The Output Format policy. Default is set at creation when it is not specified.",
+        "type": "string",
+        "default": "Report Model"
+      },
+      "OutputFormatRevision": {
+        "description": "The Output Format revision",
+        "type": "string",
+        "example": 1
+      },
+      "OutputFormatTitle": {
+        "type": "string",
+        "example": "My Output Format"
+      },
+      "OutputFormatType": {
+        "description": "The Output Format type",
+        "type": "string",
+        "example": "Report Template"
+      },
+      "PersonIdentifier": {
+        "type": "string",
+        "example": "user_a"
+      },
+      "Report": {
+        "description": "A Report object description",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ReportPhysicalId"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ReportType"
+          },
+          "name": {
+            "$ref": "#/components/schemas/ReportName"
+          },
+          "title": {
+            "$ref": "#/components/schemas/ReportTitle"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/PersonIdentifier"
+          },
+          "revision": {
+            "$ref": "#/components/schemas/ReportRevision"
+          },
+          "current": {
+            "$ref": "#/components/schemas/ReportCurrentState"
+          },
+          "description": {
+            "$ref": "#/components/schemas/ReportDescription"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/ReportPolicy"
+          },
+          "template": {
+            "$ref": "#/components/schemas/TemplateId"
+          },
+          "outputFormat": {
+            "$ref": "#/components/schemas/OutputFormatId"
+          },
+          "inputs": {
+            "$ref": "#/components/schemas/ReportInputs"
+          },
+          "targetDocument": {
+            "$ref": "#/components/schemas/TargetDocument"
+          },
+          "configuration": {
+            "$ref": "#/components/schemas/Configuration"
+          }
+        }
+      },
+      "ReportCommonAuthoring": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/ReportName"
+          },
+          "description": {
+            "$ref": "#/components/schemas/ReportDescription"
+          },
+          "inputs": {
+            "$ref": "#/components/schemas/ReportInputs"
+          },
+          "targetDocument": {
+            "$ref": "#/components/schemas/TargetDocumentId"
+          },
+          "configuration": {
+            "$ref": "#/components/schemas/Configuration"
+          }
+        }
+      },
+      "ReportCreation": {
+        "description": "It is mandatory to provide input values for each parameter of the template.",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "$ref": "#/components/schemas/ReportTitle"
+              },
+              "template": {
+                "$ref": "#/components/schemas/TemplateId"
+              },
+              "outputFormat": {
+                "$ref": "#/components/schemas/OutputFormatId"
+              }
+            },
+            "required": [
+              "title",
+              "template",
+              "outputFormat"
+            ]
+          },
+          {
+            "$ref": "#/components/schemas/ReportCommonAuthoring"
+          }
+        ]
+      },
+      "ReportUpdate": {
+        "description": "A schema definition to update a Report.",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "$ref": "#/components/schemas/ReportTitle"
+              },
+              "template": {
+                "$ref": "#/components/schemas/TemplateId"
+              },
+              "outputFormat": {
+                "$ref": "#/components/schemas/OutputFormatId"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/ReportCommonAuthoring"
+          }
+        ],
+        "example": {
+          "title": "Modified title"
+        }
+      },
+      "ReportCurrentState": {
+        "description": "The report current state.",
+        "type": "string",
+        "example": "IN_WORK"
+      },
+      "ReportDescription": {
+        "type": "string",
+        "example": "The Report description."
+      },
+      "ReportGenerationInformation": {
+        "description": "The report generation information",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "The status of the generation",
+            "example": "Running"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message about the generation (progression, error)",
+            "example": "Generation in progress, 19s passed (exceeded by 15s)"
+          },
+          "lastDuration": {
+            "$ref": "#/components/schemas/Duration",
+            "description": "Optional duration of the last report generation when available"
+          },
+          "running": {
+            "$ref": "#/components/schemas/ReportGenerationRunning",
+            "description": "Optional progress details when a report generation is running"
+          }
+        }
+      },
+      "ReportGenerationRunning": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "progression": {
+                "$ref": "#/components/schemas/Progression"
+              },
+              "timePassed": {
+                "$ref": "#/components/schemas/Duration",
+                "description": "The time passed in seconds since the beginning of the report generation"
+              }
+            }
+          },
+          {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "timeRemaining": {
+                    "$ref": "#/components/schemas/Duration",
+                    "description": "Optional remaining time estimation based on last duration"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "timeExceeded": {
+                    "$ref": "#/components/schemas/Duration",
+                    "description": "Optional exceeding time based on last duration"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "Duration": {
+        "properties": {
+          "seconds": {
+            "type": "integer",
+            "description": "Duration in seconds",
+            "example": 12
+          },
+          "display": {
+            "type": "string",
+            "description": "User friendly duration string",
+            "example": "12s"
+          }
+        }
+      },
+      "Progression": {
+        "properties": {
+          "percent": {
+            "type": "integer",
+            "description": "The progression percentage based on last duration when available. It can remain at 90% until completion in case estimated time is exceeded.",
+            "example": 20
+          }
+        }
+      },
+      "ReportGenerationStatus": {
+        "description": "A Report basic description with generation and target document information",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ReportPhysicalId"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ReportType"
+          },
+          "name": {
+            "$ref": "#/components/schemas/ReportName"
+          },
+          "title": {
+            "$ref": "#/components/schemas/ReportTitle"
+          },
+          "revision": {
+            "$ref": "#/components/schemas/ReportRevision"
+          },
+          "targetDocument": {
+            "$ref": "#/components/schemas/TargetDocumentWithDetails"
+          },
+          "generation": {
+            "$ref": "#/components/schemas/ReportGenerationInformation"
+          }
+        }
+      },
+      "ReportModelCurrent": {
+        "description": "The Report Model policy current state",
+        "type": "string",
+        "example": "Private"
+      },
+      "ReportPhysicalId": {
+        "type": "string",
+        "example": "CE80B056D0940800634581A100067B02"
+      },
+      "ReportType": {
+        "type": "string",
+        "default": "CATReportReference"
+      },
+      "ReportName": {
+        "description": "An autoname will be set when this value is missing in case of creation.",
+        "type": "string",
+        "example": "Report_1"
+      },
+      "ReportTitle": {
+        "type": "string",
+        "example": "Report 1"
+      },
+      "ReportRevision": {
+        "type": "string",
+        "example": "A"
+      },
+      "ReportInputs": {
+        "description": "A list of list of input ids. It shall correspond to the template definition. If the template has 2 input types (1st cardinality Single, 2nd cardinality List): [[input1physicalid1], [input2physicalid1, input2physicalid2]]",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ReportInputValues"
+        }
+      },
+      "ReportInputValues": {
+        "description": "The list of physicalids for one input parameter of the report.",
+        "type": "object",
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "56B0FFF5000010B263488109000264FD",
+              "56B0FFF5000010B263488109000264E7"
+            ]
+          }
+        },
+        "required": [
+          "values"
+        ]
+      },
+      "ReportPolicy": {
+        "description": "The Report policy.",
+        "type": "string",
+        "example": "VPLM_SMB_Definition_MajorRev"
+      },
+      "ManagedObjectIdFailureDetails": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "Detailed information about what object cannot be treated and why.",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "The object does not exists"
+            },
+            "reference": {
+              "type": "string",
+              "example": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            }
+          }
+        }
+      },
+      "SuccessStatus": {
+        "type": "integer",
+        "example": 200
+      },
+      "PartialSuccessStatus": {
+        "type": "integer",
+        "example": 207
+      },
+      "SuccessTrue": {
+        "type": "boolean",
+        "enum": [
+          true
+        ]
+      },
+      "SuccessFalse": {
+        "type": "boolean",
+        "enum": [
+          false
+        ]
+      },
+      "SuccessResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "$ref": "#/components/schemas/SuccessTrue"
+          },
+          "code": {
+            "$ref": "#/components/schemas/SuccessStatus"
+          },
+          "csrf": {
+            "$ref": "#/components/schemas/CsrfFilled"
+          }
+        }
+      },
+      "PartialSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "$ref": "#/components/schemas/SuccessTrue"
+          },
+          "code": {
+            "$ref": "#/components/schemas/PartialSuccessStatus"
+          },
+          "csrf": {
+            "$ref": "#/components/schemas/CsrfFilled"
+          }
+        }
+      },
+      "BasicPartialSuccess": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PartialSuccessResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "message": {
+                "$ref": "#/components/schemas/MessageOperationFailed"
+              }
+            }
+          }
+        ]
+      },
+      "TargetDocumentPhysicalId": {
+        "type": "string",
+        "example": "F5FFB05626140000634EBF39000BEE56"
+      },
+      "TargetDocumentReferenceObject": {
+        "description": "Object reference for access with dedicated API",
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "$ref": "#/components/schemas/TargetDocumentPhysicalId"
+          },
+          "source": {
+            "type": "string",
+            "example": "$3DSpace"
+          },
+          "type": {
+            "type": "string",
+            "example": "Report Document"
+          },
+          "relativePath": {
+            "type": "string",
+            "example": "/resources/v1/modeler/documents/F5FFB05626140000634EBF39000BEE56"
+          }
+        }
+      },
+      "TargetDocument": {
+        "description": "A Target Document object description",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TargetDocumentReferenceObject"
+          },
+          {
+            "type": "object",
+            "description": "Field kept for compatibility and for consistency with other schemas. It is a duplicate information considering that object reference adds identifier field.",
+            "properties": {
+              "id": {
+                "$ref": "#/components/schemas/TargetDocumentPhysicalId"
+              }
+            }
+          }
+        ]
+      },
+      "TargetDocumentWithDetails": {
+        "description": "A Target Document object description",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TargetDocument"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "auto_231666860913110"
+              },
+              "title": {
+                "type": "string",
+                "example": "Report_1 - RT-0000001"
+              },
+              "owner": {
+                "$ref": "#/components/schemas/PersonIdentifier"
+              },
+              "revision": {
+                "type": "string",
+                "example": 1
+              },
+              "current": {
+                "type": "string",
+                "description": "The current lifecycle state",
+                "example": "In Work"
+              },
+              "description": {
+                "type": "string",
+                "example": "target document description"
+              },
+              "policy": {
+                "type": "string",
+                "example": "Report Document"
+              },
+              "reportFile": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "The id of generated report file if any",
+                    "example": "F5FFB05626140000634EBF39000DF64"
+                  },
+                  "fileName": {
+                    "type": "string",
+                    "description": "The name of generated report file if any",
+                    "example": "Report_1.rtf"
+                  },
+                  "fileVersion": {
+                    "type": "string",
+                    "description": "The current version number of the file (this is the version that will be downloaded)",
+                    "example": 3
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "TargetDocumentId": {
+        "description": "An object with id designating the Target Document to use (DOCUMENTS subtype).",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TargetDocumentPhysicalId"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "Template": {
+        "description": "A Report Template object description",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TemplatePhysicalId"
+          },
+          "type": {
+            "$ref": "#/components/schemas/TemplateType"
+          },
+          "name": {
+            "$ref": "#/components/schemas/TemplateName"
+          },
+          "title": {
+            "$ref": "#/components/schemas/TemplateTitle"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/PersonIdentifier"
+          },
+          "revision": {
+            "$ref": "#/components/schemas/TemplateRevision"
+          },
+          "current": {
+            "$ref": "#/components/schemas/ReportModelCurrent"
+          },
+          "description": {
+            "$ref": "#/components/schemas/TemplateDescription"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/TemplatePolicy"
+          },
+          "model": {
+            "$ref": "#/components/schemas/TemplateModelOutput"
+          }
+        }
+      },
+      "TemplateCommonAuthoring": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/TemplateName"
+          },
+          "description": {
+            "$ref": "#/components/schemas/TemplateDescription"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/TemplatePolicy"
+          },
+          "model": {
+            "$ref": "#/components/schemas/TemplateModelInput"
+          }
+        }
+      },
+      "TemplateCreation": {
+        "description": "A schema definition to create a Report Template.",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "$ref": "#/components/schemas/TemplateType"
+              },
+              "title": {
+                "$ref": "#/components/schemas/TemplateTitle"
+              }
+            },
+            "required": [
+              "title"
+            ]
+          },
+          {
+            "$ref": "#/components/schemas/TemplateCommonAuthoring"
+          }
+        ]
+      },
+      "TemplateUpdate": {
+        "description": "A schema definition to update a Report Template.",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "$ref": "#/components/schemas/TemplateTitle"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/TemplateCommonAuthoring"
+          }
+        ],
+        "example": {
+          "title": "Modified title"
+        }
+      },
+      "ManagedObjectCreationFailureDetails": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "Detailed information about what object cannot be treated and why.",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "The object does not exists"
+            },
+            "referenceIndex": {
+              "description": "Index of object that could not be treated",
+              "type": "integer",
+              "example": 1
+            }
+          }
+        }
+      },
+      "TemplateDescription": {
+        "type": "string",
+        "example": "The Report Template description."
+      },
+      "TemplateId": {
+        "description": "Object which id shall be the physicalid of a Report Template.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "F5FFB05636150000634FAD6A000B4574"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "TemplateModelInput": {
+        "description": "Object representing the Report Template information in request body.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TemplateData"
+          }
+        ]
+      },
+      "TemplateName": {
+        "description": "The Report Template name. An autoname will be set when this value is missing in case of creation.",
+        "type": "string",
+        "example": "RM-0000001"
+      },
+      "TemplatePhysicalId": {
+        "description": "The Report Template physicalid",
+        "type": "string",
+        "example": "CE80B0567958050062F0BA3D001D9E80"
+      },
+      "TemplatePolicy": {
+        "description": "The Report Template policy. Default is set at creation when it is not specified.",
+        "type": "string",
+        "default": "Report Model"
+      },
+      "TemplateRevision": {
+        "description": "The Report Template revision",
+        "type": "string",
+        "example": 1
+      },
+      "TemplateTitle": {
+        "type": "string",
+        "example": "My Report Template"
+      },
+      "TemplateType": {
+        "description": "The Report Template type. Default is set at creation when it is not specified.",
+        "type": "string",
+        "default": "Report Model"
+      },
+      "TemplateModelOutput": {
+        "description": "Object representing the Report Template information provided in response.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TemplateData"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "inputs": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TemplateInput"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "TemplateInput": {
+        "description": "Read-only information about a template input.",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "Requirement"
+          },
+          "name": {
+            "type": "string",
+            "example": "p1"
+          },
+          "title": {
+            "type": "string",
+            "example": "A Requirement Parameter"
+          },
+          "typeQualifiedName": {
+            "type": "string",
+            "example": "PLM.Requirement"
+          },
+          "nature": {
+            "type": "string",
+            "description": "Assumption of parameter nature based on type qualified name.\n- primitive when type is Standard.Integer, Standard.String, Standard.Boolean and Standard.Real types,\n- plmrel when type format is PLM.rel_XXX,\n- plmbus when type format is PLM.xxx,\n- other for types that do not match previous cases.\n",
+            "enum": [
+              "plmbus",
+              "plmrel",
+              "primitive",
+              "other"
+            ]
+          },
+          "cardinality": {
+            "$ref": "#/components/schemas/Cardinality"
+          }
+        }
+      },
+      "Cardinality": {
+        "type": "string",
+        "enum": [
+          "single",
+          "optional",
+          "list"
+        ]
+      },
+      "TemplateData": {
+        "description": "The Template internal data in compressed or XML format. Response return compressed version by default.",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "string",
+                "description": "Report Template data in a compressed format (GZIP compression and Base64 encoding)",
+                "example": "H4sIAAAAAAAAAFWOywrCMBBF94L/MMy+r52Lxm6KILRQ6mM/pGMJNGlNUvHzbYOKLg/MOXPz4qkHeLB1ajQCszhFYCPHTple4OV8iHZY7LebvBzlrNn4Sjn/y2BIcyawraM0Q+j09dtCGMj5kjwduxXfWkN2UTzboAqcEORy6AQ2VR23fJ+V5ZA+TSzVTUnySxBBs3PUr88wWVvJZ8MfhIEvEkJ9P9cAAAA="
+              },
+              "compression": {
+                "type": "string",
+                "description": "This is the default",
+                "enum": [
+                  "gzip+b64"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "description": "Report Template data in a raw format",
+                "type": "string",
+                "example": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><DocumentList><Document name1=\"TPL1\" dmVersion=\"1\" lastDataId=\"1\"><Structure type=\"paragraph\"><DataTerminalText text1=\"Dummy text\"/></Structure></Document></DocumentList>"
+              },
+              "compression": {
+                "type": "string",
+                "enum": [
+                  "none"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

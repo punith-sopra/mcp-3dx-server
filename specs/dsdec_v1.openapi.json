@@ -1,0 +1,1077 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Decision Web Services",
+    "description": "Decision Modeler Web Services",
+    "version": "1.0.0",
+    "x-ds-service": [
+      "3DSpace"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dsdec",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_3DSpace"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsdec/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/decisions": {
+      "post": {
+        "summary": "Create Decisions.",
+        "operationId": "POST_dsdec:Decisions_Create",
+        "description": "",
+        "tags": [
+          " "
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-decision"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/createDecisions"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContextForPost"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          }
+        ]
+      }
+    },
+    "/decisions/{decisionId}": {
+      "get": {
+        "summary": "Retrieve Specific Decision",
+        "operationId": "GET_dsdec:Decision_ID",
+        "description": "",
+        "tags": [
+          " "
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-decision"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "decisionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Modify Specific Decision.",
+        "operationId": "PUT_dsdec:Decision_ID_Content",
+        "description": "",
+        "tags": [
+          " "
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-decision"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/modifyDecisions"
+        },
+        "parameters": [
+          {
+            "name": "decisionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete Specific Decision.",
+        "description": "",
+        "operationId": "DELETE_dsdec:Decision_Delete",
+        "tags": [
+          " "
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/204"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "decisionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          }
+        ]
+      }
+    },
+    "/decisions/search": {
+      "get": {
+        "summary": "Search Decisions.",
+        "description": "",
+        "operationId": "GET_dsdec:Decisions_GET",
+        "tags": [
+          "Search"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-decision"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "searchStr",
+            "description": "Search Criteria; 2 or more characters required.",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "top",
+            "description": "The number of objects to return; default 50; max 1000",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "skip",
+            "description": "The number of objects to skip in case of paginating through the serach results; default 0",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "decision": {
+        "$ref": "#/components/x-schemas/decision"
+      }
+    },
+    "x-schemas": {
+      "search": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "readOnly": true
+              },
+              "title": {
+                "default": "",
+                "type": "string"
+              },
+              "owner": {
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (No)"
+              },
+              "revision": {
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "type": "string"
+              },
+              "originated": {
+                "format": "date-time",
+                "type": "string",
+                "readOnly": true
+              },
+              "eTag": {
+                "type": "string",
+                "readOnly": true
+              },
+              "type": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "attachment": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/attachment"
+                }
+              },
+              "appliesTo": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/appliesTo"
+                }
+              },
+              "context": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/context"
+                }
+              },
+              "revisions": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "readOnly": true,
+                "items": {
+                  "$ref": "#/components/x-schemas/revisions"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "decision": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "readOnly": true
+              },
+              "title": {
+                "type": "string"
+              },
+              "owner": {
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (No)"
+              },
+              "revision": {
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "type": "string"
+              },
+              "originated": {
+                "format": "date-time",
+                "type": "string",
+                "readOnly": true
+              },
+              "eTag": {
+                "type": "string",
+                "readOnly": true
+              },
+              "type": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "attachment": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/attachment"
+                }
+              },
+              "appliesTo": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/appliesTo"
+                }
+              },
+              "context": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/context"
+                }
+              },
+              "revisions": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "readOnly": true,
+                "items": {
+                  "$ref": "#/components/x-schemas/revisions"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "attachment": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "context": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "appliesTo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "revisions": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "readOnly": true
+              },
+              "title": {
+                "default": "",
+                "type": "string"
+              },
+              "owner": {
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (No)"
+              },
+              "revision": {
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "type": "string"
+              },
+              "originated": {
+                "format": "date-time",
+                "type": "string",
+                "readOnly": true
+              },
+              "eTag": {
+                "type": "string",
+                "readOnly": true
+              },
+              "type": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {
+            "readOnly": true
+          }
+        ]
+      },
+      "createDecisions": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "readOnly": true
+              },
+              "title": {
+                "type": "string"
+              },
+              "owner": {
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (No)"
+              },
+              "revision": {
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "type": "string"
+              },
+              "originated": {
+                "format": "date-time",
+                "type": "string",
+                "readOnly": true
+              },
+              "eTag": {
+                "type": "string",
+                "readOnly": true
+              },
+              "type": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "attachment": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/attachment"
+                }
+              },
+              "appliesTo": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/appliesTo"
+                }
+              },
+              "context": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/context"
+                }
+              },
+              "revisions": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "readOnly": true,
+                "items": {
+                  "$ref": "#/components/x-schemas/revisions"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "modifyDecisions": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "readOnly": true
+              },
+              "title": {
+                "type": "string"
+              },
+              "owner": {
+                "type": "string",
+                "x-ApplicableOperations": "Create (No), Read (Yes), Modify (No)"
+              },
+              "revision": {
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "type": "string"
+              },
+              "originated": {
+                "format": "date-time",
+                "type": "string",
+                "readOnly": true
+              },
+              "eTag": {
+                "type": "string",
+                "readOnly": true
+              },
+              "type": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "attachment": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/attachment"
+                }
+              },
+              "appliesTo": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/appliesTo"
+                }
+              },
+              "context": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/context"
+                }
+              },
+              "revisions": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "readOnly": true,
+                "items": {
+                  "$ref": "#/components/x-schemas/revisions"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-decision": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/decision"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-EMPTY204": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/successful_delete"
+          },
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {}
+        ]
+      },
+      "BASICS_ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "PATCH_SUB_RESOURCE_ACTION": {
+        "type": "object",
+        "properties": {
+          "op": {
+            "description": "Specify the sub-resource update action. See 6W Web Service Principles: Data Object Updates",
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "add",
+              "remove"
+            ]
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://3dspace.mydomain:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "object",
+            "properties": {
+              "success": {
+                "description": "Reflects true to indicate successful request.",
+                "example": true,
+                "type": "boolean"
+              },
+              "status": {
+                "description": "The HTTP response code.",
+                "example": 200,
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "successful_delete": {
+        "description": "The response data for successful delete request.",
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "object",
+            "properties": {
+              "success": {
+                "description": "Reflects true to indicate successful request.",
+                "example": true,
+                "type": "boolean"
+              },
+              "status": {
+                "description": "The HTTP response code.",
+                "example": 204,
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "Unique identifier of the error type.",
+            "example": "errors:3dx:invalidRequest",
+            "type": "string"
+          },
+          "status": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "title": {
+            "description": "Short Description of the Error.",
+            "example": "Bad Request",
+            "type": "string"
+          },
+          "detail": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "Unique identifier of the error type.",
+            "example": "errors:3dx:invalidRequest",
+            "type": "string"
+          },
+          "status": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "title": {
+            "description": "Short Description of the Error.",
+            "example": "Bad Request",
+            "type": "string"
+          },
+          "detail": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "Unique identifier of the error type.",
+            "example": "errors:3dx:invalidRequest",
+            "type": "string"
+          },
+          "status": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "title": {
+            "description": "Short Description of the Error.",
+            "example": "Bad Request",
+            "type": "string"
+          },
+          "detail": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "Unique identifier of the error type.",
+            "example": "errors:3dx:invalidRequest",
+            "type": "string"
+          },
+          "status": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "title": {
+            "description": "Short Description of the Error.",
+            "example": "Bad Request",
+            "type": "string"
+          },
+          "detail": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "204": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY204"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-decision": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-decision"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "createDecisions": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/createDecisions"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "modifyDecisions": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/modifyDecisions"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "SecurityContextForPost": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "example": "en-US",
+        "description": "Identifies the locale for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "X-Requested-With": {
+        "name": "X-Requested-With",
+        "example": "XMLHttpRequest",
+        "description": "Required header for non GET operations; use value XMLHttpRequest.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

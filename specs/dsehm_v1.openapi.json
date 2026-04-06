@@ -1,0 +1,275 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "x-ds-copyright": "3DEXPERIENCE R2024x (c) 2024 Dassault Systemes.",
+    "description": "dsehm: Human Ergonomic corpus REST Services",
+    "version": "1.0.1",
+    "title": "Human Ergonomic Web Services",
+    "x-ds-service": [
+      "3DSpace"
+    ]
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dsehm",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3DSpace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsehm/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/dsehm:ErgoHuman/{ID}": {
+      "get": {
+        "summary": "Get ErgoHuman",
+        "description": "Service to Get ErgoHuman",
+        "operationId": "GET_dsehm:ErgoHuman_ID",
+        "tags": [
+          "dsehm:ErgoHuman"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsehm:ErgoHuman object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsehm:ErgoHumanMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsehm:ErgoHumanMask.Default"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsehm_ErgoHumanMask.Default"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "dsehm_ErgoHumanMask.Default": {
+        "title": "dsehm_ErgoHumanMask.Default",
+        "type": "object",
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErgoHuman"
+            }
+          },
+          "nlsLabel": {
+            "$ref": "#/components/schemas/NLSLabel"
+          }
+        }
+      },
+      "ErgoHuman": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "T1XXX79CEF11C472C9537094C2FA8T1XX"
+          },
+          "type": {
+            "type": "string",
+            "example": "ErgoHuman"
+          },
+          "name": {
+            "type": "string",
+            "example": "Ergo-26032206-00000002"
+          },
+          "title": {
+            "type": "string",
+            "example": "My title"
+          },
+          "description": {
+            "type": "string",
+            "example": "My description"
+          },
+          "revision": {
+            "type": "string",
+            "example": "A"
+          },
+          "state": {
+            "type": "string",
+            "example": "In Work"
+          },
+          "owner": {
+            "type": "string",
+            "example": "Owner Name"
+          },
+          "organization": {
+            "type": "string",
+            "example": "MyCompany"
+          },
+          "collabspace": {
+            "type": "string",
+            "example": "Default"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-01-31 09:48:10 UTC"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-01-31 09:48:10 UTC"
+          },
+          "cestamp": {
+            "type": "string",
+            "example": "2D70169432D84866A200F907881AC9B1"
+          }
+        }
+      },
+      "NLSLabel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "My Id translated value"
+          },
+          "type": {
+            "type": "string",
+            "example": "My Type translated value"
+          },
+          "modified": {
+            "type": "string",
+            "example": "My Modification Date translated value"
+          },
+          "created": {
+            "type": "string",
+            "example": "My Creation Date translated value"
+          },
+          "revision": {
+            "type": "string",
+            "example": "My Revision translated value"
+          },
+          "state": {
+            "type": "string",
+            "example": "My State translated value"
+          },
+          "owner": {
+            "type": "string",
+            "example": "My Owner translated value"
+          }
+        }
+      }
+    }
+  }
+}

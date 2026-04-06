@@ -1,0 +1,2670 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Task Web Services",
+    "description": "Web Services for managing the task modeler.",
+    "version": "1.1.0",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3dspace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dspm:task/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/tasks": {
+      "get": {
+        "description": "",
+        "operationId": "getUserTasks",
+        "summary": "Get the user assigned/owned tasks.",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-tasks"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "showProjectTasks",
+            "description": "whether to include project tasks",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "post": {
+        "description": "",
+        "summary": "Create new task(s).",
+        "operationId": "createTasks",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-tasks"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/tasks"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "description": "",
+        "summary": "Modify existing task(s).",
+        "operationId": "modifyTasks",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-tasks"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/tasks"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/tasks/{taskId}/assignees": {
+      "get": {
+        "description": "",
+        "summary": "Retrieve assignees for an existing task.",
+        "operationId": "getTaskAssignees",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-assignees"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "post": {
+        "description": "",
+        "summary": "Add new assignees for an existing task.",
+        "operationId": "modifyTaskAssignees",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-assignees"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/assignees"
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/tasks/{taskId}/deliverables": {
+      "get": {
+        "description": "",
+        "summary": "Get the task deliverables.",
+        "operationId": "getTaskDeliverables",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-deliverables"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "post": {
+        "description": "",
+        "summary": "Add new task deliverables.",
+        "operationId": "addTaskDeliverables",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-deliverables"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/deliverables"
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/tasks/ids": {
+      "post": {
+        "description": "",
+        "summary": "Get the user assigned tasks for the specified task objects.",
+        "operationId": "getUserTasksforIds",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-tasks"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "$ids": {
+                    "description": "Comma-separated list of IDs to retrieve.",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/tasks/{taskId}/references": {
+      "get": {
+        "description": "",
+        "summary": "Get the task references.",
+        "operationId": "getTaskReferences",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-references"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "post": {
+        "description": "",
+        "summary": "Add new task references.",
+        "operationId": "addTaskReferences",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-references"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/references"
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/tasks/{taskId}/scopes": {
+      "get": {
+        "description": "",
+        "summary": "Retrieve tha tasks context/scope object(s).",
+        "operationId": "getContextForTasks",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-scopes"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "post": {
+        "description": "",
+        "summary": "Add specified Scope object(s) to the specific Task object.",
+        "operationId": "addContextForTask",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-scopes"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/scopes"
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/tasks/scopeId/{scopeId}": {
+      "get": {
+        "description": "",
+        "summary": "Retrieve tha tasks for a given context/scope object.",
+        "operationId": "getTasksForContext",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-tasks"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "scopeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/tasks/{taskId}": {
+      "get": {
+        "description": "",
+        "summary": "Retrive an existing task information.",
+        "operationId": "getTaskInfoForId",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-tasks"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "description": "",
+        "summary": "Update an existing task information.",
+        "operationId": "modifyTaskByID",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-tasks"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/tasks"
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "delete": {
+        "description": "",
+        "summary": "Delete an existing task.",
+        "operationId": "deleteTask",
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "tasks": {
+        "$ref": "#/components/x-schemas/tasks"
+      },
+      "assignees": {
+        "$ref": "#/components/x-schemas/assignees"
+      },
+      "deliverables": {
+        "$ref": "#/components/x-schemas/deliverables"
+      },
+      "references": {
+        "$ref": "#/components/x-schemas/references"
+      },
+      "scopes": {
+        "$ref": "#/components/x-schemas/scopes"
+      }
+    },
+    "x-schemas": {
+      "tasks": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "required": [
+                  "title"
+                ],
+                "properties": {
+                  "title": {
+                    "description": "The name/title of the task.",
+                    "type": "string"
+                  },
+                  "revision": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "originated": {
+                    "description": "The originated date of the task.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modifyAccess": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "deleteAccess": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string",
+                    "enum": [
+                      "Create",
+                      "Assign",
+                      "Active",
+                      "Review",
+                      "Complete"
+                    ]
+                  },
+                  "project": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "hasProject": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "taskRequirement": {
+                    "type": "string",
+                    "enum": [
+                      "Optional",
+                      "Mandatory"
+                    ]
+                  },
+                  "notes": {
+                    "description": "Additional notes associated to the task",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "needsReview": {
+                    "default": "No",
+                    "type": "string",
+                    "enum": [
+                      "No",
+                      "Yes"
+                    ]
+                  },
+                  "percentComplete": {
+                    "type": "string"
+                  },
+                  "estimatedStartDate": {
+                    "type": "string"
+                  },
+                  "dueDate": {
+                    "type": "string"
+                  },
+                  "estimatedDurationInputValue": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "estimatedDurationInputUnit": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "estimatedDuration": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "actualStartDate": {
+                    "type": "string"
+                  },
+                  "actualFinishDate": {
+                    "type": "string"
+                  },
+                  "actualDuration": {
+                    "type": "string"
+                  },
+                  "forecastStartDate": {
+                    "type": "string"
+                  },
+                  "forecastFinishDate": {
+                    "type": "string"
+                  },
+                  "forecastDuration": {
+                    "type": "string"
+                  },
+                  "constraintType": {
+                    "default": "",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "enum": [
+                      "As Soon As Possible",
+                      "As Late As Possible",
+                      "Finish No Earlier Than",
+                      "Finish No Later Than",
+                      "Must Finish On",
+                      "Must Start On",
+                      "Start No Earlier Than",
+                      "Start No Later Than"
+                    ]
+                  },
+                  "constraintDate": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "scheduleFrom": {
+                    "default": "Project Start Date",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "enum": [
+                      "Project Finish Date",
+                      "Project Start Date"
+                    ]
+                  },
+                  "scheduleBasedOn": {
+                    "default": "Estimated",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "enum": [
+                      "Actual",
+                      "Estimated",
+                      "Forecast"
+                    ]
+                  },
+                  "projectVisibility": {
+                    "default": "Members",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "enum": [
+                      "Company",
+                      "Members"
+                    ]
+                  },
+                  "routeTaskInstructions": {
+                    "description": "Route Task Instructions for route-based tasks.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "routeTaskAction": {
+                    "default": "Comment",
+                    "type": "string",
+                    "readOnly": true,
+                    "enum": [
+                      "Comment",
+                      "Approve",
+                      "Information Only",
+                      "Notify Only",
+                      "Investigate"
+                    ]
+                  },
+                  "routeTaskDueDate": {
+                    "type": "string"
+                  },
+                  "routeTaskActualFinishDate": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "routeTaskDelegationAllowed": {
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true,
+                    "enum": [
+                      "True",
+                      "False"
+                    ]
+                  },
+                  "routeTaskAssigneeSetDueDate": {
+                    "default": "No",
+                    "type": "string",
+                    "readOnly": true,
+                    "enum": [
+                      "Yes",
+                      "No"
+                    ]
+                  },
+                  "routeTaskApprovalAction": {
+                    "type": "string",
+                    "enum": [
+                      "Approve",
+                      "Reject",
+                      "Abstain",
+                      "None"
+                    ]
+                  },
+                  "routeTaskApprovalComments": {
+                    "default": "\n\n\n",
+                    "type": "string"
+                  },
+                  "routeTaskReviewerComments": {
+                    "type": "string"
+                  },
+                  "policy": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "PALId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "objectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "freeFloat": {
+                    "description": "Free Float value",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "totalFloat": {
+                    "description": "Total Float value",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "isOverallCritical": {
+                    "description": "isOverallCritical",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "nlsType": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "pattern": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "color": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "isSummaryTask": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "effortId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "sourceId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "taskProjectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "criticalTask": {
+                    "default": "FALSE",
+                    "type": "string",
+                    "enum": [
+                      "TRUE",
+                      "FALSE"
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "Deviation": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "predictiveActualFinishDate": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "sequenceOrder": {
+                    "description": "the task sequence id within a project.",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "taskWBS": {
+                    "description": "the task WBS within a project.",
+                    "default": "1",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "predecessors": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/predecessors"
+                    }
+                  },
+                  "ownerInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  },
+                  "originatorInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/originatorInfo"
+                    }
+                  },
+                  "references": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/references"
+                    }
+                  },
+                  "deliverables": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/deliverables"
+                    }
+                  },
+                  "DPMProject": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/DPMProject"
+                    }
+                  },
+                  "route": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/route"
+                    }
+                  },
+                  "scopes": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/scopes"
+                    }
+                  },
+                  "contents": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/contents"
+                    }
+                  },
+                  "assignees": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/assignees"
+                    }
+                  },
+                  "calendar": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/calendar"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "predecessors": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "PALId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "lagTime": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "dependencyType": {
+                    "default": "FS",
+                    "type": "string",
+                    "enum": [
+                      "FS",
+                      "SF",
+                      "FF",
+                      "SS"
+                    ]
+                  },
+                  "lagTimeInputUnit": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "lagTimeInputValue": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "From": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "predTaskSeqNumber": {
+                    "description": "the predecessor task sequence id.",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "To": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "predProjectName": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "predProjectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "successors": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "PALId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "lagTime": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "dependencyType": {
+                    "default": "FS",
+                    "type": "string",
+                    "enum": [
+                      "FS",
+                      "SF",
+                      "FF",
+                      "SS"
+                    ]
+                  },
+                  "lagTimeInputUnit": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "lagTimeInputValue": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "From": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "predTaskSeqNumber": {
+                    "description": "the predecessor task sequence id.",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "To": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "predProjectName": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "predProjectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "autoRefresh": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          }
+        ]
+      },
+      "scopeId": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          }
+        ]
+      },
+      "ownerInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID_TYPE"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "default": "Unknown",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "originatorInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID_TYPE"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "default": "Unknown",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "references": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "revision": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "synopsis": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "description": "the person's first name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "description": "the person's last name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "fullname": {
+                    "description": "the person's full name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "objectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "policy": {
+                    "description": "required to support state NLS",
+                    "type": "string"
+                  },
+                  "stateNLS": {
+                    "type": "string"
+                  },
+                  "typeNLS": {
+                    "type": "string"
+                  },
+                  "collabSpace": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "ownerFullname": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "hasfiles": {
+                    "description": "determines whether the object has a file checked in any format",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "deliverables": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "revision": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "synopsis": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "description": "the person's first name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "description": "the person's last name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "fullname": {
+                    "description": "the person's full name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "objectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "policy": {
+                    "description": "required to support state NLS",
+                    "type": "string"
+                  },
+                  "stateNLS": {
+                    "type": "string"
+                  },
+                  "typeNLS": {
+                    "type": "string"
+                  },
+                  "collabSpace": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "ownerFullname": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "hasfiles": {
+                    "description": "determines whether the object has a file checked in any format",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "linkURL": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "DPMProject": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "revision": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "policy": {
+                    "description": "required to support state NLS",
+                    "type": "string"
+                  },
+                  "stateNLS": {
+                    "type": "string"
+                  },
+                  "typeNLS": {
+                    "type": "string"
+                  },
+                  "collabSpace": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "ownerFullname": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "hasfiles": {
+                    "description": "determines whether the object has a file checked in any format",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "route": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "scopes": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "revision": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "synopsis": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "description": "the person's first name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "description": "the person's last name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "fullname": {
+                    "description": "the person's full name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "objectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "policy": {
+                    "description": "required to support state NLS",
+                    "type": "string"
+                  },
+                  "stateNLS": {
+                    "type": "string"
+                  },
+                  "typeNLS": {
+                    "type": "string"
+                  },
+                  "collabSpace": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "ownerFullname": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "hasfiles": {
+                    "description": "determines whether the object has a file checked in any format",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "contents": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "revision": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "synopsis": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "description": "the person's first name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "description": "the person's last name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "fullname": {
+                    "description": "the person's full name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "objectId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "policy": {
+                    "description": "required to support state NLS",
+                    "type": "string"
+                  },
+                  "stateNLS": {
+                    "type": "string"
+                  },
+                  "typeNLS": {
+                    "type": "string"
+                  },
+                  "collabSpace": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "ownerFullname": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "hasfiles": {
+                    "description": "determines whether the object has a file checked in any format",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "assignees": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "Title": {
+                    "type": "string"
+                  },
+                  "Id": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "WorkTime": {
+                    "default": "480",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "icon": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "fullname": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "email": {
+                    "default": "Unknown",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "allocation": {
+                    "default": "100.0",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "assigneeRole": {
+                    "default": "Task Assignee",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "calendar": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/calendar"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Assignments": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "TaskId": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "icon": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "TaskProjectId": {
+                    "type": "string"
+                  },
+                  "Name": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "percentComplete": {
+                    "type": "string"
+                  },
+                  "estimatedStartDate": {
+                    "type": "string"
+                  },
+                  "dueDate": {
+                    "type": "string"
+                  },
+                  "estimatedDurationInputValue": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "owner": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "allocation": {
+                    "default": "100.0",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  },
+                  "assigneeRole": {
+                    "default": "Task Assignee",
+                    "x-IncludedByDefault:": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "calendar": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "EventInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "weekDay": {
+                    "type": "string"
+                  },
+                  "exceptionType": {
+                    "default": "Non Working",
+                    "type": "string",
+                    "enum": [
+                      "Working",
+                      "Non Working"
+                    ]
+                  },
+                  "workStartTime": {
+                    "default": "800",
+                    "type": "string"
+                  },
+                  "workFinishTime": {
+                    "default": "1700",
+                    "type": "string"
+                  },
+                  "lunchStartTime": {
+                    "default": "1200",
+                    "type": "string"
+                  },
+                  "lunchFinishTime": {
+                    "default": "1300",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-tasks": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/tasks"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RESULTS-assignees": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/assignees"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RESULTS-deliverables": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/deliverables"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RESULTS-references": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/references"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RESULTS-scopes": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/scopes"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RESULTS-EMPTY": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              }
+            }
+          }
+        ]
+      },
+      "BASICS": {
+        "type": "object",
+        "required": [
+          "type",
+          "title"
+        ],
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "description": "The object type.",
+            "type": "string"
+          },
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public URI.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public URI.",
+            "example": "https://3dspace.mydomain:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "BASICS_ID_TYPE": {
+        "type": "object",
+        "required": [
+          "type",
+          "title"
+        ],
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "description": "The object type.",
+            "type": "string"
+          }
+        }
+      },
+      "csrf": {
+        "description": "CSRF object is required to be sent back for update operations and typically provided with read operations.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The CSRF token name.",
+            "example": "ENO_CSRF_TOKEN",
+            "type": "string"
+          },
+          "value": {
+            "description": "The CSRF token value.",
+            "example": "EXAM-PLEW-R1CD-BNF7-G8UC-KT52-MGUA-UBE1",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request.",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-tasks": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-tasks"
+            }
+          }
+        }
+      },
+      "200-assignees": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-assignees"
+            }
+          }
+        }
+      },
+      "200-deliverables": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-deliverables"
+            }
+          }
+        }
+      },
+      "200-references": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-references"
+            }
+          }
+        }
+      },
+      "200-scopes": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-scopes"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "tasks": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/tasks"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "assignees": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/assignees"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "deliverables": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/deliverables"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "references": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/references"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "scopes": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/scopes"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "description": "Identifies the locale for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "description": "The ENOVIA CSRF token which is typically required for update oerations.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "include": {
+        "name": "$include",
+        "description": "Identify sub-resources that should be returned by the web request.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "fields": {
+        "name": "$fields",
+        "description": "Identify resource and sub-resource fields that should be returned by the web request.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

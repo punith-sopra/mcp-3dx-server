@@ -1,0 +1,3111 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "Public API's to get, create and manage formulated products and related information.",
+    "version": "1.1.1",
+    "title": "Formulated Product Web Services.",
+    "x-ds-copyright": "Copyright Dassault Systemes 2025"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dsfrm",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_3DSpace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsfrm/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/dsfrm:FormulatedProduct/search": {
+      "get": {
+        "summary": "Displays the list of Formulated Products from indexed search.",
+        "description": "Displays the list of formulated products, including both the formulated products and their specialized subtypes. For improved performance and refinement, use the $searchStr query parameter to define search criteria. By default, the API returns 50 items, with the option to increase up to 1000 using the $top parameter.",
+        "operationId": "dsfrm:FormulatedProduct_Search",
+        "tags": [
+          "dsfrm:FormulatedProduct"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$searchStr",
+            "in": "query",
+            "description": "Provide a 3DEXPERIENCE search expression with a minimum of two characters. <br>Note that this will run on indexed data only. For example, <br> 1.searchStr=\"FRM\" OR (modified&gt;\"2021-09-01T00:00:00Z\" AND modified&lt;\"2021-09-23T00:00:00Z\")</br>2.searchStr=\"FRM\" AND modified&lt;\"2019-03-19T08:00:00.000Z\"",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defines what data is to be returned by default Mask is:dsfrm:FormulatedProduct.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsfrm:FormulatedProduct.Default",
+                "dsfrm:FormulatedProduct.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "You can add several fields with the comma (,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search. This feild accepts a maximum value of 1000.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with the $top query parameter)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsfrm_FormulatedProductMask.Default"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsfrm_FormulatedProductMask.Details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be recognised by the server due to incorrect syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request is required user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once,the user SHOULD be presented the entity that was given in the response.Since the response entity might be included the relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsfrm:FormulatedProduct": {
+      "post": {
+        "summary": "Creates Formulated Product.",
+        "description": "Creates Formulated Product (default value type:Formulated_Product).",
+        "operationId": "dsfrm:FormulatedProduct_Create",
+        "tags": [
+          "dsfrm:FormulatedProduct"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DS-Change-Authoring-Context",
+            "in": "header",
+            "description": "Work Under Change Action",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "pid:GH564568015FFCF14F940A513C6765RE"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defines what data is to be returned by default Mask is:dsfrm:FormulatedProduct.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsfrm:FormulatedProduct.Default",
+                "dsfrm:FormulatedProduct.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "You can add several fields with the comma (,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createFormulatedProduct"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsfrm_FormulatedProductMask.Default"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsfrm_FormulatedProductMask.Details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be recognised by the server due to incorrect syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request is required user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once,the user SHOULD be presented the entity that was given in the response.Since the response entity might be included the relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server recognised the request, but refused to complete it.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsfrm:FormulatedProduct/{ID}": {
+      "patch": {
+        "summary": "Modifies the Formulated Product attributes.",
+        "description": "Modifies the Formulated Product attributes.",
+        "operationId": "dsfrm:FormulatedProduct_Update",
+        "tags": [
+          "dsfrm:FormulatedProduct"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DS-Change-Authoring-Context",
+            "in": "header",
+            "description": "Work Under Change Action",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "pid:GH564568015FFCF14F940A513C6765RE"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsfrm:FormulatedProduct object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defines what data is to be returned by default Mask is:dsfrm:FormulatedProduct.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsfrm:FormulatedProduct.Default",
+                "dsfrm:FormulatedProduct.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "You can add several fields with the comma (,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateFormulatedProduct"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsfrm_FormulatedProductMask.Default"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsfrm_FormulatedProductMask.Details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be recognised by the server due to incorrect syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request is required user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once,the user SHOULD be presented the entity that was given in the response.Since the response entity might be included the relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server recognised the request, but refused to complete it.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Lists a Formulated Product.",
+        "description": "Lists a Formulated Product.",
+        "operationId": "dsfrm:FormulatedProduct_Get",
+        "tags": [
+          "dsfrm:FormulatedProduct"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsfrm:FormulatedProduct object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defines what data is to be returned by default Mask is:dsfrm:FormulatedProduct.Default.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsfrm:FormulatedProduct.Default",
+                "dsfrm:FormulatedProduct.Details"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "You can add several fields with the comma (,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveno:CustomerAttributes"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsfrm_FormulatedProductMask.Default"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsfrm_FormulatedProductMask.Details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be recognised by the server due to incorrect syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request is required user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once,the user SHOULD be presented the entity that was given in the response.Since the response entity might be included the relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes a Formulated Product.",
+        "description": "Deletes a Formulated Product.",
+        "operationId": "dsfrm:FormulatedProduct_Delete.",
+        "tags": [
+          "dsfrm:FormulatedProduct"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DS-Change-Authoring-Context",
+            "in": "header",
+            "description": "Work Under Change Action",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "pid:GH564568015FFCF14F940A513C6765RE"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsfrm:FormulatedProduct object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "BAD REQUEST. The request could not be recognised by the server due to incorrect syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request is required user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once,the user SHOULD be presented the entity that was given in the response.Since the response entity might be included the relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server recognised the request, but refused to complete it.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsfrm:FormulatedProduct/{ID}/dsfrm:FormulaIngredient": {
+      "get": {
+        "summary": "Displays the Formula Ingredient details of a Formulated Product.",
+        "description": "Retrieve all the Formula Ingredient connection details. If a raw material or Formulated Product with weight units enabled and used as a child ingredient, the Quantity(inputUnit,min, max,and target) details will be retrieved. Otherwise, the Quantity(min, max,and target) details will be retrieved in terms of percentage.",
+        "operationId": "dsfrm:FormulaIngredient_Get",
+        "tags": [
+          "dsfrm:FormulaIngredient"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "The id of the formulated product for which Formula Ingredient connections need to be retrived.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DS-Change-Authoring-Context",
+            "in": "header",
+            "description": "Work Under Change Action",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "pid:GH564568015FFCF14F940A513C6765RE"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/formula_ingredient_connection_details"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be recognised by the server due to incorrect syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request is required user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once,the user SHOULD be presented the entity that was given in the response.Since the response entity might be included the relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Creates the Formula Ingredient connection.",
+        "description": "Creates the Formula Ingredient connection for the specified raw material or formulated product with the associated parent formulated product.",
+        "operationId": "dsfrm:FormulaIngredient_Create",
+        "tags": [
+          "dsfrm:FormulaIngredient"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "The id of the formulated product for which Formula Ingredient connections need to be created.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DS-Change-Authoring-Context",
+            "in": "header",
+            "description": "Work Under Change Action",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "pid:GH564568015FFCF14F940A513C6765RE"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/create_formula_ingredient_percent"
+                  },
+                  {
+                    "$ref": "#/components/schemas/create_formula_ingredient_weight"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/formula_ingredient_connection_details"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be recognised by the server due to incorrect syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request is required user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once,the user SHOULD be presented the entity that was given in the response.Since the response entity might be included the relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsfrm:FormulatedProduct/{ID}/dsfrm:FormulaIngredient/{ConID}": {
+      "get": {
+        "summary": "Displays Formula Ingredient connection details based on the provided connection ID.",
+        "description": "Displays the Formula Ingredient connection details based on provided connection id. If a raw material or Formulated Product with weight units enabled and used as a child ingredient, the Quantity(inputUnit,min, max,and target) details will be retrieved. Otherwise, the Quantity(min, max,and target) details will be retrieved in terms of percentage.",
+        "operationId": "dsfrm:FormulaIngredient_Single_Get",
+        "tags": [
+          "dsfrm:FormulaIngredient"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "The id of the formulated product for which Formula Ingredient connections need to be retrived.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DS-Change-Authoring-Context",
+            "in": "header",
+            "description": "Work Under Change Action",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "pid:GH564568015FFCF14F940A513C6765RE"
+            }
+          },
+          {
+            "name": "ConID",
+            "in": "path",
+            "description": "ID of the Formula Ingredient Connection.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/formula_ingredient_connection_details"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be recognised by the server due to incorrect syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request is required user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once,the user SHOULD be presented the entity that was given in the response.Since the response entity might be included the relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Modifies the Formulat Ingredient connection details.",
+        "description": "Modifies the Formulat Ingredient connection details.",
+        "operationId": "dsfrm:FormulaIngredient_Update",
+        "tags": [
+          "dsfrm:FormulaIngredient"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DS-Change-Authoring-Context",
+            "in": "header",
+            "description": "Work Under Change Action",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "pid:GH564568015FFCF14F940A513C6765RE"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsfrm:FormulatedProduct object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ConID",
+            "in": "path",
+            "description": "ID of the Formula Ingredient Connection.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/update_formula_ingredient_percent"
+                  },
+                  {
+                    "$ref": "#/components/schemas/update_formula_ingredient_weight"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/formula_ingredient_connection_details"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be recognised by the server due to incorrect syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request is required user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once,the user SHOULD be presented the entity that was given in the response.Since the response entity might be included the relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server recognised the request, but refused to complete it.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Disconnects a Formula Ingredient Connection.",
+        "description": "Disconnects a Formula Ingredient Connection.",
+        "operationId": "dsfrm:FormulaIngredient_Disconnect.",
+        "tags": [
+          "dsfrm:FormulaIngredient"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DS-Change-Authoring-Context",
+            "in": "header",
+            "description": "Work Under Change Action",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "pid:GH564568015FFCF14F940A513C6765RE"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsfrm:FormulatedProduct object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ConID",
+            "in": "path",
+            "description": "ID of the Formula Ingredient Connection.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "BAD REQUEST. The request could not be recognised by the server due to incorrect syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request is required user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once,the user SHOULD be presented the entity that was given in the response.Since the response entity might be included the relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server recognised the request, but refused to complete it.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsfrm:FormulatedProduct/{ID}/dslc:changeControl": {
+      "post": {
+        "summary": "Activate the Change Control.",
+        "description": "Activate the Change Control.",
+        "operationId": "create_dsfrm:FormulatedProduct_dslc:changeControl",
+        "tags": [
+          "dslc:changeControl"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsfrm:FormulatedProduct object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addEmpty"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "BAD REQUEST. The request could not be recognised by the server due to incorrect syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request is required user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once,the user SHOULD be presented the entity that was given in the response.Since the response entity might be included the relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server recognised the request, but refused to complete it.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Displays the Change Control status of a Formulated Product.",
+        "description": "Displays the Change Control status of a Formulated Product.",
+        "operationId": "GET_dsfrm:FormulatedProduct_dslc:changeControl",
+        "tags": [
+          "dslc:changeControl"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsfrm:FormulatedProduct object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defines what data is to be returned by default Mask is:dsmvlc:ChangeControlMask.Status",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvlc:ChangeControlMask.Status"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvlc_ChangeControlMask.Status"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be recognised by the server due to incorrect syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request is required user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once,the user SHOULD be presented the entity that was given in the response.Since the response entity might be included the relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deactivates the Change Control of a Formulated Product.",
+        "description": "Deactivates the Change Control of a Formulated Product.",
+        "operationId": "DELETE_dsfrm:FormulatedProduct_ID_dslc:changeControl",
+        "tags": [
+          "dslc:changeControl"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsfrm:FormulatedProduct object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "BAD REQUEST. The request could not be recognised by the server due to incorrect syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request is required user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once,the user SHOULD be presented the entity that was given in the response.Since the response entity might be included the relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsfrm:FormulatedProduct/{ID}/dseng:EnterpriseReference": {
+      "post": {
+        "summary": "Adds Enterprise Reference to a Formulated Product.",
+        "description": "Adds Enterprise Reference to a Formulated Product.",
+        "operationId": "Create_dsfrm:FormulatedProduct_ID_dseng:EnterpriseReference",
+        "tags": [
+          "dseng:EnterpriseReference"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsfrm:FormulatedProduct object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defines what data is to be returned by default Mask is:dsmveng:EnterpriseReference.Details",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveng:EnterpriseReference.Details"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addEnterpriseReference"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dsmveng_EnterpriseReference.Details"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be recognised by the server due to incorrect syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request is required user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once,the user SHOULD be presented the entity that was given in the response.Since the response entity might be included the relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server recognised the request, but refused to complete it.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Modifies the Enterprise Reference of a Formulated Product",
+        "description": "Modifies the Enterprise Reference of a Formulated Product",
+        "operationId": "PATCH_dsfrm:FormulatedProduct_ID_dseng:EnterpriseReference",
+        "tags": [
+          "dseng:EnterpriseReference"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsfrm:FormulatedProduct object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defines what data is to be returned by default Mask is:dsmveng:EnterpriseReference.Details",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveng:EnterpriseReference.Details"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateEnterpriseReference"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dsmveng_EnterpriseReference.Details"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be recognised by the server due to incorrect syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request is required user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once,the user SHOULD be presented the entity that was given in the response.Since the response entity might be included the relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Displays the Enterprise Reference of a Formulated Product.",
+        "description": "Displays the Enterprise Reference of a Formulated Product.",
+        "operationId": "GET_dsfrm:FormulatedProduct_ID_dseng:EnterpriseReference",
+        "tags": [
+          "dseng:EnterpriseReference"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsfrm:FormulatedProduct object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defines what data is to be returned by default Mask is:dsmveng:EnterpriseReference.Details",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmveng:EnterpriseReference.Details"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dsmveng_EnterpriseReference.Details"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be recognised by the server due to incorrect syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request is required user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once,the user SHOULD be presented the entity that was given in the response.Since the response entity might be included the relevant diagnostic information. HTTP access authentication is explained in HTTP Authentication: Basic and Digest Access Authentication.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "dsfrm_FormulatedProductMask.Default": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "identifier": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "source": {
+                  "type": "string",
+                  "example": "$3DSpace"
+                },
+                "relativePath": {
+                  "type": "string",
+                  "example": "/resources/v1/modeler/dsrm/dsrm:RawMaterial/C9AD8256....."
+                },
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "type": "string",
+                  "example": "String"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "dimensionType": {
+                  "type": "string",
+                  "example": "String"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "identifier": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsfrm_FormulatedProductMask.Details": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "identifier": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "source": {
+                  "type": "string",
+                  "example": "$3DSpace"
+                },
+                "relativePath": {
+                  "type": "string",
+                  "example": "/resources/v1/modeler/dsfrm/dsfrm:FormulatedProduct/6054DBD114390B00...."
+                },
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "type": "string",
+                  "example": "String"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "referenceBatchQuantity": {
+                  "type": "object",
+                  "properties": {
+                    "quantity": {
+                      "type": "string",
+                      "example": "20",
+                      "description": "The amount of the batch."
+                    },
+                    "unit": {
+                      "type": "string",
+                      "example": "KILOGRAM",
+                      "description": "The unit of measurement for the quantity."
+                    },
+                    "magnitude": {
+                      "type": "string",
+                      "example": "Mass",
+                      "description": "The type of magnitude represented (e.g., mass, volume)."
+                    }
+                  }
+                },
+                "dseng:EnterpriseReference": {
+                  "properties": {
+                    "partNumber": {
+                      "description": "partNumber manually entered value",
+                      "type": "string",
+                      "example": "partNumber value"
+                    }
+                  }
+                },
+                "dsfrm:EnterpriseAttributes": {
+                  "properties": {
+                    "Attribute DB Name": {
+                      "description": "Attribute DB Value",
+                      "type": "string",
+                      "example": "Attribute DB Value"
+                    }
+                  }
+                },
+                "customerAttributes": {
+                  "type": "object",
+                  "properties": {
+                    "DBCustomType.MyDBAttr1": {
+                      "description": "Attribute DB Value",
+                      "type": "string",
+                      "example": "Attribute DB Value"
+                    },
+                    "DBcustomExtension": {
+                      "properties": {
+                        "DBcustomExtension.MyDBAttr2": {
+                          "description": "Attribute DB Value",
+                          "type": "string",
+                          "example": "Attribute DB Value"
+                        }
+                      }
+                    },
+                    "DBcustomAttributesGroup": {
+                      "properties": {
+                        "DBcustomAttributesGroup.MyDBAttr3": {
+                          "description": "Attribute DB Value",
+                          "type": "string",
+                          "example": "Attribute DB Value"
+                        }
+                      }
+                    }
+                  }
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "identifier": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "createFormulatedProduct": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "FRM-Title"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "Formulated_Product"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "FRM-Description"
+                },
+                "dimensionType": {
+                  "type": "string",
+                  "example": "Mass/Area/Length/Volume"
+                },
+                "referenceBatchQuantity": {
+                  "type": "object",
+                  "properties": {
+                    "quantity": {
+                      "type": "string",
+                      "example": "20",
+                      "description": "The amount of the quantity."
+                    },
+                    "unit": {
+                      "type": "string",
+                      "example": "KILOGRAM",
+                      "description": "The unit of measurement for the quantity."
+                    },
+                    "magnitude": {
+                      "type": "string",
+                      "example": "Mass",
+                      "description": "The type of magnitude represented (e.g., mass, volume)."
+                    }
+                  }
+                },
+                "dseng:EnterpriseReference": {
+                  "type": "object",
+                  "properties": {
+                    "partNumber": {
+                      "type": "string",
+                      "example": "EIN",
+                      "description": "partNumber manually entered value"
+                    }
+                  }
+                },
+                "dsfrm:EnterpriseAttributes": {
+                  "type": "object",
+                  "properties": {
+                    "Attribute DB Name": {
+                      "description": "Attribute DB Value",
+                      "type": "string",
+                      "example": "Attribute DB Value"
+                    }
+                  }
+                },
+                "customerAttributes": {
+                  "type": "object",
+                  "properties": {
+                    "DBCustomType.MyDBAttr1": {
+                      "description": "Attribute DB Value",
+                      "type": "string",
+                      "example": "Attribute DB Value"
+                    },
+                    "DBcustomExtension": {
+                      "properties": {
+                        "DBcustomExtension.MyDBAttr2": {
+                          "description": "Attribute DB Value",
+                          "type": "string",
+                          "example": "Attribute DB Value"
+                        }
+                      }
+                    },
+                    "DBcustomAttributesGroup": {
+                      "properties": {
+                        "DBcustomAttributesGroup.MyDBAttr3": {
+                          "description": "Attribute DB Value",
+                          "type": "string",
+                          "example": "Attribute DB Value"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "updateFormulatedProduct": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "FRM-Title"
+          },
+          "description": {
+            "type": "string",
+            "example": "FRM-Description"
+          },
+          "cestamp": {
+            "type": "string",
+            "example": "EE4C8256C8022F0067D7EF7B00000020"
+          },
+          "referenceBatchQuantity": {
+            "type": "object",
+            "properties": {
+              "quantity": {
+                "type": "string",
+                "example": "20",
+                "description": "The amount of the quantity."
+              },
+              "unit": {
+                "type": "string",
+                "example": "KILOGRAM",
+                "description": "The unit of measurement for the quantity."
+              },
+              "magnitude": {
+                "type": "string",
+                "example": "Mass",
+                "description": "The type of magnitude represented (e.g., mass, volume)."
+              }
+            }
+          },
+          "dseng:EnterpriseReference": {
+            "properties": {
+              "partNumber": {
+                "description": "partNumber manually entered value",
+                "type": "string",
+                "example": "partNumber value"
+              }
+            }
+          },
+          "dsfrm:EnterpriseAttributes": {
+            "properties": {
+              "Attribute DB Name": {
+                "description": "Attribute DB Value",
+                "type": "string",
+                "example": "Attribute DB Value"
+              }
+            }
+          },
+          "customerAttributes": {
+            "type": "object",
+            "properties": {
+              "DBCustomType.MyDBAttr1": {
+                "description": "Attribute DB Value",
+                "type": "string",
+                "example": "Attribute DB Value"
+              },
+              "DBcustomExtension": {
+                "properties": {
+                  "DBcustomExtension.MyDBAttr2": {
+                    "description": "Attribute DB Value",
+                    "type": "string",
+                    "example": "Attribute DB Value"
+                  }
+                }
+              },
+              "DBcustomAttributesGroup": {
+                "properties": {
+                  "DBcustomAttributesGroup.MyDBAttr3": {
+                    "description": "Attribute DB Value",
+                    "type": "string",
+                    "example": "Attribute DB Value"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "formula_ingredient_connection_details": {
+        "type": "object",
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "object",
+            "properties": {
+              "quantity": {
+                "type": "object",
+                "properties": {
+                  "inputUnit": {
+                    "type": "string",
+                    "example": "GRAM"
+                  },
+                  "min": {
+                    "type": "string",
+                    "example": "3.0"
+                  },
+                  "max": {
+                    "type": "string",
+                    "example": "6.0"
+                  },
+                  "target": {
+                    "type": "string",
+                    "example": "4.0"
+                  }
+                }
+              },
+              "quantityPercent": {
+                "type": "object",
+                "properties": {
+                  "min": {
+                    "type": "string",
+                    "example": "3.0"
+                  },
+                  "max": {
+                    "type": "string",
+                    "example": "6.0"
+                  },
+                  "target": {
+                    "type": "string",
+                    "example": "4.0"
+                  }
+                }
+              },
+              "loss": {
+                "type": "string",
+                "example": "0.0"
+              },
+              "resource": {
+                "type": "object",
+                "properties": {
+                  "identifier": {
+                    "type": "string",
+                    "example": "AD4482561A69000067E0F1A800000009"
+                  },
+                  "relativePath": {
+                    "type": "string",
+                    "example": "/resources/v1/modeler/dsfrm/dsfrm:FormulatedProduct/AD4482561A69000......"
+                  },
+                  "source": {
+                    "type": "string",
+                    "example": "3DSpace"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "Formulated Product00000003"
+                  },
+                  "type": {
+                    "type": "string",
+                    "example": "Formulated_Product"
+                  }
+                }
+              },
+              "id": {
+                "type": "string",
+                "example": "AD448256FDB6040067F3C1B200000010"
+              },
+              "cestamp": {
+                "type": "string",
+                "example": "AD448256FDB6040067F3C20B0000001E"
+              },
+              "isQS": {
+                "type": "boolean",
+                "example": false
+              }
+            }
+          }
+        }
+      },
+      "create_formula_ingredient_percent": {
+        "type": "object",
+        "properties": {
+          "quantity_Percent": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "string",
+                "example": "3.0"
+              },
+              "max": {
+                "type": "string",
+                "example": "6.0"
+              },
+              "target": {
+                "type": "string",
+                "example": "4.0"
+              }
+            }
+          },
+          "loss": {
+            "type": "string",
+            "example": "0.0"
+          },
+          "id": {
+            "type": "string",
+            "example": "AD448256FDB6040067F3C1B200000010"
+          },
+          "isQS": {
+            "type": "boolean",
+            "example": false
+          },
+          "resource": {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "example": "AD4482561A69000067E0F1A800000009"
+              },
+              "relativePath": {
+                "type": "string",
+                "example": "/resources/v1/modeler/dsfrm/dsfrm:FormulatedProduct/AD4482561A69000......"
+              },
+              "source": {
+                "type": "string",
+                "example": "3DSpace"
+              },
+              "title": {
+                "type": "string",
+                "example": "Formulated Product00000003"
+              },
+              "type": {
+                "type": "string",
+                "example": "Formulated_Product"
+              }
+            }
+          }
+        }
+      },
+      "create_formula_ingredient_weight": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "string",
+                "example": "3.0"
+              },
+              "max": {
+                "type": "string",
+                "example": "6.0"
+              },
+              "target": {
+                "type": "string",
+                "example": "4.0"
+              },
+              "inputUnit": {
+                "type": "string",
+                "example": "GRAM"
+              }
+            }
+          },
+          "loss": {
+            "type": "string",
+            "example": "0.0"
+          },
+          "id": {
+            "type": "string",
+            "example": "AD448256FDB6040067F3C1B200000010"
+          },
+          "isQS": {
+            "type": "boolean",
+            "example": false
+          },
+          "resource": {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "example": "AD4482561A69000067E0F1A800000009"
+              },
+              "relativePath": {
+                "type": "string",
+                "example": "/resources/v1/modeler/dsfrm/dsfrm:FormulatedProduct/AD4482561A69000......"
+              },
+              "source": {
+                "type": "string",
+                "example": "3DSpace"
+              },
+              "title": {
+                "type": "string",
+                "example": "Formulated Product00000003"
+              },
+              "type": {
+                "type": "string",
+                "example": "Formulated_Product"
+              }
+            }
+          }
+        }
+      },
+      "update_formula_ingredient_percent": {
+        "type": "object",
+        "properties": {
+          "quantity_Percent": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "string",
+                "example": "3",
+                "description": "Minimum percentage value"
+              },
+              "target": {
+                "type": "string",
+                "example": "4",
+                "description": "Target percentage value"
+              },
+              "max": {
+                "type": "string",
+                "example": "6",
+                "description": "Maximum percentage value"
+              }
+            }
+          },
+          "loss": {
+            "type": "string",
+            "example": "5",
+            "description": "Loss percentage or amount"
+          },
+          "isQS": {
+            "type": "boolean",
+            "example": true,
+            "description": "Indicates whether QS is enabled"
+          },
+          "cestamp": {
+            "type": "string",
+            "example": "08C79B09DA8F1A0067ED180900000166",
+            "description": "cestamp"
+          }
+        }
+      },
+      "update_formula_ingredient_weight": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "string",
+                "example": "3",
+                "description": "Minimum quantity value"
+              },
+              "max": {
+                "type": "string",
+                "example": "6",
+                "description": "Maximum quantity value"
+              },
+              "target": {
+                "type": "string",
+                "example": "4",
+                "description": "Target quantity value"
+              },
+              "inputUnit": {
+                "type": "string",
+                "example": "GRAM",
+                "description": "Unit of measurement for the quantity"
+              }
+            }
+          },
+          "loss": {
+            "type": "string",
+            "example": "4",
+            "description": "Loss percentage or amount"
+          },
+          "isQS": {
+            "type": "boolean",
+            "example": true,
+            "description": "Indicates whether QS is enabled"
+          },
+          "cestamp": {
+            "type": "string",
+            "example": "AD448256FDB6040067F3C1B200000016",
+            "description": "cestamp"
+          }
+        }
+      },
+      "addEmpty": {},
+      "dsmvlc_ChangeControlMask.Status": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Change Control Status": {
+                  "type": "string",
+                  "example": "[NONE, ANY, ID OR MANY]"
+                }
+              }
+            }
+          }
+        }
+      },
+      "dsmveng_EnterpriseReference.Details": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "partNumber": {
+                  "type": "string",
+                  "example": "Part Number Value"
+                }
+              }
+            }
+          }
+        }
+      },
+      "addEnterpriseReference": {
+        "properties": {
+          "partNumber": {
+            "type": "string",
+            "example": "my Part Number2"
+          }
+        }
+      },
+      "updateEnterpriseReference": {
+        "properties": {
+          "partNumber": {
+            "type": "string",
+            "example": "my Part Number2"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

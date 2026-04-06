@@ -1,0 +1,512 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Configuration Rule Solver Web Services",
+    "version": "1.0.0",
+    "title": "Configuration Rule Solver Web Services.",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{ConfigRuleSolver}",
+      "variables": {
+        "ConfigRuleSolver": {
+          "default": "https://3DEXPERIENCE_configrulesolver",
+          "description": "URL of the ConfigRuleSolver service"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/resources/v1/cfgsolver/session": {
+      "post": {
+        "summary": "Create a solver session",
+        "description": "Create a solver session from a Model Version.",
+        "operationId": "CREATE_cfgsolver_session",
+        "tags": [
+          "Creation"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "objectReference": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "${mvId}"
+                      },
+                      "type": {
+                        "type": "string",
+                        "example": "Model Version"
+                      },
+                      "source": {
+                        "type": "string",
+                        "example": "https://3dspace.3ds.com/enovia"
+                      },
+                      "relativePath": {
+                        "type": "string",
+                        "example": "/resources/v1/dspfl/dspfl:ModelVersion/${mvId}"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "${sessionId}"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "session"
+                    },
+                    "source": {
+                      "type": "string",
+                      "example": "https://3DEXPERIENCE_configrulesolver"
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "example": "/resources/v1/cfgsolver/session/${sessionId}"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST: Request payload is not valid or object reference cannot be loaded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Please provide a valid request payload"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "UNAUTHORIZED"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resources/v1/cfgsolver/session/${sessionId}/computeValidConfigurations": {
+      "post": {
+        "summary": "Compute valid configurations",
+        "description": "The API returns complete configurations or partial combinations in batches. Please note that you can make as many calls as you wish, however session will process one request at a time.",
+        "operationId": "COMPUTE_session_validConfigurations",
+        "tags": [
+          "Compute"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/sessionId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/session_request_configurations"
+                  },
+                  {
+                    "$ref": "#/components/schemas/session_request_combinations"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/getVariabilityDefinition_noconflict"
+                    },
+                    {
+                      "$ref": "#/components/schemas/getVariabilityDefinition_withconflict"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "NO CONTENT. The request has been aborted\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 204
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Request aborted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bad Request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resources/v1/cfgsolver/session/${sessionId}/abort": {
+      "post": {
+        "summary": "Abort all pending requests",
+        "description": "Abort all pending calls to computeValidConfigurations API.",
+        "operationId": "ABORT_session_allcompute",
+        "tags": [
+          "Abort"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/sessionId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {}
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resources/v1/cfgsolver/session/${sessionId}": {
+      "delete": {
+        "summary": "Delete the session",
+        "description": "Delete the session and abort all requests",
+        "operationId": "DELETE_session",
+        "tags": [
+          "DELETE"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/sessionId"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 202
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Succeeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "session_request_configurations": {
+        "title": "Request Payload: Get Valid Configurations",
+        "properties": {
+          "configuration": {
+            "type": "array",
+            "description": "list of chosen criteria",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "${valueId}"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "Variant Value"
+                },
+                "source": {
+                  "type": "string",
+                  "example": "https://3dspace.3ds.com/enovia"
+                },
+                "relativePath": {
+                  "type": "string",
+                  "example": "/resources/v1/modeler/dspfl/dspfl:Variant/${variant}/dspfl:VariantValue/${value}"
+                }
+              }
+            }
+          }
+        }
+      },
+      "session_request_combinations": {
+        "title": "Request Payload: Get Valid Combinations",
+        "properties": {
+          "combinations": {
+            "type": "array",
+            "description": "list of criteria from which valid combinations will be computed",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "${optionId}"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "Variability Option"
+                },
+                "source": {
+                  "type": "string",
+                  "example": "https://3dspace.3ds.com/enovia"
+                },
+                "relativePath": {
+                  "type": "string",
+                  "example": "/resources/v1/modeler/dspfl/dspfl:VariabilityGroup/${optionGrId}/dspfl:Option/${optionId}"
+                }
+              }
+            }
+          }
+        }
+      },
+      "getVariabilityDefinition_noconflict": {
+        "title": "Response Payload: Configurations",
+        "properties": {
+          "configurations": {
+            "type": "object",
+            "properties": {
+              "totalItems": {
+                "type": "integer",
+                "example": 10
+              },
+              "member": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "${optionId}"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "Variability Option"
+                    },
+                    "source": {
+                      "type": "string",
+                      "example": "https://3dspace.3ds.com/enovia"
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "example": "/resources/v1/modeler/dspfl/dspfl:VariabilityGroup/${optionGrId}/dspfl:Option/${optionId}"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "getVariabilityDefinition_withconflict": {
+        "title": "Response Payload: Conflicts",
+        "properties": {
+          "configurations": {
+            "type": "object",
+            "properties": {
+              "totalItems": {
+                "type": "integer",
+                "example": 0
+              },
+              "member": {
+                "type": "array",
+                "description": "empty array",
+                "items": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "conflict": {
+            "type": "array",
+            "description": "chosen values in conflict, two by two",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "${optionId}"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "Variability Option"
+                },
+                "source": {
+                  "type": "string",
+                  "example": "https://3dspace.3ds.com/enovia"
+                },
+                "relativePath": {
+                  "type": "string",
+                  "example": "/resources/v1/modeler/dspfl/dspfl:VariabilityGroup/${optionGrId}/dspfl:Option/${optionId}"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "sessionId": {
+        "name": "sessionId",
+        "in": "path",
+        "description": "A session identifier.",
+        "required": true,
+        "style": "simple",
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

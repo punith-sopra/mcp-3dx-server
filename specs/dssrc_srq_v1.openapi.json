@@ -1,0 +1,2301 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Supplier Request Management Web Services",
+    "description": "Web services to manage the Supplier Requests",
+    "version": "1.0.1",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{Sourcing}/resources/v1/modeler/dssrc",
+      "variables": {
+        "Sourcing": {
+          "default": "https://3DEXPERIENCE_Sourcing",
+          "description": "URL of the Sourcing service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dssrc-srq/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/supplierRequestTemplates/search": {
+      "get": {
+        "summary": "Search the Supplier Request Template using input search string",
+        "description": "",
+        "operationId": "searchSupplierRequestTemplates",
+        "tags": [
+          "Supplier Request Templates APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.rfqtemplates"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "searchStr",
+            "description": "Search Criteria: A minimum of 2 characters is required.",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "description": "Number of objects to return: default is 50, with a maximum limit of 1000.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "description": "Number of objects to skip when paginating through the search results: default is 0.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/supplierRequestTemplates/{id}": {
+      "get": {
+        "summary": "Get Supplier Request Template Information",
+        "description": "",
+        "operationId": "getSupplierRequestTemplatesInformation",
+        "tags": [
+          "Supplier Request Templates APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.rfqtemplates"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/attachments/checkInTicket": {
+      "post": {
+        "summary": "Get a check-in ticket to upload files to FCS. This is required when check-in a file to a new document that has not yet been created.",
+        "description": "",
+        "operationId": "getCheckinTicket",
+        "tags": [
+          "Supplier Request Attachments APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-checkInTicket"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/attachments/{id}": {
+      "get": {
+        "summary": "Get details of specific attachment",
+        "description": "",
+        "operationId": "getAttachmentDetails",
+        "tags": [
+          "Supplier Request Attachments APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.attachment"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/supplierRequests/{id}": {
+      "get": {
+        "summary": "Get Supplier Request Information",
+        "description": "",
+        "operationId": "getSupplierRequests",
+        "tags": [
+          "Supplier Request APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.srqs"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify the sub-resources to be returned by the web request. You can provide a combination of comma-separated entries, including the keywords 'none' and 'all', as well as payload-specific sub-resources such as [!]suppliers, [!]attachments, [!]detachAttachments, and [!]requestTemplate. Some entries are enabled by default, as described in the schema section of the response payload. For further details on refinement, please refer to the '6W REST Services Principles - Refinement' section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/supplierRequests/{deleteRequestId}": {
+      "delete": {
+        "summary": "Delete Supplier Request",
+        "description": "",
+        "operationId": "deleteSupplierRequests",
+        "tags": [
+          "Supplier Request APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-delete"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "deleteRequestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/supplierRequests": {
+      "post": {
+        "summary": "Create Supplier Request",
+        "description": "",
+        "operationId": "createSupplierRequest",
+        "tags": [
+          "Supplier Request APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.srqs"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/dssrc.srqs.create"
+                    }
+                  }
+                }
+              },
+              "examples": {
+                "Prototype Request": {
+                  "$ref": "#/components/examples/createPrototypeRequest"
+                },
+                "Design Request": {
+                  "$ref": "#/components/examples/createDesignRequest"
+                },
+                "Design Change": {
+                  "$ref": "#/components/examples/createDesignChange"
+                },
+                "Distribution Event": {
+                  "$ref": "#/components/examples/createDistributionEvent"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "$include",
+            "description": "Specify the sub-resources to be returned by the web request. You can provide a combination of comma-separated entries, including the keywords 'none' and 'all', as well as payload-specific sub-resources such as [!]suppliers, [!]attachments, [!]requestTemplate, and [!]buyer. Some entries are enabled by default and are described in the schema section of the response payload. For more information about refinement, please refer to the '6W REST Services Principles - Refinement' section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/supplierRequests/{requestId}": {
+      "patch": {
+        "summary": "Update Supplier Request",
+        "description": "",
+        "operationId": "updateSupplierRequest",
+        "tags": [
+          "Supplier Request APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.srqs"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/dssrc.srqs.update"
+        },
+        "parameters": [
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify the sub-resources to be returned by the web request. You can provide a combination of comma-separated entries, including the keywords 'none' and 'all', along with payload-specific sub-resources such as [!]suppliers, [!]attachments, [!]detachAttachments, [!]requestTemplate, and [!]buyer. Some entries are enabled by default, as detailed in the schema section of the response payload. For more information on refinement, please refer to the '6W REST Services Principles - Refinement' section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/supplierRequests/{id}/attachments/detach": {
+      "post": {
+        "summary": "Remove attachments from Supplier Request",
+        "description": "",
+        "operationId": "detachAttachments",
+        "tags": [
+          "Supplier Request APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-detach-attachments"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/detachAttachmentsPayload"
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/supplierRequests/{id}/attachments": {
+      "get": {
+        "summary": "Get attachments connected to Supplier Request",
+        "description": "",
+        "operationId": "getAttachments",
+        "tags": [
+          "Supplier Request APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-attachments"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/supplierRequests/{id}/attachments/attach": {
+      "post": {
+        "summary": "Add attachments to Supplier Request",
+        "description": "",
+        "operationId": "attachAttachments",
+        "tags": [
+          "Supplier Request APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-attachments"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/attachpayload"
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/supplierRequests/search": {
+      "get": {
+        "summary": "Search Supplier Requests using input search string",
+        "description": "",
+        "operationId": "searchSupplierRequests",
+        "tags": [
+          "Supplier Request APIs"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-dssrc.srq-search-result"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "searchStr",
+            "description": "Search Criteria: 2 or more characters required.",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "description": "Number of objects to return: default is 50, with a maximum limit of 1000.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "description": "Number of objects to skip when paginating through the search results: default is 0.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      }
+    },
+    "/supplierRequests/{id}/send": {
+      "post": {
+        "summary": "Promote Supplier Request to 'Sent' state",
+        "description": "",
+        "operationId": "sendsupplierRequest",
+        "tags": [
+          "Supplier Request APIs"
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/sendrequestPayload"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-send"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "dssrc.rfqtemplates": {
+        "$ref": "#/components/x-schemas/dssrc.rfqtemplates"
+      },
+      "checkInTicket": {
+        "$ref": "#/components/x-schemas/checkInTicket"
+      },
+      "dssrc.attachment": {
+        "$ref": "#/components/x-schemas/dssrc.attachment"
+      },
+      "attachments": {
+        "$ref": "#/components/x-schemas/attachments"
+      },
+      "dssrc.srqs": {
+        "$ref": "#/components/x-schemas/dssrc.srqs"
+      },
+      "suppliers": {
+        "$ref": "#/components/x-schemas/suppliers"
+      },
+      "send": {
+        "$ref": "#/components/x-schemas/send"
+      }
+    },
+    "x-schemas": {
+      "dssrc.rfqtemplates": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "000000800000000C0000000000000000",
+                "readOnly": true
+              },
+              "identifier": {
+                "type": "string",
+                "example": "000000800000000C0000000000000000",
+                "readOnly": true
+              },
+              "relativePath": {
+                "type": "string",
+                "example": "/resources/v1/modeler/dssrc/supplierRequestTemplates/000000800000000C0000000000000000",
+                "readOnly": true
+              },
+              "source": {
+                "type": "string",
+                "example": "https://sourcing.mydomain:443/sourcing",
+                "readOnly": true
+              },
+              "type": {
+                "type": "string",
+                "example": "Supplier Request Template",
+                "readOnly": true
+              },
+              "name": {
+                "type": "string",
+                "example": "SRT-100000",
+                "readOnly": true
+              },
+              "title": {
+                "description": "The title information",
+                "example": "Request title",
+                "type": "string"
+              },
+              "revision": {
+                "type": "string",
+                "example": "1",
+                "readOnly": true
+              },
+              "owner": {
+                "description": "The owner of the component request",
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "description": "The description of the object",
+                "type": "string"
+              },
+              "originated": {
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "type": "string",
+                "readOnly": true
+              },
+              "modified": {
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "type": "string",
+                "readOnly": true
+              },
+              "state": {
+                "type": "string",
+                "example": "Released",
+                "readOnly": true
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "dssrc.attachment": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "identifier": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "attachments": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "000000800000000C0000000000000000"
+              },
+              "type": {
+                "type": "string",
+                "example": "SRC_Attachment"
+              },
+              "identifier": {
+                "type": "string",
+                "example": "000000800000000C0000000000000000"
+              },
+              "source": {
+                "type": "string",
+                "example": "https://sourcing.mydomain:443/sourcing"
+              },
+              "relativePath": {
+                "example": "/resources/v1/modeler/dssrc/attachments/000000800000000C0000000000000000",
+                "type": "string"
+              },
+              "name": {
+                "type": "string",
+                "example": "sample.pdf"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "attachpayloaddata": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "receipt": {
+                "type": "string",
+                "description": "check-in ticket generated using /servlet/fcs/checkin Public API for file Checkin",
+                "example": "QEBlbnZlbG9wMkBmY3NrZXlfM2ZlZmM1NjJlZTdkMDQwZEBAdGFyZ2V0QEBmY3NrZXlfM2ZlZmM1NWY"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "detach-attachment-success": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "example": "true",
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "string",
+            "example": 200
+          },
+          "data": {
+            "example": []
+          }
+        }
+      },
+      "suppliers": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "example": "Company",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "source": {
+                "default": "",
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "relativePath": {
+                "default": "",
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "srq-search-result": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "example": "000000800000000C0000000000000000",
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "example": "Prototype Request"
+              },
+              "identifier": {
+                "type": "string",
+                "example": "000000800000000C0000000000000000"
+              },
+              "source": {
+                "type": "string",
+                "example": "https://sourcing.mydomain:443/sourcing"
+              },
+              "relativePath": {
+                "example": "/resources/v1/modeler/dssrc/supplierRequests/000000800000000C0000000000000000",
+                "type": "string"
+              },
+              "name": {
+                "example": "PTR-100000",
+                "type": "string"
+              },
+              "title": {
+                "example": "Request title",
+                "type": "string"
+              },
+              "revision": {
+                "example": "1",
+                "type": "string"
+              },
+              "owner": {
+                "example": "owner",
+                "type": "string"
+              },
+              "description": {
+                "example": "Sample description",
+                "type": "string"
+              },
+              "originated": {
+                "example": "2024-09-05T16:10:31.000Z",
+                "type": "string"
+              },
+              "modified": {
+                "example": "2024-09-05T16:24:43.000Z",
+                "type": "string"
+              },
+              "state": {
+                "example": "Draft",
+                "type": "string"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "dssrc.srqs": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "000000800000000C0000000000000000",
+                "readOnly": true
+              },
+              "identifier": {
+                "type": "string",
+                "example": "000000800000000C0000000000000000",
+                "readOnly": true
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "SRC_Prototype_Request",
+                  "SRC_Design_Request",
+                  "SRC_Design_Change",
+                  "SRC_Distribution_Event"
+                ],
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "name": {
+                "type": "string",
+                "example": "PTR-100001",
+                "readOnly": true
+              },
+              "title": {
+                "description": "object title information",
+                "example": "Request for Drone",
+                "default": "",
+                "type": "string",
+                "x-ApplicableOperations": "Create (Required), Read (Yes), Modify (No)"
+              },
+              "revision": {
+                "type": "string",
+                "example": "1",
+                "readOnly": true
+              },
+              "owner": {
+                "description": "The owner of the object",
+                "type": "string",
+                "example": "user_id",
+                "readOnly": true
+              },
+              "description": {
+                "description": "The description of the object",
+                "default": "Sample Description",
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "originated": {
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "type": "string",
+                "readOnly": true
+              },
+              "modified": {
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "type": "string",
+                "readOnly": true
+              },
+              "state": {
+                "type": "string",
+                "example": "Draft",
+                "readOnly": true
+              },
+              "dueDate": {
+                "default": "2024-09-15T08:49:00.000Z",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "suppliers": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/suppliers"
+                }
+              },
+              "attachments": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/attachments"
+                }
+              },
+              "detachAttachments": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/detachAttachments"
+                }
+              },
+              "requestTemplate": {
+                "$ref": "#/components/x-schemas/requestTemplate"
+              }
+            }
+          }
+        ]
+      },
+      "dssrc.srqs.create": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "SRC_Prototype_Request",
+                  "SRC_Design_Request",
+                  "SRC_Design_Change",
+                  "SRC_Distribution_Event"
+                ],
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "title": {
+                "description": "object title information",
+                "example": "Request for Drone",
+                "default": "",
+                "type": "string",
+                "x-ApplicableOperations": "Create (Required), Read (Yes), Modify (No)"
+              },
+              "description": {
+                "description": "The description of the object",
+                "default": "Sample Description",
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "dueDate": {
+                "default": "2024-09-15T08:49:00.000Z",
+                "type": "string"
+              }
+            },
+            "required": [
+              "title"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "supplier": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/suppliers"
+                }
+              },
+              "attachments": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/attachments"
+                }
+              },
+              "detachAttachments": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/detachAttachments"
+                }
+              },
+              "requestTemplate": {
+                "$ref": "#/components/x-schemas/requestTemplate"
+              },
+              "buyer": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/buyer"
+                }
+              }
+            },
+            "required": [
+              "buyer",
+              "supplier"
+            ]
+          }
+        ]
+      },
+      "dssrc.srqs.update": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "description": "object title information",
+                "example": "Request for Drone",
+                "default": "",
+                "type": "string",
+                "x-ApplicableOperations": "Create (Required), Read (Yes), Modify (No)"
+              },
+              "description": {
+                "description": "The description of the object",
+                "default": "Sample Description",
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "state": {
+                "type": "string",
+                "enum": [
+                  "Review",
+                  "Sent"
+                ],
+                "description": "The state field to allow user to change the state of the object. Only applicable for Distribution Event object state modification",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "dueDate": {
+                "default": "2024-09-15T08:49:00.000Z",
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "checkInTicket": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ticketURL": {
+                "description": "The URL to retrieve the file from the FCS server.",
+                "type": "string",
+                "example": "https://server_name.dsone.3ds.com/fcs/servlet/fcs/checkin"
+              },
+              "ticketparamname": {
+                "description": "The Ticket parameter name required by the FCS server.",
+                "type": "string",
+                "example": "__fcs__jobTicket"
+              },
+              "ticket": {
+                "description": "The ticket parameter value required by the FCS server.",
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "send": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "readOnly": true
+              },
+              "type": {
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "name": {
+                "type": "string",
+                "readOnly": true
+              },
+              "title": {
+                "description": "object title information",
+                "example": "Request for Drone",
+                "default": "",
+                "type": "string",
+                "x-ApplicableOperations": "Create (Required), Read (Yes), Modify (No)"
+              },
+              "revision": {
+                "type": "string",
+                "readOnly": true
+              },
+              "owner": {
+                "description": "The owner of the object",
+                "type": "string",
+                "readOnly": true
+              },
+              "description": {
+                "description": "description of the object.",
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "originated": {
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "type": "string",
+                "readOnly": true
+              },
+              "modified": {
+                "format": "date-time",
+                "example": "2021-01-01T07:24:11.000Z",
+                "type": "string",
+                "readOnly": true
+              },
+              "state": {
+                "type": "string",
+                "readOnly": true
+              }
+            },
+            "required": [
+              "title"
+            ]
+          },
+          {}
+        ]
+      },
+      "detachAttachments": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "example": "SRC_Attachment"
+              },
+              "name": {
+                "type": "string",
+                "example": "sample.pdf"
+              },
+              "id": {
+                "type": "string",
+                "example": "000000800000000C0000000000000000"
+              },
+              "identifier": {
+                "type": "string",
+                "example": "000000800000000C0000000000000000"
+              },
+              "source": {
+                "type": "string",
+                "example": "https://sourcing.mydomain:443/sourcing"
+              },
+              "relativePath": {
+                "example": "/resources/v1/modeler/dssrc/attachments/000000800000000C0000000000000000",
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "detachAttachmentsPayload": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The attachment id which is to be detached",
+                "example": "000000800000000C0000000000000000"
+              }
+            }
+          }
+        ]
+      },
+      "requestTemplate": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "example": "A36BDFC8A23B000066CC2289000035F6",
+                "readOnly": true
+              },
+              "type": {
+                "type": "string",
+                "example": "Supplier Request Template",
+                "readOnly": true
+              },
+              "source": {
+                "default": "",
+                "type": "string",
+                "example": "https://sourcing.mydomain:443/sourcing",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "relativePath": {
+                "default": "",
+                "type": "string",
+                "example": "/resources/v1/modeler/dssrc/supplierRequests/000000800000000C0000000000000000",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              }
+            }
+          },
+          {
+            "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+          }
+        ]
+      },
+      "buyer": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "default": "",
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "example": "Company",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "identifier": {
+                "default": "",
+                "type": "string",
+                "readOnly": true
+              },
+              "source": {
+                "default": "",
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "relativePath": {
+                "default": "",
+                "type": "string",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              }
+            }
+          },
+          {}
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-dssrc.rfqtemplates": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/dssrc.rfqtemplates"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-checkInTicket": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/checkInTicket"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-dssrc.attachment": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/dssrc.attachment"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-attachments": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/attachments"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-detach-attachments": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/detach-attachment-success"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-dssrc.srqs": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/dssrc.srqs"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-dssrc.srq-seacrh-result": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/srq-search-result"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-suppliers": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/suppliers"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-send": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/send"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-delete": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "example": "true",
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "string",
+            "example": 200
+          },
+          "data": {
+            "example": []
+          }
+        }
+      },
+      "BASICS_ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "BASICS": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "description": "The object type.",
+            "type": "string"
+          },
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object.",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "PATCH_SUB_RESOURCE_ACTION": {
+        "type": "object",
+        "properties": {
+          "updateAction": {
+            "description": "Specify the sub-resource update action. Refer '6W Web Service Principles: Data Object Updates'.",
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "CONNECT",
+              "DISCONNECT"
+            ]
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://sourcing.mydomain:443/sourcing",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "csrf": {
+        "description": "CSRF token is required to be sent back for update operations and may be provided with read operations.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The CSRF token name",
+            "example": "ENO_CSRF_TOKEN",
+            "type": "string"
+          },
+          "value": {
+            "description": "The CSRF token value",
+            "example": "EXAM-PLEW-R1CD-BNF7-G8UC-KT52-MGUA-UBE1",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-dssrc.rfqtemplates": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-dssrc.rfqtemplates"
+            }
+          }
+        }
+      },
+      "200-checkInTicket": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-checkInTicket"
+            }
+          }
+        }
+      },
+      "200-dssrc.attachment": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-dssrc.attachment"
+            }
+          }
+        }
+      },
+      "200-attachments": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-attachments"
+            }
+          }
+        }
+      },
+      "200-detach-attachments": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-detach-attachments"
+            }
+          }
+        }
+      },
+      "200-dssrc.srqs": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-dssrc.srqs"
+            }
+          }
+        }
+      },
+      "200-dssrc.srq-search-result": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-dssrc.srq-seacrh-result"
+            }
+          }
+        }
+      },
+      "200-suppliers": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-suppliers"
+            }
+          }
+        }
+      },
+      "200-send": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-send"
+            }
+          }
+        }
+      },
+      "200-delete": {
+        "description": "Delete Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-delete"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "attachments": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/attachments"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "attachpayload": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/attachpayloaddata"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "sendrequestPayload": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "dssrc.srqs": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/dssrc.srqs"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "dssrc.srqs.update": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/dssrc.srqs.update"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "suppliers": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/suppliers"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "detachAttachments": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/detachAttachments"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "detachAttachmentsPayload": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/detachAttachmentsPayload"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "Security Context setting for the web request",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "description": "Locale for the web request",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "description": "The ENOVIA CSRF token which is typically required for update operations.  Retrieve using {server}/resources/v1/application/CSRF",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "fields": {
+        "name": "$fields",
+        "description": "Specify the resource and sub-resource fields to be returned by the web request. Fields include the keywords 'none' and 'all', as well as payload-specific fields - see the schema response payload for details. For more information, refer to the '6W REST Services Principles - Refinement' section.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "examples": {
+      "createPrototypeRequest": {
+        "value": {
+          "data": [
+            {
+              "type": "SRC_Prototype_Request",
+              "title": "Sample Title",
+              "description": "Sample Description",
+              "dueDate": "2024-09-15T08:49:00.000Z",
+              "buyer": [
+                {
+                  "type": "Company",
+                  "source": "https://sourcing.mydomain:443/sourcing",
+                  "id": "uuid:52c531ee-d330-4622-ad89-0065f0c17263"
+                }
+              ],
+              "supplier": [
+                {
+                  "type": "Company",
+                  "source": "https://sourcing.mydomain:443/sourcing",
+                  "id": "uuid:c9fadc77-b137-4589-8ff0-ea680d4befa5",
+                  "identifier": "<uuid:c9fadc77-b137-4589-8ff0-ea680d4befa5>"
+                }
+              ],
+              "requestTemplate": [
+                {
+                  "id": "000000800000000C0000000000000000"
+                }
+              ],
+              "attachments": [
+                {
+                  "receipt": "QEBlbnZlbG9wMkBmY3NrZXlfM2ZlZmM1NjJlZTdkMDQwZEBAdGFyZ2V0QEBmY3NrZXlfM2ZlZmM1NWY"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "createDesignRequest": {
+        "value": {
+          "data": [
+            {
+              "type": "SRC_Design_Request",
+              "title": "Sample Title",
+              "description": "Sample Description",
+              "dueDate": "2024-09-15T08:49:00.000Z",
+              "buyer": [
+                {
+                  "type": "Company",
+                  "source": "https://sourcing.mydomain:443/sourcing",
+                  "id": "uuid:52c531ee-d330-4622-ad89-0065f0c17263"
+                }
+              ],
+              "supplier": [
+                {
+                  "type": "Company",
+                  "source": "https://sourcing.mydomain:443/sourcing",
+                  "id": "uuid:c9fadc77-b137-4589-8ff0-ea680d4befa5",
+                  "identifier": "<uuid:c9fadc77-b137-4589-8ff0-ea680d4befa5>"
+                }
+              ],
+              "requestTemplate": [
+                {
+                  "id": "000000800000000C0000000000000000"
+                }
+              ],
+              "attachments": [
+                {
+                  "receipt": "QEBlbnZlbG9wMkBmY3NrZXlfM2ZlZmM1NjJlZTdkMDQwZEBAdGFyZ2V0QEBmY3NrZXlfM2ZlZmM1NWY"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "createDesignChange": {
+        "value": {
+          "data": [
+            {
+              "type": "SRC_Design_Change",
+              "title": "Sample Title",
+              "description": "Sample Description",
+              "dueDate": "2024-09-15T08:49:00.000Z",
+              "buyer": [
+                {
+                  "type": "Company",
+                  "source": "https://sourcing.mydomain:443/sourcing",
+                  "id": "uuid:52c531ee-d330-4622-ad89-0065f0c17263"
+                }
+              ],
+              "supplier": [
+                {
+                  "type": "Company",
+                  "source": "https://sourcing.mydomain:443/sourcing",
+                  "id": "uuid:c9fadc77-b137-4589-8ff0-ea680d4befa5",
+                  "identifier": "<uuid:c9fadc77-b137-4589-8ff0-ea680d4befa5>"
+                }
+              ],
+              "requestTemplate": [
+                {
+                  "id": "000000800000000C0000000000000000"
+                }
+              ],
+              "attachments": [
+                {
+                  "receipt": "QEBlbnZlbG9wMkBmY3NrZXlfM2ZlZmM1NjJlZTdkMDQwZEBAdGFyZ2V0QEBmY3NrZXlfM2ZlZmM1NWY"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "createDistributionEvent": {
+        "value": {
+          "data": [
+            {
+              "type": "SRC_Distribution_Event",
+              "title": "Sample Title",
+              "description": "Sample Description",
+              "buyer": [
+                {
+                  "type": "Company",
+                  "source": "https://sourcing.mydomain:443/sourcing",
+                  "id": "uuid:52c531ee-d330-4622-ad89-0065f0c17263"
+                }
+              ],
+              "supplier": [
+                {
+                  "type": "Company",
+                  "source": "https://sourcing.mydomain:443/sourcing",
+                  "id": "uuid:c9fadc77-b137-4589-8ff0-ea680d4befa5",
+                  "identifier": "<uuid:c9fadc77-b137-4589-8ff0-ea680d4befa5>"
+                }
+              ],
+              "requestTemplate": [
+                {
+                  "id": "000000800000000C0000000000000000"
+                }
+              ],
+              "attachments": [
+                {
+                  "receipt": "QEBlbnZlbG9wMkBmY3NrZXlfM2ZlZmM1NjJlZTdkMDQwZEBAdGFyZ2V0QEBmY3NrZXlfM2ZlZmM1NWY"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

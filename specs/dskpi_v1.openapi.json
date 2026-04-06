@@ -1,0 +1,419 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "Services provided in 3DSpace service for KeyIndicators objects",
+    "version": "1.0.0",
+    "title": "Key Performance Indicators Web Services.",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dskpi",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3dspace/",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dskpi/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/dskpi:cockpit/search": {
+      "get": {
+        "summary": "Search Cockpits.",
+        "description": "Search Cockpits.",
+        "operationId": "GET_Search_dskpi:cockpit_Search",
+        "tags": [
+          "dskpi:cockpit"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dskpi:KPICockpitMask.Common",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dskpi:KPICockpitMask.Common"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dskpi_KPICockpitMask.Common"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dskpi:metric/locate": {
+      "post": {
+        "summary": "Fetches metrics on given reference",
+        "description": "Fetches metrics on given reference",
+        "operationId": "POST_Locate_dskpi:metric_Locate",
+        "tags": [
+          "dskpi:metric"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/locateMetric"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "totalItems": 2,
+                    "member": [
+                      {
+                        "MetricName": "Cost",
+                        "NLSMetricName": "Recurring cost",
+                        "MetricKind": "ShouldCost",
+                        "NLSMetricKind": "Should cost",
+                        "Value": "17",
+                        "Unit": "EUR",
+                        "Confidence": "50",
+                        "Description": ""
+                      },
+                      {
+                        "MetricName": "ProcessCost",
+                        "NLSMetricName": "Process cost",
+                        "MetricKind": "Estimated",
+                        "NLSMetricKind": "Estimated",
+                        "Value": "12",
+                        "Unit": "EUR",
+                        "Confidence": "50",
+                        "Description": ""
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "locateMetric": {
+        "required": [
+          "ReferenceResource",
+          "CockpitResource"
+        ],
+        "type": "object",
+        "properties": {
+          "ReferenceResource": {
+            "type": "object",
+            "required": [
+              "identifier"
+            ],
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "example": "ReferencePhysicalID",
+                "description": "The Reference Physical ID of the dseng:EngItem."
+              },
+              "type": {
+                "description": "type",
+                "type": "string",
+                "example": "VPMReference"
+              },
+              "source": {
+                "description": "source",
+                "type": "string",
+                "example": "https://server_name.dsone.3ds.com:443/3DSpace"
+              },
+              "relativePath": {
+                "description": "relativePath",
+                "type": "string",
+                "example": "/resources/v1/modeler/dseng/dseng:EngItem/ReferencePhysicalID"
+              }
+            }
+          },
+          "CockpitResource": {
+            "type": "object",
+            "required": [
+              "identifier"
+            ],
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "example": "CockpitPhysicalID",
+                "description": "The Cokpit Physical ID of the dskpi:cockpit."
+              },
+              "type": {
+                "description": "type",
+                "type": "string",
+                "example": "dskpi:cockpit"
+              },
+              "source": {
+                "description": "source",
+                "type": "string",
+                "example": "https://server_name.dsone.3ds.com:443/3DSpace"
+              },
+              "relativePath": {
+                "description": "relativePath",
+                "type": "string",
+                "example": "/resources/v1/modeler/dskpi/dskpi:cockpit/CockpitPhysicalID"
+              }
+            }
+          },
+          "ProductConfigurationResource": {
+            "type": "object",
+            "required": [
+              "identifier"
+            ],
+            "description": "ProductConfigurationResource is not mandatory",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "example": "ProductConfigurationID",
+                "description": "The Product Configuration Physical ID of the dspfl:ProductConfiguration."
+              },
+              "type": {
+                "description": "type",
+                "type": "string",
+                "example": "dspfl:ProductConfiguration"
+              },
+              "source": {
+                "description": "source",
+                "type": "string",
+                "example": "https://server_name.dsone.3ds.com:443/3DSpace"
+              },
+              "relativePath": {
+                "description": "relativePath",
+                "type": "string",
+                "example": "/resources/v1/modeler/dspfl/dspfl:ModelVersion/{ID}/dspfl:ProductConfiguration/ProductConfigurationID"
+              }
+            }
+          },
+          "ProjectResource": {
+            "type": "object",
+            "required": [
+              "identifier"
+            ],
+            "description": "ProjectResource is not mandatory",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "example": "ProjectID",
+                "description": "The Project Physical ID."
+              },
+              "type": {
+                "description": "type can be Project Space for premise or dsplan:Project for cloud.",
+                "type": "string",
+                "example": "Project Space"
+              },
+              "source": {
+                "description": "source can be https://3dspace.mydomain:443/3DSpace for premise or https://3DEXPERIENCE_3DPlan for cloud",
+                "type": "string",
+                "example": "https://server_name.dsone.3ds.com:443/3DSpace"
+              },
+              "relativePath": {
+                "description": "relativePath can be /resources/v1/modeler/projects/ProjectID for premise or /resources/v1/3dplan/projects/ProjectID for cloud.",
+                "type": "string",
+                "example": "/resources/v1/modeler/projects/ProjectID"
+              }
+            }
+          }
+        }
+      },
+      "dskpi_KPICockpitMask.Common": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        },
+        "example": [
+          {
+            "CockpitName": "Cost Assessment",
+            "CockpitPhysicalID": "569882561FC03100660309230002E7D0"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,374 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Other 3DCompass web Services",
+    "description": "This page describes other 3DCompass APIs.",
+    "version": "1.0.0",
+    "x-ds-service": [
+      "3DCompass"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DCompass}",
+      "variables": {
+        "3DCompass": {
+          "default": "https://3DEXPERIENCE_3DCompass"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "Platform Members",
+      "description": "The section is about platform members. The person using these API must be a platform administrator."
+    }
+  ],
+  "paths": {
+    "/resources/AppsMngt/api/v1/massive/synchro": {
+      "post": {
+        "summary": "Launch a request for managing platform members.",
+        "description": "This API enables platform administrators to launch a request for managing platform members: \n- Inviting new members. \n- Removing platform access for existing members. \n- Changing member features (roles, platform access rights, agreement,...).\n\n Details for  members are defined within a CSV file. Each line is for one user. The format of each line cannot be detailed here. It is explained in the article About Platform Members of the Developer Assistance. The file is passed to the API as a base 64 encoded string.  \n\n The API first starts to purge the CSV file to only keep the valid lines to proceed. If the expurged file is empty, the API raises an error (400). From the original file are removed: \n- All blank lines.\n- All lines starting with # (comments) \n- The double lines for a same user (only the first is kept). \n\nOnce the CSV file is pre-processed the massive import can start. But the API is asynchrone. The response body only contains a request identifier. To follow up the state of the import, invoke the check request state API using the request identifier as query parameter. ",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/massivesynchro"
+        },
+        "tags": [
+          "Platform Members"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CSRFToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200POST"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          }
+        }
+      },
+      "get": {
+        "summary": "Check request state.",
+        "description": "This API is the means for a platform administrator to follow up the massive import request. The response body contains a global state (status key in the response body), and a state for each processed users ( status key in the array users). While the response is successful (200), and the import is not over you can invoke the API.",
+        "tags": [
+          "Platform Members"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/massiveSynchroId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200GET"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "CSRFToken": {
+        "name": "X-DS-CSRFTOKEN",
+        "description": "It is the header for passing the CSRF token that you get calling <3DCompassURL>/resources/AppsMngt/security/csrf",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "massiveSynchroId": {
+        "name": "massiveSynchroId",
+        "description": "  ",
+        "in": "query",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "requestBody": {
+        "description": "It is the request body for the POST API.",
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "description": "It is the contents - base 64 encoded - of a CSV file. Each line of the CSV file represents a member. The CSV line format is detailed in the article About Platform Members.",
+            "type": "string"
+          },
+          "platform": {
+            "description": "The platform instance name where to manage members. The information is mandatory for Cloud environment only.",
+            "type": "string"
+          },
+          "invitationCustomMessage": {
+            "description": "An additional message to customize the invitation email. The string must be URL encoded. \n\n If the string contains not URL encoded chars, the response code is 400 and the (meaningless) body format is HTMLi nstead application/json as other 400 response codes.",
+            "type": "string"
+          }
+        }
+      },
+      "responseError": {
+        "description": "It is the kind of response body in case of failure response.",
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": [
+              "code",
+              "message"
+            ],
+            "properties": {
+              "code": {
+                "description": "Its format is MYAXXX, where XXX is a unique number specifying the error.",
+                "type": "string"
+              },
+              "message": {
+                "description": "A text (in English) describing the error. The message text may change.",
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "user": {
+        "description": " .",
+        "type": "object",
+        "required": [
+          "id",
+          "role",
+          "count",
+          "status",
+          "comment",
+          "code"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The string in the CSV file for identifying the member."
+          },
+          "role": {
+            "type": "integer",
+            "description": "The value is alsways zero."
+          },
+          "status": {
+            "type": "integer",
+            "description": "The import state of the user. The possible values are: \n\n- 0 The import is over and successfull.\n\n- 1 The import has not yet started.  \n\n- 2  The import is over with a failure \n\n- 3 The import is in work. \n\n- 6  The import is over with attention state."
+          },
+          "comment": {
+            "type": "string",
+            "description": "A non contractual information message about the import state."
+          },
+          "code": {
+            "description": "If the value is zero, the import is OK, otherwise a non contractual value.",
+            "type": "string"
+          }
+        }
+      },
+      "responseCheckImport": {
+        "description": "This is the successful response body of the GET API.",
+        "type": "object",
+        "required": [
+          "massiveSynchroId",
+          "count",
+          "status",
+          "statuslist",
+          "users"
+        ],
+        "properties": {
+          "massiveSynchroId": {
+            "type": "string",
+            "description": "It is the identifier of the request passed as query parameter of the call."
+          },
+          "count": {
+            "type": "integer",
+            "description": "The count of valid users set by the POST API. There are as many elements in the users array as the count value."
+          },
+          "status": {
+            "type": "integer",
+            "description": "The global state (for all users) of the request. The possible values are: \n\n- 0 The import is over. All users are successfully imported. Their respective state is 0. \n\n- 1 The import has not yet started. The state for each user is 1.  \n\n- 2  The import is over. It is a failure for all users. Their respective state is 2.  \n\n- 3 The import is not over. At least one user is still not imported with  the state 1 or 3. \n\n- 5  The import is over. Some users are not imported. At least one user has the state 0 and at least one has the state 2."
+          },
+          "statuslist": {
+            "description": "The kind of states for a user or globally.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "name"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "A value between 0 and 6. \n\n- 0 Success \n\n- 1 Not started \n\n- 2 Failure \n\n- 3 In Work \n\n- 5 Partial Success \n\n- 6 Attention"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "The meaning of the state. The text language is the connected person language UI setting."
+                }
+              }
+            }
+          },
+          "users": {
+            "description": "The state for each proceeded user. There are as many elements in the array as count value.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/user"
+            }
+          }
+        }
+      },
+      "responseLaunchImport": {
+        "description": "This is the successful response body of the POST API. The CSV file, once pre-processed, contains at least one valid line to process. Below only the exposed keys.",
+        "type": "object",
+        "required": [
+          "massiveSynchroId",
+          "status",
+          "message"
+        ],
+        "properties": {
+          "massiveSynchroId": {
+            "type": "string",
+            "description": "The identifier of the massive import request. Use it as value for the query parameter named massiveSynchroId of the Check Request State API (GET) for following the massive import state."
+          },
+          "status": {
+            "type": "integer",
+            "description": "It states if the CSV file contains at least one not well defined user. \n- 1 At least one user is not well defined. If all users are wrong the API response code is 400. \n- 0 All users are well defined. \n\nThe array named users in the GET API response body will have as many elements as valid user definitions. So if the status value is 1, users will contain the state for the valid users only."
+          },
+          "message": {
+            "type": "string",
+            "description": "A non contractual information message."
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "massivesynchro": {
+        "description": "The form URL encoded request body.",
+        "required": true,
+        "content": {
+          "application/x-www-form-urlencoded": {
+            "schema": {
+              "$ref": "#/components/schemas/requestBody"
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200POST": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/responseLaunchImport"
+            },
+            "examples": {
+              "CSV file with at least one bad definition member": {
+                "value": {
+                  "massiveSynchroId": "b89c40d160bf506749534634d3da41d5f2e9e569",
+                  "message": "The users import has been launched.",
+                  "status": 1
+                }
+              },
+              "Without input CSV file issue": {
+                "value": {
+                  "massiveSynchroId": "66d38b1ee6d76d5fbf45a7d299c7cc57b90cd09c",
+                  "message": "The users import has been launched.",
+                  "status": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "200GET": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/responseCheckImport"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Access Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/responseError"
+            },
+            "examples": {
+              "CSRF": {
+                "value": {
+                  "error": {
+                    "code": "MYA203",
+                    "message": "Access forbidden"
+                  }
+                }
+              },
+              "Invalid Privilege": {
+                "value": {
+                  "error": {
+                    "code": "MYA106",
+                    "message": "User xxx cannot manage platform yyy"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Error due to wrong inputs.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/responseError"
+            },
+            "examples": {
+              "Issue with data (POST)": {
+                "value": {
+                  "error": {
+                    "code": "MYA106",
+                    "message": "data is empty or not base 64 encoded"
+                  }
+                }
+              },
+              "issue with platform (POST)": {
+                "value": {
+                  "error": {
+                    "code": "MYA106",
+                    "message": "Platform  does not exist"
+                  }
+                }
+              },
+              "issue with wrong massiveImportId (GET)": {
+                "value": {
+                  "error": {
+                    "code": "MYA107",
+                    "message": "No Massivesynchro object found for ..."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

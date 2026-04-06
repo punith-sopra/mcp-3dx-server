@@ -1,0 +1,2799 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Software Producer Systems Web Services",
+    "summary": "REST API for managing workspaces, operations and assets used by user for generating artefacts from input models",
+    "description": "It lists the API to manage workspaces, operations and assets used by user for generating artefacts from input models",
+    "version": "1.0.0",
+    "x-ds-service": "softproducersystems",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{softproducersystemsUrl}/resources/v1/modeler/dsesp",
+      "variables": {
+        "softproducersystemsUrl": {
+          "default": "https://3DEXPERIENCE_softproducersystems/SoftwareProducerSystems",
+          "description": "URL of the Software Producer Service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsesp/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "service",
+      "description": "APIs for managing the Service"
+    },
+    {
+      "name": "workspaces",
+      "description": "APIs for managing Workspaces"
+    },
+    {
+      "name": "operations",
+      "description": "APIs for managing Operations"
+    },
+    {
+      "name": "assets",
+      "description": "APIs for managing Assets"
+    },
+    {
+      "name": "userspace",
+      "description": "APIs for managing the User Space"
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/service/info": {
+      "get": {
+        "operationId": "getServiceInfo",
+        "summary": "Get information about the Service",
+        "description": "Get information about the service including:  \n  - Service version \n  - List of operation types\n\nTypical API called to get service availability. ",
+        "tags": [
+          "service"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ServiceInfo.mask"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Information about service version and list of operation types",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ServiceInfo.basic"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ServiceInfo.details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/dsesp:userspace/reset": {
+      "post": {
+        "operationId": "resetUserspace",
+        "summary": "Reset user environment",
+        "description": "Cleanup API:\n- Delete all user workspaces (operations, assets...)\n- Reset user environment",
+        "tags": [
+          "userspace"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Security.CSRF"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Ok"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/dsesp:workspace": {
+      "post": {
+        "operationId": "createWorkspaces",
+        "summary": "Create new Workspaces",
+        "description": "Create new Workspaces.",
+        "tags": [
+          "workspaces"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Security.CSRF"
+          },
+          {
+            "$ref": "#/components/parameters/Workspaces.mask"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "description": "List of changeable Workspaces Attributes can be provided as request body. If not provided, one Workspace with default attributes is created.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Workspaces.details"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created Workspaces",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Workspaces.basic"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Workspaces.details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "get": {
+        "operationId": "getWorkspaces",
+        "summary": "Get the list of existing Workspaces",
+        "description": "Get the list of existing Workspaces.",
+        "tags": [
+          "workspaces"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Workspaces.mask"
+          },
+          {
+            "$ref": "#/components/parameters/List.skip"
+          },
+          {
+            "$ref": "#/components/parameters/List.top"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Workspaces",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Workspaces.basic"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Workspaces.details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/dsesp:workspace/bulkdelete": {
+      "post": {
+        "operationId": "deleteWorkspaces",
+        "summary": "Delete Workspaces",
+        "description": "Delete Workspaces.",
+        "tags": [
+          "workspaces"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Security.CSRF"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "List of ids of Workspaces to be deleted.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Workspaces.selection"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/NoContent"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/dsesp:workspace/{idWs}": {
+      "patch": {
+        "operationId": "updateWorkspace",
+        "summary": "Update attributes of Workspace",
+        "description": "Update attributes of Workspace {idWs}.",
+        "tags": [
+          "workspaces"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Security.CSRF"
+          },
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Changeable Workspace Attributes can be provided as request body. At least one attribute is required in the request body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Workspace.details"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Ok"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "get": {
+        "operationId": "getWorkspace",
+        "summary": "Get attributes of Workspace",
+        "description": "Get attributes of Workspace {idWs}.",
+        "tags": [
+          "workspaces"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          },
+          {
+            "$ref": "#/components/parameters/Workspace.mask"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Workspace's attributes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Workspace.basic"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Workspace.details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteWorkspace",
+        "summary": "Delete Workspace",
+        "description": "Delete Workspace {idWs}.",
+        "tags": [
+          "workspaces"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Security.CSRF"
+          },
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/NoContent"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/dsesp:workspace/{idWs}/extend": {
+      "post": {
+        "operationId": "extendWorkspace",
+        "summary": "Extends validity of Workspace",
+        "description": "Extends validity of Workspace {idWs} to 30 days from current date.",
+        "tags": [
+          "workspaces"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Security.CSRF"
+          },
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Ok"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/dsesp:workspace/{idWs}/download": {
+      "get": {
+        "operationId": "downloadWorkspace",
+        "summary": "Download Workspace's contents as zip file",
+        "description": "Download Workspace's contents as zip file.",
+        "tags": [
+          "workspaces"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stream of downloaded Workspace.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/dsesp:workspace/{idWs}/dsesp:operation": {
+      "post": {
+        "operationId": "createOperations",
+        "summary": "Create and invoke new Operation",
+        "description": "Create and invoke new Operations in Workspace {idWs}.",
+        "tags": [
+          "operations"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Security.CSRF"
+          },
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          },
+          {
+            "$ref": "#/components/parameters/Operations.mask"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "List of changeable Operations Attributes can be provided as request body. Attributes **type** and **objectIds** are mandatory.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Operations.details"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created Operations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Operations.basic"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Operations.details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "get": {
+        "operationId": "getOperations",
+        "summary": "Get the list of existing Operations",
+        "description": "Get the list of existing Operations of Workspace {idWs}.",
+        "tags": [
+          "operations"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          },
+          {
+            "$ref": "#/components/parameters/Operations.mask"
+          },
+          {
+            "$ref": "#/components/parameters/List.skip"
+          },
+          {
+            "$ref": "#/components/parameters/List.top"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Operations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Operations.basic"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Operations.details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/dsesp:workspace/{idWs}/dsesp:operation/bulkdelete": {
+      "post": {
+        "operationId": "deleteOperations",
+        "summary": "Delete Operations",
+        "description": "Delete Operations of Workspace {idWs}.",
+        "tags": [
+          "operations"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Security.CSRF"
+          },
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "List of ids of Operations to be deleted.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Operations.selection"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/NoContent"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/dsesp:workspace/{idWs}/dsesp:operation/{idOp}": {
+      "get": {
+        "operationId": "getOperation",
+        "summary": "Get the attributes of Operation",
+        "description": "Get the attributes of Operation {idOp} of Workspace {idWs}.",
+        "tags": [
+          "operations"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          },
+          {
+            "$ref": "#/components/parameters/Operation.id"
+          },
+          {
+            "$ref": "#/components/parameters/Operation.mask"
+          },
+          {
+            "$ref": "#/components/parameters/ListMessages.skip"
+          },
+          {
+            "$ref": "#/components/parameters/ListMessages.top"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Operation's attributes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Operation.basic"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Operation.details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteOperation",
+        "summary": "Delete Operation",
+        "description": "Delete Operation {idOp} of Workspace {idWs}.",
+        "tags": [
+          "operations"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Security.CSRF"
+          },
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          },
+          {
+            "$ref": "#/components/parameters/Operation.id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/NoContent"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/dsesp:workspace/{idWs}/dsesp:operation/{idOp}/cancel": {
+      "post": {
+        "operationId": "cancelOperation",
+        "summary": "Cancel Operation",
+        "description": "Cancel Operation {idOp} of Workspace {idWs}.  \nCancel is only allowed if Operation Status is **PENDING** or **RUNNING**.",
+        "tags": [
+          "operations"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Security.CSRF"
+          },
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          },
+          {
+            "$ref": "#/components/parameters/Operation.id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Ok"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/dsesp:workspace/{idWs}/dsesp:asset": {
+      "post": {
+        "operationId": "createAssets",
+        "summary": "Create Assets",
+        "description": "Create Assets.",
+        "tags": [
+          "assets"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Security.CSRF"
+          },
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          },
+          {
+            "$ref": "#/components/parameters/Assets.mask"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "description": "List of changeable Assets Attributes can be provided as request body. If not provided, one Asset with default attributes is created.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Assets.details"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created Assets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Assets.basic"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Assets.details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "get": {
+        "operationId": "Get the list of existing Assets of Workspace",
+        "summary": "Get Assets",
+        "description": "Get the list of existing Assets of Workspace {idWs}.",
+        "tags": [
+          "assets"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          },
+          {
+            "$ref": "#/components/parameters/Assets.mask"
+          },
+          {
+            "$ref": "#/components/parameters/List.skip"
+          },
+          {
+            "$ref": "#/components/parameters/List.top"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Assets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Assets.basic"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Assets.details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/dsesp:workspace/{idWs}/dsesp:asset/bulkdelete": {
+      "post": {
+        "operationId": "deleteAssets",
+        "summary": "Delete Assets",
+        "description": "Delete Assets of Workspace {idWs}.",
+        "tags": [
+          "assets"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Security.CSRF"
+          },
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "List of ids of Assets to be deleted.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Assets.selection"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/NoContent"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/dsesp:workspace/{idWs}/dsesp:asset/{idAs}": {
+      "get": {
+        "operationId": "getAsset",
+        "summary": "Get the attributes of Asset",
+        "description": "Get the attributes of Asset {idAs} of Workspace {idWs}.",
+        "tags": [
+          "assets"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          },
+          {
+            "$ref": "#/components/parameters/Asset.id"
+          },
+          {
+            "$ref": "#/components/parameters/Asset.mask"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of asset's attributes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Asset.basic"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Asset.details"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateAsset",
+        "summary": "Update the attributes of Asset",
+        "description": "Update the attributes of Asset {idAs} of Workspace {idWs}.",
+        "tags": [
+          "assets"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Security.CSRF"
+          },
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          },
+          {
+            "$ref": "#/components/parameters/Asset.id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Changeable Asset Attributes can be provided as request body. At least one attribute is required in the request body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Asset.details"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Ok"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteAsset",
+        "summary": "Delete Asset",
+        "description": "Delete Asset {idAs} of Workspace {idWs}.",
+        "tags": [
+          "assets"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Security.CSRF"
+          },
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          },
+          {
+            "$ref": "#/components/parameters/Asset.id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/NoContent"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/dsesp:workspace/{idWs}/dsesp:asset/{idAs}/upload": {
+      "post": {
+        "operationId": "uploadAsset",
+        "summary": "Upload contents for Asset",
+        "description": "Upload contents for Asset {idAs} of Workspace {idWs}.",
+        "tags": [
+          "assets"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Security.CSRF"
+          },
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          },
+          {
+            "$ref": "#/components/parameters/Asset.id"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Ok"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/dsesp:workspace/{idWs}/dsesp:asset/{idAs}/download": {
+      "get": {
+        "operationId": "downloadAsset",
+        "summary": "Download contents of Asset",
+        "description": "Download contents of Asset {idAs} of Workspace {idWs}.",
+        "tags": [
+          "assets"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Workspace.id"
+          },
+          {
+            "$ref": "#/components/parameters/Asset.id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stream of downloaded Asset.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "parameters": {
+      "Security.CSRF": {
+        "name": "X-Requested-With",
+        "in": "header",
+        "description": "Required header for CSRF protection.  \nMandatory value is **Batch**.  \nAnother condition is that the **ORIGIN** header should not be set.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "default": "Batch"
+        }
+      },
+      "List.skip": {
+        "name": "skip",
+        "in": "query",
+        "description": "The number of items to skip before starting to collect the result set",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "default": 0
+        }
+      },
+      "List.top": {
+        "name": "top",
+        "in": "query",
+        "description": "The top number of items to return",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "default": 100
+        }
+      },
+      "ListMessages.skip": {
+        "name": "skipMessages",
+        "in": "query",
+        "description": "The number of Operation's messages to skip before starting to collect the result set",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "default": 0
+        }
+      },
+      "ListMessages.top": {
+        "name": "topMessages",
+        "in": "query",
+        "description": "The top number of Operation's messages to return",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "default": 100
+        }
+      },
+      "ServiceInfo.mask": {
+        "name": "mask",
+        "in": "query",
+        "required": false,
+        "description": "Mask defining what will be returned:  \n- **ServiceInfo.basic** provides all attributes of Operation Types except *properties* attributes.\n- **ServiceInfo.details** provides all attributes of Operation Types.",
+        "schema": {
+          "type": "string",
+          "default": "ServiceInfo.basic",
+          "enum": [
+            "ServiceInfo.basic",
+            "ServiceInfo.details"
+          ]
+        }
+      },
+      "Workspace.id": {
+        "name": "idWs",
+        "in": "path",
+        "required": true,
+        "description": "Unique Identifier of the Workspace",
+        "schema": {
+          "$ref": "#/components/schemas/WorkspaceId"
+        }
+      },
+      "Workspaces.mask": {
+        "name": "mask",
+        "in": "query",
+        "required": false,
+        "description": "Mask defining what will be returned:  \n- **Workspaces.basic** provides all Workspaces attributes except *properties* attributes.\n- **Workspaces.details** provides all Workspaces attributes.",
+        "schema": {
+          "type": "string",
+          "default": "Workspaces.basic",
+          "enum": [
+            "Workspaces.basic",
+            "Workspaces.details"
+          ]
+        }
+      },
+      "Workspace.mask": {
+        "name": "mask",
+        "in": "query",
+        "required": false,
+        "description": "Mask defining what will be returned:  \n- **Workspace.basic** provides all Workspace's attributes except *properties* attributes.\n- **Workspace.details** provides all Workspace's attributes.",
+        "schema": {
+          "type": "string",
+          "default": "Workspace.basic",
+          "enum": [
+            "Workspace.basic",
+            "Workspace.details"
+          ]
+        }
+      },
+      "Operation.id": {
+        "name": "idOp",
+        "in": "path",
+        "required": true,
+        "description": "Unique Identifier of the Operation",
+        "schema": {
+          "$ref": "#/components/schemas/OperationId"
+        }
+      },
+      "Operations.mask": {
+        "name": "mask",
+        "in": "query",
+        "required": false,
+        "description": "Mask defining what will be returned:  \n- **Operations.basic** provides all Operations attributes except *properties* and *log* attributes.\n- **Operations.details** provides all Operations attributes.",
+        "schema": {
+          "type": "string",
+          "default": "Operations.basic",
+          "enum": [
+            "Operations.basic",
+            "Operations.details"
+          ]
+        }
+      },
+      "Operation.mask": {
+        "name": "mask",
+        "in": "query",
+        "required": false,
+        "description": "Mask defining what will be returned:  \n- **Operation.basic** provides all Operation's attributes except *properties* and *log* attributes.\n- **Operation.details** provides all Operation's attributes.",
+        "schema": {
+          "type": "string",
+          "default": "Operation.basic",
+          "enum": [
+            "Operation.basic",
+            "Operation.details"
+          ]
+        }
+      },
+      "Asset.id": {
+        "name": "idAs",
+        "in": "path",
+        "required": true,
+        "description": "Unique Identifier of the Asset",
+        "schema": {
+          "$ref": "#/components/schemas/AssetId"
+        }
+      },
+      "Assets.mask": {
+        "name": "mask",
+        "in": "query",
+        "required": false,
+        "description": "Mask defining what will be returned:  \n- **Assets.basic** provides all Assets attributes except *properties* attributes.\n- **Assets.details** provides all Assets attributes.",
+        "schema": {
+          "type": "string",
+          "default": "Assets.basic",
+          "enum": [
+            "Assets.basic",
+            "Assets.details"
+          ]
+        }
+      },
+      "Asset.mask": {
+        "name": "mask",
+        "in": "query",
+        "required": false,
+        "description": "Mask defining what will be returned:  \n- **Asset.basic** provides all Asset's attributes except *properties* attributes.\n- **Asset.details** provides all Asset's attributes.",
+        "schema": {
+          "type": "string",
+          "default": "Asset.basic",
+          "enum": [
+            "Asset.basic",
+            "Asset.details"
+          ]
+        }
+      }
+    },
+    "responses": {
+      "Ok": {
+        "description": "Code 200 - OK - Response in case of success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseMessage"
+            },
+            "example": {
+              "summary": "Request successfully processed",
+              "message": "Request successfully processed"
+            }
+          }
+        }
+      },
+      "NoContent": {
+        "description": "Code 204 - No Content - Response in case of successfull delete request"
+      },
+      "BadRequest": {
+        "description": "Code 400 - Bad Request - Response in case of invalid request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseMessage"
+            },
+            "example": {
+              "summary": "Bad Request",
+              "message": "Invalid payload for the resource"
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Code 403 - Forbidden - Response in case of unauthorized access",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseMessage"
+            },
+            "example": {
+              "summary": "Forbidden",
+              "message": "Unauthorized access to the resource"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Code 404 - Not Found - Response in case of Id not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseMessage"
+            },
+            "example": {
+              "summary": "Not Found",
+              "message": "Id of the resource does not exist"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ServiceInfo": {
+        "description": "Information about the Service",
+        "properties": {
+          "apiVersion": {
+            "description": "Service Api Version",
+            "type": "string",
+            "examples": [
+              1
+            ]
+          },
+          "lastUpdateDate": {
+            "description": "Service Last Update Date",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Date"
+              }
+            ]
+          },
+          "serviceVersion": {
+            "description": "Service Version",
+            "type": "string",
+            "examples": [
+              "1.10.0"
+            ]
+          }
+        }
+      },
+      "ServiceInfo.basic": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ServiceInfo"
+          },
+          {
+            "properties": {
+              "operationTypes": {
+                "description": "List of Operation Types",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OperationType.basic"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ServiceInfo.details": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ServiceInfo"
+          },
+          {
+            "properties": {
+              "operationTypes": {
+                "description": "List of Operation Types",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OperationType.details"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "OperationType": {
+        "description": "Operation Type Definition"
+      },
+      "OperationType.basic": {
+        "description": "Operation Type Basic Definition",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/OperationType"
+          },
+          {
+            "properties": {
+              "uuid": {
+                "$ref": "#/components/schemas/OperationTypeId"
+              },
+              "uniqueIdentifier": {
+                "description": "Unique Identifier of the Operation Type",
+                "type": "string",
+                "examples": [
+                  "Unique Identifier of Operation Type 1"
+                ]
+              },
+              "name": {
+                "description": "Name of the Operation Type (language dependant)",
+                "type": "string",
+                "examples": [
+                  "Operation Type 1"
+                ]
+              },
+              "description": {
+                "description": "Description of the Operation Type",
+                "type": "string",
+                "examples": [
+                  "Description of Operation Type 1"
+                ]
+              },
+              "usage": {
+                "description": "How to use Operation Type",
+                "type": "string",
+                "examples": [
+                  "How to use Operation Type 1"
+                ]
+              },
+              "version": {
+                "description": "Version of the Operation Type",
+                "type": "string",
+                "examples": [
+                  100
+                ]
+              },
+              "status": {
+                "$ref": "#/components/schemas/OperationTypeStatus"
+              },
+              "nature": {
+                "description": "Nature of the Operation Type (middleware, applicative, zip...)",
+                "type": "string",
+                "examples": [
+                  "applicative"
+                ]
+              },
+              "type": {
+                "description": "Type of the Operation Type (generation, build, validation...)",
+                "type": "string",
+                "examples": [
+                  "generation"
+                ]
+              },
+              "execution": {
+                "description": "Default Options for the Operation Type's execution",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/OperationExecution"
+                  }
+                ]
+              },
+              "parameters": {
+                "description": "List of Parameters to be used while invoking Operation Type",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OperationTypeParameter"
+                }
+              },
+              "returnCodes": {
+                "description": "- List of Codes returned by Operation Type\n- Common codes of operation and scanner of Operation Type",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OperationTypeReturnCode"
+                }
+              },
+              "serviceCodes": {
+                "$ref": "#/components/schemas/OperationTypeServiceCodes"
+              },
+              "operation": {
+                "description": "Definition of the generation operation of Operation Type",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/OperationTypeExecutable.basic"
+                  }
+                ]
+              },
+              "scanner": {
+                "description": "Definition of the scanner operation of Operation Type",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/OperationTypeExecutable.basic"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "OperationType.details": {
+        "description": "Operation Type Detailed Definition",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/OperationType.basic"
+          },
+          {
+            "properties": {
+              "properties": {
+                "description": "List of Operation Type's properties",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Property"
+                }
+              },
+              "operation": {
+                "$ref": "#/components/schemas/OperationTypeExecutable.details"
+              },
+              "scanner": {
+                "$ref": "#/components/schemas/OperationTypeExecutable.details"
+              }
+            }
+          }
+        ]
+      },
+      "OperationTypeSupportedObjectType": {
+        "description": "Type of Objet",
+        "type": "string",
+        "enum": [
+          "CONTAINERS",
+          "FILES",
+          "OBJECTS"
+        ]
+      },
+      "OperationTypeStatus": {
+        "description": "Status of the Operation Type",
+        "type": "string",
+        "enum": [
+          "UNDER_DEVELOPMENT",
+          "BETA",
+          "RELEASED",
+          "DEPRECATED"
+        ],
+        "examples": [
+          "RELEASED"
+        ]
+      },
+      "OperationTypeId": {
+        "description": "Unique Identifier of the Operation Type",
+        "type": "string",
+        "format": "uuid",
+        "examples": [
+          "3450dad5-2ab8-4c39-8d55-b33b7e07cea6"
+        ]
+      },
+      "OperationTypeParameter": {
+        "description": "Description of Operation Type's Parameter",
+        "properties": {
+          "name": {
+            "description": "Name of Parameter",
+            "type": "string",
+            "examples": [
+              "ParameterName"
+            ]
+          },
+          "description": {
+            "description": "Parameter's description",
+            "type": "string",
+            "examples": [
+              "How to use the Parameter in details"
+            ]
+          },
+          "shortDescription": {
+            "description": "Parameter's short description",
+            "type": "string",
+            "examples": [
+              "Brief description of Parameter"
+            ]
+          },
+          "type": {
+            "description": "Type of Parameter",
+            "type": "string",
+            "examples": [
+              "string"
+            ]
+          },
+          "mandatory": {
+            "description": "Is the Parameter mandatory?",
+            "type": "boolean",
+            "examples": [
+              true
+            ]
+          },
+          "multiplicity": {
+            "description": "Multiplicity of Parameter, -1 for infinity",
+            "type": "integer",
+            "examples": [
+              1
+            ]
+          },
+          "flag": {
+            "description": "Is the Parameter a flag? Flag is a parameter without value. DefaultValue, PossibleValues and Multiplicity are not applicable in case of a Flag.",
+            "type": "boolean",
+            "examples": [
+              false
+            ]
+          },
+          "defaultValue": {
+            "description": "Default value of Parameter",
+            "type": "string",
+            "examples": [
+              "Value1"
+            ]
+          },
+          "possibleValues": {
+            "description": "Possible values of Parameter",
+            "type": "array",
+            "examples": [
+              [
+                "Value1",
+                "Value2"
+              ]
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "OperationTypeServiceCodes": {
+        "description": "Service Codes redefined to avoid collading with Operation Type's codes.",
+        "properties": {
+          "error": {
+            "description": "Service Code used for error invocation. Default Service Code value: -1.",
+            "type": "integer",
+            "examples": [
+              "-1"
+            ]
+          },
+          "cancel": {
+            "description": "Service Code used for cancelled invocation. Default Service Code value: -2.",
+            "type": "integer",
+            "examples": [
+              "-2"
+            ]
+          }
+        }
+      },
+      "OperationTypeReturnCode": {
+        "description": "Code returned by Operation Type following its execution",
+        "properties": {
+          "value": {
+            "description": "Value of the code",
+            "type": "integer",
+            "examples": [
+              0
+            ]
+          },
+          "defaultMessage": {
+            "description": "Default message related to the code's value",
+            "type": "string",
+            "examples": [
+              "Operation Type 1 invoked with success"
+            ]
+          },
+          "description": {
+            "description": "Return code's description",
+            "type": "string",
+            "examples": [
+              "Code 0 is returned when Operation Type 1 is invoked with success"
+            ]
+          },
+          "level": {
+            "description": "Return Code's level",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OperationTypeReturnCodeLevel"
+              }
+            ],
+            "examples": [
+              "OK"
+            ]
+          }
+        }
+      },
+      "OperationTypeReturnCodeLevel": {
+        "description": "Return Code's level",
+        "type": "string",
+        "enum": [
+          "OK",
+          "WARNING",
+          "ERROR",
+          "FAILURE"
+        ]
+      },
+      "OperationTypeExecutable": {
+        "description": "Definition of the scanner or operation of Operation Type"
+      },
+      "OperationTypeExecutable.basic": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/OperationTypeExecutable"
+          },
+          {
+            "properties": {
+              "excludedExtensions": {
+                "description": "List of excluded extensions",
+                "type": "array",
+                "examples": [
+                  [
+                    ".ext2",
+                    ".ext3"
+                  ]
+                ],
+                "items": {
+                  "type": "string"
+                }
+              },
+              "supportedExtensions": {
+                "description": "List of supported extensions. If empty, all extensions are supported",
+                "type": "array",
+                "examples": [
+                  [
+                    ".ext1",
+                    ".ext2"
+                  ]
+                ],
+                "items": {
+                  "type": "string"
+                }
+              },
+              "supportedObjects": {
+                "description": "List of supported objects. If empty, all objects are supported",
+                "type": "array",
+                "examples": [
+                  [
+                    "FILES",
+                    "OBJECTS"
+                  ]
+                ],
+                "items": {
+                  "$ref": "#/components/schemas/OperationTypeSupportedObjectType"
+                }
+              },
+              "parameters": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OperationTypeParameter"
+                }
+              },
+              "returnCodes": {
+                "description": "- List of Codes returned by Operation Type\n- Specific codes of operation or scanner of Operation Type",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OperationTypeReturnCode"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "OperationTypeExecutable.details": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/OperationTypeExecutable.basic"
+          },
+          {
+            "properties": {
+              "properties": {
+                "description": "List of Properties",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Property"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Workspaces": {
+        "description": "List of Workspaces",
+        "properties": {
+          "totalItems": {
+            "readOnly": true,
+            "description": "Number of Workspaces",
+            "type": "integer",
+            "format": "int64",
+            "examples": [
+              1
+            ]
+          }
+        }
+      },
+      "Workspaces.selection": {
+        "description": "List of Workspaces",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Workspaces"
+          },
+          {
+            "properties": {
+              "member": {
+                "description": "List of Workspaces UUID",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Workspace.selection"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Workspaces.basic": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Workspaces"
+          },
+          {
+            "properties": {
+              "member": {
+                "description": "List of Workspaces",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Workspace.basic"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Workspaces.details": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Workspaces"
+          },
+          {
+            "properties": {
+              "member": {
+                "description": "List of Workspaces",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Workspace.details"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Workspace": {
+        "description": "Workspace Definition",
+        "properties": {
+          "uuid": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WorkspaceId"
+              }
+            ],
+            "readOnly": true
+          }
+        }
+      },
+      "Workspace.selection": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Workspace"
+          },
+          {
+            "properties": {
+              "uuid": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/WorkspaceId"
+                  }
+                ],
+                "readOnly": false
+              }
+            }
+          }
+        ]
+      },
+      "Workspace.basic": {
+        "description": "Workspace Basic Definition",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Workspace"
+          },
+          {
+            "properties": {
+              "creationDate": {
+                "description": "Creation Date of Workspace",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Date"
+                  }
+                ],
+                "readOnly": true
+              },
+              "lastModifiedDate": {
+                "description": "Date of last modication of Workspace",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Date"
+                  }
+                ],
+                "readOnly": true
+              },
+              "expirationDate": {
+                "description": "Expiration Date of Workspace\nWorkspace is deleted when the date is exceeded",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Date"
+                  }
+                ],
+                "readOnly": true
+              },
+              "sizeInBytes": {
+                "description": "Size of Workspace in Bytes",
+                "readOnly": true,
+                "type": "integer",
+                "format": "int64"
+              },
+              "displayName": {
+                "description": "Name of the Workspace",
+                "type": "string",
+                "examples": [
+                  "My Workspace"
+                ]
+              },
+              "description": {
+                "description": "Description of the Workspace",
+                "type": "string",
+                "examples": [
+                  "Description of My Workspace"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "Workspace.details": {
+        "description": "Workspace Detailed Definition",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Workspace.basic"
+          },
+          {
+            "properties": {
+              "properties": {
+                "description": "List of workspace's changeable properties",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Property"
+                }
+              },
+              "serviceProperties": {
+                "readOnly": true,
+                "description": "List of workspace's readonly properties",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Property"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "WorkspaceId": {
+        "description": "Unique Identifier of the workspace",
+        "type": "string",
+        "format": "uuid",
+        "examples": [
+          "3450dad5-2ab8-4c39-8d55-b33b7e07cea6"
+        ]
+      },
+      "Operations": {
+        "description": "List of Operations",
+        "properties": {
+          "totalItems": {
+            "readOnly": true,
+            "description": "Number of Operations",
+            "type": "integer",
+            "format": "int64",
+            "examples": [
+              1
+            ]
+          }
+        }
+      },
+      "Operations.selection": {
+        "description": "List of Operations",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Operations"
+          },
+          {
+            "properties": {
+              "member": {
+                "description": "List of Operations UUID",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Operation.selection"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Operations.basic": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Operations"
+          },
+          {
+            "properties": {
+              "member": {
+                "description": "List of Operations",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Operation.basic"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Operations.details": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Operations"
+          },
+          {
+            "properties": {
+              "member": {
+                "description": "List of Operations",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Operation.details"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Operation": {
+        "description": "Operation Definition",
+        "properties": {
+          "uuid": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OperationId"
+              }
+            ],
+            "readOnly": true
+          }
+        }
+      },
+      "Operation.selection": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Operation"
+          },
+          {
+            "properties": {
+              "uuid": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/OperationId"
+                  }
+                ],
+                "readOnly": false
+              }
+            }
+          }
+        ]
+      },
+      "Operation.basic": {
+        "description": "Operation Basic Definition",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Operation"
+          },
+          {
+            "properties": {
+              "creationDate": {
+                "description": "Creation Date of Operation",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Date"
+                  }
+                ],
+                "readOnly": true
+              },
+              "status": {
+                "readOnly": true,
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/OperationStatus"
+                  }
+                ]
+              },
+              "kind": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/OperationKind"
+                  }
+                ]
+              },
+              "progress": {
+                "readOnly": true,
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/OperationProgress"
+                  }
+                ]
+              },
+              "durationInS": {
+                "readOnly": true,
+                "description": "Duration of Operation execution (in second)",
+                "type": "integer",
+                "examples": [
+                  7
+                ]
+              },
+              "returnCode": {
+                "readOnly": true,
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/OperationReturnCode"
+                  }
+                ]
+              },
+              "producedAssets": {
+                "readOnly": true,
+                "description": "- Exhaustive list of produced Assets by Operation",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AssetId"
+                }
+              },
+              "returnedAssets": {
+                "readOnly": true,
+                "description": "- List of Assets produced by Operation\n- If Operation returns an Asset CONTAINER, its children Assets are not listed in the **returnedAssets** but listed in the **producedAssets**. Only Asset CONTAINER is part of **returnedAssets**.\n- List is filled only if Operation Status is SUCCEEDED.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AssetId"
+                }
+              },
+              "displayName": {
+                "description": "Name of the Operation",
+                "type": "string",
+                "examples": [
+                  "MyOperation"
+                ]
+              },
+              "description": {
+                "description": "Description of the Operation",
+                "type": "string",
+                "examples": [
+                  "Description of MyOperation"
+                ]
+              },
+              "execution": {
+                "$ref": "#/components/schemas/OperationExecution"
+              },
+              "type": {
+                "description": "Reference to the Operation Type UUID",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/OperationTypeId"
+                  }
+                ]
+              },
+              "objectIds": {
+                "$ref": "#/components/schemas/ObjectIds.path"
+              },
+              "parameters": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OperationParameter"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Operation.details": {
+        "description": "Operation Detailed Definition",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Operation.basic"
+          },
+          {
+            "properties": {
+              "properties": {
+                "description": "List of Operation's changeable properties",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Property"
+                }
+              },
+              "serviceProperties": {
+                "readOnly": true,
+                "description": "List of Operation's readonly properties",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Property"
+                }
+              },
+              "log": {
+                "$ref": "#/components/schemas/OperationLog"
+              }
+            }
+          }
+        ]
+      },
+      "OperationStatus": {
+        "description": "Status of the Operation",
+        "type": "string",
+        "enum": [
+          "CREATED",
+          "PENDING",
+          "RUNNING",
+          "SUCCEEDED",
+          "FAILED",
+          "CANCELLED"
+        ],
+        "examples": [
+          "CREATED"
+        ]
+      },
+      "OperationKind": {
+        "description": "Kind of Operation",
+        "type": "string",
+        "enum": [
+          "OPERATION",
+          "SCANNER"
+        ],
+        "examples": [
+          "SCANNER"
+        ]
+      },
+      "OperationExecution": {
+        "description": "Options for the Operation's execution",
+        "properties": {
+          "timeToLiveInMin": {
+            "description": "The Time To live (TTL) is the maximum duration given to an Operation to complete. After this duration, Operation' job is finished. Unit is the minute.",
+            "type": "integer",
+            "examples": [
+              5
+            ],
+            "default": 60
+          }
+        }
+      },
+      "OperationId": {
+        "description": "Unique Identifier of the Operation",
+        "type": "string",
+        "format": "uuid",
+        "examples": [
+          "3450dad5-2ab8-4c39-8d55-b33b7e07cea6"
+        ]
+      },
+      "OperationLog": {
+        "description": "Log returned during invocation of Operation",
+        "readOnly": true,
+        "properties": {
+          "totalMessages": {
+            "readOnly": true,
+            "description": "Number of Messages",
+            "type": "integer",
+            "format": "int64",
+            "examples": [
+              1
+            ]
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Log"
+            }
+          }
+        }
+      },
+      "OperationParameter": {
+        "description": "Parameter used for the invocation of the Operation",
+        "properties": {
+          "name": {
+            "description": "Name of the Operation's parameter",
+            "type": "string",
+            "examples": [
+              "ParameterName"
+            ]
+          },
+          "value": {
+            "description": "Value of the Operation's parameter",
+            "type": "string",
+            "examples": [
+              "Value1"
+            ]
+          }
+        }
+      },
+      "OperationProgress": {
+        "description": "Progress of the Operation",
+        "properties": {
+          "progress": {
+            "description": "- Current progress of the Operation. \n- It can not exceed the maximum. \n- If progress equals maximum, Operation is complete.",
+            "type": "integer",
+            "examples": [
+              2
+            ]
+          },
+          "maximum": {
+            "description": "Maximum progress of the Operation",
+            "type": "integer",
+            "examples": [
+              5
+            ]
+          }
+        }
+      },
+      "OperationReturnCode": {
+        "description": "Code returned by Operation, depending on its Operation Type.",
+        "properties": {
+          "value": {
+            "description": "Code Value",
+            "type": "integer",
+            "examples": [
+              0
+            ]
+          },
+          "message": {
+            "description": "Code Message",
+            "type": "string",
+            "examples": [
+              "MyOperation invoked with success"
+            ]
+          }
+        }
+      },
+      "AssetType": {
+        "description": "Type of Asset",
+        "type": "string",
+        "enum": [
+          "CONTAINER",
+          "FILE"
+        ],
+        "examples": [
+          "FILE"
+        ]
+      },
+      "Assets": {
+        "description": "List of Assets",
+        "properties": {
+          "totalItems": {
+            "readOnly": true,
+            "description": "Number of Assets",
+            "type": "integer",
+            "format": "int64",
+            "examples": [
+              1
+            ]
+          }
+        }
+      },
+      "Assets.selection": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Assets"
+          },
+          {
+            "properties": {
+              "member": {
+                "description": "List of Assets UUID",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Asset.selection"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Assets.basic": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Assets"
+          },
+          {
+            "properties": {
+              "member": {
+                "description": "List of Assets",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Asset.basic"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Assets.details": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Assets"
+          },
+          {
+            "properties": {
+              "member": {
+                "description": "List of Assets",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Asset.details"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Asset": {
+        "description": "Asset Definition",
+        "properties": {
+          "uuid": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AssetId"
+              }
+            ],
+            "readOnly": true
+          }
+        }
+      },
+      "Asset.selection": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Asset"
+          },
+          {
+            "properties": {
+              "uuid": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AssetId"
+                  }
+                ],
+                "readOnly": false
+              }
+            }
+          }
+        ]
+      },
+      "Asset.common": {
+        "description": "Asset Common Definition",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Asset"
+          },
+          {
+            "properties": {
+              "creationDate": {
+                "description": "Creation Date of Asset",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Date"
+                  }
+                ],
+                "readOnly": true
+              },
+              "lastModifiedDate": {
+                "description": "Date of last modication of Asset",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Date"
+                  }
+                ],
+                "readOnly": true
+              },
+              "creationOperation": {
+                "description": "Id of Operation that created the Asset",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/OperationId"
+                  }
+                ],
+                "readOnly": true
+              },
+              "sizeInBytes": {
+                "readOnly": true,
+                "description": "Size of Asset in Bytes",
+                "type": "integer",
+                "format": "int64"
+              },
+              "children": {
+                "description": "List of Asset's children, specific to CONTAINER Asset",
+                "readOnly": true,
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AssetId"
+                }
+              },
+              "assetToOperationTypesIds": {
+                "readOnly": true,
+                "description": "List of applicable OperationTypes on Asset",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OperationTypeId"
+                }
+              },
+              "displayName": {
+                "description": "Name of the Asset",
+                "type": "string",
+                "examples": [
+                  "MyAsset.ext"
+                ]
+              },
+              "description": {
+                "description": "Description of the Asset",
+                "type": "string",
+                "examples": [
+                  "Description of MyAsset.ext"
+                ]
+              },
+              "parentId": {
+                "description": "- Id of parent Asset if Asset is child of another Asset.\n- Parent asset must be of type CONTAINER. \n- If no parent Asset is defined, Asset is at the Workspace's root ",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AssetId"
+                  }
+                ]
+              },
+              "type": {
+                "$ref": "#/components/schemas/AssetType"
+              }
+            }
+          }
+        ]
+      },
+      "Asset.basic": {
+        "description": "Asset Basic Definition",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Asset.common"
+          },
+          {
+            "properties": {
+              "objectsToOperationTypeIds": {
+                "readOnly": true,
+                "description": "List of Asset's Objects with applicable OperationTypes",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AssetObjectToOperationTypeIds.basic"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Asset.details": {
+        "description": "Asset Detailed Definition",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Asset.common"
+          },
+          {
+            "properties": {
+              "objectsToOperationTypeIds": {
+                "readOnly": true,
+                "description": "List of Asset's Objects with applicable OperationTypes",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AssetObjectToOperationTypeIds.details"
+                }
+              },
+              "properties": {
+                "description": "List of Asset's changeable properties",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Property"
+                }
+              },
+              "serviceProperties": {
+                "readOnly": true,
+                "description": "List of Asset's readonly properties",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Property"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "AssetId": {
+        "description": "Unique Identifier of the Asset",
+        "type": "string",
+        "format": "uuid",
+        "examples": [
+          "3450dad5-2ab8-4c39-8d55-b33b7e07cea6"
+        ]
+      },
+      "AssetObject.basic": {
+        "description": "\\\"Internal\\\" Object of Asset",
+        "properties": {
+          "name": {
+            "description": "Name of Object",
+            "type": "string",
+            "examples": [
+              "My Model Object"
+            ]
+          },
+          "type": {
+            "description": "Type of Object",
+            "type": "string",
+            "examples": [
+              "Model Type"
+            ]
+          },
+          "id": {
+            "$ref": "#/components/schemas/ObjectId"
+          }
+        }
+      },
+      "AssetObject.details": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AssetObject.basic"
+          },
+          {
+            "properties": {
+              "properties": {
+                "description": "List of AssetObject's properties",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Property"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "AssetObjectToOperationTypeIds": {
+        "description": "Asset's Object with applicable OperationTypes",
+        "properties": {
+          "operationTypeIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OperationTypeId"
+            }
+          }
+        }
+      },
+      "AssetObjectToOperationTypeIds.basic": {
+        "description": "Asset's Object with applicable OperationTypes",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AssetObjectToOperationTypeIds"
+          },
+          {
+            "properties": {
+              "object": {
+                "$ref": "#/components/schemas/AssetObject.basic"
+              }
+            }
+          }
+        ]
+      },
+      "AssetObjectToOperationTypeIds.details": {
+        "description": "Asset's Object with applicable OperationTypes",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AssetObjectToOperationTypeIds"
+          },
+          {
+            "properties": {
+              "object": {
+                "$ref": "#/components/schemas/AssetObject.details"
+              }
+            }
+          }
+        ]
+      },
+      "ObjectIds.path": {
+        "description": "List of Object Ids",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ObjectId.path"
+        }
+      },
+      "ObjectId": {
+        "description": "Unique Id of an Object",
+        "type": "string",
+        "examples": [
+          "IdOfMyObject"
+        ]
+      },
+      "ObjectId.path": {
+        "description": "An Object Id is either:\n  - the **uuid** of an Asset\n  - a **path** to an Object in an Asset formatted as following: \"assetUuid:IdOfMyObject\"",
+        "type": "string",
+        "examples": [
+          "3450dad5-2ab8-4c39-8d55-b33b7e07cea6:IdOfMyObject"
+        ]
+      },
+      "Property": {
+        "properties": {
+          "key": {
+            "description": "Unique key of property",
+            "type": "string"
+          },
+          "value": {
+            "description": "Property object",
+            "type": "object"
+          }
+        },
+        "examples": [
+          {
+            "key": "MyPropertyKey",
+            "value": "Value of my Property"
+          }
+        ]
+      },
+      "Date": {
+        "description": "Date",
+        "type": "string",
+        "format": "date-time",
+        "examples": [
+          "2017-07-21T17:32:28.000Z"
+        ]
+      },
+      "ResponseMessage": {
+        "properties": {
+          "summary": {
+            "description": "Summary",
+            "type": "string",
+            "examples": [
+              "Message Summary"
+            ]
+          },
+          "message": {
+            "description": "Main message",
+            "type": "string",
+            "examples": [
+              "Detailed Message"
+            ]
+          }
+        }
+      },
+      "Log": {
+        "description": "Log Definition",
+        "properties": {
+          "timestamp": {
+            "description": "Log's Timestamp",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Date"
+              }
+            ]
+          },
+          "status": {
+            "$ref": "#/components/schemas/LogStatus"
+          },
+          "source": {
+            "description": "Source of the Log",
+            "type": "string",
+            "examples": [
+              "Source of the Log"
+            ]
+          },
+          "message": {
+            "description": "Message of the Log",
+            "type": "string",
+            "examples": [
+              "Message of the Log"
+            ]
+          }
+        }
+      },
+      "LogStatus": {
+        "description": "Status of the Log",
+        "type": "string",
+        "enum": [
+          "INFO",
+          "OK",
+          "WARNING",
+          "ERROR",
+          "FAILURE"
+        ],
+        "examples": [
+          "INFO"
+        ]
+      }
+    }
+  }
+}

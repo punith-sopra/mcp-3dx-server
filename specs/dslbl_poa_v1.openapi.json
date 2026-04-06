@@ -1,0 +1,1174 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Piece Of Art Web Services",
+    "description": "Web Services for managing Piece Of Art information.",
+    "version": "2.0.0",
+    "x-ds-service": [
+      "3DSpace"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/dslbl/v2",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_3DSpace"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dslbl:poa/v2",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/poas/search": {
+      "get": {
+        "summary": "Search for POAs.",
+        "description": "",
+        "operationId": "searchPOA",
+        "tags": [
+          "Piece Of Art"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-poa"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "searchStr",
+            "description": "Search Criteria; 2 or more characters required.",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "top",
+            "description": "The number of objects to return; default 50; max 1000",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "skip",
+            "description": "The number of objects to skip in case of paginating through the serach results; default 0",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      }
+    },
+    "/poas/{poaId}": {
+      "get": {
+        "summary": "Retrieve the information for a given POA.",
+        "description": "",
+        "operationId": "getPOA",
+        "tags": [
+          "Piece Of Art"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-poa"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "poaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update POAs.",
+        "description": "",
+        "operationId": "patchPOAs",
+        "tags": [
+          "Piece Of Art"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-poa"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/patchPOAs"
+        },
+        "parameters": [
+          {
+            "name": "poaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "name": "X-Requested-With",
+            "in": "header",
+            "description": "Required header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "XMLHttpRequest"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      }
+    },
+    "/poas/{artworkPacketId}": {
+      "delete": {
+        "summary": "Delete a given POA.",
+        "description": "",
+        "operationId": "deletPOA",
+        "tags": [
+          "Piece Of Art"
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/204"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "artworkPacketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "name": "X-Requested-With",
+            "in": "header",
+            "description": "Required header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "XMLHttpRequest"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          }
+        ]
+      }
+    },
+    "/poas": {
+      "post": {
+        "summary": "Create POAs.",
+        "description": "",
+        "operationId": "createPOA",
+        "tags": [
+          "Piece Of Art"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-poa"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/createPOA"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "poa": {
+        "$ref": "#/components/x-schemas/poa"
+      }
+    },
+    "x-schemas": {
+      "finalArts": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "printReadyArtworks": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/printReadyArtworks"
+                }
+              },
+              "products": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/products"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "printReadyArtworks": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {}
+        ]
+      },
+      "referenceDocuments": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {}
+        ]
+      },
+      "search": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "eTag": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "countries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/countries"
+                }
+              },
+              "languages": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/languages"
+                }
+              },
+              "finalArts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/finalArts"
+                }
+              },
+              "referenceDocuments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/referenceDocuments"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "poa": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {},
+          {
+            "type": "object",
+            "properties": {
+              "eTag": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "title": {
+                "default": "",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "countries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/countries"
+                }
+              },
+              "languages": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/languages"
+                }
+              },
+              "finalArts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/finalArts"
+                }
+              },
+              "referenceDocuments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/referenceDocuments"
+                }
+              },
+              "artworkPacket": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/artworkPacket"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "languages": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "eTag": {
+                "type": "string"
+              },
+              "sequence": {
+                "type": "string"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "artworkPacket": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "countries": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "2LetterCode": {
+                "type": "string"
+              },
+              "3LetterCode": {
+                "type": "string"
+              },
+              "number": {
+                "type": "string"
+              },
+              "continent": {
+                "type": "string"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "products": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {}
+        ]
+      },
+      "patchPOA": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {},
+          {
+            "type": "object",
+            "properties": {
+              "eTag": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "title": {
+                "default": "",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "countries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/countries"
+                }
+              },
+              "languages": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/languages"
+                }
+              },
+              "finalArts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/finalArts"
+                }
+              },
+              "referenceDocuments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/referenceDocuments"
+                }
+              },
+              "artworkPacket": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/artworkPacket"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "patchPOAs": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {},
+          {
+            "type": "object",
+            "properties": {
+              "eTag": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "title": {
+                "default": "",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "countries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/countries"
+                }
+              },
+              "languages": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/languages"
+                }
+              },
+              "finalArts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/finalArts"
+                }
+              },
+              "referenceDocuments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/referenceDocuments"
+                }
+              },
+              "artworkPacket": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/artworkPacket"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "createPOA": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {},
+          {
+            "type": "object",
+            "properties": {
+              "eTag": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "title": {
+                "default": "",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "countries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/countries"
+                }
+              },
+              "languages": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/languages"
+                }
+              },
+              "finalArts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/finalArts"
+                }
+              },
+              "referenceDocuments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/referenceDocuments"
+                }
+              },
+              "artworkPacket": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/artworkPacket"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-poa": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/poa"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-EMPTY204": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/successful_delete"
+          },
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {}
+        ]
+      },
+      "BASICS_ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "PATCH_SUB_RESOURCE_ACTION": {
+        "type": "object",
+        "properties": {
+          "op": {
+            "description": "Specify the sub-resource update action. See 6W Web Service Principles: Data Object Updates",
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "add",
+              "remove"
+            ]
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "object",
+            "properties": {
+              "success": {
+                "description": "Reflects true to indicate successful request.",
+                "example": true,
+                "type": "boolean"
+              },
+              "statusCode": {
+                "description": "The HTTP response code.",
+                "example": 200,
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "successful_delete": {
+        "description": "The response data for successful delete request.",
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "object",
+            "properties": {
+              "success": {
+                "description": "Reflects false to indicate failure.",
+                "example": false,
+                "type": "boolean"
+              },
+              "statusCode": {
+                "description": "The HTTP response code.",
+                "example": 400,
+                "type": "integer"
+              }
+            }
+          },
+          "error": {
+            "allOf": [
+              {
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+                      "example": "NLS Error.",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "object",
+            "properties": {
+              "success": {
+                "description": "Reflects false to indicate failure.",
+                "example": false,
+                "type": "boolean"
+              },
+              "statusCode": {
+                "description": "The HTTP response code.",
+                "example": 401,
+                "type": "integer"
+              }
+            }
+          },
+          "error": {
+            "allOf": [
+              {
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+                      "example": "NLS Error.",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "object",
+            "properties": {
+              "success": {
+                "description": "Reflects false to indicate failure.",
+                "example": false,
+                "type": "boolean"
+              },
+              "statusCode": {
+                "description": "The HTTP response code.",
+                "example": 403,
+                "type": "integer"
+              }
+            }
+          },
+          "error": {
+            "allOf": [
+              {
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+                      "example": "NLS Error.",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "object",
+            "properties": {
+              "success": {
+                "description": "Reflects false to indicate failure.",
+                "example": false,
+                "type": "boolean"
+              },
+              "statusCode": {
+                "description": "The HTTP response code.",
+                "example": 500,
+                "type": "integer"
+              }
+            }
+          },
+          "error": {
+            "allOf": [
+              {
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+                      "example": "NLS Error.",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "responses": {
+      "204": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY204"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-poa": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-poa"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "patchPOA": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/patchPOA"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patchPOAs": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/patchPOAs"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "createPOA": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/createPOA"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "example": "en-US",
+        "description": "Identifies the locale for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "X-Requested-With": {
+        "name": "X-Requested-With",
+        "example": "XMLHttpRequest",
+        "description": "Required header for non GET operations; use value XMLHttpRequest.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

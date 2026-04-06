@@ -1,0 +1,549 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "3DWorkforce Web Services",
+    "description": "Rest Services for managing workforce of an organization",
+    "version": "1.0.0",
+    "x-ds-service": [
+      "3DOrganization"
+    ],
+    "x-ds-copyright": "3DEXPERIENCE R2025x (c) 2025 Dassault Systemes."
+  },
+  "servers": [
+    {
+      "url": "{APIGateway}/api/3dorg/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/businessRoles/fetch": {
+      "post": {
+        "tags": [
+          "Business Role"
+        ],
+        "summary": "Fetch Business Role details",
+        "description": "Retrieve Business Role details for the given Business Role ID",
+        "operationId": "POST_3dworkforce:fetchBusinessRoles_1",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/listOfBusinessRolesIDs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadBusinessRoleResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/businessRoles/search": {
+      "get": {
+        "tags": [
+          "Business Role"
+        ],
+        "summary": "Search Business Roles",
+        "description": "Find matching Business Roles for the given search string, limit, and offset.",
+        "operationId": "GET_3dworkforce:searchBusinessRoles_1",
+        "parameters": [
+          {
+            "name": "searchStr",
+            "in": "query",
+            "required": true,
+            "description": "Search Criteria, Pass Empty value to find all Business Roles.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "software"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "The number of objects to skip in case of paginating through the search results; Pass 0 to return all",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 0
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "To limit the number of objects to return; Pass 0 to return all",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 10
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Business Role returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchBusinessRoleResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request: The format of the request is not correct.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@code": {
+                      "type": "string",
+                      "description": "Error code: Search string is missing",
+                      "example": "400"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "Missing Search string!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/businessRoles": {
+      "patch": {
+        "tags": [
+          "Business Role"
+        ],
+        "summary": "Update Business Role assignments",
+        "description": "Update multiple Business Role assignments in a single API call.",
+        "operationId": "PATCH_3dworkforce:updateBusinessRoles_1",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string",
+                          "description": "Business Role ID",
+                          "example": "http://www.3ds.com/ontology/wfbusinessroles/servicesconsulting/DS0615"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "Business Role type",
+                          "example": "esco:Occupation"
+                        },
+                        "users": {
+                          "type": "array",
+                          "items": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/components/schemas/addOperation"
+                              },
+                              {
+                                "$ref": "#/components/schemas/removeOperation"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Business Role is either added/removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "string",
+                      "description": "result type",
+                      "example": "success"
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "status code of the result.",
+                      "example": "200"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "207": {
+            "$ref": "#/components/responses/207"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "ReadBusinessRoleResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "type": "string",
+                  "example": "http://www.3ds.com/ontology/wfbusinessroles/strategy/DS0688"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Should be esco:Occupation",
+                  "example": "esco:Occupation"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "title of the Business Role.",
+                  "example": "3DEXPERIENCE Lab"
+                },
+                "homepage": {
+                  "type": "string",
+                  "description": "homepage url of the Business Role",
+                  "example": "https://eu1-215dsi0708-ifwe.3dexperience.3ds.com/#dashboard:a2cd064c-4e44-4455-a21a-0b065278ef97/tab:People/DS0688"
+                },
+                "users": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "accountName": {
+                        "type": "string",
+                        "description": "account name of the user",
+                        "example": "testUser"
+                      },
+                      "firstName": {
+                        "type": "string",
+                        "description": "first name of the user",
+                        "example": "Test"
+                      },
+                      "lastName": {
+                        "type": "string",
+                        "description": "last name of the user",
+                        "example": "User"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "SearchBusinessRoleResponse": {
+        "type": "object",
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "type": "string",
+                  "example": "http://www.3ds.com/ontology/wfbusinessroles/strategy/DS0688"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Should be esco:Occupation",
+                  "example": "esco:Occupation"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "title of the Business Role.",
+                  "example": "3DEXPERIENCE Lab"
+                },
+                "homepage": {
+                  "type": "string",
+                  "description": "homepage url of the Business Role",
+                  "example": "https://eu1-215dsi0708-ifwe.3dexperience.3ds.com/#dashboard:a2cd064c-4e44-4455-a21a-0b065278ef97/tab:People/DS0688"
+                },
+                "users": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "accountName": {
+                        "type": "string",
+                        "description": "account name of the user",
+                        "example": "testUser"
+                      },
+                      "firstName": {
+                        "type": "string",
+                        "description": "first name of the user",
+                        "example": "Test"
+                      },
+                      "lastName": {
+                        "type": "string",
+                        "description": "last name of the user",
+                        "example": "User"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "listOfBusinessRolesIDs": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReadBusinessRoleResponse"
+            },
+            "description": "list of Business Role IDs",
+            "example": [
+              "http://www.3ds.com/ontology/wfbusinessroles/servicesconsulting/DS0688"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "addOperation": {
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "description": "type of operation",
+            "example": "add"
+          },
+          "accountName": {
+            "type": "string",
+            "description": "account name of the user",
+            "example": "testUser"
+          }
+        }
+      },
+      "removeOperation": {
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "description": "type of operation",
+            "example": "remove"
+          },
+          "accountName": {
+            "type": "string",
+            "description": "account name of the user",
+            "example": "testUser"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "xmlHttpRequestHeader": {
+        "name": "X-Requested-With",
+        "in": "header",
+        "description": "Required header. The value is XMLHttpRequest.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "XMLHttpRequest"
+        }
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Bad request:The format of the request is not correct.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "@code": {
+                  "type": "string",
+                  "description": "Error code : Can be http code or custom app code.",
+                  "example": "400"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Error message",
+                  "example": "Invalid Business Role."
+                }
+              }
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Filter Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "@code": {
+                  "type": "string",
+                  "description": "Error code : Can be http code or custom app code.",
+                  "example": "403"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Error message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "207": {
+        "description": "Partial success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "identifier": {
+                        "type": "string",
+                        "description": "Business Role ID",
+                        "example": "http://www.3ds.com/ontology/wfbusinessroles/servicesconsulting/dummy"
+                      },
+                      "type": {
+                        "type": "string",
+                        "description": "Business Role type",
+                        "example": "esco:Occupation"
+                      },
+                      "users": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "op": {
+                              "type": "string",
+                              "description": "type of operation",
+                              "example": "add"
+                            },
+                            "accountName": {
+                              "type": "string",
+                              "description": "account name of the user",
+                              "example": "testUser"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "@code": {
+                      "type": "string",
+                      "description": "Can be http code or custom app code.",
+                      "example": "207"
+                    },
+                    "result": {
+                      "type": "string",
+                      "description": "type of result",
+                      "example": "partial success"
+                    },
+                    "exceptions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Business Role ID",
+                            "example": "http://www.3ds.com/ontology/wfbusinessroles/servicesconsulting/dummy"
+                          },
+                          "message": {
+                            "type": "string",
+                            "description": "error message",
+                            "example": "Invalid BusinessRole"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

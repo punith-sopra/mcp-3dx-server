@@ -1,0 +1,1611 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "x-ds-copyright": "3DEXPERIENCE R2025x (c) 2025 Dassault Systemes.",
+    "description": "Scientific Notebook Public REST API",
+    "version": "1.0.2",
+    "title": "Experiment Web Services",
+    "x-ds-service": [
+      "Experiment"
+    ]
+  },
+  "servers": [
+    {
+      "url": "{Experiment}/resources/v1/spr",
+      "variables": {
+        "Experiment": {
+          "default": "https://3DEXPERIENCE_Experiment"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/experiment/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "experiment templates",
+      "description": "Access to Experiment Templates"
+    },
+    {
+      "name": "experiments",
+      "description": "Access to Experiments"
+    },
+    {
+      "name": "experiment actions",
+      "description": "Perform actions on experiments"
+    },
+    {
+      "name": "experiment reports",
+      "description": "Access to Experiment Reports"
+    },
+    {
+      "name": "experiment attachments",
+      "description": "Access to Experiment Attachments"
+    }
+  ],
+  "paths": {
+    "/experimenttemplates": {
+      "get": {
+        "operationId": "getExperimentTemplates",
+        "tags": [
+          "experiment templates"
+        ],
+        "description": "Get all Experiment Templates",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperimenttemplatesResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/experimenttemplates/{templateid}": {
+      "get": {
+        "operationId": "getExperimentTemplate",
+        "tags": [
+          "experiment templates"
+        ],
+        "description": "Get an Experiment Template by id",
+        "parameters": [
+          {
+            "name": "templateid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Experimenttemplate"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/experimentreports": {
+      "get": {
+        "operationId": "getExperimentReports",
+        "tags": [
+          "experiment reports"
+        ],
+        "description": "Get all Experiment Reports",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperimentreportsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/experiments": {
+      "post": {
+        "operationId": "createExperiment",
+        "tags": [
+          "experiments"
+        ],
+        "description": "Create a new experiment",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xRequestedWith"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExperimentPost"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperimentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableContent"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/experiments/{experimentid}": {
+      "get": {
+        "operationId": "getExperiment",
+        "tags": [
+          "experiments"
+        ],
+        "description": "Get an Experiment by id",
+        "parameters": [
+          {
+            "name": "experimentid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperimentResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResourceNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateExperiment",
+        "tags": [
+          "experiments"
+        ],
+        "description": "Update an Experiment by id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xRequestedWith"
+          },
+          {
+            "$ref": "#/components/parameters/ifMatch"
+          },
+          {
+            "name": "experimentid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/merge-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExperimentPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperimentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResourceNotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableContent"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/experiments/{experimentid}/reportjobs": {
+      "get": {
+        "operationId": "getExperimentReportsJobs",
+        "tags": [
+          "experiments"
+        ],
+        "description": "Get all report jobs for an experiment",
+        "parameters": [
+          {
+            "name": "experimentid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperimentjobsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResourceNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createExperimentReportJob",
+        "tags": [
+          "experiments"
+        ],
+        "description": "Create a job to generate a report for an experiment",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xRequestedWith"
+          },
+          {
+            "name": "experimentid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExperimentjobsPost"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperimentjobsPostResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResourceNotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableContent"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/experiments/{experimentid}/reportjobs/{jobId}": {
+      "get": {
+        "operationId": "getExperimentReportsByJobId",
+        "tags": [
+          "experiments"
+        ],
+        "description": "Get a single report jobs for an experiment by id",
+        "parameters": [
+          {
+            "name": "experimentid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "jobId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Experimentjob"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResourceNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/experiments/{experimentid}/sections/{sectionid}/attachments": {
+      "post": {
+        "operationId": "addAttachment",
+        "tags": [
+          "experiments"
+        ],
+        "description": "Add a section to an experiment",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xRequestedWith"
+          },
+          {
+            "name": "experimentid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sectionid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attachment"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResourceNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/experimentattachments/{attachmentid}": {
+      "get": {
+        "operationId": "getAttachment",
+        "tags": [
+          "experiment attachments"
+        ],
+        "description": "Get an attachment by id",
+        "parameters": [
+          {
+            "name": "attachmentid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attachment"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResourceNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/experiments/{experimentid}/runaction/addSection": {
+      "post": {
+        "operationId": "addSection",
+        "tags": [
+          "experiment actions"
+        ],
+        "description": "Add a section to an experiment",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xRequestedWith"
+          },
+          {
+            "name": "experimentid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExperimentAddSectionPost"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Section"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResourceNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/experiments/{experimentid}/runaction/createTaskPlan": {
+      "post": {
+        "operationId": "createTaskPlan",
+        "tags": [
+          "experiment actions"
+        ],
+        "description": "Create a task plan for an experiment",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xRequestedWith"
+          },
+          {
+            "name": "experimentid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResourceNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/experiments/{experimentid}/runaction/createSamples": {
+      "post": {
+        "operationId": "createExperimentSamples",
+        "tags": [
+          "experiment actions"
+        ],
+        "description": "Create samples for an experiment",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xRequestedWith"
+          },
+          {
+            "name": "experimentid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSamplesPost"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateSamplesResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResourceNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ExperimenttemplatesResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "templateUri"
+          ],
+          "properties": {
+            "templateUri": {
+              "type": "string",
+              "description": "The uri of the experiment template",
+              "examples": [
+                "uuid:4504bfe7-fc59-4c2a-90ea-73971332f599"
+              ]
+            },
+            "label": {
+              "type": "string",
+              "description": "The label of the experiment template",
+              "examples": [
+                "Synthetic Chemistry"
+              ]
+            }
+          }
+        }
+      },
+      "Experimenttemplate": {
+        "type": "object",
+        "required": [
+          "templateUri"
+        ],
+        "properties": {
+          "templateUri": {
+            "type": "string",
+            "description": "The uri of the experiment template",
+            "examples": [
+              "uuid:4504bfe7-fc59-4c2a-90ea-73971332f599"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "description": "The label of the experiment template",
+            "examples": [
+              "Synthetic Chemistry"
+            ]
+          },
+          "backgroundFields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BackgroundField"
+            }
+          },
+          "sections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Section"
+            }
+          },
+          "insertableSectionTemplates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InsertableSection"
+            }
+          }
+        }
+      },
+      "ExperimentreportsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The id of the experiment report",
+              "examples": [
+                "Report.Audit"
+              ]
+            },
+            "label": {
+              "type": "string",
+              "description": "The label of the experiment report",
+              "examples": [
+                "Audit Report"
+              ]
+            },
+            "description": {
+              "type": "string",
+              "description": "The description of the experiment report",
+              "examples": [
+                "Generates a report containing the audit trail for the experiment."
+              ]
+            }
+          }
+        }
+      },
+      "ExperimentPost": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "$ref": "#/components/schemas/Person"
+          },
+          "template": {
+            "type": "string",
+            "description": "The id of the template to use to create the experiment",
+            "examples": [
+              "dsinv:Template.Experiment.SyntheticChemistry"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the experiment",
+            "examples": [
+              "My experiment"
+            ]
+          },
+          "objective": {
+            "type": "string",
+            "description": "The objective of the experiment",
+            "examples": [
+              "Investigate phenomena"
+            ]
+          },
+          "hasSecureCollection": {
+            "$ref": "#/components/schemas/SecureCollection"
+          },
+          "backgroundFields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BackgroundField"
+            }
+          }
+        }
+      },
+      "ExperimentResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "etag"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The id of the experiment",
+            "examples": [
+              "uuid:4504bfe7-fc59-4c2a-90ea-73971332f599"
+            ]
+          },
+          "etag": {
+            "type": "string",
+            "description": "The etag of the experiment, for optimistic locking",
+            "examples": [
+              "e907b9b0-f379-49df-8f46-d8cd3115d353"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the experiment",
+            "examples": [
+              "My experiment"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "description": "The auto-generated name of the experiment",
+            "examples": [
+              "EXP-00000012"
+            ]
+          },
+          "objective": {
+            "type": "string",
+            "description": "The objective of the experiment",
+            "examples": [
+              "Investigate phenomena"
+            ]
+          },
+          "owner": {
+            "$ref": "#/components/schemas/Person"
+          },
+          "hasSecureCollection": {
+            "$ref": "#/components/schemas/SecureCollection"
+          },
+          "backgroundFields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BackgroundField"
+            }
+          },
+          "sections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Section"
+            }
+          }
+        }
+      },
+      "ExperimentPatch": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "examples": [
+              "My experiment"
+            ]
+          },
+          "objective": {
+            "type": "string",
+            "examples": [
+              "Investigate phenomena"
+            ]
+          },
+          "backgroundFields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BackgroundField"
+            }
+          },
+          "sections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The id of the section",
+                  "examples": [
+                    "uuid:b51f2168-e116-4386-907d-b39e58971b3f"
+                  ]
+                },
+                "title": {
+                  "type": "string",
+                  "description": "The title of the experiment section",
+                  "examples": [
+                    "Procedure"
+                  ]
+                },
+                "textSection": {
+                  "type": "string",
+                  "description": "The text in the section",
+                  "examples": [
+                    "<b>Important text</b>"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "Experimentjob": {
+        "type": "object",
+        "description": "A report on the experiment",
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "description": "The id of the job",
+            "examples": [
+              "FD5B2F30-DD5C-4042-B35B-5E3A540E8677"
+            ]
+          },
+          "statusCode": {
+            "type": "number",
+            "description": "The code representing the status of the job",
+            "examples": []
+          },
+          "statusLabel": {
+            "type": "string",
+            "description": "A text label for the status of the job",
+            "examples": [
+              "complete"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "description": "A url to fetch the report",
+            "examples": [
+              "https://..."
+            ]
+          }
+        }
+      },
+      "ExperimentjobsResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Experimentjob"
+        }
+      },
+      "ExperimentjobsPost": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "type": "string",
+            "description": "The name to display on a report. Useful when using Openness agent credentials",
+            "examples": [
+              "John Doe"
+            ]
+          },
+          "reportId": {
+            "type": "string",
+            "description": "The id of the report to generate",
+            "enum": [
+              "Report.Audit",
+              "Report.Experiment",
+              "Report.ExperimentAudit",
+              "Report.ExperimentWithAttachments",
+              "Report.ExperimentAuditWithAttachments"
+            ],
+            "examples": [
+              "Report.Audit"
+            ]
+          }
+        }
+      },
+      "ExperimentjobsPostResponse": {
+        "type": "object",
+        "description": "The information about the new report job",
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "description": "The id of the new report job",
+            "examples": [
+              "FD5B2F30-DD5C-4042-B35B-5E3A540E8677"
+            ]
+          }
+        }
+      },
+      "ExperimentAddSectionPost": {
+        "type": "object",
+        "properties": {
+          "sectionTemplateId": {
+            "type": "string",
+            "description": "The id of the section template to use when creating a new section. This must be one of the insertableTextSections from the associated Experiment Template.",
+            "examples": [
+              "uuid:d204a28f-c302-45d8-aafc-24395559b116"
+            ]
+          }
+        }
+      },
+      "BackgroundField": {
+        "type": "object",
+        "description": "The background fields on the experiment",
+        "properties": {
+          "backgroundFieldUri": {
+            "type": "string",
+            "description": "The id of the background field",
+            "examples": [
+              "dsinv:aBackgroundField"
+            ]
+          },
+          "value": {
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "The value of the field",
+                "examples": [
+                  "A field value"
+                ]
+              },
+              {
+                "type": "number",
+                "description": "The value of the field",
+                "examples": [
+                  1.234
+                ]
+              },
+              {
+                "$ref": "#/components/schemas/ReferenceValue"
+              }
+            ]
+          }
+        }
+      },
+      "Attachment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The id of the attachment",
+            "examples": [
+              "uuid:3fe9b7af-9024-4e2b-b6bd-5edbffa53495"
+            ]
+          },
+          "fileName": {
+            "type": "string",
+            "description": "The file name of the attachment",
+            "examples": [
+              "aspirin.pdf"
+            ]
+          },
+          "mimeType": {
+            "type": "string",
+            "description": "The mime type of the attachment",
+            "examples": [
+              "application/pdf"
+            ]
+          },
+          "fileSize": {
+            "type": "number",
+            "description": "The size of the attachment in bytes",
+            "examples": [
+              29894
+            ]
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time the attachment was last updated",
+            "examples": [
+              "2025-08-12T12:17:01.554Z"
+            ]
+          },
+          "hasPreview": {
+            "type": "boolean",
+            "description": "If the attachment has a preview",
+            "examples": [
+              false
+            ]
+          }
+        }
+      },
+      "Section": {
+        "type": "object",
+        "description": "The sections in the experiment",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The id of the section",
+            "examples": [
+              "uuid:745eec42-95b3-4dbd-9a06-924f28fb6d53"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "description": "The title of the section",
+            "examples": [
+              "Title for text section"
+            ]
+          },
+          "supportsText": {
+            "type": "boolean",
+            "description": "If the section supports storing text",
+            "examples": [
+              true
+            ]
+          },
+          "textSection": {
+            "type": "string",
+            "description": "The text in the section",
+            "examples": [
+              "<b>Important text</b>"
+            ]
+          },
+          "supportsMimeTypes": {
+            "type": "array",
+            "description": "The mime types of files that can be attached",
+            "examples": [
+              [
+                "*/*"
+              ]
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Attachment"
+            }
+          }
+        }
+      },
+      "InsertableSection": {
+        "type": "object",
+        "description": "The insertable sections in the experiment",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The id of the insertable section",
+            "examples": [
+              "uuid:745eec42-95b3-4dbd-9a06-924f28fb6d54"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "description": "The title of the insertable section",
+            "examples": [
+              "Title for insertable section"
+            ]
+          },
+          "supportsText": {
+            "type": "boolean",
+            "description": "If the section supports storing text",
+            "examples": [
+              true
+            ]
+          },
+          "supportsMimeTypes": {
+            "type": "array",
+            "description": "The mime types of files that can be attached",
+            "examples": [
+              [
+                "*/*"
+              ]
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ReferenceValue": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "examples": [
+              "313499D3D5B40100682E6E390000135A"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "examples": [
+              "Plate"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "examples": [
+              "https://devopsrct1twdg2410824-euw1-24dsw10922-3dspace.3dx-staging.3ds.com"
+            ]
+          },
+          "relativePath": {
+            "type": "string",
+            "examples": [
+              "/resources/v1/modeler/plant/313499D3D5B40100682E6E390000135A"
+            ]
+          }
+        }
+      },
+      "Person": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "examples": [
+              "iam:sfo1"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "examples": [
+              "foaf:Person"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "examples": [
+              "https://devopssfo1twdg2410824-euw1-24dsw10922-3dswym.3dx-staging.3ds.com"
+            ]
+          },
+          "relativePath": {
+            "type": "string",
+            "examples": [
+              "/api/user/find/login/sfo1"
+            ]
+          }
+        }
+      },
+      "SecureCollection": {
+        "type": "object",
+        "description": "A named collection that controls user access to lots. materials and substances. A Secure Collection may optionally prevent duplicate instances being stored within the same Secure Collection.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "examples": [
+              "uuid:745eec42-95b3-4dbc-9a06-924f28fb6d53"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "examples": [
+              "dsbioseccolmgmt:SecureCollection"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "examples": [
+              "https://devopssfo1twdg2410824-euw1-24dsw10922-substancereg.3dx-staging.3ds.com"
+            ]
+          },
+          "relativePath": {
+            "type": "string",
+            "examples": [
+              "/resources/v1/seccolmgmt/securecollections/uuid:745eec42-95b3-4dbc-9a06-924f28fb6d53"
+            ]
+          }
+        }
+      },
+      "CreateSamplesPost": {
+        "type": "object",
+        "properties": {
+          "samples": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The name of the sample",
+                  "examples": [
+                    "My Sample"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateSamplesResponse": {
+        "type": "object",
+        "properties": {
+          "samples": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The name of the sample",
+                  "examples": [
+                    "My Sample"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "ServerError": {
+        "description": "Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "examples": [
+                    "Internal server Error"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized"
+      },
+      "Forbidden": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "examples": [
+                    "Permission denied"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "InvalidRequest": {
+        "description": "InvalidRequest",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "examples": [
+                    "Bad Request"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "ResourceNotFound": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "examples": [
+                    "Requested object does not exist"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "UnprocessableContent": {
+        "description": "Unprocessable Content",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "examples": [
+                    "Invalid data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "ServiceUnavailable": {
+        "description": "Service Unavailable"
+      }
+    },
+    "parameters": {
+      "top": {
+        "in": "query",
+        "name": "top",
+        "description": "Optional parameter that specifies how many items to return. \n\n Example top=10 will return 10 items",
+        "content": {
+          "text/plain": {
+            "schema": {
+              "type": "string",
+              "examples": [
+                10
+              ],
+              "default": 1000
+            }
+          }
+        },
+        "required": false
+      },
+      "skip": {
+        "in": "query",
+        "name": "skip",
+        "description": "Optional parameter that specifies how many items to skip from the start of the items to return. \n\nExample skip=7 will skip the first 7 items from the results ",
+        "content": {
+          "text/plain": {
+            "schema": {
+              "type": "string",
+              "examples": [
+                0
+              ],
+              "default": 0
+            }
+          }
+        },
+        "required": false
+      },
+      "xRequestedWith": {
+        "name": "X-Requested-With",
+        "in": "header",
+        "description": "X-Requested-With header for CSRF.",
+        "required": true,
+        "schema": {
+          "description": "X-Requested-With header. Authorized values: 'XMLHttpRequest' or 'script'.",
+          "type": "string",
+          "enum": [
+            "XMLHttpRequest",
+            "script"
+          ],
+          "examples": [
+            "XMLHttpRequest"
+          ]
+        }
+      },
+      "ifMatch": {
+        "in": "header",
+        "name": "If-Match",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Optional header that makes the request conditional on the resource having a matching etag. If the etag does not match then a 412 (Precondition failed) response is returned.",
+        "required": false,
+        "example": "e907b9b0-f379-49df-8f46-d8cd3115d353"
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

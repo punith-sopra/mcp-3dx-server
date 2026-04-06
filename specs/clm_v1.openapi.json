@@ -1,0 +1,249 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Credential Lifecycle Management Web Services. They do not require a CAS authentication for using them, and any member of the platform  can use them.",
+    "version": "1.0.0",
+    "title": "CLM Web Services",
+    "x-ds-service": [
+      "clm"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{CLM}",
+      "variables": {
+        "CLM": {
+          "default": "https://3DEXPERIENCE_CLM"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "Bearer Token",
+      "description": "Creation and revocation."
+    }
+  ],
+  "paths": {
+    "/clm/oauth2/token": {
+      "post": {
+        "summary": "Creates a token.",
+        "description": "This API creates a bearer token for a CLM agent. The CLM agent is specified by its identifier (client_id) and its credentials (client_secret). Both are generated when a CLM agent is created in the Agent Management application. Except that the credentials coming from the application must be firstly encoded in URL and Filename safe base64 encoding scheme. \n\nFor a CLM agent, only one bearer token exists. If you call twice this API, and for the same CLM agent, it invalidates the previous token. \n\nThe duration of the token is 24H (84600 ms). After this period, the token can no longer be used. A new one must be generated.",
+        "tags": [
+          "Bearer Token"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/client_id"
+          },
+          {
+            "$ref": "#/components/parameters/client_secret"
+          },
+          {
+            "$ref": "#/components/parameters/grant_type"
+          }
+        ],
+        "requestBody": {
+          "description": "The request body is an empty body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The token has been successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createTokenBody"
+                },
+                "example": {
+                  "token_type": "Bearer",
+                  "access_token": "6ae78563-7d30-48a1-a035-8f42f0537aa0",
+                  "expires_in": 86400
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A query parameter is missing, wrong grant type.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The client_id and/or the client_credentials are wrong.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorBody"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorBody"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clm/oauth2/revoketoken": {
+      "post": {
+        "summary": "Revokes a token.",
+        "description": "It revokes the bearer token for the CLM agent specified by its identifier (client_id) and its credentials (client_secret). Both are generated when a CLM agent is created in the Agent Management application. The credentials must be URL base 64 encoded to be used for client_secret. If the CLM agent does not have a bearer token, the response is 200.",
+        "tags": [
+          "Bearer Token"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/client_id"
+          }
+        ],
+        "requestBody": {
+          "description": "The request body is an empty body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The token has been successfully revoked or the CLM agent does not have token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/revokeTokenBody"
+                },
+                "example": {
+                  "token_type": "revoked"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A query parameter is missing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The client_id and/or the client_credentials are wrong.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorBody"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server issue.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorBody"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "errorBody": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "description": "The message associated with the error.",
+            "type": "string"
+          }
+        }
+      },
+      "createTokenBody": {
+        "type": "object",
+        "properties": {
+          "token_type": {
+            "description": "The string value is always Bearer.",
+            "type": "string"
+          },
+          "access_token": {
+            "description": ".",
+            "type": "string"
+          },
+          "expires_in": {
+            "description": "The token duration in ms. The value is 84600 (24H)",
+            "type": "string"
+          }
+        }
+      },
+      "revokeTokenBody": {
+        "type": "object",
+        "properties": {
+          "token_type": {
+            "description": "The string value is always revoked.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "client_id": {
+        "name": "client_id",
+        "in": "query",
+        "description": "The client identifier is automatically generated when a new CLM agent is  interactivelly created in the Agent Management application. Its value is an UUIV4.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "client_secret": {
+        "name": "client_secret",
+        "in": "query",
+        "description": "The credentials associated with the client identifier. The value generated from the Agent Management application must be encoded in 'URL and Filename safe' base64 encoding scheme.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "grant_type": {
+        "name": "grant_type",
+        "in": "query",
+        "description": "The kind of granting. The value is unique, it can only be client_credentials.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "client_credentials"
+          ]
+        }
+      }
+    }
+  }
+}

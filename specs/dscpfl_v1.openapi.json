@@ -1,0 +1,3440 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "Web services to manage Sellable Item objects from 3DPortfolio service.",
+    "version": "1.0.0",
+    "title": "Sellable Item Web Services",
+    "x-ds-service": [
+      "3DPortfolio"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DPortfolio}/3drdfpersist/resources/v1/modeler/dscpfl",
+      "variables": {
+        "3DPortfolio": {
+          "default": "https://3DEXPERIENCE_3DPortfolio"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dscpfl/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/dscpfl:SellableItem": {
+      "post": {
+        "tags": [
+          "Sellable Item"
+        ],
+        "summary": "Create a Sellable Item",
+        "description": "Create Sellable Item with its first Version. A model is mandatory at the creation and non modifiable after.",
+        "operationId": "dscpfl:CreateSellableItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "$ref": "#/components/parameters/securityContextHeader"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createSellableItemInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sellable Item created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadSItemMask"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request:The format of the request is not correct.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/responses/ErrorIncompleteLocation"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncompleteChannel"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncompleteMarket"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncorrectIndividual"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Sellable Item"
+        ],
+        "summary": "Get Sellable Items",
+        "description": "Get all the Sellable Items accessible to the user",
+        "operationId": "dscpfl:GetSellableItems",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Number of Sellable Items to skip. Default value is 0.",
+            "schema": {
+              "type": "integer",
+              "example": "10"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Number of Sellable Items to fetch. Default is 50 and max is 1000.",
+            "schema": {
+              "type": "integer",
+              "example": "10"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sellable Items returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "Collection"
+                    },
+                    "totalItems": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ReadSItemMask"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/dscpfl:SellableItem/{ID}": {
+      "patch": {
+        "tags": [
+          "Sellable Item"
+        ],
+        "summary": "Update Sellable Item attributes",
+        "description": "Update the attribute values of a Sellable Item",
+        "operationId": "dscpfl:UpdateSellableItemAttributes",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateSellableItemInput"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "IF-MATCH",
+            "in": "header",
+            "description": "The entity tag (etag) value that should me matched for a successful update.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "ab68c6df-c129-48c8-a168-31ae128f3843"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Sellable Item",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sellable Item updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadSItemMask"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request:The format of the request is not correct.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/responses/ErrorMissingSItemURI"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncompleteLocation"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncompleteChannel"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncompleteMarket"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncorrectIndividual"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorInconsistentSItemTargets"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "412": {
+            "$ref": "#/components/responses/412"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Sellable Item"
+        ],
+        "summary": "Get Sellable Item",
+        "description": "Get Sellable Item details",
+        "operationId": "dscpfl:GetSellableItemDetails",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Sellable Item",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sellable Item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadSItemMask"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Sellable Item"
+        ],
+        "summary": "Delete Sellable Item",
+        "description": "Delete a Sellable Item",
+        "operationId": "dscpfl:DeleteSellableItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Sellable Item",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sellable Item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@id": {
+                      "type": "string",
+                      "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+                    },
+                    "@code": {
+                      "type": "integer",
+                      "example": "200"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/dscpfl:SellableItem/{ID}/commercialItems": {
+      "patch": {
+        "tags": [
+          "Commercial Items"
+        ],
+        "summary": "Add/Remove Commercial Items",
+        "description": "Add or remove Sellable Items in the Sellable Item. Use this API to manage bundles of sellable items.",
+        "operationId": "dscpfl:AddRemoveItemsToSellableItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "IF-MATCH",
+            "in": "header",
+            "description": "The entity tag (etag) value that should me matched for a successful update.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "ab68c6df-c129-48c8-a168-31ae128f3843"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Sellable Item",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "add": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string",
+                          "example": "uuid:8636c658-cf96-4b29-ab0a-65095b9668f2"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "Should be dscpfl:SellableItem if it is not of the custom type.",
+                          "example": "dscpfl:SellableItem"
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "The source URL.",
+                          "example": "https://3DEXPERIENCE_3DPortfolio"
+                        },
+                        "relativePath": {
+                          "type": "string",
+                          "description": "The relative path to the Sellable Item.",
+                          "example": "/3drdfpersist/resources/v1/modeler/dscpfl/dscpfl:SellableItem/uuid:8636c658-cf96-4b29-ab0a-65095b9668f2"
+                        }
+                      },
+                      "required": [
+                        "identifier",
+                        "type",
+                        "source",
+                        "relativePath"
+                      ]
+                    }
+                  },
+                  "remove": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string",
+                          "example": "uuid:8636c658-cf96-4b29-ab0a-65095b9668f3"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "Should be dscpfl:SellableItem if it is not of the custom type.",
+                          "example": "dscpfl:SellableItem"
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "The source URL.",
+                          "example": "https://3DEXPERIENCE_3DPortfolio"
+                        },
+                        "relativePath": {
+                          "type": "string",
+                          "description": "The relative path to the Sellable Item.",
+                          "example": "/3drdfpersist/resources/v1/modeler/dscpfl/dscpfl:SellableItem/uuid:8636c658-cf96-4b29-ab0a-65095b9668f3"
+                        }
+                      },
+                      "required": [
+                        "identifier",
+                        "type",
+                        "source",
+                        "relativePath"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Commercial items added and removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "added": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "example": "uuid:8636c658-cf96-4b29-ab0a-65095b9668f2"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "Should be dscpfl:SellableItem if it is not of the custom type.",
+                            "example": "dscpfl:SellableItem"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The source URL.",
+                            "example": "https://3DEXPERIENCE_3DPortfolio"
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "description": "The relative path to the Sellable Item.",
+                            "example": "/3drdfpersist/resources/v1/modeler/dscpfl/dscpfl:SellableItem/uuid:8636c658-cf96-4b29-ab0a-65095b9668f2"
+                          }
+                        }
+                      }
+                    },
+                    "removed": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "example": "uuid:8636c658-cf96-4b29-ab0a-65095b9668f2"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "Should be dscpfl:SellableItem if it is not of the custom type.",
+                            "example": "dscpfl:SellableItem"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The source URL.",
+                            "example": "https://3DEXPERIENCE_3DPortfolio"
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "description": "The relative path to the Sellable Item.",
+                            "example": "/3drdfpersist/resources/v1/modeler/dscpfl/dscpfl:SellableItem/uuid:8636c658-cf96-4b29-ab0a-65095b9668f2s"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request:The format of the request is not correct.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@code": {
+                      "type": "integer",
+                      "description": "Error code : Can be http code or custom app code.",
+                      "example": "400"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "Only Sellable Items are allowed."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "412": {
+            "description": "The passed If-Match header doesn't match the current etag value.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@code": {
+                      "type": "integer",
+                      "description": "Error code.",
+                      "example": "412"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "You don't have the last version of the Sellable Item."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Commercial Items"
+        ],
+        "summary": "Get Commercial Items",
+        "description": "Get Commercial Items of a Sellable Item",
+        "operationId": "dscpfl:GetCommercialItemsOfSellableItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Sellable Item",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Commercial items returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "Collection"
+                    },
+                    "totalItems": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "example": "uuid:8636c658-cf96-4b29-ab0a-65095b9668f2"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "Should be dscpfl:SellableItem if it is not of the custom type.",
+                            "example": "dscpfl:SellableItem"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The source URL.",
+                            "example": "https://3DEXPERIENCE_3DPortfolio"
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "description": "The relative path to the Sellable Item.",
+                            "example": "/3drdfpersist/resources/v1/modeler/dscpfl/dscpfl:SellableItem/uuid:8636c658-cf96-4b29-ab0a-65095b9668f2s"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/dscpfl:SellableItem/{ID}/referencedDocuments": {
+      "patch": {
+        "tags": [
+          "Sellable Item Documents"
+        ],
+        "summary": "Add/Remove documents",
+        "description": "Add or remove documents into a Sellable Item",
+        "operationId": "dscpfl:AddRemoveDocumentsToSellableItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Sellable Item",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "add": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string",
+                          "description": "The ds6w:resourceUid of the document accessible in the federated search.",
+                          "example": "ABED148A6BCA8925FFF874A8D"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "The document type.",
+                          "example": "Document"
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "The source URL.",
+                          "example": "https://mydomain-3dspace.3dx-staging.3ds.com/"
+                        },
+                        "relativePath": {
+                          "type": "string",
+                          "description": "The relative path to the document.",
+                          "example": "/relative/path/for/ABED148A6BCA8925FFF874A8D"
+                        }
+                      },
+                      "required": [
+                        "identifier",
+                        "type",
+                        "source",
+                        "relativePath"
+                      ]
+                    }
+                  },
+                  "remove": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string",
+                          "description": "The ds6w:resourceUid of the document accessible in the federated search.",
+                          "example": "53D551541C07000060F02430001D7AF4"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "The document type.",
+                          "example": "Document"
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "The source URL.",
+                          "example": "https://mydomain-3dspace.3dx-staging.3ds.com/"
+                        },
+                        "relativePath": {
+                          "type": "string",
+                          "description": "The relative path to the document.",
+                          "example": "/relative/path/for/53D551541C07000060F02430001D7AF4"
+                        }
+                      },
+                      "required": [
+                        "identifier",
+                        "type",
+                        "source",
+                        "relativePath"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sellable Item document added or removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "added": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "description": "The ds6w:resourceUid of the document accessible in the federated search.",
+                            "example": "ABED148A6BCA8925FFF874A8D"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "The document type.",
+                            "example": "Document"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The source URL.",
+                            "example": "https://mydomain-3dspace.3dx-staging.3ds.com/"
+                          }
+                        }
+                      }
+                    },
+                    "removed": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "description": "The ds6w:resourceUid of the document accessible in the federated search.",
+                            "example": "53D551541C07000060F02430001D7AF4"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "The document type.",
+                            "example": "Document"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The source URL.",
+                            "example": "https://mydomain-3dspace.3dx-staging.3ds.com/"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Sellable Item Documents"
+        ],
+        "summary": "Get Sellable Item documents",
+        "description": "Get documents attached to a Sellable Item",
+        "operationId": "dscpfl:GetDocumentsOfSellableItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Sellable Item",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sellable Item documents returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "Collection"
+                    },
+                    "totalItems": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "description": "The ds6w:resourceUid of the document accessible in the federated search.",
+                            "example": "ABED148A6BCA8925FFF874A8D"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "The document type.",
+                            "example": "Picture"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The source URL.",
+                            "example": "https://mydomain-3dspace.3dx-staging.3ds.com/"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/dscpfl:SellableItem/{ID}/salesExperiences": {
+      "get": {
+        "tags": [
+          "Sellable Item Sales Experiences"
+        ],
+        "summary": "Get Sales Experiences of a Sellable Item",
+        "description": "Get Sales Experiences of a Sellable Item. Results can be filtered using location, market and channel query parameters.",
+        "operationId": "dscpfl:GetSalesExperiencesOfSellableItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Sellable Item",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "uuid:abcd68c6df-c129-48c8-a168-31ae12814528"
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "description": "Location to use as filter",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "lcc-3166-1:IND,lcc-3166-1:FRA"
+            }
+          },
+          {
+            "name": "channel",
+            "in": "query",
+            "description": "Channel to use as filter",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "pfl3ds-channel:WebStore,pfl3ds-channel:CloudStore"
+            }
+          },
+          {
+            "name": "market",
+            "in": "query",
+            "description": "Market to use as filter",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "pfl3ds-market:Healthcare,pfl3ds-market:Mining"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sales Experience Details returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "description": "ID of the Sales Experience.",
+                            "example": "ABED148A6BCA8925FFF874A8D"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "The Sales Experience Type.",
+                            "example": "MediaVideo3DExp"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "Source of the Sales Experience.",
+                            "example": "https://devopsspe8zgrg27321-euw1-27dsw11205-space.3dx-staging.3ds.com:443/enovia"
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "description": "Relative path of the Sales Experience.",
+                            "example": "/resources/v1/modeler/MediaVideo3DExp/ABED148A6BCA8925FFF874A8D"
+                          },
+                          "location": {
+                            "type": "array",
+                            "description": "Target Locations for the Sales Experience.",
+                            "items": {
+                              "$ref": "#/components/schemas/locationWithLabel"
+                            }
+                          },
+                          "channel": {
+                            "type": "array",
+                            "description": "Target Channels for the Sales Experience.",
+                            "items": {
+                              "$ref": "#/components/schemas/channelWithLabel"
+                            }
+                          },
+                          "market": {
+                            "type": "array",
+                            "description": "Target Markets for the Sales Experience.",
+                            "items": {
+                              "$ref": "#/components/schemas/marketWithLabel"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request:The format of the request is not correct.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/responses/ErrorInvalidSItemID"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dscpfl:SellableItem/{ID}/setGoverningProject": {
+      "post": {
+        "tags": [
+          "Sellable Item Governing Project"
+        ],
+        "summary": "Set Sellable Item Governing Project",
+        "description": "Set Governing Project of the Sellable Item. If a governing project is already set, it will be replaced.",
+        "operationId": "dscpfl:SetGoverningProjectOfSellableItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Sellable Item",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "identifier": {
+                    "type": "string",
+                    "description": "The ds6w:resourceUid of the Project accessible in the federated search.",
+                    "example": "uuid:b5674451-bec6-4605-aa2d-48c90a1f6ca8"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "The Project type.",
+                    "example": "dsplan:Project"
+                  },
+                  "source": {
+                    "type": "string",
+                    "description": "The source URL.",
+                    "example": "https://mydomain-3dplan.3dx-staging.3ds.com/"
+                  },
+                  "relativePath": {
+                    "type": "string",
+                    "description": "The relative path to the project.",
+                    "example": "/relative/path/for/uuid:b5674451-bec6-4605-aa2d-48c90a1f6ca8"
+                  }
+                },
+                "required": [
+                  "identifier",
+                  "type",
+                  "source",
+                  "relativePath"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sellable Item Governing Project returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "description": "The ds6w:resourceUid of the Project accessible in the federated search.",
+                      "example": "uuid:b5674451-bec6-4605-aa2d-48c90a1f6ca8"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "The Project type.",
+                      "example": "dsplan:Project"
+                    },
+                    "source": {
+                      "type": "string",
+                      "description": "The source URL.",
+                      "example": "https://mydomain-3dplan.3dx-staging.3ds.com/"
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "description": "The relative path to the item only if it is a Sellable Item.",
+                      "example": "/relative/path/for/uuid:b5674451-bec6-4605-aa2d-48c90a1f6ca8"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "412": {
+            "$ref": "#/components/responses/412"
+          }
+        }
+      }
+    },
+    "/dscpfl:SellableItem/{ID}/removeGoverningProject": {
+      "post": {
+        "tags": [
+          "Sellable Item Governing Project"
+        ],
+        "summary": "Remove Sellable Item Governing Project",
+        "description": "Remove Governing Project of the Sellable Item",
+        "operationId": "dscpfl:RemoveGoverningProjectOfSellableItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Sellable Item",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blank Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "412": {
+            "$ref": "#/components/responses/412"
+          }
+        }
+      }
+    },
+    "/dscpfl:SellableItem/{ID}/governingProject": {
+      "get": {
+        "tags": [
+          "Sellable Item Governing Project"
+        ],
+        "summary": "Get Sellable Item Governing Project",
+        "description": "Get Governing Project of the Sellable Item",
+        "operationId": "dscpfl:GetGoverningProjectOfSellableItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Sellable Item",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sellable Item Governing Project returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "description": "The ds6w:resourceUid of the Project accessible in the federated search.",
+                      "example": "uuid:b5674451-bec6-4605-aa2d-48c90a1f6ca8"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "The Project type.",
+                      "example": "dsplan:Project"
+                    },
+                    "source": {
+                      "type": "string",
+                      "description": "The source URL.",
+                      "example": "https://mydomain-3dplan.3dx-staging.3ds.com/"
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "description": "The relative path to the Project.",
+                      "example": "/relative/path/for/uuid:b5674451-bec6-4605-aa2d-48c90a1f6ca8"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/dscpfl:SellableItem/{ID}/setMainContent": {
+      "post": {
+        "tags": [
+          "Sellable Item Main Content"
+        ],
+        "summary": "Set main content of a sellable item",
+        "description": "Set main content of a sellable item. Only objects of type Model Version, Product Configuration and Base Configuration can be set as main content. ",
+        "operationId": "dscpfl:SetMainContentOfSellableItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "$ref": "#/components/parameters/securityContextHeader"
+          },
+          {
+            "name": "IF-MATCH",
+            "in": "header",
+            "description": "The entity tag (etag) value that should me matched for a successful update.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "ab68c6df-c129-48c8-a168-31ae128f3843"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Sellable Item",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "identifier": {
+                    "type": "string",
+                    "description": "The physical id of the main content.",
+                    "example": "ABED148A6BCA8925FFF874A8D"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "The type of the main content.",
+                    "example": "Product Configuration"
+                  },
+                  "source": {
+                    "type": "string",
+                    "description": "The source URL of the main content",
+                    "example": "https://devopsspe8zgrg27321-euw1-27dsw11205-space.3dx-staging.3ds.com:443/enovia"
+                  },
+                  "relativePath": {
+                    "type": "string",
+                    "description": "The relative path of the main content.",
+                    "example": "/resources/v1/modeler/dspfl/dspfl:ModelVersion/73BA85E86D5300006756E70B40314E/dspfl:ProductConfiguration/ABED148A6BCA8925FFF874A8D"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The main content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "description": "The physical id of the main content.",
+                      "example": "ABED148A6BCA8925FFF874A8D"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "The type of the main content.",
+                      "example": "Product Configuration"
+                    },
+                    "source": {
+                      "type": "string",
+                      "description": "The source URL of the main content",
+                      "example": "https://devopsspe8zgrg27321-euw1-27dsw11205-space.3dx-staging.3ds.com:443/enovia"
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "description": "The relative path of the main content.",
+                      "example": "/resources/v1/modeler/dspfl/dspfl:ModelVersion/73BA85E86D5300006756E70B40314E/dspfl:ProductConfiguration/ABED148A6BCA8925FFF874A8D"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request:The format of the request is not correct.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@code": {
+                      "type": "integer",
+                      "description": "Error code : Can be http code or custom app code.",
+                      "example": "400"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "Model Version, Product Configuration and Base Configuration are the only types allowed for main content."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "412": {
+            "$ref": "#/components/responses/412"
+          }
+        }
+      }
+    },
+    "/dscpfl:SellableItem/{ID}/removeMainContent": {
+      "post": {
+        "tags": [
+          "Sellable Item Main Content"
+        ],
+        "summary": "Remove main content of a sellable item",
+        "description": "Remove main content of a sellable item",
+        "operationId": "dscpfl:RemoveMainContentOfSellableItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "$ref": "#/components/parameters/securityContextHeader"
+          },
+          {
+            "name": "IF-MATCH",
+            "in": "header",
+            "description": "The entity tag (etag) value that should me matched for a successful update.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "ab68c6df-c129-48c8-a168-31ae128f3843"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Sellable Item",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request:The format of the request is not correct.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@code": {
+                      "type": "integer",
+                      "description": "Error code : Can be http code or custom app code.",
+                      "example": "400"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "Sellable Item URI is missing in your request."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "412": {
+            "$ref": "#/components/responses/412"
+          }
+        }
+      }
+    },
+    "/dscpfl:SellableItem/{ID}/mainContent": {
+      "get": {
+        "tags": [
+          "Sellable Item Main Content"
+        ],
+        "summary": "Get main content of a sellable item",
+        "description": "Get main content of a sellable item",
+        "operationId": "dscpfl:GetMainContentOfSellableItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "$ref": "#/components/parameters/securityContextHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Sellable Item",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The main content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "description": "The physical id of the main content.",
+                      "example": "ABED148A6BCA8925FFF874A8D"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "The type of the main content.",
+                      "example": "Product Configuration"
+                    },
+                    "source": {
+                      "type": "string",
+                      "description": "The source URL of the main content",
+                      "example": "https://devopsspe8zgrg27321-euw1-27dsw11205-space.3dx-staging.3ds.com:443/enovia"
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "description": "The relative path of the main content.",
+                      "example": "/resources/v1/modeler/dspfl/dspfl:ModelVersion/73BA85E86D5300006756E70B40314E/dspfl:ProductConfiguration/ABED148A6BCA8925FFF874A8D"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request:The format of the request is not correct.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@code": {
+                      "type": "integer",
+                      "description": "Error code : Can be http code or custom app code.",
+                      "example": "400"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "Sellable Item URI is missing in your request."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dscpfl:SellableItem/{ID}/prices": {
+      "patch": {
+        "tags": [
+          "Sellable Item Prices"
+        ],
+        "summary": "Add or Remove Sellable Item prices",
+        "description": "Add or Remove List Prices of a Sellable Item. Removing a list price will delete it, as a List Price cannot exist outside of a Sellable Item.",
+        "operationId": "dscpfl:AddRemoveListPricesToSellableItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "$ref": "#/components/parameters/securityContextHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Sellable Item",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "IF-MATCH",
+            "in": "header",
+            "description": "The entity tag (etag) value that should me matched for a successful update.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "ab68c6df-c129-48c8-a168-31ae128f3843"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "add": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The price type.",
+                          "example": "dscpfl:ListPrice"
+                        },
+                        "currency": {
+                          "type": "string",
+                          "description": "The price currency.",
+                          "example": "USD"
+                        },
+                        "locations": {
+                          "type": "array",
+                          "description": "Target Locations for this List Price.",
+                          "items": {
+                            "$ref": "#/components/schemas/locationWithoutLabel"
+                          }
+                        },
+                        "channels": {
+                          "type": "array",
+                          "description": "Target Channels for this List Price.",
+                          "items": {
+                            "$ref": "#/components/schemas/channelWithoutLabel"
+                          }
+                        },
+                        "basePrice": {
+                          "type": "object",
+                          "properties": {
+                            "amount": {
+                              "type": "number",
+                              "description": "The base price amount",
+                              "example": "100"
+                            }
+                          }
+                        },
+                        "featurePrices": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "identifier": {
+                                "type": "string",
+                                "description": "The physical id of the variant or the option group.",
+                                "example": "ABED148A6BCA8925FFF874A8B"
+                              },
+                              "type": {
+                                "type": "string",
+                                "description": "The type of the variant or the option group.",
+                                "example": "Variant"
+                              },
+                              "title": {
+                                "type": "string",
+                                "description": "The title of the variant or the option group.",
+                                "example": "Color"
+                              },
+                              "source": {
+                                "type": "string",
+                                "description": "The source of the variant or the option group.",
+                                "example": "https://devopsspe8zgrg27321-euw1-27dsw11205-space.3dx-staging.3ds.com:443/enovia"
+                              },
+                              "relativePath": {
+                                "type": "string",
+                                "description": "The relative path of the variant or the option group.",
+                                "example": "/resources/v1/modeler/dspfl/dspfl:Variant/ABED148A6BCA8925FFF874A8B"
+                              },
+                              "sequenceNumber": {
+                                "type": "number",
+                                "description": "The sequence number of the variant/option group in the base configuration.",
+                                "example": "0"
+                              },
+                              "status": {
+                                "type": "string",
+                                "description": "(For Variant Parameter ONLY) The status of the Parameter in the Base Configuration.",
+                                "example": "Available"
+                              },
+                              "isCumulative": {
+                                "type": "boolean",
+                                "description": "(For Variant Parameter ONLY) The Parameter Pricing is Cumulative or not.",
+                                "example": "true"
+                              },
+                              "minValue": {
+                                "type": "number",
+                                "description": "(For Variant Parameter ONLY) The minimum value of the Parameter range.",
+                                "example": "0"
+                              },
+                              "maxValue": {
+                                "type": "number",
+                                "description": "(For Variant Parameter ONLY) The maximum value of the Parameter range.",
+                                "example": "100"
+                              },
+                              "prices": {
+                                "type": "array",
+                                "description": "(For Variant Parameter ONLY) The ranges and their prices.",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "amount": {
+                                      "type": "number",
+                                      "description": "The price amount.",
+                                      "example": "50"
+                                    },
+                                    "minValue": {
+                                      "type": "number",
+                                      "description": "The minimum limit of the specific range.",
+                                      "example": "0"
+                                    },
+                                    "maxValue": {
+                                      "type": "number",
+                                      "description": "The maximum limit of the specific range.",
+                                      "example": "25"
+                                    },
+                                    "isFixed": {
+                                      "type": "boolean",
+                                      "description": "The price for this range is fixed or varies by the quantity",
+                                      "example": "false"
+                                    },
+                                    "quantity": {
+                                      "type": "number",
+                                      "description": "The quantity multiplier for variable price.",
+                                      "example": "1"
+                                    },
+                                    "unit": {
+                                      "type": "string",
+                                      "description": "The Parameter unit.",
+                                      "example": "kg"
+                                    }
+                                  }
+                                }
+                              },
+                              "features": {
+                                "type": "array",
+                                "description": "(For Variant or Variability Group ONLY) The Values/Options associated.",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "identifier": {
+                                      "type": "string",
+                                      "description": "The physical id of the feature.",
+                                      "example": "ABED148A6BCA8925FFF874A8D"
+                                    },
+                                    "type": {
+                                      "type": "string",
+                                      "description": "The type of the feature.",
+                                      "example": "Variant Value"
+                                    },
+                                    "source": {
+                                      "type": "string",
+                                      "description": "The source URL of the variant value or the option.",
+                                      "example": "https://devopsspe8zgrg27321-euw1-27dsw11205-space.3dx-staging.3ds.com:443/enovia"
+                                    },
+                                    "relativePath": {
+                                      "type": "string",
+                                      "description": "The relative path of a variant value or an option.",
+                                      "example": "/resources/v1/modeler/dspfl/dspfl:Variant/73BA85E86D5300006756E70B40314E/dspfl:VariantValue/73BA85E86D5300006756E71D40314E8E"
+                                    },
+                                    "title": {
+                                      "type": "string",
+                                      "description": "The title of the feature.",
+                                      "example": "Red color"
+                                    },
+                                    "status": {
+                                      "type": "string",
+                                      "description": "The status of the feature in the Base Configuration.",
+                                      "example": "Available"
+                                    },
+                                    "prices": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "amount": {
+                                            "type": "number",
+                                            "description": "The amount of the feature price.",
+                                            "example": "50"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "remove": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/listPriceObjectReference"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sellable Item prices returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "added": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/listPriceObjectReference"
+                      }
+                    },
+                    "removed": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/listPriceObjectReference"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request:The format of the request is not correct.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/responses/ErrorMissingSItemURI"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncompleteLocation"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncompleteChannel"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncorrectIndividual"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorInconsistentListPriceTargets"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorDuplicateListPriceTargets"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorFeaturePricingNotAllowed"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorSItemNotInWork"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncompleteFeatureRef"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorMissingMinMaxValues"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncorrectParameterFormat"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "412": {
+            "$ref": "#/components/responses/412"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Sellable Item Prices"
+        ],
+        "summary": "Get Sellable Item list prices",
+        "description": "Get prices of a Sellable Item. Results can be filtered using location and currency query parameters.",
+        "operationId": "dscpfl:GetListPricesOfSellableItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "$ref": "#/components/parameters/securityContextHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a Sellable Item",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "uuid:abcd68c6df-c129-48c8-a168-31ae12814528"
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "description": "Location to use as filter",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "lcc-3166-1:IND,lcc-3166-1:FRA"
+            }
+          },
+          {
+            "name": "channel",
+            "in": "query",
+            "description": "Channel to use as filter",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "pfl3ds-channel:WebStore,pfl3ds-channel:CloudStore"
+            }
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "Currency to use as filter",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "USD"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sellable Item list prices returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "identifier": {
+                            "type": "string",
+                            "description": "URI of list price.",
+                            "example": "uuid:ce9ceb40-95e8-4a8c-9420-4492fef0b3b8"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "List price type.",
+                            "example": "dscpfl:ListPrice"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "Source of List Price.",
+                            "example": "https://devopseti1n6pl1223817-euw1-27dsw21219-3dportfolio.3dx-staging.3ds.com:443"
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "description": "Relative path of list price.",
+                            "example": "/3drdfpersist/resources/v1/modeler/dscpfl/dscpfl:ListPrice/uuid:ce9ceb40-95e8-4a8c-9420-4492fef0b3b8"
+                          },
+                          "currency": {
+                            "type": "string",
+                            "description": "The default currency of List Price.",
+                            "example": "USD"
+                          },
+                          "location": {
+                            "type": "array",
+                            "description": "Target Locations for this List Price.",
+                            "items": {
+                              "$ref": "#/components/schemas/locationWithLabel"
+                            }
+                          },
+                          "channel": {
+                            "type": "array",
+                            "description": "Target Channels for this List Price.",
+                            "items": {
+                              "$ref": "#/components/schemas/channelWithLabel"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/dscpfl:ListPrice/{ID}": {
+      "get": {
+        "tags": [
+          "Sellable Item Prices"
+        ],
+        "summary": "Get a List Price",
+        "description": "Get List Price",
+        "operationId": "dscpfl:GetListPrice",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "$ref": "#/components/parameters/securityContextHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a List Price",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "uuid:ce9ceb40-95e8-4a8c-9420-4492fef0b3b8"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List Price returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/configuredListPriceResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request:The format of the request is not correct.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@code": {
+                      "type": "integer",
+                      "description": "Error code : Can be http code or custom app code.",
+                      "example": "400"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "List Price URI is missing in your request."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Sellable Item Prices"
+        ],
+        "summary": "Update a List Price",
+        "description": "Update a List Price",
+        "operationId": "dscpfl:UpdateListPrice",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "$ref": "#/components/parameters/securityContextHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a List Price",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "currency": {
+                    "type": "string",
+                    "description": "The price currency.",
+                    "example": "USD"
+                  },
+                  "locations": {
+                    "type": "array",
+                    "description": "Target Locations for this List Price.",
+                    "items": {
+                      "$ref": "#/components/schemas/locationWithoutLabel"
+                    }
+                  },
+                  "channels": {
+                    "type": "array",
+                    "description": "Target Channels for this List Price.",
+                    "items": {
+                      "$ref": "#/components/schemas/channelWithoutLabel"
+                    }
+                  },
+                  "basePrice": {
+                    "type": "object",
+                    "properties": {
+                      "amount": {
+                        "type": "number",
+                        "description": "The base price amount",
+                        "example": "100"
+                      }
+                    }
+                  },
+                  "featurePrices": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string",
+                          "description": "The physical id of the feature.",
+                          "example": "ABED148A6BCA8925FFF874A8D"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the feature.",
+                          "example": "Variant Value"
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "The source URL of the variant value or the option.",
+                          "example": "https://devopsspe8zgrg27321-euw1-27dsw11205-space.3dx-staging.3ds.com:443/enovia"
+                        },
+                        "relativePath": {
+                          "type": "string",
+                          "description": "The relative path of a variant value or an option.",
+                          "example": "/resources/v1/modeler/dspfl/dspfl:Variant/73BA85E86D5300006756E70B40314E/dspfl:VariantValue/ABED148A6BCA8925FFF874A8D"
+                        },
+                        "status": {
+                          "type": "string",
+                          "description": "The status of the feature in the Base Configuration.",
+                          "example": "Available"
+                        },
+                        "isCumulative": {
+                          "type": "boolean",
+                          "description": "(For Variant Parameter ONLY) The Parameter Pricing is Cumulative or not.",
+                          "example": "true"
+                        },
+                        "minValue": {
+                          "type": "number",
+                          "description": "(For Variant Parameter ONLY) The minimum value of the Parameter range.",
+                          "example": "0"
+                        },
+                        "maxValue": {
+                          "type": "number",
+                          "description": "(For Variant Parameter ONLY) The maximum value of the Parameter range.",
+                          "example": "100"
+                        },
+                        "prices": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "amount": {
+                                "type": "number",
+                                "description": "The amount of the feature price.",
+                                "example": "50"
+                              },
+                              "minValue": {
+                                "type": "number",
+                                "description": "(For Variant Parameter ONLY) The minimum limit of the specific range.",
+                                "example": "0"
+                              },
+                              "maxValue": {
+                                "type": "number",
+                                "description": "(For Variant Parameter ONLY) The maximum limit of the specific range.",
+                                "example": "25"
+                              },
+                              "isFixed": {
+                                "type": "boolean",
+                                "description": "(For Variant Parameter ONLY) The price for this range is fixed or varies by the quantity",
+                                "example": "false"
+                              },
+                              "quantity": {
+                                "type": "number",
+                                "description": "(For Variant Parameter ONLY) The quantity multiplier for variable price.",
+                                "example": "1"
+                              },
+                              "unit": {
+                                "type": "string",
+                                "description": "(For Variant Parameter ONLY) The Parameter unit.",
+                                "example": "kg"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "List Price returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/configuredListPriceResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request:The format of the request is not correct.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/responses/ErrorMissingSItemURI"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncompleteLocation"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncompleteChannel"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncorrectIndividual"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorInconsistentListPriceTargets"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorDuplicateListPriceTargets"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorFeaturePricingNotAllowed"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorSItemNotInWork"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncompleteFeatureRef"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorMissingMinMaxValues"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncorrectParameterFormat"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dscpfl:ListPrice/{ID}/getConfiguredPrice": {
+      "post": {
+        "tags": [
+          "Sellable Item Prices"
+        ],
+        "summary": "Get Configured Price",
+        "description": "Get Configured Price",
+        "operationId": "dscpfl:GetConfiguredPrice",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xmlHttpRequestHeader"
+          },
+          {
+            "$ref": "#/components/parameters/securityContextHeader"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "URI of a List Price",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "selectedCriteria": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string",
+                          "description": "The physical id of the feature.",
+                          "example": "ABED148A6BCA8925FFF874A8D"
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the feature.",
+                          "example": "Variant Value"
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "The source URL of the variant value or the option.",
+                          "example": "https://devopsspe8zgrg27321-euw1-27dsw11205-space.3dx-staging.3ds.com:443/enovia"
+                        },
+                        "relativePath": {
+                          "type": "string",
+                          "description": "The relative path of a variant value or an option.",
+                          "example": "/resources/v1/modeler/dspfl/dspfl:Variant/73BA85E86D5300006756E70B40314E/dspfl:VariantValue/ABED148A6BCA8925FFF874A8D"
+                        },
+                        "status": {
+                          "type": "string",
+                          "description": "The status of the feature in the Base Configuration.",
+                          "example": "Available"
+                        },
+                        "value": {
+                          "type": "number",
+                          "description": "(For Variant Parameter ONLY) The requested value of the Parameter.",
+                          "example": "25"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Detailed Configured Pricing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "identifier": {
+                        "type": "string",
+                        "description": "The physical id of the feature.",
+                        "example": "ABED148A6BCA8925FFF874A8D"
+                      },
+                      "type": {
+                        "type": "string",
+                        "description": "The type of the feature.",
+                        "example": "Variant Value"
+                      },
+                      "source": {
+                        "type": "string",
+                        "description": "The source URL of the variant value or the option.",
+                        "example": "https://devopsspe8zgrg27321-euw1-27dsw11205-space.3dx-staging.3ds.com:443/enovia"
+                      },
+                      "relativePath": {
+                        "type": "string",
+                        "description": "The relative path of a variant value or an option.",
+                        "example": "/resources/v1/modeler/dspfl/dspfl:Variant/73BA85E86D5300006756E70B40314E/dspfl:VariantValue/ABED148A6BCA8925FFF874A8D"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "The status of the feature in the Base Configuration.",
+                        "example": "Available"
+                      },
+                      "value": {
+                        "type": "number",
+                        "description": "(For Variant Parameter ONLY) The requested value of the Parameter.",
+                        "example": "25"
+                      },
+                      "amount": {
+                        "type": "number",
+                        "description": "The price amount.",
+                        "example": "500"
+                      },
+                      "minAmount": {
+                        "type": "number",
+                        "description": "(accessible to Sellable Item Manager ONLY) The minimum price amount.",
+                        "example": "400"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request:The format of the request is not correct.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/responses/ErrorListPriceNotAssociatedToSItem"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorValuesOfSameVariant"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorIncorrectFeatureStatus"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorInvalidFeatureID"
+                    },
+                    {
+                      "$ref": "#/components/responses/ErrorInvalidListPriceID"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ReadSItemMask": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "example": "uuid:8636c658-cf96-4b29-ab0a-65095b9668f2"
+          },
+          "type": {
+            "type": "string",
+            "description": "Should be dscpfl:SellableItem if it is not of the custom type.",
+            "example": "dscpfl:SellableItem"
+          },
+          "source": {
+            "type": "string",
+            "description": "The source URL.",
+            "example": "https://3DEXPERIENCE_3DPortfolio"
+          },
+          "relativePath": {
+            "type": "string",
+            "description": "The relative path to the Sellable Item.",
+            "example": "/3drdfpersist/resources/v1/modeler/dscpfl/dscpfl:SellableItem/uuid:8636c658-cf96-4b29-ab0a-65095b9668f2"
+          },
+          "title": {
+            "type": "string",
+            "description": "The name of the Sellable Item",
+            "example": "A car engine"
+          },
+          "description": {
+            "type": "string",
+            "description": "The purpose of the Sellable Item",
+            "example": "A 4 stroke IC engine for cars"
+          },
+          "image": {
+            "type": "string",
+            "description": "A Base64 encoded image.",
+            "example": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD//gAyUHJ..."
+          },
+          "revision": {
+            "type": "string",
+            "description": "The version of the Sellable Item",
+            "example": "1_A"
+          },
+          "state": {
+            "type": "string",
+            "description": "The maturity state of the Sellable Item.",
+            "example": "Private"
+          },
+          "modified": {
+            "type": "string",
+            "description": "Last modification date",
+            "example": "2020-10-14T12:56:16.53Z"
+          },
+          "created": {
+            "type": "string",
+            "description": "Creation date",
+            "example": "2020-10-14T12:56:16.53Z"
+          },
+          "@etag": {
+            "type": "string",
+            "description": "Entity tag",
+            "example": "ab68c6df-c129-48c8-a168-31ae128f3843"
+          },
+          "owner": {
+            "type": "object",
+            "description": "Owner of the Sellable Item",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "description": "The URI of the owner.",
+                "example": "iam:rde1"
+              },
+              "type": {
+                "type": "string",
+                "description": "The type.",
+                "example": "pno:Person"
+              },
+              "source": {
+                "type": "string",
+                "description": "The URL of the source.",
+                "example": "https://mydomain-3dswym.3dx-staging.3ds.com"
+              },
+              "relativePath": {
+                "type": "string",
+                "description": "The relative path to the person.",
+                "example": "/api/user/find/login/rde1"
+              }
+            }
+          },
+          "model": {
+            "type": "object",
+            "description": "The model of the sellable item.",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "description": "The ds6w:resourceUid of the object accessible in the federated search.",
+                "example": "3F24EAB12009000061525913001467AB"
+              },
+              "type": {
+                "type": "string",
+                "description": "The object type.",
+                "example": "Model"
+              },
+              "source": {
+                "type": "string",
+                "description": "The source URL.",
+                "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dspace.3dx-staging.3ds.com"
+              },
+              "relativePath": {
+                "type": "string",
+                "description": "The relative path to the object.",
+                "example": "/resources/v1/modeler/dspfl/dspfl:Model/3F24EAB12009000061525913001467AB"
+              }
+            }
+          },
+          "locations": {
+            "type": "array",
+            "description": "Target Locations for this Sellable Item.",
+            "items": {
+              "$ref": "#/components/schemas/locationWithLabel"
+            }
+          },
+          "channels": {
+            "type": "array",
+            "description": "Target Channels for this Sellable Item.",
+            "items": {
+              "$ref": "#/components/schemas/channelWithLabel"
+            }
+          },
+          "markets": {
+            "type": "array",
+            "description": "Target Markets for this Sellable Item.",
+            "items": {
+              "$ref": "#/components/schemas/marketWithLabel"
+            }
+          }
+        }
+      },
+      "createSellableItemInput": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The name of the Sellable Item",
+            "example": "A car engine"
+          },
+          "description": {
+            "type": "string",
+            "description": "The purpose of the Sellable Item",
+            "example": "A 4 stroke IC engine for cars"
+          },
+          "image": {
+            "type": "string",
+            "description": "A Base64 encoded image.",
+            "example": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD//gAyUHJ..."
+          },
+          "model": {
+            "type": "object",
+            "description": "The model of the sellable item.",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "description": "The ds6w:resourceUid of the object accessible in the federated search.",
+                "example": "3F24EAB12009000061525913001467AB"
+              },
+              "type": {
+                "type": "string",
+                "description": "The object type.",
+                "example": "Model"
+              },
+              "source": {
+                "type": "string",
+                "description": "The source URL.",
+                "example": "https://devopseti1z13x71739-euw1-23dsw11202-3dspace.3dx-staging.3ds.com"
+              },
+              "relativePath": {
+                "type": "string",
+                "description": "The relative path to the object.",
+                "example": "/resources/v1/modeler/dspfl/dspfl:Model/3F24EAB12009000061525913001467AB"
+              }
+            },
+            "required": [
+              "identifier",
+              "type",
+              "source",
+              "relativePath"
+            ]
+          },
+          "locations": {
+            "type": "array",
+            "description": "Target Locations for this Sellable Item.",
+            "items": {
+              "$ref": "#/components/schemas/locationWithoutLabel"
+            }
+          },
+          "channels": {
+            "type": "array",
+            "description": "Target Channels for this Sellable Item.",
+            "items": {
+              "$ref": "#/components/schemas/channelWithoutLabel"
+            }
+          },
+          "markets": {
+            "type": "array",
+            "description": "Target Markets for this Sellable Item.",
+            "items": {
+              "$ref": "#/components/schemas/marketWithoutLabel"
+            }
+          }
+        },
+        "required": [
+          "title",
+          "model"
+        ]
+      },
+      "updateSellableItemInput": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The name of the Sellable Item",
+            "example": "A car engine"
+          },
+          "description": {
+            "type": "string",
+            "description": "The purpose of the Sellable Item",
+            "example": "A 4 stroke IC engine for cars"
+          },
+          "image": {
+            "type": "string",
+            "description": "A Base64 encoded image.",
+            "example": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD//gAyUHJ..."
+          },
+          "locations": {
+            "type": "array",
+            "description": "Target Locations for this Sellable Item.",
+            "items": {
+              "$ref": "#/components/schemas/locationWithoutLabel"
+            }
+          },
+          "channels": {
+            "type": "array",
+            "description": "Target Channels for this Sellable Item.",
+            "items": {
+              "$ref": "#/components/schemas/channelWithoutLabel"
+            }
+          },
+          "markets": {
+            "type": "array",
+            "description": "Target Markets for this Sellable Item.",
+            "items": {
+              "$ref": "#/components/schemas/marketWithoutLabel"
+            }
+          }
+        }
+      },
+      "configuredListPriceResponse": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "description": "The list price URI",
+            "example": "uuid:ce9ceb40-95e8-4a8c-9420-4492fef0b3b8"
+          },
+          "type": {
+            "type": "string",
+            "description": "The price type.",
+            "example": "dscpfl:ListPrice"
+          },
+          "source": {
+            "type": "string",
+            "description": "The source URL.",
+            "example": "https://devopsspe8zgrg9227-euw1-27dsw11205-3dportfolio.3dx-staging.3ds.com:443"
+          },
+          "relativePath": {
+            "type": "string",
+            "description": "The relative path to the List Price",
+            "example": "/3drdfpersist/resources/v1/modeler/dscpfl/dscpfl:ListPrice/uuid:8636c658-cf96-4b29-ab0a-65095b9668f2"
+          },
+          "currency": {
+            "type": "string",
+            "description": "The price currency.",
+            "example": "USD"
+          },
+          "location": {
+            "type": "array",
+            "description": "Target Locations for this List Price.",
+            "items": {
+              "$ref": "#/components/schemas/locationWithLabel"
+            }
+          },
+          "channel": {
+            "type": "array",
+            "description": "Target Channels for this List Price.",
+            "items": {
+              "$ref": "#/components/schemas/channelWithLabel"
+            }
+          },
+          "basePrice": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "description": "The base price amount",
+                "example": "100"
+              }
+            }
+          },
+          "featurePrices": {
+            "type": "object",
+            "properties": {
+              "member": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "description": "The physical id of the variant or the option group.",
+                      "example": "ABED148A6BCA8925FFF874A8B"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "The type of the variant or the option group.",
+                      "example": "Variant"
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "The title of the variant or the option group.",
+                      "example": "Color"
+                    },
+                    "source": {
+                      "type": "string",
+                      "description": "The source of the variant or the option group.",
+                      "example": "https://devopsspe8zgrg27321-euw1-27dsw11205-space.3dx-staging.3ds.com:443/enovia"
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "description": "The relative path of the variant or the option group.",
+                      "example": "/resources/v1/modeler/dspfl/dspfl:Variant/ABED148A6BCA8925FFF874A8B"
+                    },
+                    "sequenceNumber": {
+                      "type": "number",
+                      "description": "The sequence number of the variant/option group in the base configuration.",
+                      "example": "0"
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "(For Variant Parameter ONLY) The status of the Parameter in the Base Configuration.",
+                      "example": "Available"
+                    },
+                    "isCumulative": {
+                      "type": "boolean",
+                      "description": "(For Variant Parameter ONLY) The Parameter Pricing is Cumulative or not.",
+                      "example": "true"
+                    },
+                    "minValue": {
+                      "type": "number",
+                      "description": "(For Variant Parameter ONLY) The minimum value of the Parameter range.",
+                      "example": "0"
+                    },
+                    "maxValue": {
+                      "type": "number",
+                      "description": "(For Variant Parameter ONLY) The maximum value of the Parameter range.",
+                      "example": "100"
+                    },
+                    "value": {
+                      "type": "number",
+                      "description": "(For Variant Parameter ONLY) The selected/Default value of the Parameter in Base Configuration.",
+                      "example": "60"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "description": "(For Variant Parameter ONLY) The unit of the Parameter.",
+                      "example": "kg"
+                    },
+                    "prices": {
+                      "type": "array",
+                      "description": "(For Variant Parameter ONLY) The ranges and their prices.",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "amount": {
+                            "type": "number",
+                            "description": "The price amount.",
+                            "example": "500"
+                          },
+                          "minAmount": {
+                            "type": "number",
+                            "description": "(accessible to Sellable Item Manager ONLY) The minimum price amount.",
+                            "example": "400"
+                          },
+                          "minValue": {
+                            "type": "number",
+                            "description": "The minimum limit of the specific range.",
+                            "example": "0"
+                          },
+                          "maxValue": {
+                            "type": "number",
+                            "description": "The maximum limit of the specific range.",
+                            "example": "25"
+                          },
+                          "isFixed": {
+                            "type": "boolean",
+                            "description": "The price for this range is fixed or varies by the quantity",
+                            "example": "false"
+                          },
+                          "quantity": {
+                            "type": "number",
+                            "description": "The quantity multiplier for variable price.",
+                            "example": "1"
+                          },
+                          "unit": {
+                            "type": "string",
+                            "description": "The Parameter unit.",
+                            "example": "kg"
+                          }
+                        }
+                      }
+                    },
+                    "features": {
+                      "type": "object",
+                      "properties": {
+                        "member": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "identifier": {
+                                "type": "string",
+                                "description": "The physical id of the feature.",
+                                "example": "ABED148A6BCA8925FFF874A8D"
+                              },
+                              "type": {
+                                "type": "string",
+                                "description": "The type of the feature.",
+                                "example": "Variant Value"
+                              },
+                              "source": {
+                                "type": "string",
+                                "description": "The source URL of the variant value or the option.",
+                                "example": "https://devopsspe8zgrg27321-euw1-27dsw11205-space.3dx-staging.3ds.com:443/enovia"
+                              },
+                              "relativePath": {
+                                "type": "string",
+                                "description": "The relative path of a variant value or an option.",
+                                "example": "/resources/v1/modeler/dspfl/dspfl:Variant/73BA85E86D5300006756E70B40314E/dspfl:VariantValue/73BA85E86D5300006756E71D40314E8E"
+                              },
+                              "title": {
+                                "type": "string",
+                                "description": "The title of the feature.",
+                                "example": "Red color"
+                              },
+                              "status": {
+                                "type": "string",
+                                "description": "The status of the feature in the Base Configuration.",
+                                "example": "Available"
+                              },
+                              "prices": {
+                                "type": "object",
+                                "properties": {
+                                  "member": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "amount": {
+                                          "type": "number",
+                                          "description": "The amount of the feature price.",
+                                          "example": "50"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "locationWithLabel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The URI of the individual in the referential.",
+            "example": "lcc-3166-1:FRA"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of the individual.",
+            "example": "lcc-cr:Alpha3Code"
+          },
+          "source": {
+            "type": "string",
+            "description": "The source of the individual.",
+            "example": "ontology"
+          },
+          "label": {
+            "type": "string",
+            "description": "The label of the individual",
+            "example": "FRA"
+          }
+        }
+      },
+      "channelWithLabel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The URI of the individual in the referential.",
+            "example": "pfl3ds-channel:OnlineStore"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of the individual.",
+            "example": "pfl3ds-channel:Channel"
+          },
+          "source": {
+            "type": "string",
+            "description": "The source of the individual.",
+            "example": "ontology"
+          },
+          "label": {
+            "type": "string",
+            "description": "The label of the individual",
+            "example": "Online Store"
+          }
+        }
+      },
+      "marketWithLabel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The URI of the individual in the referential.",
+            "example": "pfl3ds-market:Healthcare"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of the individual.",
+            "example": "pfl3ds-market:Market"
+          },
+          "source": {
+            "type": "string",
+            "description": "The source of the individual.",
+            "example": "ontology"
+          },
+          "label": {
+            "type": "string",
+            "description": "The label of the individual",
+            "example": "Healthcare"
+          }
+        }
+      },
+      "locationWithoutLabel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The URI of the individual in the referential.",
+            "example": "lcc-3166-1:FRA"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of the individual.",
+            "example": "lcc-cr:Alpha3Code"
+          },
+          "source": {
+            "type": "string",
+            "description": "The source of the individual.",
+            "example": "ontology"
+          }
+        }
+      },
+      "channelWithoutLabel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The URI of the individual in the referential.",
+            "example": "pfl3ds-channel:OnlineStore"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of the individual.",
+            "example": "pfl3ds-channel:Channel"
+          },
+          "source": {
+            "type": "string",
+            "description": "The source of the individual.",
+            "example": "ontology"
+          }
+        }
+      },
+      "marketWithoutLabel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The URI of the individual in the referential.",
+            "example": "pfl3ds-market:Healthcare"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of the individual.",
+            "example": "pfl3ds-market:Market"
+          },
+          "source": {
+            "type": "string",
+            "description": "The source of the individual.",
+            "example": "ontology"
+          }
+        }
+      },
+      "listPriceObjectReference": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "description": "The list price URI",
+            "example": "uuid:ce9ceb40-95e8-4a8c-9420-4492fef0b3b8"
+          },
+          "type": {
+            "type": "string",
+            "description": "The price type.",
+            "example": "dscpfl:ListPrice"
+          },
+          "source": {
+            "type": "string",
+            "description": "The source URL.",
+            "example": "https://devopsspe8zgrg9227-euw1-27dsw11205-3dportfolio.3dx-staging.3ds.com:443"
+          },
+          "relativePath": {
+            "type": "string",
+            "description": "The relative path to the List Price",
+            "example": "/3drdfpersist/resources/v1/modeler/dscpfl/dscpfl:ListPrice/uuid:ce9ceb40-95e8-4a8c-9420-4492fef0b3b8"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "xmlHttpRequestHeader": {
+        "name": "X-Requested-With",
+        "in": "header",
+        "description": "Required header. The value is XMLHttpRequest.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "XMLHttpRequest"
+        }
+      },
+      "securityContextHeader": {
+        "name": "SecurityContext ",
+        "in": "header",
+        "description": "Required header. Security context of the logged in user.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "VPLMProjectLeader.Company Name.Common Space"
+        }
+      }
+    },
+    "responses": {
+      "ErrorIncompleteLocation": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Location reference should have these properties : id, type, source."
+          }
+        }
+      },
+      "ErrorIncompleteChannel": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Channel reference should have these properties : id, type, source."
+          }
+        }
+      },
+      "ErrorIncompleteMarket": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Market reference should have these properties : id, type, source."
+          }
+        }
+      },
+      "ErrorIncorrectIndividual": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "An entity with ID \"lcc-3166-1:FRANCE\" does not exist. Please verify."
+          }
+        }
+      },
+      "ErrorInconsistentSItemTargets": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Sellable Item should have either all the targeted locations/channels of the associated List Prices or no value set. FRA, IND."
+          }
+        }
+      },
+      "ErrorInconsistentListPriceTargets": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "List Price should have one of the target locations/channels of the parent Sellable Item or no value. IND, FRA."
+          }
+        }
+      },
+      "ErrorDuplicateListPriceTargets": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Operation cannot be done as a List Price with the same Currency, Locations and Channels already exists."
+          }
+        }
+      },
+      "ErrorFeaturePricingNotAllowed": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "The status of the feature 750955C260008F2C does not allow edition of the price."
+          }
+        }
+      },
+      "ErrorSItemNotInWork": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Operation cannot be done as the SellableItem is not in Draft/In work State."
+          }
+        }
+      },
+      "ErrorIncompleteFeatureRef": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Each Feature reference should have these properties : identifier, title, type, source, relativePath, status."
+          }
+        }
+      },
+      "ErrorMissingMinMaxValues": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Minimum and maximum value for the parameter is not provided."
+          }
+        }
+      },
+      "ErrorIncorrectParameterFormat": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "The feature 750955C260008F2C is missing parameters or is in incorrect format : isCumulative, isFixed, minValue, maxValue."
+          }
+        }
+      },
+      "ErrorListPriceNotAssociatedToSItem": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "The List Price is not associated to a Sellable Item. Please try again with correct details."
+          }
+        }
+      },
+      "ErrorValuesOfSameVariant": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "The Variant Values, ED148A6BCA892 and 5FFF874A8D are of same variant."
+          }
+        }
+      },
+      "ErrorIncorrectFeatureStatus": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "The status of the feature ABED148A6BCA8925FFF874A8A is incorrect."
+          }
+        }
+      },
+      "ErrorInvalidFeatureID": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "The Variability Option ABED148A6BCA8925FFF874A8A is not a feature present in the Base Configuration."
+          }
+        }
+      },
+      "ErrorInvalidListPriceID": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "The List Price Id is Invalid. Please try again with correct details."
+          }
+        }
+      },
+      "ErrorMissingSItemURI": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Sellable Item URI is missing in your request."
+          }
+        }
+      },
+      "ErrorInvalidSItemID": {
+        "type": "object",
+        "properties": {
+          "@code": {
+            "type": "integer",
+            "description": "Error code : Can be http code or custom app code.",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "The Sellable Item Id is Invalid. Please try again with correct details."
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request:The format of the request is not correct.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "@code": {
+                  "type": "integer",
+                  "description": "Error code : Can be http code or custom app code.",
+                  "example": "400"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Error message",
+                  "example": "Sellable Item URI is missing in your request."
+                }
+              }
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden:This request is not authorized.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "@code": {
+                  "type": "integer",
+                  "description": "Error code : Can be http code or custom app code.",
+                  "example": "403"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Error message",
+                  "example": "Operation cannot be done as the Sellable Item is not in Private/In work State."
+                }
+              }
+            }
+          }
+        }
+      },
+      "412": {
+        "description": "The passed If-Match header doesn't match the current etag value.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "@code": {
+                  "type": "integer",
+                  "description": "Error code.",
+                  "example": "412"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Error message",
+                  "example": "You don't have the last version of the portfolio version."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

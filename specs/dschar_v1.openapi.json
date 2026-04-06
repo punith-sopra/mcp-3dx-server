@@ -1,0 +1,2934 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "Services provided in 3DSpace service for Performance Specification and Performance Characteristics.",
+    "summary": "Public API's to get, create and manage Performance Specification and Performance Characteristics.",
+    "version": "1.1.2",
+    "title": "Performance Specification Web Services.",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dschar",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_3DSpace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dschar/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/dschar:PerformanceSpec": {
+      "post": {
+        "summary": "Creates Performance Specification.",
+        "description": "A performance specification can be created using this API. To create the performance specification user needs to provide an item where performance specification can be created as part of the request along with performance specification details including extension and enterprise attributes information.",
+        "operationId": "dschar:PerformanceSpec",
+        "tags": [
+          "dschar:PerformanceSpec"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DS-Change-Authoring-Context",
+            "in": "header",
+            "description": "Work Under Change Action",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "pid:GH564568015FFCF14F940A513C6765RE"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvchar:PerformanceSpecMask.Basic.Public",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvchar:PerformanceSpecMask.Basic.Public"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvchar:enterpriseAttributes, dsmvchar:customerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createPerformanceSpec"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "title": "API Response Format for Performance Specification Using Basic Mask",
+                      "$ref": "#/components/schemas/dsmvchar_PerformanceSpecMask.Basic.Public"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dschar:PerformanceSpec/{ID}": {
+      "get": {
+        "summary": "Gets a Performance Specification",
+        "description": "This API lists the details of a performance specification. Use ‘dsmvchar_PerformanceSpecMask.Details.Public’ mask to get the details of performance characteristics associated to performance specification along with it’s enterprise and extension attributes information.",
+        "operationId": "GET_dschar:PerformanceSpec_ID",
+        "tags": [
+          "dschar:PerformanceSpec"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dschar:PerformanceSpec object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvchar:PerformanceSpecMask.Basic.Public",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvchar:PerformanceSpecMask.Basic.Public",
+                "dsmvchar:PerformanceSpecMask.Details.Public"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvchar:enterpriseAttributes",
+                "dsmvchar:customerAttributes"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "title": "API Response Format for Performance Specification Using Details Mask",
+                      "$ref": "#/components/schemas/dsmvchar_PerformanceSpecMask.Details.Public"
+                    },
+                    {
+                      "title": "API Response Format for Performance Specification Using Basic Mask",
+                      "$ref": "#/components/schemas/dsmvchar_PerformanceSpecMask.Basic.Public"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Updates a Performance Specification.",
+        "description": "This API can be used to update the performance specification details including extension and enterprise attributes information.",
+        "operationId": "dschar:PerformanceSpec_BULKUPDATE",
+        "tags": [
+          "dschar:PerformanceSpec"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dschar:PerformanceSpec object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvchar:PerformanceSpecMask.Basic.Public",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvchar:PerformanceSpecMask.Basic.Public"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvchar:enterpriseAttributes, dsmvchar:customerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updatePerformanceSpec"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "title": "API Response Format for Performance Specification Using Basic Mask",
+                      "$ref": "#/components/schemas/dsmvchar_PerformanceSpecMask.Basic.Public"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes a Performance Specification",
+        "description": "The performance specifications and it’s associated performance characteristic information can be deleted. This can be allowed only when the parent item for which performance specification is created and in the IN_WORK maturity state and the user has required access on both the parent item and performance specification.",
+        "operationId": "DELETE_dschar:PerformanceSpec_ID",
+        "tags": [
+          "dschar:PerformanceSpec"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DS-Change-Authoring-Context",
+            "in": "header",
+            "description": "Work Under Change Action",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "pid:GH564568015FFCF14F940A513C6765RE"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dschar:PerformanceSpec object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dschar:PerformanceSpec/{PSID}/dschar:PerformanceChar": {
+      "post": {
+        "summary": "Creates a Performance Characteristics for a Performance Specification.",
+        "description": "This API can be used to create a performance characteristic as a Measurement or Descriptive type for a performance specification. When you create a performance characteristic,the details including extensions and enterprise attributes, and test methods can be specified",
+        "operationId": "dschar:PerformanceSpec_ID_dschar:PerformanceChar",
+        "tags": [
+          "dschar:PerformanceChar"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PSID",
+            "in": "path",
+            "description": "dschar:PerformanceSpec object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvchar:PerformanceCharMask.Common.Public",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvchar:PerformanceCharMask.Common.Public"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvchar:enterpriseAttributes, dsmvchar:customerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "title": "API Request Body Format for  Descriptive Performance Characteristics",
+                    "$ref": "#/components/schemas/createDescriptivePerformanceChar"
+                  },
+                  {
+                    "title": "API Request Body Format for Measurement Performance Characteristics",
+                    "$ref": "#/components/schemas/createMeasurementPerformanceChar"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "title": "API Response Format for Performance Characteristics Using Common Mask",
+                      "$ref": "#/components/schemas/dsmvchar_PerformanceCharMask.Common.Public"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dschar:PerformanceSpec/{PSID}/dschar:PerformanceChar/{PCID}": {
+      "patch": {
+        "summary": "Updates the performance characteristic on a Performance Specification.",
+        "description": "This API can be used to update the performance characteristic details including extension and enterprise attributes, and test methods",
+        "operationId": "dschar:PerformanceSpec_ID_dschar:PerformanceChar_BULKUPDATE",
+        "tags": [
+          "dschar:PerformanceChar"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PSID",
+            "in": "path",
+            "description": "dschar:PerformanceSpec object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PCID",
+            "in": "path",
+            "description": "dschar:PerformanceChar connection ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvchar:PerformanceCharMask.Common.Public",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvchar:PerformanceCharMask.Common.Public"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "$fields",
+            "description": "We can add several fields with comma(,) separator to get in the response.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvchar:enterpriseAttributes",
+                "dsmvchar:customerAttributes"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "title": "API Request Body Format for Measurement Performance Characteristics",
+                    "$ref": "#/components/schemas/updateMeasurementPerformanceChar"
+                  },
+                  {
+                    "title": "API Request Body Format for  Descriptive Performance Characteristics",
+                    "$ref": "#/components/schemas/updateDescriptivePerformanceChar"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "title": "API Response Format for Performance Characteristics Using Common Mask",
+                      "$ref": "#/components/schemas/dsmvchar_PerformanceCharMask.Common.Public"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes a Performance Characteristic",
+        "description": "Deletes a Performance Characteristic",
+        "operationId": "DELETE_dschar:PerformanceSpec_PID_dschar:PerformanceChar_ID",
+        "tags": [
+          "dschar:PerformanceChar"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PSID",
+            "in": "path",
+            "description": "dschar:PerformanceSpec object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PCID",
+            "in": "path",
+            "description": "dschar:PerformanceChar object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dschar:dimensions": {
+      "get": {
+        "summary": "Gets the supported list of Dimensions for Performance Characteristics.",
+        "description": "Gets the supported list of Dimensions for Performance Characteristics.",
+        "operationId": "dschar:dimensions_ID_FETCHALL",
+        "tags": [
+          "dschar:dimensions"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "type": "integer",
+                      "example": "1..n"
+                    },
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "description": "Dimension id",
+                            "type": "string",
+                            "example": "940694db-7813-4a64-8d53-2a2ad88aa755"
+                          },
+                          "name": {
+                            "description": "Dimensionname",
+                            "type": "string",
+                            "example": "Length Temperature Time"
+                          },
+                          "units": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "description": "Unit id",
+                                  "type": "string",
+                                  "example": "3f288aee-f814-467b-baac-445ee8acfc11"
+                                },
+                                "name": {
+                                  "description": "Unit name",
+                                  "type": "string",
+                                  "example": "cm-s-degC (centimeter second degree celsius)"
+                                },
+                                "isBaseUnit": {
+                                  "type": "boolean",
+                                  "example": "true/false"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dschar:PerformanceSpec/locate": {
+      "post": {
+        "summary": "Locates the Performance Specifications of a referenced object.",
+        "description": "Locates the performance specifications of a referenced object.",
+        "operationId": "dschar:PerformanceSpec_LOCATE",
+        "tags": [
+          "dschar:PerformanceSpec"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvchar:PerformanceSpecMask.Locate.Public",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvchar:PerformanceSpecMask.Locate.Public"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/locatePeformanceSpec"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "title": "API Response Format to Locates the Performance Specifications of a referenced object.",
+                      "$ref": "#/components/schemas/dsmvchar_PerformanceSpecMask.Locate.Public"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN. The server understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. If the request method was not HEAD and the server wishes to make public why the request has not been fulfilled, it SHOULD describe the reason for the refusal in the entity. If the server does not wish to make this information available to the client, the status code 404 (Not Found) can be used instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 403
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "dslc_changeControl": {},
+      "createPerformanceSpec": {
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "referencedObject": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "example": "729D82566ADE1A00656FCE2C000BE0EB"
+                    },
+                    "source": {
+                      "type": "string",
+                      "example": "3DSpace"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "VPMReference/Raw_Material/.."
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "example": "/resources/v1/modeler/dseng/dseng:EngItem/729D82566ADE1A00656FCE2C000BE0EB"
+                    }
+                  }
+                },
+                "title": {
+                  "type": "string",
+                  "example": "PS-Title"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "PS-Description"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "PerformanceSpec"
+                },
+                "notes": {
+                  "type": "string",
+                  "example": "ps notes"
+                },
+                "dsmvchar:enterpriseAttributes": {
+                  "properties": {
+                    "XP_PerformanceSpec_Ext.MyDBAttr": {
+                      "description": "Attribute DB Value",
+                      "type": "string",
+                      "example": "Attribute DB Value"
+                    }
+                  }
+                },
+                "customerAttributes": {
+                  "type": "object",
+                  "properties": {
+                    "DBcustomAttribute1": {
+                      "description": "Attribute DB Value",
+                      "type": "string",
+                      "example": "Attribute DB Value"
+                    },
+                    "DBcustomExtension": {
+                      "properties": {
+                        "DBcustomExtensionAttr1": {
+                          "description": "Attribute DB Value",
+                          "type": "string",
+                          "example": "Attribute DB Value"
+                        }
+                      }
+                    },
+                    "DBcustomAttributesGroup": {
+                      "properties": {
+                        "DBcustomAttributesGroupAttr1": {
+                          "description": "Attribute DB Value",
+                          "type": "string",
+                          "example": "Attribute DB Value"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "updatePerformanceSpec": {
+        "type": "object",
+        "required": [
+          "cestamp"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "PS-Title update"
+          },
+          "cestamp": {
+            "type": "string",
+            "example": "Timestamp id"
+          },
+          "description": {
+            "type": "string",
+            "example": "performance spec description update"
+          },
+          "notes": {
+            "type": "string",
+            "example": "performance spec notes update"
+          },
+          "dsmvchar:enterpriseAttributes": {
+            "properties": {
+              "XP_PerformanceSpec_Ext.MyDBAttr": {
+                "description": "Attribute DB Value",
+                "type": "string",
+                "example": "Attribute DB Value"
+              }
+            }
+          },
+          "customerAttributes": {
+            "type": "object",
+            "properties": {
+              "DBcustomAttribute1": {
+                "description": "Attribute DB Value",
+                "type": "string",
+                "example": "Attribute DB Value"
+              },
+              "DBcustomExtension": {
+                "properties": {
+                  "DBcustomExtensionAttr1": {
+                    "description": "Attribute DB Value",
+                    "type": "string",
+                    "example": "Attribute DB Value"
+                  }
+                }
+              },
+              "DBcustomAttributesGroup": {
+                "properties": {
+                  "DBcustomAttributesGroupAttr1": {
+                    "description": "Attribute DB Value",
+                    "type": "string",
+                    "example": "Attribute DB Value"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "locatePeformanceSpec": {
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "referencedObject": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "example": "729D82566ADE1A00656FCE2C000BE0EB"
+                    },
+                    "source": {
+                      "type": "string",
+                      "example": "3DSpace"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "VPMReference/Raw_Material/.."
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "example": "/resources/v1/modeler/dseng/dseng:EngItem/729D82566ADE1A00656FCE2C000BE0EB"
+                    }
+                  }
+                },
+                "filter": {
+                  "type": "string",
+                  "example": "allrevisions/latest/released"
+                }
+              }
+            }
+          }
+        }
+      },
+      "createDescriptivePerformanceChar": {
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "DC Title"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "DC Description"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "DescriptiveCharacteristic"
+                },
+                "notes": {
+                  "type": "string",
+                  "example": "DS notes"
+                },
+                "priority": {
+                  "type": "integer",
+                  "example": 2
+                },
+                "target": {
+                  "description": "Descriptive characteristic target value",
+                  "type": "string",
+                  "example": "target"
+                },
+                "missedTargetAction": {
+                  "type": "string",
+                  "example": "Ship and Monitor"
+                },
+                "dsmvchar:enterpriseAttributes": {
+                  "properties": {
+                    "XP_PerformanceChar_Ext.MyDBAttr": {
+                      "description": "Attribute DB Value",
+                      "type": "string",
+                      "example": "Attribute DB Value"
+                    }
+                  }
+                },
+                "customerAttributes": {
+                  "type": "object",
+                  "properties": {
+                    "DBcustomExtension": {
+                      "properties": {
+                        "DBcustomExtensionAttr1": {
+                          "description": "Attribute DB Value",
+                          "type": "string",
+                          "example": "Attribute DB Value"
+                        }
+                      }
+                    },
+                    "DBcustomAttributesGroup": {
+                      "properties": {
+                        "DBcustomAttributesGroupAttr1": {
+                          "description": "Attribute DB Value",
+                          "type": "string",
+                          "example": "Attribute DB Value"
+                        }
+                      }
+                    }
+                  }
+                },
+                "testMethods": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "identifier": {
+                        "type": "string",
+                        "example": "729D82566...."
+                      },
+                      "source": {
+                        "type": "string",
+                        "example": "3DSpace"
+                      },
+                      "type": {
+                        "type": "string",
+                        "example": "Test Method Specification"
+                      },
+                      "relativePath": {
+                        "type": "string",
+                        "example": "/resources/v1/modeler/documents/729D82566...."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "updateDescriptivePerformanceChar": {
+        "type": "object",
+        "required": [
+          "cestamp"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "DC Title"
+          },
+          "cestamp": {
+            "type": "string",
+            "example": "Timestamp id"
+          },
+          "description": {
+            "type": "string",
+            "example": "DC Description"
+          },
+          "type": {
+            "type": "string",
+            "example": "DescriptiveCharacteristic"
+          },
+          "notes": {
+            "type": "string",
+            "example": "DS notes"
+          },
+          "priority": {
+            "type": "integer",
+            "example": 2
+          },
+          "target": {
+            "description": "Descriptive characteristic target value",
+            "type": "string",
+            "example": "target"
+          },
+          "missedTargetAction": {
+            "type": "string",
+            "example": "Ship and Monitor"
+          },
+          "dsmvchar:enterpriseAttributes": {
+            "properties": {
+              "XP_PerformanceChar_Ext.MyDBAttr": {
+                "description": "Attribute DB Value",
+                "type": "string",
+                "example": "Attribute DB Value"
+              }
+            }
+          },
+          "customerAttributes": {
+            "type": "object",
+            "properties": {
+              "DBcustomExtension": {
+                "properties": {
+                  "DBcustomExtensionAttr1": {
+                    "description": "Attribute DB Value",
+                    "type": "string",
+                    "example": "Attribute DB Value"
+                  }
+                }
+              },
+              "DBcustomAttributesGroup": {
+                "properties": {
+                  "DBcustomAttributesGroupAttr1": {
+                    "description": "Attribute DB Value",
+                    "type": "string",
+                    "example": "Attribute DB Value"
+                  }
+                }
+              }
+            }
+          },
+          "testMethods": {
+            "type": "object",
+            "properties": {
+              "add": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "example": "729D82566...."
+                    },
+                    "source": {
+                      "type": "string",
+                      "example": "3DSpace"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "Test Method Specification"
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "example": "/resources/v1/modeler/documents/729D82566...."
+                    }
+                  }
+                }
+              },
+              "remove": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "example": "729D82588...."
+                    },
+                    "source": {
+                      "type": "string",
+                      "example": "3DSpace"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "Test Method Specification"
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "example": "/resources/v1/modeler/documents/729D82588...."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "createMeasurementPerformanceChar": {
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "MC Title"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "MC Description"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "MeasurementCharacteristic"
+                },
+                "notes": {
+                  "type": "string",
+                  "example": "MC notes"
+                },
+                "priority": {
+                  "type": "integer",
+                  "example": 2
+                },
+                "dimensionId": {
+                  "type": "string",
+                  "example": "a60a0701-b356-4912-9f47-587c8384fb40"
+                },
+                "unitOfMeasureId": {
+                  "type": "string",
+                  "example": "1/m^3 (per cubic meter units)"
+                },
+                "precision": {
+                  "type": "string",
+                  "example": "0.1/0.01/0.001/0.0001/0.00001/0.000001/0.0000001/0.00000001/0.000000001/0.0000000001"
+                },
+                "missedTargetAction": {
+                  "type": "string",
+                  "example": "Ship and Monitor"
+                },
+                "min": {
+                  "description": "Measurement characteristic min value",
+                  "type": "string",
+                  "example": 1
+                },
+                "max": {
+                  "description": "Measurement characteristic max value",
+                  "type": "string",
+                  "example": 10
+                },
+                "target": {
+                  "description": "Measurement characteristic target value",
+                  "type": "string",
+                  "example": 5
+                },
+                "lowerSpecificationLimit": {
+                  "description": "Measurement characteristic lowerSpecificationLimit value",
+                  "type": "string",
+                  "example": 1
+                },
+                "upperSpecificationLimit": {
+                  "description": "Measurement characteristic upperSpecificationLimit value",
+                  "type": "string",
+                  "example": 10
+                },
+                "lowerRoutineReleaseLimit": {
+                  "description": "Measurement characteristic lowerRoutineReleaseLimit value",
+                  "type": "string",
+                  "example": 1
+                },
+                "upperRoutineReleaselimit": {
+                  "description": "Measurement characteristic upperRoutineReleaselimit value",
+                  "type": "string",
+                  "example": 10
+                },
+                "isMinIncluded": {
+                  "description": "Measurement characteristic isMinIncluded value",
+                  "type": "boolean",
+                  "example": "true/false"
+                },
+                "isMaxIncluded": {
+                  "description": "Measurement characteristic isMaxIncluded value",
+                  "type": "boolean",
+                  "example": "true/false"
+                },
+                "isLowerSpecificationLimitIncluded": {
+                  "description": "Measurement characteristic isLowerSpecificationLimitIncluded value",
+                  "type": "boolean",
+                  "example": "true/false"
+                },
+                "isUpperSpecificationLimitIncluded": {
+                  "description": "Measurement characteristic isUpperSpecificationLimitIncluded value",
+                  "type": "boolean",
+                  "example": "true/false"
+                },
+                "isLowerRoutineReleaseLimitIncluded": {
+                  "description": "Measurement characteristic isLowerRoutineReleaseLimitIncluded value",
+                  "type": "boolean",
+                  "example": "true/false"
+                },
+                "isUpperRoutineReleaseLimitIncluded": {
+                  "description": "Measurement characteristic isUpperRoutineReleaseLimitIncluded value",
+                  "type": "boolean",
+                  "example": "true/false"
+                },
+                "dsmvchar:enterpriseAttributes": {
+                  "properties": {
+                    "XP_PerformanceChar_Ext.MyDBAttr": {
+                      "description": "Attribute DB Value",
+                      "type": "string",
+                      "example": "Attribute DB Value"
+                    }
+                  }
+                },
+                "customerAttributes": {
+                  "type": "object",
+                  "properties": {
+                    "DBcustomExtension": {
+                      "properties": {
+                        "DBcustomExtensionAttr1": {
+                          "description": "Attribute DB Value",
+                          "type": "string",
+                          "example": "Attribute DB Value"
+                        }
+                      }
+                    },
+                    "DBcustomAttributesGroup": {
+                      "properties": {
+                        "DBcustomAttributesGroupAttr1": {
+                          "description": "Attribute DB Value",
+                          "type": "string",
+                          "example": "Attribute DB Value"
+                        }
+                      }
+                    }
+                  }
+                },
+                "testMethods": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "identifier": {
+                        "type": "string",
+                        "example": "729D82566...."
+                      },
+                      "source": {
+                        "type": "string",
+                        "example": "3DSpace"
+                      },
+                      "type": {
+                        "type": "string",
+                        "example": "Test Method Specification"
+                      },
+                      "relativePath": {
+                        "type": "string",
+                        "example": "/resources/v1/modeler/documents/729D82566...."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "updateMeasurementPerformanceChar": {
+        "type": "object",
+        "required": [
+          "cestamp"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "MC Title"
+          },
+          "cestamp": {
+            "type": "string",
+            "example": "Timestamp id"
+          },
+          "description": {
+            "type": "string",
+            "example": "MC Description"
+          },
+          "type": {
+            "type": "string",
+            "example": "MeasurementCharacteristic"
+          },
+          "notes": {
+            "type": "string",
+            "example": "MC notes"
+          },
+          "priority": {
+            "type": "integer",
+            "example": 2
+          },
+          "unitOfMeasureId": {
+            "type": "string",
+            "example": "1/m^3 (per cubic meter units)"
+          },
+          "precision": {
+            "type": "string",
+            "example": "0.1/0.01/0.001/0.0001/0.00001/0.000001/0.0000001/0.00000001/0.000000001/0.0000000001"
+          },
+          "missedTargetAction": {
+            "type": "string",
+            "example": "Ship and Monitor"
+          },
+          "min": {
+            "description": "Measurement characteristic min value",
+            "type": "string",
+            "example": 1
+          },
+          "max": {
+            "description": "Measurement characteristic max value",
+            "type": "string",
+            "example": 10
+          },
+          "target": {
+            "description": "Measurement characteristic target value",
+            "type": "string",
+            "example": 5
+          },
+          "lowerSpecificationLimit": {
+            "description": "Measurement characteristic lowerSpecificationLimit value",
+            "type": "string",
+            "example": 1
+          },
+          "upperSpecificationLimit": {
+            "description": "Measurement characteristic upperSpecificationLimit value",
+            "type": "string",
+            "example": 10
+          },
+          "lowerRoutineReleaseLimit": {
+            "description": "Measurement characteristic lowerRoutineReleaseLimit value",
+            "type": "string",
+            "example": 1
+          },
+          "upperRoutineReleaselimit": {
+            "description": "Measurement characteristic upperRoutineReleaselimit value",
+            "type": "string",
+            "example": 10
+          },
+          "isMinIncluded": {
+            "description": "Measurement characteristic isMinIncluded value",
+            "type": "boolean",
+            "example": "true/false"
+          },
+          "isMaxIncluded": {
+            "description": "Measurement characteristic isMaxIncluded value",
+            "type": "boolean",
+            "example": "true/false"
+          },
+          "isLowerSpecificationLimitIncluded": {
+            "description": "Measurement characteristic isLowerSpecificationLimitIncluded value",
+            "type": "boolean",
+            "example": "true/false"
+          },
+          "isUpperSpecificationLimitIncluded": {
+            "description": "Measurement characteristic isUpperSpecificationLimitIncluded value",
+            "type": "boolean",
+            "example": "true/false"
+          },
+          "isLowerRoutineReleaseLimitIncluded": {
+            "description": "Measurement characteristic isLowerRoutineReleaseLimitIncluded value",
+            "type": "boolean",
+            "example": "true/false"
+          },
+          "isUpperRoutineReleaseLimitIncluded": {
+            "description": "Measurement characteristic isUpperRoutineReleaseLimitIncluded value",
+            "type": "boolean",
+            "example": "true/false"
+          },
+          "dsmvchar:enterpriseAttributes": {
+            "properties": {
+              "XP_PerformanceChar_Ext.MyDBAttr": {
+                "description": "Attribute DB Value",
+                "type": "string",
+                "example": "Attribute DB Value"
+              }
+            }
+          },
+          "customerAttributes": {
+            "type": "object",
+            "properties": {
+              "DBcustomExtension": {
+                "properties": {
+                  "DBcustomExtensionAttr1": {
+                    "description": "Attribute DB Value",
+                    "type": "string",
+                    "example": "Attribute DB Value"
+                  }
+                }
+              },
+              "DBcustomAttributesGroup": {
+                "properties": {
+                  "DBcustomAttributesGroupAttr1": {
+                    "description": "Attribute DB Value",
+                    "type": "string",
+                    "example": "Attribute DB Value"
+                  }
+                }
+              }
+            }
+          },
+          "testMethods": {
+            "type": "object",
+            "properties": {
+              "add": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "example": "729D82566...."
+                    },
+                    "source": {
+                      "type": "string",
+                      "example": "3DSpace"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "Test Method Specification"
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "example": "/resources/v1/modeler/documents/729D82566...."
+                    }
+                  }
+                }
+              },
+              "remove": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "example": "729D82588...."
+                    },
+                    "source": {
+                      "type": "string",
+                      "example": "3DSpace"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "Test Method Specification"
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "example": "/resources/v1/modeler/documents/729D82588...."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "dsmvchar_PerformanceSpecMask.Basic.Public": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "identifier": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "referencedObject": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "example": "729D82566ADE1A00656FCE2C000BE0EB"
+                    },
+                    "source": {
+                      "type": "string",
+                      "example": "3DSpace"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "VPMReference/Raw_Material/.."
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "example": "/resources/v1/modeler/dseng/dseng:EngItem/729D82566ADE1A00656FCE2C000BE0EB"
+                    }
+                  }
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "notes": {
+                  "description": "notes value",
+                  "type": "string",
+                  "example": "PS notes"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2024-01-31T09:48:10Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2024-01-31T09:48:10Z"
+                },
+                "title": {
+                  "description": "Performance spec object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Performance spec description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "729D825626CC3F006573478F000BCC02"
+                },
+                "organization": {
+                  "type": "string",
+                  "example": "String"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "dsmvchar:enterpriseAttributes": {
+                  "type": "object",
+                  "properties": {
+                    "XP_PerformanceSpec_Ext.MyDBAttr": {
+                      "description": "Attribute DB Value",
+                      "type": "string",
+                      "example": "Attribute DB Value"
+                    }
+                  }
+                },
+                "customerAttributes": {
+                  "type": "object",
+                  "properties": {
+                    "DBcustomAttribute1": {
+                      "description": "Attribute DB Value",
+                      "type": "string",
+                      "example": "Attribute DB Value"
+                    },
+                    "DBcustomExtension": {
+                      "properties": {
+                        "DBcustomExtensionAttr1": {
+                          "description": "Attribute DB Value",
+                          "type": "string",
+                          "example": "Attribute DB Value"
+                        }
+                      }
+                    },
+                    "DBcustomAttributesGroup": {
+                      "properties": {
+                        "DBcustomAttributesGroupAttr1": {
+                          "description": "Attribute DB Value",
+                          "type": "string",
+                          "example": "Attribute DB Value"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "dsmvchar_PerformanceSpecMask.Details.Public": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Entity physical id",
+            "type": "string",
+            "example": "EE562168015FFCF14F940A513C63AA77"
+          },
+          "identifier": {
+            "description": "Entity physical id",
+            "type": "string",
+            "example": "EE562168015FFCF14F940A513C63AA77"
+          },
+          "referencedObject": {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "example": "729D82566ADE1A00656FCE2C000BE0EB"
+              },
+              "source": {
+                "type": "string",
+                "example": "3DSpace"
+              },
+              "type": {
+                "type": "string",
+                "example": "VPMReference/Raw_Material/.."
+              },
+              "relativePath": {
+                "type": "string",
+                "example": "/resources/v1/modeler/dseng/dseng:EngItem/729D82566ADE1A00656FCE2C000BE0EB"
+              }
+            }
+          },
+          "type": {
+            "description": "Basic type value",
+            "type": "string",
+            "example": "DBType"
+          },
+          "notes": {
+            "description": "notes value",
+            "type": "string",
+            "example": "PS notes"
+          },
+          "modified": {
+            "description": "Basic modified value",
+            "type": "string",
+            "example": "2024-01-31T09:48:10Z"
+          },
+          "created": {
+            "description": "Object created value",
+            "type": "string",
+            "example": "2024-01-31T09:48:10Z"
+          },
+          "name": {
+            "description": "Performance spec name",
+            "type": "string",
+            "example": "My name"
+          },
+          "title": {
+            "description": "Performance spec object title value",
+            "type": "string",
+            "example": "My title"
+          },
+          "description": {
+            "description": "Performance spec description value",
+            "type": "string",
+            "example": "My description"
+          },
+          "characteristics": {
+            "properties": {
+              "totalItems": {
+                "type": "integer",
+                "example": "1..n"
+              },
+              "member": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/characteristic"
+                }
+              }
+            }
+          },
+          "revision": {
+            "description": "Object revision value",
+            "type": "string",
+            "example": "A.1"
+          },
+          "state": {
+            "description": "Object current state value",
+            "type": "string",
+            "example": "IN_WORK"
+          },
+          "owner": {
+            "description": "Object owner value",
+            "type": "string",
+            "example": "DB Owner"
+          },
+          "cestamp": {
+            "description": "Object cestamp value",
+            "type": "string",
+            "example": "729D825626CC3F006573478F000BCC02"
+          },
+          "organization": {
+            "type": "string",
+            "example": "String"
+          },
+          "collabspace": {
+            "description": "Object collabspace value",
+            "type": "string",
+            "example": "Default"
+          },
+          "dsmvchar:EnterpriseAttributes": {
+            "properties": {
+              "XP_PerformanceSpec_Ext.MyDBAttr4": {
+                "description": "Attribute DB Value",
+                "type": "string",
+                "example": "Attribute DB Value"
+              }
+            }
+          },
+          "dsmvchar:enterpriseAttributes": {
+            "type": "object",
+            "properties": {
+              "XP_PerformanceSpec_Ext.MyDBAttr": {
+                "description": "Attribute DB Value",
+                "type": "string",
+                "example": "Attribute DB Value"
+              }
+            }
+          },
+          "customerAttributes": {
+            "type": "object",
+            "properties": {
+              "DBcustomAttribute1": {
+                "description": "Attribute DB Value",
+                "type": "string",
+                "example": "Attribute DB Value"
+              },
+              "DBcustomExtension": {
+                "properties": {
+                  "DBcustomExtensionAttr1": {
+                    "description": "Attribute DB Value",
+                    "type": "string",
+                    "example": "Attribute DB Value"
+                  }
+                }
+              },
+              "DBcustomAttributesGroup": {
+                "properties": {
+                  "DBcustomAttributesGroupAttr1": {
+                    "description": "Attribute DB Value",
+                    "type": "string",
+                    "example": "Attribute DB Value"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "dsmvchar_PerformanceSpecMask.Locate.Public": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "referencedObject": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "example": "729D82566ADE1A00656FCE2C000BE0EB"
+                    },
+                    "source": {
+                      "type": "string",
+                      "example": "3DSpace"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "VPMReference/Raw_Material/.."
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "example": "/resources/v1/modeler/dseng/dseng:EngItem/729D82566ADE1A00656FCE2C000BE0EB"
+                    }
+                  }
+                },
+                "performanceSpecs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "description": "Entity physical id",
+                        "type": "string",
+                        "example": "EE562168015FFCF14F940A513C63AA77"
+                      },
+                      "identifier": {
+                        "description": "Entity physical id",
+                        "type": "string",
+                        "example": "EE562168015FFCF14F940A513C63AA7"
+                      },
+                      "type": {
+                        "description": "Basic type value",
+                        "type": "string",
+                        "example": "DBType"
+                      },
+                      "notes": {
+                        "description": "notes value",
+                        "type": "string",
+                        "example": "PS notes"
+                      },
+                      "modified": {
+                        "description": "Basic modified value",
+                        "type": "string",
+                        "example": "2024-01-31T09:48:10Z"
+                      },
+                      "created": {
+                        "description": "Object created value",
+                        "type": "string",
+                        "example": "2024-01-31T09:48:10Z"
+                      },
+                      "name": {
+                        "description": "Performance spec name",
+                        "type": "string",
+                        "example": "My name"
+                      },
+                      "title": {
+                        "description": "Performance spec object title value",
+                        "type": "string",
+                        "example": "My title"
+                      },
+                      "description": {
+                        "description": "Performance spec description value",
+                        "type": "string",
+                        "example": "My description"
+                      },
+                      "revision": {
+                        "description": "Object revision value",
+                        "type": "string",
+                        "example": "A.1"
+                      },
+                      "state": {
+                        "description": "Object current state value",
+                        "type": "string",
+                        "example": "IN_WORK"
+                      },
+                      "owner": {
+                        "description": "Object owner value",
+                        "type": "string",
+                        "example": "DB Owner"
+                      },
+                      "cestamp": {
+                        "description": "Object cestamp value",
+                        "type": "string",
+                        "example": "729D825626CC3F006573478F000BCC02"
+                      },
+                      "organization": {
+                        "type": "string",
+                        "example": "String"
+                      },
+                      "collabspace": {
+                        "description": "Object collabspace value",
+                        "type": "string",
+                        "example": "Default"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "dsmvchar_PerformanceCharMask.Common.Public": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": "1..n"
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/characteristic"
+            }
+          }
+        }
+      },
+      "characteristic": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Entity physical id",
+            "type": "string",
+            "example": "EE562168015FFCF14F940A513C63AA77"
+          },
+          "identifier": {
+            "description": "Entity physical id",
+            "type": "string",
+            "example": "EE562168015FFCF14F940A513C63AA77"
+          },
+          "type": {
+            "description": "Basic type value",
+            "type": "string",
+            "example": "DBType"
+          },
+          "notes": {
+            "description": "notes value",
+            "type": "string",
+            "example": "PS notes"
+          },
+          "modified": {
+            "description": "Basic modified value",
+            "type": "string",
+            "example": "2024-01-31T09:48:10Z"
+          },
+          "created": {
+            "description": "Object created value",
+            "type": "string",
+            "example": "2024-01-31T09:48:10Z"
+          },
+          "title": {
+            "description": "Performance char object title value",
+            "type": "string",
+            "example": "My title"
+          },
+          "description": {
+            "description": "Performance spec description value",
+            "type": "string",
+            "example": "My description"
+          },
+          "owner": {
+            "description": "Object owner value",
+            "type": "string",
+            "example": "DB Owner"
+          },
+          "cestamp": {
+            "description": "Object cestamp value",
+            "type": "string",
+            "example": "729D825626CC3F006573478F000BCC02"
+          },
+          "organization": {
+            "type": "string",
+            "example": "String"
+          },
+          "collabspace": {
+            "description": "Object collabspace value",
+            "type": "string",
+            "example": "Default"
+          },
+          "parameterTemplate": {
+            "type": "string",
+            "example": "c7e97ca3-0709-4340-820f-7d69d69fb7c3"
+          },
+          "precision": {
+            "type": "string",
+            "example": 0.1
+          },
+          "dimension": {
+            "type": "string",
+            "example": "Amount Per Volume"
+          },
+          "dimensionId": {
+            "type": "string",
+            "example": "a60a0701-b356-4912-9f47-587c8384fb40"
+          },
+          "unitOfMeasure": {
+            "type": "string",
+            "example": "Amount Per Volume"
+          },
+          "unitOfMeasureId": {
+            "type": "string",
+            "example": "1/m^3 (per cubic meter units)"
+          },
+          "priority": {
+            "type": "integer",
+            "example": 2
+          },
+          "min": {
+            "description": "Measurement characteristic min value",
+            "type": "string",
+            "example": 1
+          },
+          "max": {
+            "description": "Measurement characteristic max value",
+            "type": "string",
+            "example": 10
+          },
+          "target": {
+            "description": "Measurement characteristic target value",
+            "type": "string",
+            "example": 5
+          },
+          "lowerSpecificationLimit": {
+            "description": "Measurement characteristic lowerSpecificationLimit value",
+            "type": "string",
+            "example": 1
+          },
+          "upperSpecificationLimit": {
+            "description": "Measurement characteristic upperSpecificationLimit value",
+            "type": "string",
+            "example": 10
+          },
+          "lowerRoutineReleaseLimit": {
+            "description": "Measurement characteristic lowerRoutineReleaseLimit value",
+            "type": "string",
+            "example": 1
+          },
+          "upperRoutineReleaselimit": {
+            "description": "Measurement characteristic upperRoutineReleaselimit value",
+            "type": "string",
+            "example": 10
+          },
+          "isMinIncluded": {
+            "description": "Measurement characteristic isMinIncluded value",
+            "type": "boolean",
+            "example": "true/false"
+          },
+          "isMaxIncluded": {
+            "description": "Measurement characteristic isMaxIncluded value",
+            "type": "boolean",
+            "example": "true/false"
+          },
+          "isLowerSpecificationLimitIncluded": {
+            "description": "Measurement characteristic isLowerSpecificationLimitIncluded value",
+            "type": "boolean",
+            "example": "true/false"
+          },
+          "isUpperSpecificationLimitIncluded": {
+            "description": "Measurement characteristic isUpperSpecificationLimitIncluded value",
+            "type": "boolean",
+            "example": "true/false"
+          },
+          "isLowerRoutineReleaseLimitIncluded": {
+            "description": "Measurement characteristic isLowerRoutineReleaseLimitIncluded value",
+            "type": "boolean",
+            "example": "true/false"
+          },
+          "isUpperRoutineReleaseLimitIncluded": {
+            "description": "Measurement characteristic isUpperRoutineReleaseLimitIncluded value",
+            "type": "boolean",
+            "example": "true/false"
+          },
+          "dsmvchar:enterpriseAttributes": {
+            "type": "object",
+            "properties": {
+              "XP_PerformanceSpec_Ext.MyDBAttr": {
+                "description": "Attribute DB Value",
+                "type": "string",
+                "example": "Attribute DB Value"
+              }
+            }
+          },
+          "customerAttributes": {
+            "type": "object",
+            "properties": {
+              "DBcustomExtension": {
+                "properties": {
+                  "DBcustomExtensionAttr1": {
+                    "description": "Attribute DB Value",
+                    "type": "string",
+                    "example": "Attribute DB Value"
+                  }
+                }
+              },
+              "DBcustomAttributesGroup": {
+                "properties": {
+                  "DBcustomAttributesGroupAttr1": {
+                    "description": "Attribute DB Value",
+                    "type": "string",
+                    "example": "Attribute DB Value"
+                  }
+                }
+              }
+            }
+          },
+          "testMethods": {
+            "properties": {
+              "totalItems": {
+                "type": "integer",
+                "example": "1..n"
+              },
+              "member": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/testMethods"
+                }
+              }
+            }
+          }
+        }
+      },
+      "testMethods": {
+        "description": "Only Released test methods can be connected to a performance characteristic",
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": "1..n"
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "name": {
+                  "description": "Test method name",
+                  "type": "string",
+                  "example": "TMS-001"
+                },
+                "title": {
+                  "description": "Test method title",
+                  "type": "string",
+                  "example": "Test Method1"
+                },
+                "isLatest": {
+                  "description": "is latest revision value",
+                  "type": "string",
+                  "example": "TRUE/FALSE"
+                },
+                "revision": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "source": {
+                  "type": "string",
+                  "example": "$3DSpace"
+                },
+                "relativePath": {
+                  "type": "string",
+                  "example": "/resources/v1/modeler/documents/729D82562CB21F0....."
+                }
+              }
+            }
+          }
+        }
+      },
+      "Dimensions": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Dimension id",
+            "type": "string",
+            "example": "940694db-7813-4a64-8d53-2a2ad88aa755"
+          },
+          "name": {
+            "description": "Dimensionname",
+            "type": "string",
+            "example": "Length Temperature Time"
+          },
+          "units": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Unit id",
+                  "type": "string",
+                  "example": "3f288aee-f814-467b-baac-445ee8acfc11"
+                },
+                "name": {
+                  "description": "Unit name",
+                  "type": "string",
+                  "example": "cm-s-degC (centimeter second degree celsius)"
+                },
+                "isBaseUnit": {
+                  "type": "boolean",
+                  "example": "true/false"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Distributed File Store",
+    "description": "It details the API for checkin (uploading) or checkout (downloading) files whose the metadata is managed by another 3DEXPERIENCE service. For these two operations the complete DFS URL paths (DFS root URL + operation path) come from this other 3DEXPERIENCE service.\n\n These API are not CASIfied. But the API for retrieving them, from another 3DEXPERIENCE service, are.",
+    "version": "1.0.0",
+    "x-ds-service": [
+      "dfs"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{dfs}",
+      "variables": {
+        "dfs": {
+          "default": "https://3DEXPERIENCE_DFS",
+          "description": "URL of the Distributed File Store service"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "DFS"
+    }
+  ],
+  "paths": {
+    "/servlet/fcs/checkin": {
+      "post": {
+        "description": "The checkin operation has 3 steps:\n- Invoking service A for retrieving a job ticket and the complete DFS URL,\n- Invoking this DFS URL with the job ticket and the data to upload (1 or N files),\n- Invoking back service A with the job receipt returned by the previous call.",
+        "summary": "Checkin File",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200Checkin"
+          }
+        },
+        "tags": [
+          "DFS"
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/checkinBodyRequest"
+        }
+      }
+    },
+    "/servlet/fcs/checkout": {
+      "post": {
+        "description": "The checkout operation has 2 steps:\n- Invoking service A for retrieving a job ticket and the complete DFS URL,\n- Invoking this DFS URL with the job ticket for downloading the unique file.",
+        "summary": "Checkout File",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200Checkout"
+          }
+        },
+        "tags": [
+          "DFS"
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/checkoutBodyRequest"
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "200Checkin": {
+        "description": "The checkin response containing the job receipt. It must be passed to the service managing the file metadata for completing the checkin.",
+        "content": {
+          "text/html": {}
+        }
+      },
+      "200Checkout": {
+        "description": "The checkout response is the downloaded file. For the format of the response body:\n-  You do not know the file MIME type. For the request Accept header set * / *.  The response body format is depending on the file format. In any case, if the applicative server cannot define it, the default format is application/octet-stream. \n- You know the MIME type of the file. Use the right value for the request Accept header. Example for a txt file, set txt/html for the Accept header."
+      }
+    },
+    "requestBodies": {
+      "checkinBodyRequest": {
+        "required": true,
+        "description": "The request body format is multipart/form-data. A boundary string (starting with --) must enclose each parameter. At the end there is the boundary string enclosed with --. In case of several files to upload there are as many __fcs__corelation_X lines as file_X lines. X is the file index starting from 0.",
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "$ref": "#/components/schemas/checkinBody"
+            }
+          }
+        }
+      },
+      "checkoutBodyRequest": {
+        "required": true,
+        "description": "The request body is an URL encoded string __fcs__jobTicket=xxx , where xxx is the job ticket value coming from the 3DEXPERIENCE service managing the file.",
+        "content": {
+          "application/x-www-form-urlencoded ": {
+            "schema": {
+              "$ref": "#/components/schemas/checkoutBody"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "checkinBody": {
+        "type": "object",
+        "required": [
+          "__fcs__jobTicket",
+          "__fcs__corelation_X",
+          "file_X"
+        ],
+        "properties": {
+          "__fcs__nohtml": {
+            "type": "boolean",
+            "description": "It defines the response format. If the value is true, the format is text, otherwise html."
+          },
+          "__fcs__jobTicket": {
+            "type": "string",
+            "description": "The value comes from the service managing the file metadata."
+          },
+          "__fcs__corelation_X": {
+            "type": "string",
+            "description": "The value comes  from the service managing the file metadata. X starts from 0."
+          },
+          "file_X": {
+            "type": "string",
+            "format": "binary",
+            "description": "The file stream to upload. X starts from 0. The name of the file is passed in the filename attribute of the same Content-Disposition. "
+          }
+        }
+      },
+      "checkoutBody": {
+        "type": "object",
+        "required": [
+          "__fcs__jobTicket"
+        ],
+        "properties": {
+          "__fcs__jobTicket": {
+            "type": "string",
+            "description": "The value comes from the service managing the file metadata."
+          }
+        }
+      }
+    }
+  }
+}

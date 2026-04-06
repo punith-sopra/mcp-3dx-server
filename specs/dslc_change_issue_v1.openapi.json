@@ -1,0 +1,1694 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Issue Web Services",
+    "description": "Issue Web Services",
+    "summary": "APIs to manage issues (search, create, retrieve, patch, approve and reject)",
+    "version": "1.4.0",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dsiss",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3dspace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsiss/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/issue": {
+      "post": {
+        "summary": "Creates a new Issue.",
+        "description": "Creates a new Issue or subtype of Issue with elements passed in input. Elements passed in input can only be part of the core part or members. Output will be the core part with modified fields",
+        "operationId": "POST_dsiss",
+        "tags": [
+          "Issue"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/securityContextParameters"
+          },
+          {
+            "$ref": "#/components/parameters/CSRFParameters"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IssueCreateInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Issue successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssueOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error occured during creation of the Issue. Invalid Json passed in input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Function cannot be executed as a check failed, could be linked with an invalid CSRF token or a system condition unfulfilled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/issue/{id}": {
+      "get": {
+        "summary": "Retrieve an Issue.",
+        "description": "Retrieves an Issue with the required facets. Core part is always retrieved",
+        "operationId": "GET_dsiss:Issue_ID",
+        "tags": [
+          "Issue"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/securityContextParameters"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The physicalid of the Issue you want to retrieve",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$fields",
+            "in": "query",
+            "description": "The parameter allowing retrieval of the Issue's additional fields. Comma separated list of fields among members, affectedItems, resolvedBy, contexts, resolution, customerAttributes",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Issue successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssueOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error occured during retrieval of the Issue. Identifier passed in input is not an Issue or Invalid Json passed in input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Function cannot be executed as a check failed, could be linked with an invalid CSRF token or a system condition unfulfilled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Modify an existing Issue.",
+        "description": "Modify an existing Issue. Only the elements passed in input are modified. Output will be composed of the core part as well as the modified fields.",
+        "operationId": "PATCH_dsiss:Issue_ID",
+        "tags": [
+          "Issue"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "CSRF token could be obtained from a GET or from dedicated web service /resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The physicalid of the Issue you want to modify",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IssueModifyInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Issue successfully modified.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssueOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Identifier passed in input is not an Issue or invalid Json passed in input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Function cannot be executed as a check failed, could be linked with an invalid CSRF token or a system condition unfulfilled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Addition and removal of members is limited to 10 per key in a single call.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/issue/{id}/approve": {
+      "post": {
+        "summary": "Approve an Issue",
+        "description": "Approve an Issue",
+        "operationId": "POSTApprove_dsiss:Issue_ID",
+        "tags": [
+          "Issue"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "CSRF token could be obtained from a GET or from dedicated web service /resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The physicalid of the Issue you want to approve",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IssueApprovalRejectionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Issue successfully approved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssueBasicOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Identifier passed in input is not an Issue or invalid Json passed in input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Function cannot be executed as a check failed, could be linked with an invalid CSRF token or a system condition unfulfilled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/issue/{id}/reject": {
+      "post": {
+        "summary": "Reject an Issue",
+        "description": "Reject an Issue",
+        "operationId": "POSTReject_dsiss:Issue_ID",
+        "tags": [
+          "Issue"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "CSRF token could be obtained from a GET or from dedicated web service /resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The physicalid of the Issue you want to reject",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IssueApprovalRejectionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Issue successfully rejected.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssueBasicOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Identifier passed in input is not an Issue or invalid Json passed in input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Function cannot be executed as a check failed, could be linked with an invalid CSRF token or a system condition unfulfilled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/issue/search": {
+      "get": {
+        "summary": "Gets a list of Issue from indexed search",
+        "description": "Gets a list of Issue. By default, returns a total of up to 50 items, can be optionally increased upto 1000 items using $top query parameter.Recommendation, Use $searchStr query parameter with a minimum of two characters for better performances.",
+        "operationId": "GETSearch_dsiss:Issue_Search",
+        "tags": [
+          "Issue"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Security context the logged in user is using like ctx::VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$searchStr",
+            "in": "query",
+            "description": "A search text to find one or more items.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 1000",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchOutput"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Could be linked with missing security context or licensing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Generic issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "parameters": {
+      "securityContextParameters": {
+        "name": "SecurityContext",
+        "in": "header",
+        "description": "Security context the logged in user is using like ctx::RoleValue.OrganizationValue.CollaborativeSpaceValue",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "CSRFParameters": {
+        "name": "ENO_CSRF_TOKEN",
+        "in": "header",
+        "description": "CSRF token could be obtained from a GET or from dedicated web service /resources/v1/application/CSRF",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "IssueApprovalRejectionInput": {
+        "required": [
+          "cestamp",
+          "comment"
+        ],
+        "properties": {
+          "cestamp": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "comment": {
+            "type": "string",
+            "example": "associated comment"
+          }
+        }
+      },
+      "IssueCreateInput": {
+        "required": [
+          "description"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "Description of Issue"
+          },
+          "type": {
+            "type": "string",
+            "example": "Type of Issue or its Sub type"
+          },
+          "title": {
+            "type": "string",
+            "example": "Title of Issue"
+          },
+          "name": {
+            "type": "string",
+            "default": "name generated by autonaming",
+            "example": "name of Issue"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ],
+            "default": "Low",
+            "example": "Low"
+          },
+          "Estimated Start Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-21",
+            "deprecated": true
+          },
+          "Planned Start Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-21"
+          },
+          "Estimated End Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-22",
+            "deprecated": true
+          },
+          "Planned Completion Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-22"
+          },
+          "Due Completion Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-22"
+          },
+          "withApproval": {
+            "type": "string",
+            "enum": [
+              "true",
+              "false"
+            ]
+          },
+          "members": {
+            "type": "object",
+            "$ref": "#/components/schemas/IssueInputElementMember"
+          }
+        }
+      },
+      "IssueModifyInput": {
+        "required": [
+          "cestamp"
+        ],
+        "properties": {
+          "cestamp": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "description": {
+            "type": "string",
+            "example": "Description of Issue"
+          },
+          "title": {
+            "type": "string",
+            "example": "Title of Issue"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ],
+            "default": "Low",
+            "example": "Low"
+          },
+          "Estimated Start Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-21",
+            "deprecated": true
+          },
+          "Planned Start Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-21"
+          },
+          "Estimated End Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-22",
+            "deprecated": true
+          },
+          "Planned Completion Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-22"
+          },
+          "Due Completion Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-22"
+          },
+          "Escalation Required": {
+            "type": "string",
+            "enum": [
+              "Yes",
+              "No"
+            ],
+            "example": "No"
+          },
+          "Resolution Recommendation": {
+            "type": "string",
+            "example": "Recommendation details for resolution"
+          },
+          "Action Taken": {
+            "type": "string",
+            "example": "Action taken regarding reported issue"
+          },
+          "Resolution Statement": {
+            "type": "string",
+            "example": "Statement made upon completion"
+          },
+          "dslc:IssueEnterpriseAttributes": {
+            "$ref": "#/components/schemas/IssueEnterpriseAttributes"
+          },
+          "remove": {
+            "$ref": "#/components/schemas/IssueModifyRemoveInput"
+          },
+          "add": {
+            "$ref": "#/components/schemas/IssueModifyAddInput"
+          },
+          "replace": {
+            "$ref": "#/components/schemas/IssueModifyReplaceInput"
+          }
+        }
+      },
+      "IssueEnterpriseAttributes": {
+        "properties": {
+          "attribute1Name": {
+            "type": "string",
+            "example": "attribute1Value"
+          },
+          "attribute2Name": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "attribute2Value"
+            }
+          }
+        }
+      },
+      "IssueModifyRemoveInput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/IssueModifyRemoveInputElement"
+        }
+      },
+      "IssueModifyRemoveInputElement": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/IssueModifyInputElementMembers"
+          },
+          {
+            "$ref": "#/components/schemas/IssueModifyRemoveInputElementAffectedItems"
+          },
+          {
+            "$ref": "#/components/schemas/IssueModifyRemoveInputElementContexts"
+          },
+          {
+            "$ref": "#/components/schemas/IssueModifyRemoveInputElementResolution"
+          },
+          {
+            "$ref": "#/components/schemas/IssueModifyRemoveInputElementResolvedBy"
+          },
+          {
+            "$ref": "#/components/schemas/IssueModifyRemoveInputElementCustomerAttributes"
+          }
+        ]
+      },
+      "IssueModifyInputElementMembers": {
+        "properties": {
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IssueInputElementMember"
+            }
+          }
+        }
+      },
+      "IssueInputElementMember": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/IssueInputElementMemberAssignees"
+          },
+          {
+            "$ref": "#/components/schemas/IssueInputElementMemberGroupAssignees"
+          },
+          {
+            "$ref": "#/components/schemas/IssueInputElementMemberCoowners"
+          },
+          {
+            "$ref": "#/components/schemas/IssueInputElementMemberGroupCoowners"
+          },
+          {
+            "$ref": "#/components/schemas/IssueInputElementMemberContributors"
+          },
+          {
+            "$ref": "#/components/schemas/IssueInputElementMemberGroupContributors"
+          },
+          {
+            "$ref": "#/components/schemas/IssueInputElementMemberInformedUsers"
+          },
+          {
+            "$ref": "#/components/schemas/IssueInputElementMemberGroupInformedUsers"
+          }
+        ]
+      },
+      "IssueInputElementMemberAssignees": {
+        "properties": {
+          "assignees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          }
+        }
+      },
+      "IssueInputElementMemberGroupAssignees": {
+        "properties": {
+          "groupAssignees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          }
+        }
+      },
+      "IssueInputElementMemberCoowners": {
+        "properties": {
+          "coowners": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          }
+        }
+      },
+      "IssueInputElementMemberGroupCoowners": {
+        "properties": {
+          "groupCoordinators": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          }
+        }
+      },
+      "IssueInputElementMemberContributors": {
+        "properties": {
+          "contributors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          }
+        }
+      },
+      "IssueInputElementMemberGroupContributors": {
+        "properties": {
+          "groupContributors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          }
+        }
+      },
+      "IssueInputElementMemberInformedUsers": {
+        "properties": {
+          "informed": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          }
+        }
+      },
+      "IssueInputElementMemberGroupInformedUsers": {
+        "properties": {
+          "groupInformed": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          }
+        }
+      },
+      "Person": {
+        "type": "string",
+        "example": "userX",
+        "description": "full details of a Person can be retrieved using dedicated Web Service /resources/modeler/pno/person/userX"
+      },
+      "Group": {
+        "type": "string",
+        "example": "groupURI",
+        "description": "full details of a Group can be retrieved using group URI"
+      },
+      "IssueModifyRemoveInputElementAffectedItems": {
+        "properties": {
+          "affectedItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AffectedItemObject"
+            }
+          }
+        }
+      },
+      "IssueModifyRemoveInputElementContexts": {
+        "properties": {
+          "contexts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectInput"
+            }
+          }
+        }
+      },
+      "IssueModifyRemoveInputElementResolution": {
+        "properties": {
+          "resolution": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResolutionObject"
+            }
+          }
+        }
+      },
+      "ObjectInput": {
+        "required": [
+          "identifier"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "example": "https://3dspace.mydomain:443/3dspace"
+          },
+          "type": {
+            "type": "string",
+            "example": "VPMReference"
+          },
+          "identifier": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "relativePath": {
+            "type": "string",
+            "example": "/resources/v1/modeler/dseng/dseng:EngItem/F718B05686760000926EEB5BE7400900"
+          }
+        }
+      },
+      "IssueModifyRemoveInputElementResolvedBy": {
+        "properties": {
+          "resolvedBy": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResolvedByObject"
+            }
+          }
+        }
+      },
+      "ResolvedByObject": {
+        "required": [
+          "identifier"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "example": "https://3dspace.mydomain:443/3dspace"
+          },
+          "type": {
+            "type": "string",
+            "example": "Change Order"
+          },
+          "identifier": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "relativePath": {
+            "type": "string",
+            "example": "/resources/v1/modeler/dscm/changeorder/F718B05686760000926EEB5BE7400900"
+          }
+        }
+      },
+      "ResolutionObject": {
+        "properties": {
+          "elements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectOutput"
+            }
+          }
+        }
+      },
+      "AffectedItemObject": {
+        "properties": {
+          "elements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectOutput"
+            }
+          },
+          "targetBallonCoordinates": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": [
+                "X",
+                "Y",
+                "Z"
+              ]
+            }
+          }
+        }
+      },
+      "IssueModifyRemoveInputElementCustomerAttributes": {
+        "properties": {
+          "customerAttributes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "SpecializationExtensionName",
+              "description": "One or more SpecializationExtension can be removed from object"
+            }
+          }
+        }
+      },
+      "IssueModifyAddInput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/IssueModifyAddInputElement"
+        }
+      },
+      "IssueModifyAddInputElement": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/IssueModifyInputElementMembers"
+          },
+          {
+            "$ref": "#/components/schemas/IssueModifyAddInputElementAffectedItems"
+          },
+          {
+            "$ref": "#/components/schemas/IssueModifyAddInputElementContexts"
+          },
+          {
+            "$ref": "#/components/schemas/IssueModifyAddInputElementResolution"
+          },
+          {
+            "$ref": "#/components/schemas/IssueModifyAddInputElementResolvedBy"
+          },
+          {
+            "$ref": "#/components/schemas/IssueModifyAddInputElementCustomerAttributes"
+          }
+        ]
+      },
+      "IssueModifyAddInputElementAffectedItems": {
+        "properties": {
+          "affectedItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AffectedItemObject"
+            }
+          }
+        }
+      },
+      "IssueModifyAddInputElementContexts": {
+        "properties": {
+          "contexts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectInput"
+            }
+          }
+        }
+      },
+      "IssueModifyAddInputElementResolution": {
+        "properties": {
+          "resolution": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResolutionObject"
+            }
+          }
+        }
+      },
+      "IssueModifyAddInputElementResolvedBy": {
+        "properties": {
+          "resolvedBy": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResolvedByObject"
+            }
+          }
+        }
+      },
+      "IssueModifyAddInputElementCustomerAttributes": {
+        "properties": {
+          "customerAttributes": {
+            "properties": {
+              "SpecializationExtensionName": {
+                "properties": {
+                  "customerAttribute1Name": {
+                    "type": "string",
+                    "example": "customerAttribute1Value"
+                  },
+                  "customerAttribute2Name": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "customerAttribute2Value"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "IssueModifyReplaceInput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/IssueModifyReplaceInputElement"
+        }
+      },
+      "IssueModifyReplaceInputElement": {
+        "$ref": "#/components/schemas/IssueModifyReplaceInputElementCustomerAttributes"
+      },
+      "IssueModifyReplaceInputElementCustomerAttributes": {
+        "properties": {
+          "customerAttributes": {
+            "$ref": "#/components/schemas/IssueModifyReplaceInputElementCustomerAttributesInput"
+          }
+        }
+      },
+      "IssueModifyReplaceInputElementCustomerAttributesInput": {
+        "$ref": "#/components/schemas/CustomerAttributesOutput"
+      },
+      "IssueBasicOutput": {
+        "$ref": "#/components/schemas/IssueBasicOutputElement"
+      },
+      "IssueBasicOutputElement": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "EE562168015FFCF14F940A513C63AA77"
+          },
+          "cestamp": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "policy": {
+            "type": "string",
+            "example": "Issue"
+          },
+          "type": {
+            "type": "string",
+            "example": "Issue"
+          },
+          "description": {
+            "type": "string",
+            "example": "Description of Issue"
+          },
+          "title": {
+            "type": "string",
+            "example": "title of Issue"
+          },
+          "name": {
+            "type": "string",
+            "example": "ISS-0000001"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "Create",
+              "Assign",
+              "Active",
+              "Review",
+              "Closed"
+            ],
+            "description": "current state of the Issue",
+            "example": "Create"
+          },
+          "owner": {
+            "type": "string",
+            "example": "Identifier of the owner of the Issue"
+          },
+          "organization": {
+            "type": "string",
+            "example": "MyCompany"
+          },
+          "collabSpace": {
+            "type": "string",
+            "example": "3DS Collab Space"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ],
+            "default": "Low",
+            "example": "Low"
+          },
+          "Creation Date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-07-21T17:32:28Z"
+          },
+          "Last Modification Date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-07-21T17:32:28Z"
+          },
+          "Estimated Start Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-21",
+            "deprecated": true
+          },
+          "Planned Start Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-21"
+          },
+          "Actual Start Date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-07-21T17:32:28Z"
+          },
+          "Estimated End Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-22",
+            "deprecated": true
+          },
+          "Planned Completion Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-22"
+          },
+          "Due Completion Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-23"
+          },
+          "Actual End Date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-07-22T17:32:28Z"
+          },
+          "withApproval": {
+            "type": "string",
+            "enum": [
+              "true",
+              "false"
+            ],
+            "example": "true"
+          },
+          "Escalation Required": {
+            "type": "string",
+            "enum": [
+              "Yes",
+              "No"
+            ],
+            "example": "No"
+          },
+          "Resolution Recommendation": {
+            "type": "string",
+            "example": "Recommendation details for resolution"
+          },
+          "Action Taken": {
+            "type": "string",
+            "example": "Action taken regarding reported issue"
+          },
+          "Resolution Statement": {
+            "type": "string",
+            "example": "Statement made upon completion"
+          },
+          "dslc:IssueEnterpriseAttributes": {
+            "$ref": "#/components/schemas/IssueEnterpriseAttributes"
+          }
+        }
+      },
+      "IssueOutput": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "EE562168015FFCF14F940A513C63AA77"
+          },
+          "cestamp": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "policy": {
+            "type": "string",
+            "example": "Issue"
+          },
+          "type": {
+            "type": "string",
+            "example": "Issue"
+          },
+          "description": {
+            "type": "string",
+            "example": "Description of Issue"
+          },
+          "title": {
+            "type": "string",
+            "example": "title of Issue"
+          },
+          "name": {
+            "type": "string",
+            "example": "ISS-0000001"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "Create",
+              "Assign",
+              "Active",
+              "Review",
+              "Closed"
+            ],
+            "description": "current state of the Issue",
+            "example": "Create"
+          },
+          "owner": {
+            "type": "string",
+            "example": "Identifier of the owner of the Issue"
+          },
+          "organization": {
+            "type": "string",
+            "example": "MyCompany"
+          },
+          "collabSpace": {
+            "type": "string",
+            "example": "3DS Collab Space"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ],
+            "default": "Low",
+            "example": "Low"
+          },
+          "Creation Date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-07-21T17:32:28Z"
+          },
+          "Last Modification Date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-07-21T17:32:28Z"
+          },
+          "Estimated Start Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-21",
+            "deprecated": true
+          },
+          "Planned Start Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-21"
+          },
+          "Actual Start Date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-07-21T17:32:28Z"
+          },
+          "Estimated End Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-22",
+            "deprecated": true
+          },
+          "Planned Completion Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-22"
+          },
+          "Due Completion Date": {
+            "type": "string",
+            "format": "date",
+            "example": "2017-07-23"
+          },
+          "Actual End Date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-07-22T17:32:28Z"
+          },
+          "withApproval": {
+            "type": "string",
+            "enum": [
+              "true",
+              "false"
+            ],
+            "example": "true"
+          },
+          "Escalation Required": {
+            "type": "string",
+            "enum": [
+              "Yes",
+              "No"
+            ],
+            "example": "No"
+          },
+          "Resolution Recommendation": {
+            "type": "string",
+            "example": "Recommendation details for resolution"
+          },
+          "Action Taken": {
+            "type": "string",
+            "example": "Action taken regarding reported issue"
+          },
+          "Resolution Statement": {
+            "type": "string",
+            "example": "Statement made upon completion"
+          },
+          "dslc:IssueEnterpriseAttributes": {
+            "$ref": "#/components/schemas/IssueEnterpriseAttributes"
+          },
+          "members": {
+            "$ref": "#/components/schemas/MembersOutput"
+          },
+          "affectedItems": {
+            "$ref": "#/components/schemas/AffectedItemsOutput"
+          },
+          "resolvedBy": {
+            "$ref": "#/components/schemas/ResolvedByOutput"
+          },
+          "resolution": {
+            "$ref": "#/components/schemas/ResolutionOutput"
+          },
+          "contexts": {
+            "$ref": "#/components/schemas/ContextsOutput"
+          },
+          "customerAttributes": {
+            "$ref": "#/components/schemas/CustomerAttributesOutput"
+          }
+        }
+      },
+      "MembersOutput": {
+        "properties": {
+          "assignees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          },
+          "groupAssignees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          },
+          "coowners": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          },
+          "groupCoordinators": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          },
+          "contributors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          },
+          "groupContributors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          },
+          "informed": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            }
+          },
+          "groupInformed": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            }
+          }
+        }
+      },
+      "AffectedItemsOutput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/AffectedItemObject"
+        }
+      },
+      "ResolvedByOutput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ResolvedByObject"
+        }
+      },
+      "ObjectOutput": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "example": "https://3dspace.mydomain:443/3dspace"
+          },
+          "type": {
+            "type": "string",
+            "example": "VPMReference"
+          },
+          "identifier": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "relativePath": {
+            "type": "string",
+            "example": "/resources/v1/modeler/dseng/dseng:EngItem/F718B05686760000926EEB5BE7400900"
+          }
+        }
+      },
+      "ResolutionOutput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ResolutionObject"
+        }
+      },
+      "ContextsOutput": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ObjectOutput"
+        }
+      },
+      "CustomerAttributesOutput": {
+        "properties": {
+          "customerAttribute1Name": {
+            "type": "string",
+            "example": "customerAttribute1Value"
+          },
+          "customerAttribute2Name": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "customerAttribute2Value"
+            }
+          },
+          "DeploymentExtensionName": {
+            "properties": {
+              "customerAttribute3Name": {
+                "type": "string",
+                "example": "customerAttribute3Value"
+              },
+              "customerAttribute4Name": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "example": "customerAttribute4Value"
+                }
+              }
+            }
+          },
+          "SpecializationExtensionName": {
+            "properties": {
+              "customerAttribute5Name": {
+                "type": "string",
+                "example": "customerAttribute5Value"
+              },
+              "customerAttribute6Name": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "example": "customerAttribute6Value"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SearchOutput": {
+        "properties": {
+          "issue": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SearchObjectOutput"
+            }
+          }
+        }
+      },
+      "SearchObjectOutput": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "example": "https://3dspace.mydomain:443/3dspace"
+          },
+          "type": {
+            "type": "string",
+            "example": "Issue"
+          },
+          "identifier": {
+            "type": "string",
+            "example": "F718B05686760000926EEB5BE7400900"
+          },
+          "relativePath": {
+            "type": "string",
+            "example": "/resources/v1/modeler/dsiss/issue/F718B05686760000926EEB5BE7400900"
+          }
+        }
+      },
+      "ErrorOutput": {
+        "properties": {
+          "errorCode": {
+            "type": "string",
+            "example": "1"
+          },
+          "errorMessage": {
+            "type": "string",
+            "example": "Error message"
+          }
+        }
+      }
+    }
+  }
+}

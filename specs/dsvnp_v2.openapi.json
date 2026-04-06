@@ -1,0 +1,3442 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "Web Services for managing the Supply Network modeler.",
+    "x-ds-copyright": "3DEXPERIENCE R2021x (c) 2020 Dassault Systemes.",
+    "version": "2.0.0",
+    "title": "Supply Network Web Services",
+    "x-ds-service": [
+      "3DNetwork"
+    ]
+  },
+  "servers": [
+    {
+      "url": "{3DNetwork}/",
+      "variables": {
+        "3DNetwork": {
+          "default": "https://mydomain-3dnetwork.3dexperience.3ds.com"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsvnp/v2",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/3drdfpersist/resources/dsvnp/v2/buyerEntities": {
+      "post": {
+        "tags": [
+          "Buyer Entities"
+        ],
+        "summary": "Create Buyer Entities",
+        "description": "Create a Buyer Entity",
+        "operationId": "POST_dsvnp:Buyer_Entities_create",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:LegalEntityMask.simple",
+                "dsvnp:LegalEntityMask.simple.logo",
+                "dsvnp:LegalEntityMask.details",
+                "dsvnp:LegalEntityMask.details.logo"
+              ],
+              "example": "dsvnp:LegalEntityMask.details",
+              "default": "dsvnp:LegalEntityMask.simple"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Legal_Entity"
+                    },
+                    "minimum": 1,
+                    "maximum": 1
+                  }
+                },
+                "required": [
+                  "data"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/201_entities"
+          },
+          "207": {
+            "$ref": "#/components/responses/207_entities"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/dsvnp/v2/buyerEntities/{ID}": {
+      "parameters": [
+        {
+          "name": "ID",
+          "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0",
+          "in": "path",
+          "description": "URI of a Buyer Entity",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "patch": {
+        "tags": [
+          "Buyer Entities"
+        ],
+        "summary": "Update Buyer Entity",
+        "description": "Update Buyer Entity informations given as ID",
+        "operationId": "PATCH_dsvnp:Buyer_Entities_update",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          },
+          {
+            "$ref": "#/components/parameters/If-Match"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:LegalEntityMask.simple",
+                "dsvnp:LegalEntityMask.simple.logo",
+                "dsvnp:LegalEntityMask.details",
+                "dsvnp:LegalEntityMask.details.logo"
+              ],
+              "example": "dsvnp:LegalEntityMask.details",
+              "default": "dsvnp:LegalEntityMask.simple"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/entities_update"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_entities_update"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "412": {
+            "$ref": "#/components/responses/412"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Buyer Entities"
+        ],
+        "summary": "Get Buyer Entity",
+        "description": "Get Buyer Entity informations given as ID",
+        "operationId": "GET_dsvnp:Buyer_Entities_ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/If-None-Match"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:LegalEntityMask.simple",
+                "dsvnp:LegalEntityMask.simple.logo",
+                "dsvnp:LegalEntityMask.details",
+                "dsvnp:LegalEntityMask.details.logo"
+              ],
+              "example": "dsvnp:LegalEntityMask.details",
+              "default": "dsvnp:LegalEntityMask.simple"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_entities_get"
+          },
+          "304": {
+            "$ref": "#/components/responses/304"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/3drdfindex/resources/dsvnp/v2/buyerEntities/search": {
+      "get": {
+        "tags": [
+          "Buyer Entities"
+        ],
+        "summary": "Search Buyer Entities",
+        "description": "Search Buyer Entities using their title or external IDs",
+        "operationId": "GET_dsvnp:Buyer_Entities_search",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/externalIdentifier"
+          },
+          {
+            "$ref": "#/components/parameters/externalSource"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:LegalEntityMask.simple",
+                "dsvnp:LegalEntityMask.simple.logo",
+                "dsvnp:LegalEntityMask.details",
+                "dsvnp:LegalEntityMask.details.logo"
+              ],
+              "example": "dsvnp:LegalEntityMask.details",
+              "default": "dsvnp:LegalEntityMask.simple"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_entities_get"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/dsvnp/v2/supplierEntities": {
+      "post": {
+        "tags": [
+          "Supplier Entities"
+        ],
+        "summary": "Create Supplier Entities",
+        "description": "Create a Supplier Entity and its mandatory Relationship. A Supplier Entity can not exist without a Relationship",
+        "operationId": "POST_dsvnp:Supplier_Entities_create",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:LegalEntityMask.simple",
+                "dsvnp:LegalEntityMask.simple.logo",
+                "dsvnp:LegalEntityMask.details",
+                "dsvnp:LegalEntityMask.details.logo"
+              ],
+              "example": "dsvnp:LegalEntityMask.details",
+              "default": "dsvnp:LegalEntityMask.simple"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "required": [
+                        "supplierEntity",
+                        "relationship"
+                      ],
+                      "properties": {
+                        "supplierEntity": {
+                          "$ref": "#/components/schemas/Legal_Entity"
+                        },
+                        "relationship": {
+                          "required": [
+                            "owningEntity",
+                            "level",
+                            "preferenceStatus",
+                            "state"
+                          ],
+                          "properties": {
+                            "owningEntity": {
+                              "type": "string",
+                              "description": "Buyer Entity identifier",
+                              "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+                            },
+                            "level": {
+                              "description": "Level of the relationship between the owner and the target",
+                              "type": "string",
+                              "example": "Supplier",
+                              "enum": [
+                                "Supplier",
+                                "Potential Supplier",
+                                "Partner",
+                                "Candidate Supplier",
+                                "Refused Supplier"
+                              ]
+                            },
+                            "preferenceStatus": {
+                              "description": "Preferrence level of the relationship",
+                              "type": "string",
+                              "example": "Default",
+                              "enum": [
+                                "Preferred",
+                                "Default",
+                                "Not Preferred"
+                              ],
+                              "default": "Default"
+                            },
+                            "effectivityStartDate": {
+                              "description": "Effectivity start date of the relationship",
+                              "type": "string",
+                              "example": "2020-10-14T12:56:16.53Z"
+                            },
+                            "effectivityEndDate": {
+                              "description": "Effectivity end date of the relationship",
+                              "type": "string",
+                              "example": "2020-10-25T12:56:16.53Z"
+                            },
+                            "state": {
+                              "description": "Life cycle of the relationship",
+                              "type": "string",
+                              "example": "Active",
+                              "default": "In Work",
+                              "enum": [
+                                "In Work",
+                                "Active"
+                              ]
+                            },
+                            "externalIds": {
+                              "description": "Unique reference to external Ids coming from integration tools or external data base",
+                              "type": "array",
+                              "items": {
+                                "properties": {
+                                  "identifier": {
+                                    "type": "string",
+                                    "example": "24EDCF9D254F000061DBF56400060746"
+                                  },
+                                  "source": {
+                                    "type": "string",
+                                    "example": "ERP"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "minimum": 1,
+                    "maximum": 1
+                  }
+                },
+                "required": [
+                  "data"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/201_entities"
+          },
+          "207": {
+            "$ref": "#/components/responses/207_entities"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/dsvnp/v2/supplierEntities/{ID}": {
+      "parameters": [
+        {
+          "name": "ID",
+          "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0",
+          "in": "path",
+          "description": "URI of a Supplier Entity",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "patch": {
+        "tags": [
+          "Supplier Entities"
+        ],
+        "summary": "Update Supplier Entity",
+        "description": "Update Supplier Entity informations given as ID",
+        "operationId": "PATCH_dsvnp:Supplier_Entities_update",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          },
+          {
+            "$ref": "#/components/parameters/If-Match"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:LegalEntityMask.simple",
+                "dsvnp:LegalEntityMask.simple.logo",
+                "dsvnp:LegalEntityMask.details",
+                "dsvnp:LegalEntityMask.details.logo"
+              ],
+              "example": "dsvnp:LegalEntityMask.details",
+              "default": "dsvnp:LegalEntityMask.simple"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/entities_update"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_entities_update"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "412": {
+            "$ref": "#/components/responses/412"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Supplier Entities"
+        ],
+        "summary": "Get Supplier Entity",
+        "description": "Get Supplier Entity informations given as ID",
+        "operationId": "GET_dsvnp:Supplier_Entities_ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/If-None-Match"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:LegalEntityMask.simple",
+                "dsvnp:LegalEntityMask.simple.logo",
+                "dsvnp:LegalEntityMask.details",
+                "dsvnp:LegalEntityMask.details.logo"
+              ],
+              "example": "dsvnp:LegalEntityMask.details",
+              "default": "dsvnp:LegalEntityMask.simple"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_entities_get"
+          },
+          "304": {
+            "$ref": "#/components/responses/304"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/3drdfindex/resources/dsvnp/v2/supplierEntities/search": {
+      "get": {
+        "tags": [
+          "Supplier Entities"
+        ],
+        "summary": "Search Supplier Entities",
+        "description": "Search Supplier Entities using their title or external IDs",
+        "operationId": "GET_dsvnp:Supplier_Entities_search",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/title"
+          },
+          {
+            "$ref": "#/components/parameters/externalIdentifier"
+          },
+          {
+            "$ref": "#/components/parameters/externalSource"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:LegalEntityMask.simple",
+                "dsvnp:LegalEntityMask.simple.logo",
+                "dsvnp:LegalEntityMask.details",
+                "dsvnp:LegalEntityMask.details.logo"
+              ],
+              "example": "dsvnp:LegalEntityMask.details",
+              "default": "dsvnp:LegalEntityMask.simple"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_entities_get"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/dsvnp/v2/relationships": {
+      "post": {
+        "tags": [
+          "Relationships"
+        ],
+        "summary": "Create Relationships",
+        "description": "Create up to 50 Relationships at once",
+        "operationId": "POST_dsvnp:Relationships_create",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:RelationshipMask.simple",
+                "dsvnp:RelationshipMask.details"
+              ],
+              "example": "dsvnp:RelationshipMask.details",
+              "default": "dsvnp:RelationshipMask.simple"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Relationship"
+                    },
+                    "minimum": 1,
+                    "maximum": 50
+                  }
+                },
+                "required": [
+                  "data"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/201_relationship"
+          },
+          "207": {
+            "$ref": "#/components/responses/207_relationship"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/dsvnp/v2/relationships/{ID}": {
+      "parameters": [
+        {
+          "name": "ID",
+          "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0",
+          "in": "path",
+          "description": "URI of a Relationship",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "patch": {
+        "tags": [
+          "Relationships"
+        ],
+        "summary": "Update Relationship",
+        "description": "Update Relationship informations given as ID",
+        "operationId": "PATCH_dsvnp:Relationships_update",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          },
+          {
+            "$ref": "#/components/parameters/If-Match"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:RelationshipMask.simple",
+                "dsvnp:RelationshipMask.details"
+              ],
+              "example": "dsvnp:RelationshipMask.details",
+              "default": "dsvnp:RelationshipMask.simple"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/relationship_update"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_relationship_update"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "412": {
+            "$ref": "#/components/responses/412"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Relationships"
+        ],
+        "summary": "Get Relationship",
+        "description": "Get Relationship informations given as ID",
+        "operationId": "GET_dsvnp:Relationships_ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/If-None-Match"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:relationshipMask.simple",
+                "dsvnp:relationshipMask.details"
+              ],
+              "example": "dsvnp:relationshipMask.details",
+              "default": "dsvnp:relationshipMask.simple"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_relationship_get"
+          },
+          "304": {
+            "$ref": "#/components/responses/304"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/3drdfindex/resources/dsvnp/v2/relationships/search": {
+      "get": {
+        "tags": [
+          "Relationships"
+        ],
+        "summary": "Search Relationships",
+        "description": "Search Relationships using their external IDs",
+        "operationId": "GET_dsvnp:Relationships_search",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/externalIdentifier"
+          },
+          {
+            "$ref": "#/components/parameters/externalSource"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:relationshipMask.simple",
+                "dsvnp:relationshipMask.details"
+              ],
+              "example": "dsvnp:relationshipMask.details",
+              "default": "dsvnp:relationshipMask.simple"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_relationship_get"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/3drdfindex/resources/dsvnp/v2/supplierEntities/{ID}/relationships": {
+      "parameters": [
+        {
+          "name": "ID",
+          "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0",
+          "in": "path",
+          "description": "URI of a Supplier Entity",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Supplier Entities"
+        ],
+        "summary": "List Relationships",
+        "description": "List Relationships from a given Supplier Entity",
+        "operationId": "GET_dsvnp:Supplier_Entities_Relationships",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:relationshipMask.simple",
+                "dsvnp:relationshipMask.details"
+              ],
+              "example": "dsvnp:relationshipMask.details",
+              "default": "dsvnp:relationshipMask.simple"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_relationship_get"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/3drdfindex/resources/dsvnp/v2/buyerEntities/{ID}/relationships": {
+      "parameters": [
+        {
+          "name": "ID",
+          "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0",
+          "in": "path",
+          "description": "URI of a Buyer Entity",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Buyer Entities"
+        ],
+        "summary": "List Relationships",
+        "description": "List Relationships from a given Buyer Entity",
+        "operationId": "GET_dsvnp:Buyer_Entities_Relationships",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:relationshipMask.simple",
+                "dsvnp:relationshipMask.details"
+              ],
+              "example": "dsvnp:relationshipMask.details",
+              "default": "dsvnp:relationshipMask.simple"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_relationship_get"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/dsvnp/v2/supplierEntities/{ID}/supplierUsers": {
+      "parameters": [
+        {
+          "name": "ID",
+          "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0",
+          "in": "path",
+          "description": "URI of a Supplier Entity",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "tags": [
+          "Supplier Users"
+        ],
+        "summary": "Invite Supplier Users",
+        "description": "Invite on your platform up to 50 Supplier Users at once on a given Supplier Entity",
+        "operationId": "POST_dsvnp:Supplier_Users_create",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:SupplierUserMask.simple",
+                "dsvnp:SupplierUserMask.details"
+              ],
+              "example": "dsvnp:SupplierUserMask.details",
+              "default": "dsvnp:SupplierUserMask.simple"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "required": [
+                        "email"
+                      ],
+                      "properties": {
+                        "email": {
+                          "type": "string",
+                          "description": "Supplier Users email used for invitation",
+                          "example": "jane.doe@supplier.com"
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "Welcome to our new collaboration experience",
+                          "description": "Message sent in the invitation email",
+                          "default": ""
+                        },
+                        "disciplines": {
+                          "description": "Allocated disciplines to the supplier user",
+                          "type": "array",
+                          "example": [
+                            "Sourcing",
+                            "Engineering"
+                          ],
+                          "default": [],
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "Sourcing",
+                              "Engineering",
+                              "Distribution Event"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "minimum": 1,
+                    "maximum": 50
+                  }
+                },
+                "required": [
+                  "data"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/201_supplier_user"
+          },
+          "207": {
+            "$ref": "#/components/responses/207_supplier_user"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Supplier Users"
+        ],
+        "summary": "List Supplier Users",
+        "description": "List Supplier Users from a given Supplier Entity",
+        "operationId": "GET_dsvnp:Supplier_Entities_Supplier_Users",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:SupplierUserMask.simple",
+                "dsvnp:SupplierUserMask.details"
+              ],
+              "example": "dsvnp:SupplierUserMask.simple",
+              "default": "dsvnp:SupplierUserMask.details"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_supplier_user_get"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/dsvnp/v2/supplierUsers/{ID}": {
+      "parameters": [
+        {
+          "name": "ID",
+          "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0",
+          "in": "path",
+          "description": "URI of a Supplier User",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Supplier Users"
+        ],
+        "summary": "Get Supplier Users",
+        "description": "Get Supplier Users informations given as ID",
+        "operationId": "GET_dsvnp:Supplier_Users_ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/If-None-Match"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:SupplierUserMask.simple",
+                "dsvnp:SupplierUserMask.details"
+              ],
+              "example": "dsvnp:SupplierUserMask.details",
+              "default": "dsvnp:SupplierUserMask.simple"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_supplier_user_get"
+          },
+          "304": {
+            "$ref": "#/components/responses/304"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Supplier Users"
+        ],
+        "summary": "Delete Supplier Users",
+        "description": "Delete a Supplier User given as ID. Supplier Users has to be either Pending or Deactivated prior to the removal.",
+        "operationId": "DELETE_dsvnp:Suplier_Users_delete",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/If-Match"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "DELETION Success."
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "412": {
+            "$ref": "#/components/responses/412"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Supplier Users"
+        ],
+        "summary": "Update Supplier Users",
+        "description": "Update Supplier Users informations given as ID",
+        "operationId": "PATCH_dsvnp:Supplier_Users_update",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Requested-With"
+          },
+          {
+            "$ref": "#/components/parameters/If-Match"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "name": "mask",
+            "description": "Mask defining which information will be returned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsvnp:SupplierUserMask.simple",
+                "dsvnp:SupplierUserMask.details"
+              ],
+              "example": "dsvnp:SupplierUserMask.details",
+              "default": "dsvnp:SupplierUserMask.simple"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/supplier_user_update"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_supplier_user_update"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "412": {
+            "$ref": "#/components/responses/412"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "Legal_Entity": {
+        "title": "Legal Entities",
+        "required": [
+          "registrationId",
+          "registrationLocation",
+          "title"
+        ],
+        "properties": {
+          "registrationId": {
+            "type": "string",
+            "example": "123456789",
+            "description": "Id of the legal entity in his country of registration"
+          },
+          "registrationLocation": {
+            "type": "string",
+            "example": "France",
+            "description": "Country of registration of the legal entity"
+          },
+          "registeredSiteRegistrationId": {
+            "type": "string",
+            "example": "987654321",
+            "description": "Id of the legal entity's registered site in his country of registration"
+          },
+          "registeredSiteLocation": {
+            "type": "string",
+            "example": "France",
+            "description": "Country of registration of the legal entity's registered site"
+          },
+          "externalIds": {
+            "description": "Unique reference to external Ids coming from integration tools or external data base",
+            "type": "array",
+            "items": {
+              "properties": {
+                "identifier": {
+                  "description": "External id",
+                  "type": "string",
+                  "example": "24EDCF9D254F000061DBF56400060746"
+                },
+                "source": {
+                  "description": "External id source",
+                  "type": "string",
+                  "example": "ERP"
+                }
+              }
+            }
+          },
+          "title": {
+            "description": "Title (or name) of the legal entity",
+            "type": "string",
+            "example": "Legal Entity 1"
+          },
+          "registeredSiteTitle": {
+            "description": "Title (or name) of the legal entity's registered site",
+            "type": "string",
+            "example": "Site 1"
+          },
+          "description": {
+            "description": "Small description of the legal entity",
+            "type": "string",
+            "example": "Entity 1 description"
+          },
+          "registrationEntity": {
+            "description": "Registration entity that gave the legal entity registration definition",
+            "type": "string",
+            "example": "National Enterprise Registry (NER)"
+          },
+          "otherIds": {
+            "description": "Other relevant Ids not part of a legal entity registration",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "type": "string",
+                  "example": "12-345-6789"
+                },
+                "label": {
+                  "type": "string",
+                  "example": "DUNS"
+                }
+              }
+            }
+          },
+          "legalStatus": {
+            "description": "Legal status registered in the registration entity (Active or Inactive)",
+            "type": "string",
+            "example": "active"
+          },
+          "legalForm": {
+            "description": "Legal form from the legal entity registration definition",
+            "type": "string",
+            "example": "SA"
+          },
+          "website": {
+            "description": "Legal entity website",
+            "type": "string",
+            "example": "http://legalone.com"
+          },
+          "email": {
+            "description": "Legal entity contact email",
+            "type": "string",
+            "example": "sales-contact@legalone.com"
+          },
+          "phone": {
+            "description": "Legal entity contact phone",
+            "type": "string",
+            "example": "01 23 45 67 89"
+          },
+          "fax": {
+            "description": "Legal entity contact fax",
+            "type": "string",
+            "example": "01 45 23 67 89"
+          },
+          "address": {
+            "description": "Legal entity registration adresse",
+            "type": "string",
+            "example": "10 rue republic"
+          },
+          "zipCode": {
+            "description": "Legal entity registration zip code",
+            "type": "string",
+            "example": "75000"
+          },
+          "city": {
+            "description": "Legal entity registration city",
+            "type": "string",
+            "example": "Paris"
+          },
+          "region": {
+            "description": "Legal entity registration region",
+            "type": "string",
+            "example": "Ile de France"
+          },
+          "country": {
+            "description": "Legal entity registration country",
+            "type": "string",
+            "example": "FRA"
+          },
+          "latitude": {
+            "description": "Latitude GPS coordinate of the registration adresse",
+            "type": "number",
+            "example": 52.479722
+          },
+          "longitude": {
+            "description": "Longitude GPS coordinate of the registration adresse",
+            "type": "number",
+            "example": 62.185667
+          },
+          "employee": {
+            "description": "Number of employee",
+            "type": "integer",
+            "example": 100
+          },
+          "revenue": {
+            "description": "Registered global revenue",
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "integer",
+                "example": 100
+              },
+              "currency": {
+                "type": "string",
+                "example": "EUR",
+                "enum": [
+                  "USD",
+                  "EUR",
+                  "GBP",
+                  "JPY",
+                  "RUB"
+                ]
+              },
+              "date": {
+                "type": "string",
+                "example": "2023"
+              }
+            }
+          },
+          "productCategories": {
+            "description": "Legal entity supported product categories",
+            "type": "array",
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "24EDCF9D254F000061DBF56400060746"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "General Class"
+                },
+                "service": {
+                  "type": "string",
+                  "example": "3dspace"
+                },
+                "resourceType": {
+                  "type": "string",
+                  "example": "General Class"
+                }
+              }
+            }
+          },
+          "capabilities": {
+            "description": "Legal entity industrial capabilities",
+            "type": "array",
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "24EDCF9D254F000061DBF56400060746"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "General Class"
+                },
+                "service": {
+                  "type": "string",
+                  "example": "3dspace"
+                },
+                "resourceType": {
+                  "type": "string",
+                  "example": "General Class"
+                }
+              }
+            }
+          },
+          "classifications": {
+            "description": "Legal entities classifications",
+            "type": "array",
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "24EDCF9D254F000061DBF56400060746"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "General Class"
+                },
+                "service": {
+                  "type": "string",
+                  "example": "3dspace"
+                },
+                "resourceType": {
+                  "type": "string",
+                  "example": "General Class"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Relationship": {
+        "title": "Relationships",
+        "required": [
+          "owningEntity",
+          "targetEntity",
+          "level"
+        ],
+        "properties": {
+          "owningEntity": {
+            "type": "string",
+            "description": "Buyer Entity identifier",
+            "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+          },
+          "targetEntity": {
+            "type": "string",
+            "description": "Supplier Entity identifier",
+            "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+          },
+          "level": {
+            "description": "Level of the relationship between the owner and the target",
+            "type": "string",
+            "example": "Supplier",
+            "enum": [
+              "Supplier",
+              "Potential Supplier",
+              "Partner",
+              "Candidate Supplier",
+              "Refused Supplier"
+            ]
+          },
+          "preferenceStatus": {
+            "description": "Preferrence level of the relationship",
+            "type": "string",
+            "example": "Default",
+            "enum": [
+              "Preferred",
+              "Default",
+              "Not Preferred"
+            ],
+            "default": "Default"
+          },
+          "effectivityStartDate": {
+            "description": "Effectivity start date of the relationship",
+            "type": "string",
+            "example": "2020-10-14T12:56:16.53Z"
+          },
+          "effectivityEndDate": {
+            "description": "Effectivity end date of the relationship",
+            "type": "string",
+            "example": "2020-10-25T12:56:16.53Z"
+          },
+          "state": {
+            "description": "Life cycle of the relationship",
+            "type": "string",
+            "example": "Active",
+            "default": "In Work",
+            "enum": [
+              "In Work",
+              "Active"
+            ]
+          },
+          "externalIds": {
+            "description": "Unique reference to external Ids coming from integration tools or external data base",
+            "type": "array",
+            "items": {
+              "properties": {
+                "identifier": {
+                  "type": "string",
+                  "example": "24EDCF9D254F000061DBF56400060746"
+                },
+                "source": {
+                  "type": "string",
+                  "example": "ERP"
+                }
+              }
+            }
+          }
+        }
+      },
+      "LegalEntityMask.simple": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+          },
+          "eTag": {
+            "type": "string",
+            "example": "uuid:af5850e3-a18f-4244-a4b5-ad26aedb1309"
+          },
+          "registrationId": {
+            "type": "string",
+            "example": "123456789"
+          },
+          "registrationLocation": {
+            "type": "string",
+            "example": "France"
+          },
+          "externalIds": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "uuid:43045dbc-81e2-454e-ab57-d1c3f81625bc"
+                },
+                "identifier": {
+                  "type": "string",
+                  "example": "24EDCF9D254F000061DBF56400060746"
+                },
+                "source": {
+                  "type": "string",
+                  "example": "ERP"
+                }
+              }
+            }
+          },
+          "title": {
+            "type": "string",
+            "example": "Legal Entity 1"
+          }
+        }
+      },
+      "LegalEntityMask.simple.logo": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LegalEntityMask.simple"
+          },
+          {
+            "properties": {
+              "logo": {
+                "type": "string",
+                "example": "data:image/jpeg;base64,/..."
+              }
+            }
+          }
+        ]
+      },
+      "LegalEntityMask.details": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LegalEntityMask.simple"
+          },
+          {
+            "properties": {
+              "registeredSiteRegistrationId": {
+                "type": "string",
+                "example": "987654321"
+              },
+              "registeredSiteLocation": {
+                "type": "string",
+                "example": "France"
+              },
+              "registeredSiteTitle": {
+                "type": "string",
+                "example": "Site 1"
+              },
+              "description": {
+                "type": "string",
+                "example": "Entity 1 description"
+              },
+              "registrationEntity": {
+                "type": "string",
+                "example": "National Enterprise Registry (NER)"
+              },
+              "otherIds": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "uuid:ebaaab25-8f33-4a11-92b8-7e276b72cc25"
+                    },
+                    "identifier": {
+                      "type": "string",
+                      "example": "12-345-6789"
+                    },
+                    "label": {
+                      "type": "string",
+                      "example": "DUNS"
+                    }
+                  }
+                }
+              },
+              "legalStatus": {
+                "type": "string",
+                "example": "active"
+              },
+              "legalForm": {
+                "type": "string",
+                "example": "SA"
+              },
+              "website": {
+                "type": "string",
+                "example": "http://legalone.com"
+              },
+              "email": {
+                "type": "string",
+                "example": "sales-contact@legalone.com"
+              },
+              "phone": {
+                "type": "string",
+                "example": "01 23 45 67 89"
+              },
+              "fax": {
+                "type": "string",
+                "example": "01 45 23 67 89"
+              },
+              "address": {
+                "type": "string",
+                "example": "10 rue republic"
+              },
+              "zipCode": {
+                "type": "string",
+                "example": "75000"
+              },
+              "city": {
+                "type": "string",
+                "example": "Paris"
+              },
+              "region": {
+                "type": "string",
+                "example": "Ile de France"
+              },
+              "country": {
+                "type": "string",
+                "example": "FRA"
+              },
+              "latitude": {
+                "type": "number",
+                "example": 52.479722
+              },
+              "longitude": {
+                "type": "number",
+                "example": 62.185667
+              },
+              "employee": {
+                "type": "integer",
+                "example": 100
+              },
+              "revenue": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "example": 100
+                  },
+                  "currency": {
+                    "type": "string",
+                    "example": "EUR",
+                    "enum": [
+                      "USD",
+                      "EUR",
+                      "GBP",
+                      "JPY",
+                      "RUB"
+                    ]
+                  },
+                  "date": {
+                    "type": "string",
+                    "example": "2023"
+                  }
+                }
+              },
+              "productCategories": {
+                "type": "array",
+                "items": {
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "uuid:7248fc12-fc11-4f25-84cd-7c0e9c028afe"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "General Class"
+                    },
+                    "service": {
+                      "type": "string",
+                      "example": "3dspace"
+                    },
+                    "resourceType": {
+                      "type": "string",
+                      "example": "General Class"
+                    }
+                  }
+                }
+              },
+              "capabilities": {
+                "type": "array",
+                "items": {
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "uuid:7248fc12-fc11-4f25-84cd-7c0e9c028afe"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "General Class"
+                    },
+                    "service": {
+                      "type": "string",
+                      "example": "3dspace"
+                    },
+                    "resourceType": {
+                      "type": "string",
+                      "example": "General Class"
+                    }
+                  }
+                }
+              },
+              "classifications": {
+                "type": "array",
+                "items": {
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "uuid:7248fc12-fc11-4f25-84cd-7c0e9c028afe"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "General Class"
+                    },
+                    "service": {
+                      "type": "string",
+                      "example": "3dspace"
+                    },
+                    "resourceType": {
+                      "type": "string",
+                      "example": "General Class"
+                    }
+                  }
+                }
+              },
+              "owner": {
+                "type": "string",
+                "example": "owner@mail.com"
+              },
+              "created": {
+                "type": "string",
+                "example": "2020-10-14T12:56:16.53Z"
+              },
+              "modified": {
+                "type": "string",
+                "example": "2020-10-14T12:56:16.53Z"
+              }
+            }
+          }
+        ]
+      },
+      "LegalEntityMask.details.logo": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LegalEntityMask.details"
+          },
+          {
+            "properties": {
+              "logo": {
+                "type": "string",
+                "example": "data:image/jpeg;base64,/..."
+              }
+            }
+          }
+        ]
+      },
+      "RelationshipMask.simple": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+          },
+          "eTag": {
+            "type": "string",
+            "example": "uuid:af5850e3-a18f-4244-a4b5-ad26aedb1309"
+          },
+          "owningEntity": {
+            "type": "string",
+            "description": "Buyer Entity identifier",
+            "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+          },
+          "targetEntity": {
+            "type": "string",
+            "description": "Supplier Entity identifier",
+            "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+          },
+          "level": {
+            "description": "Level of the relationship between the owner and the target",
+            "type": "string",
+            "example": "Supplier",
+            "enum": [
+              "Supplier",
+              "Potential Supplier",
+              "Partner",
+              "Candidate Supplier",
+              "Refused Supplier"
+            ]
+          },
+          "preferenceStatus": {
+            "description": "Preferrence level of the relationship",
+            "type": "string",
+            "example": "Default",
+            "enum": [
+              "Preferred",
+              "Default",
+              "Not Preferred"
+            ],
+            "default": "Default"
+          },
+          "effectivityStartDate": {
+            "description": "Effectivity start date of the relationship",
+            "type": "string",
+            "example": "2020-10-14T12:56:16.53Z"
+          },
+          "effectivityEndDate": {
+            "description": "Effectivity end date of the relationship",
+            "type": "string",
+            "example": "2020-10-25T12:56:16.53Z"
+          },
+          "state": {
+            "description": "Life cycle of the relationship",
+            "type": "string",
+            "example": "Active",
+            "enum": [
+              "In Work",
+              "Active"
+            ]
+          },
+          "externalIds": {
+            "description": "Unique reference to external Ids coming from integration tools or external data base",
+            "type": "array",
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "uuid:43045dbc-81e2-454e-ab57-d1c3f81625bc"
+                },
+                "identifier": {
+                  "type": "string",
+                  "example": "24EDCF9D254F000061DBF56400060746"
+                },
+                "source": {
+                  "type": "string",
+                  "example": "ERP"
+                }
+              }
+            }
+          }
+        }
+      },
+      "RelationshipMask.details": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/RelationshipMask.simple"
+          },
+          {
+            "properties": {
+              "owner": {
+                "type": "string",
+                "example": "owner@mail.com"
+              },
+              "created": {
+                "type": "string",
+                "example": "2020-10-14T12:56:16.53Z"
+              },
+              "modified": {
+                "type": "string",
+                "example": "2020-10-14T12:56:16.53Z"
+              }
+            }
+          }
+        ]
+      },
+      "SupplierUserMask.simple": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+          },
+          "eTag": {
+            "type": "string",
+            "example": "uuid:af5850e3-a18f-4244-a4b5-ad26aedb1309"
+          },
+          "email": {
+            "type": "string",
+            "description": "Supplier Users email used for invitation",
+            "example": "jane.doe@supplier.com"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "Supplier Users first name",
+            "example": "jane"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Supplier Users last name",
+            "example": "doe"
+          },
+          "state": {
+            "description": "Life cycle of the suplier user",
+            "type": "string",
+            "example": "Active",
+            "enum": [
+              "Pending",
+              "Active",
+              "Inactive"
+            ]
+          }
+        }
+      },
+      "SupplierUserMask.details": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SupplierUserMask.simple"
+          },
+          {
+            "properties": {
+              "disciplines": {
+                "description": "Allocated disciplines to the supplier user",
+                "type": "array",
+                "example": [
+                  "Sourcing",
+                  "Engineering"
+                ],
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "Sourcing",
+                    "Engineering",
+                    "Distribution Event"
+                  ]
+                }
+              },
+              "owner": {
+                "type": "string",
+                "example": "owner@mail.com"
+              },
+              "created": {
+                "type": "string",
+                "example": "2020-10-14T12:56:16.53Z"
+              },
+              "modified": {
+                "type": "string",
+                "example": "2020-10-14T12:56:16.53Z"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "parameters": {
+      "skip": {
+        "name": "skip",
+        "description": "Skip a number of result equal to the parameter.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "example": 0,
+          "default": 0
+        }
+      },
+      "top": {
+        "name": "top",
+        "description": "Number of returned results. Must be an integer between 1 and 50 included.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "default": 50,
+          "example": 30,
+          "minimum": 1,
+          "maximum": 50
+        }
+      },
+      "X-Requested-With": {
+        "name": "X-Requested-With",
+        "description": "The value should be XMLHttpRequest",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "XMLHttpRequest"
+        }
+      },
+      "include": {
+        "name": "include",
+        "description": "Attribute selector. Only support 'info' value for the moment",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "info"
+        }
+      },
+      "If-Match": {
+        "name": "If-Match",
+        "description": "The value should be the resource latest eTag. If not provided or not the latest one will result in error",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "uuid:af5850e3-a18f-4244-a4b5-ad26aedb1309"
+        }
+      },
+      "If-None-Match": {
+        "name": "If-None-Match",
+        "description": "The value should be an eTag ID. If matching it will not return a result, else it will revert back to default behavior",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "uuid:af5850e3-a18f-4244-a4b5-ad26aedb1309"
+        }
+      },
+      "title": {
+        "name": "title",
+        "in": "query",
+        "description": "Search string over entities Title. Regex not supported",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "Entity 1",
+          "default": "empty"
+        }
+      },
+      "externalSource": {
+        "name": "externalSource",
+        "in": "query",
+        "description": "Source attribute of an external Id. Need to be provided alongside externalIdentifier",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "ERP",
+          "default": "empty"
+        }
+      },
+      "externalIdentifier": {
+        "name": "externalIdentifier",
+        "in": "query",
+        "description": "identifier attribute of an external Id. Need to be provided alongside externalSource",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "24EDCF9D254F000061DBF56400060746",
+          "default": "empty"
+        }
+      }
+    },
+    "requestBodies": {
+      "entities_update": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "registrationId": {
+                        "type": "string",
+                        "example": "123456789",
+                        "description": "Id of the legal entity in his country of registration"
+                      },
+                      "registrationLocation": {
+                        "type": "string",
+                        "example": "France",
+                        "description": "Country of registration of the legal entity"
+                      },
+                      "registeredSiteRegistrationId": {
+                        "type": "string",
+                        "example": "987654321",
+                        "description": "Id of the legal entity's registered site in his country of registration"
+                      },
+                      "registeredSiteLocation": {
+                        "type": "string",
+                        "example": "France",
+                        "description": "Country of registration of the legal entity's registered site"
+                      },
+                      "externalIds": {
+                        "description": "Unique reference to external Ids coming from integration tools or external data base",
+                        "type": "array",
+                        "items": {
+                          "properties": {
+                            "op": {
+                              "description": "Operation applied on the sub-resource, support add, remove. Modify is the default behavior if nothing is given",
+                              "type": "string",
+                              "example": "remove",
+                              "enum": [
+                                "add",
+                                "remove"
+                              ]
+                            },
+                            "id": {
+                              "type": "string",
+                              "example": "uuid:ebaaab25-8f33-4a11-92b8-7e276b72cc25"
+                            },
+                            "identifier": {
+                              "description": "External id",
+                              "type": "string",
+                              "example": "24EDCF9D254F000061DBF56400060746"
+                            },
+                            "source": {
+                              "description": "External id source",
+                              "type": "string",
+                              "example": "ERP"
+                            }
+                          }
+                        }
+                      },
+                      "title": {
+                        "description": "Title (or name) of the legal entity",
+                        "type": "string",
+                        "example": "Legal Entity 1"
+                      },
+                      "registeredSiteTitle": {
+                        "description": "Title (or name) of the legal entity's registered site",
+                        "type": "string",
+                        "example": "Site 1"
+                      },
+                      "description": {
+                        "description": "Small description of the legal entity",
+                        "type": "string",
+                        "example": "Entity 1 description"
+                      },
+                      "registrationEntity": {
+                        "description": "Registration entity that gave the legal entity registration definition",
+                        "type": "string",
+                        "example": "National Enterprise Registry (NER)"
+                      },
+                      "otherIds": {
+                        "description": "Other relevant Ids not part of a legal entity registration",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "op": {
+                              "description": "Operation applied on the sub-resource, support add, remove. Modify is the default behavior if nothing is given",
+                              "type": "string",
+                              "example": "remove",
+                              "enum": [
+                                "add",
+                                "remove"
+                              ]
+                            },
+                            "id": {
+                              "type": "string",
+                              "example": "uuid:ebaaab25-8f33-4a11-92b8-7e276b72cc25"
+                            },
+                            "identifier": {
+                              "type": "string",
+                              "example": "12-345-6789"
+                            },
+                            "label": {
+                              "type": "string",
+                              "example": "DUNS"
+                            }
+                          }
+                        }
+                      },
+                      "legalStatus": {
+                        "description": "Legal status registered in the registration entity (Active or Inactive)",
+                        "type": "string",
+                        "example": "active"
+                      },
+                      "legalForm": {
+                        "description": "Legal form from the legal entity registration definition",
+                        "type": "string",
+                        "example": "SA"
+                      },
+                      "website": {
+                        "description": "Legal entity website",
+                        "type": "string",
+                        "example": "http://legalone.com"
+                      },
+                      "email": {
+                        "description": "Legal entity contact email",
+                        "type": "string",
+                        "example": "sales-contact@legalone.com"
+                      },
+                      "phone": {
+                        "description": "Legal entity contact phone",
+                        "type": "string",
+                        "example": "01 23 45 67 89"
+                      },
+                      "fax": {
+                        "description": "Legal entity contact fax",
+                        "type": "string",
+                        "example": "01 45 23 67 89"
+                      },
+                      "address": {
+                        "description": "Legal entity registration adresse",
+                        "type": "string",
+                        "example": "10 rue republic"
+                      },
+                      "zipCode": {
+                        "description": "Legal entity registration zip code",
+                        "type": "string",
+                        "example": "75000"
+                      },
+                      "city": {
+                        "description": "Legal entity registration city",
+                        "type": "string",
+                        "example": "Paris"
+                      },
+                      "region": {
+                        "description": "Legal entity registration region",
+                        "type": "string",
+                        "example": "Ile de France"
+                      },
+                      "country": {
+                        "description": "Legal entity registration country",
+                        "type": "string",
+                        "example": "FRA"
+                      },
+                      "latitude": {
+                        "description": "Latitude GPS coordinate of the registration adresse",
+                        "type": "number",
+                        "example": 52.479722
+                      },
+                      "longitude": {
+                        "description": "Longitude GPS coordinate of the registration adresse",
+                        "type": "number",
+                        "example": 62.185667
+                      },
+                      "employee": {
+                        "description": "Number of employee",
+                        "type": "integer",
+                        "example": 100
+                      },
+                      "revenue": {
+                        "description": "Registered global revenue",
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "integer",
+                            "example": 100
+                          },
+                          "currency": {
+                            "type": "string",
+                            "example": "EUR",
+                            "enum": [
+                              "USD",
+                              "EUR",
+                              "GBP",
+                              "JPY",
+                              "RUB"
+                            ]
+                          },
+                          "date": {
+                            "type": "string",
+                            "example": "2023"
+                          }
+                        }
+                      },
+                      "productCategories": {
+                        "description": "Legal entity supported product categories",
+                        "type": "array",
+                        "items": {
+                          "properties": {
+                            "op": {
+                              "description": "Operation applied on the sub-resource",
+                              "type": "string",
+                              "example": "add",
+                              "enum": [
+                                "add",
+                                "remove"
+                              ]
+                            },
+                            "id": {
+                              "type": "string",
+                              "example": "24EDCF9D254F000061DBF56400060746"
+                            },
+                            "type": {
+                              "type": "string",
+                              "example": "General Class"
+                            },
+                            "service": {
+                              "type": "string",
+                              "example": "3dspace"
+                            },
+                            "resourceType": {
+                              "type": "string",
+                              "example": "General Class"
+                            }
+                          }
+                        }
+                      },
+                      "capabilities": {
+                        "description": "Legal entity industrial capabilities",
+                        "type": "array",
+                        "items": {
+                          "properties": {
+                            "op": {
+                              "description": "Operation applied on the sub-resource",
+                              "type": "string",
+                              "example": "add",
+                              "enum": [
+                                "add",
+                                "remove"
+                              ]
+                            },
+                            "id": {
+                              "type": "string",
+                              "example": "24EDCF9D254F000061DBF56400060746"
+                            },
+                            "type": {
+                              "type": "string",
+                              "example": "General Class"
+                            },
+                            "service": {
+                              "type": "string",
+                              "example": "3dspace"
+                            },
+                            "resourceType": {
+                              "type": "string",
+                              "example": "General Class"
+                            }
+                          }
+                        }
+                      },
+                      "classifications": {
+                        "description": "Legal entities classifications",
+                        "type": "array",
+                        "items": {
+                          "properties": {
+                            "op": {
+                              "description": "Operation applied on the sub-resource",
+                              "type": "string",
+                              "example": "add",
+                              "enum": [
+                                "add",
+                                "remove"
+                              ]
+                            },
+                            "id": {
+                              "type": "string",
+                              "example": "24EDCF9D254F000061DBF56400060746"
+                            },
+                            "type": {
+                              "type": "string",
+                              "example": "General Class"
+                            },
+                            "service": {
+                              "type": "string",
+                              "example": "3dspace"
+                            },
+                            "resourceType": {
+                              "type": "string",
+                              "example": "General Class"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "minimum": 1,
+                  "maximum": 1
+                }
+              },
+              "required": [
+                "data"
+              ]
+            }
+          }
+        }
+      },
+      "relationship_update": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "level": {
+                        "description": "Level of the relationship between the owner and the target",
+                        "type": "string",
+                        "example": "Supplier",
+                        "enum": [
+                          "Supplier",
+                          "Potential Supplier",
+                          "Partner",
+                          "Candidate Supplier",
+                          "Refused Supplier"
+                        ]
+                      },
+                      "preferenceStatus": {
+                        "description": "Preferrence level of the relationship",
+                        "type": "string",
+                        "example": "Default",
+                        "enum": [
+                          "Preferred",
+                          "Default",
+                          "Not Preferred"
+                        ],
+                        "default": "Default"
+                      },
+                      "effectivityStartDate": {
+                        "description": "Effectivity start date of the relationship",
+                        "type": "string",
+                        "example": "2020-10-14T12:56:16.53Z"
+                      },
+                      "effectivityEndDate": {
+                        "description": "Effectivity end date of the relationship",
+                        "type": "string",
+                        "example": "2020-10-25T12:56:16.53Z"
+                      },
+                      "state": {
+                        "description": "Life cycle of the relationship",
+                        "type": "string",
+                        "example": "Active",
+                        "default": "In Work",
+                        "enum": [
+                          "In Work",
+                          "Active"
+                        ]
+                      },
+                      "externalIds": {
+                        "description": "Unique reference to external Ids coming from integration tools or external data base",
+                        "type": "array",
+                        "items": {
+                          "properties": {
+                            "op": {
+                              "description": "Operation applied on the sub-resource, support add, remove. Modify is the default behavior if nothing is given",
+                              "type": "string",
+                              "example": "remove",
+                              "enum": [
+                                "add",
+                                "remove"
+                              ]
+                            },
+                            "id": {
+                              "type": "string",
+                              "example": "uuid:43045dbc-81e2-454e-ab57-d1c3f81625bc"
+                            },
+                            "identifier": {
+                              "type": "string",
+                              "example": "24EDCF9D254F000061DBF56400060746"
+                            },
+                            "source": {
+                              "type": "string",
+                              "example": "ERP"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "minimum": 1,
+                  "maximum": 1
+                }
+              },
+              "required": [
+                "data"
+              ]
+            }
+          }
+        }
+      },
+      "supplier_user_update": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "state": {
+                        "description": "Life cycle of the suplier user",
+                        "type": "string",
+                        "example": "active",
+                        "enum": [
+                          "active",
+                          "inactive"
+                        ]
+                      },
+                      "disciplines": {
+                        "description": "Allocated disciplines to the supplier user",
+                        "type": "array",
+                        "example": [
+                          "Sourcing",
+                          "Engineering"
+                        ],
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "Sourcing",
+                            "Engineering",
+                            "Distribution Event"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "minimum": 1,
+                  "maximum": 1
+                }
+              },
+              "required": [
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "201_entities": {
+        "description": "CREATED. The request is valid and the requested Entities created.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LegalEntityMask.details"
+                  }
+                },
+                "info": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 201,
+                      "description": "Http code"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "201_relationship": {
+        "description": "CREATED. The request is valid and the requested Relationships created.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RelationshipMask.details"
+                  }
+                },
+                "info": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 201,
+                      "description": "Http code"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "201_supplier_user": {
+        "description": "CREATED. The request is valid and the requested Supplier Users created.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+                      },
+                      "eTag": {
+                        "type": "string",
+                        "example": "uuid:af5850e3-a18f-4244-a4b5-ad26aedb1309"
+                      },
+                      "email": {
+                        "type": "string",
+                        "description": "Supplier Users email used for invitation",
+                        "example": "jane.doe@supplier.com"
+                      },
+                      "state": {
+                        "description": "Life cycle of the suplier user",
+                        "type": "string",
+                        "example": "Pending",
+                        "enum": [
+                          "Pending"
+                        ]
+                      },
+                      "disciplines": {
+                        "description": "Allocated disciplines to the supplier user",
+                        "type": "array",
+                        "example": [
+                          "Sourcing",
+                          "Engineering"
+                        ],
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "Sourcing",
+                            "Engineering",
+                            "Distribution Event"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "info": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 201,
+                      "description": "Http code"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "200_entities_update": {
+        "description": "SUCCESS. The request is valid and the requested Entities updated.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LegalEntityMask.details"
+                  }
+                },
+                "info": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200,
+                      "description": "Http code"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "200_entities_get": {
+        "description": "SUCCESS. Legal Entities information retrieved",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/LegalEntityMask.simple"
+                      },
+                      {
+                        "$ref": "#/components/schemas/LegalEntityMask.details"
+                      },
+                      {
+                        "$ref": "#/components/schemas/LegalEntityMask.simple.logo"
+                      },
+                      {
+                        "$ref": "#/components/schemas/LegalEntityMask.details.logo"
+                      }
+                    ]
+                  },
+                  "example": [
+                    {
+                      "id": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0",
+                      "eTag": "uuid:af5850e3-a18f-4244-a4b5-ad26aedb1309",
+                      "registrationId": "123456789",
+                      "registrationLocation": "France",
+                      "externalIds": [
+                        {
+                          "id": "uuid:43045dbc-81e2-454e-ab57-d1c3f81625bc",
+                          "identifier": "24EDCF9D254F000061DBF56400060746",
+                          "source": "ERP"
+                        }
+                      ],
+                      "title": "Legal Entity 1"
+                    }
+                  ]
+                },
+                "info": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200,
+                      "description": "Http code"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "200_relationship_update": {
+        "description": "SUCCESS. The request is valid and the requested Relationship updated.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RelationshipMask.details"
+                  }
+                },
+                "info": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200,
+                      "description": "Http code"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "200_relationship_get": {
+        "description": "SUCCESS. Relationship information retrieved",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RelationshipMask.details"
+                  }
+                },
+                "info": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200,
+                      "description": "Http code"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "200_supplier_user_update": {
+        "description": "SUCCESS. The request is valid and the requested Supplier Users updated.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SupplierUserMask.details"
+                  }
+                },
+                "info": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200,
+                      "description": "Http code"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "200_supplier_user_get": {
+        "description": "SUCCESS. Supplier Users information retrieved",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SupplierUserMask.details"
+                  }
+                },
+                "info": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200,
+                      "description": "Http code"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "207_entities": {
+        "description": "MULTI STATUS. The request contains error(s), some Entities haven't been created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/LegalEntityMask.simple"
+                      },
+                      {
+                        "$ref": "#/components/schemas/LegalEntityMask.details"
+                      },
+                      {
+                        "$ref": "#/components/schemas/LegalEntityMask.simple.logo"
+                      },
+                      {
+                        "$ref": "#/components/schemas/LegalEntityMask.details.logo"
+                      }
+                    ]
+                  },
+                  "example": [
+                    {
+                      "id": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0",
+                      "eTag": "uuid:af5850e3-a18f-4244-a4b5-ad26aedb1309",
+                      "registrationId": "123456789",
+                      "registrationLocation": "France",
+                      "externalIds": [
+                        {
+                          "id": "uuid:43045dbc-81e2-454e-ab57-d1c3f81625bc",
+                          "identifier": "24EDCF9D254F000061DBF56400060746",
+                          "source": "ERP"
+                        }
+                      ],
+                      "title": "Legal Entity 1"
+                    }
+                  ]
+                },
+                "info": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 207,
+                      "description": "Http code"
+                    }
+                  }
+                },
+                "error": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "Error Type : unique identifier of error type",
+                        "example": "errors:3dx:invalid_request"
+                      },
+                      "title": {
+                        "type": "string",
+                        "description": "User understandable error message",
+                        "example": "Your request is malformed. Review the API documentation to ensure your request contains required formatting."
+                      },
+                      "instance": {
+                        "type": "number",
+                        "example": 0
+                      },
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "properties": {
+                            "details": {
+                              "type": "string",
+                              "description": "Error details",
+                              "example": "Invalid request due to {Property}"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "207_relationship": {
+        "description": "MULTI STATUS. The request contains error(s), some Relationship haven't been created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RelationshipMask.details"
+                  }
+                },
+                "info": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 207,
+                      "description": "Http code"
+                    }
+                  }
+                },
+                "error": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "Error Type : unique identifier of error type",
+                        "example": "errors:3dx:invalid_request"
+                      },
+                      "title": {
+                        "type": "string",
+                        "description": "User understandable error message",
+                        "example": "Your request is malformed. Review the API documentation to ensure your request contains required formatting."
+                      },
+                      "instance": {
+                        "type": "number",
+                        "example": 0
+                      },
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "properties": {
+                            "details": {
+                              "type": "string",
+                              "description": "Error details",
+                              "example": "Invalid request due to {Property}"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "207_supplier_user": {
+        "description": "MULTI STATUS. The request contains error(s), some Supplier Users haven't been created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "uuid:3dcd60a8-2f5b-4b9e-820d-fd9caf69f8e0"
+                      },
+                      "eTag": {
+                        "type": "string",
+                        "example": "uuid:af5850e3-a18f-4244-a4b5-ad26aedb1309"
+                      },
+                      "email": {
+                        "type": "string",
+                        "description": "Supplier Users email used for invitation",
+                        "example": "jane.doe@supplier.com"
+                      },
+                      "state": {
+                        "description": "Life cycle of the suplier user",
+                        "type": "string",
+                        "example": "Pending",
+                        "enum": [
+                          "Pending"
+                        ]
+                      },
+                      "disciplines": {
+                        "description": "Allocated disciplines to the supplier user",
+                        "type": "array",
+                        "example": [
+                          "Sourcing",
+                          "Engineering"
+                        ],
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "Sourcing",
+                            "Engineering",
+                            "Distribution Event"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "info": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 207,
+                      "description": "Http code"
+                    }
+                  }
+                },
+                "error": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "Error Type : unique identifier of error type",
+                        "example": "errors:3dx:invalid_request"
+                      },
+                      "title": {
+                        "type": "string",
+                        "description": "User understandable error message",
+                        "example": "Your request is malformed. Review the API documentation to ensure your request contains required formatting."
+                      },
+                      "instance": {
+                        "type": "number",
+                        "example": 0
+                      },
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "properties": {
+                            "details": {
+                              "type": "string",
+                              "description": "Error details",
+                              "example": "Invalid request due to {Property}"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "304": {
+        "description": "NOT MODIFIED. The data you requested has not been modified since your last GET"
+      },
+      "400": {
+        "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {},
+                  "example": []
+                },
+                "info": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 400,
+                      "description": "Http Code"
+                    }
+                  }
+                },
+                "error": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "Error Type : unique identifier of error type",
+                        "example": "errors:3dx:invalidRequest"
+                      },
+                      "title": {
+                        "type": "string",
+                        "description": "User understandable error message",
+                        "example": "Your request is malformed. Review the API documentation to ensure your request contains required formatting."
+                      },
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "properties": {
+                            "details": {
+                              "type": "string",
+                              "description": "Error details",
+                              "example": "Invalid request due to {Property}"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "UNAUTHORIZED. The request requires user authentication."
+      },
+      "404": {
+        "description": "NOT FOUND. Requested resources was not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {},
+                  "example": []
+                },
+                "info": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 404,
+                      "description": "Http Code"
+                    }
+                  }
+                },
+                "error": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "Error Type : unique identifier of error type",
+                        "example": "errors:3dx:resourceNotFound"
+                      },
+                      "title": {
+                        "type": "string",
+                        "description": "User understandable error message",
+                        "example": "Check that the resource exists and that you have correct access privileges."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "412": {
+        "description": "The precondition specified in the header request has failed. Mostly thrown by If-Match header",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {},
+                  "example": []
+                },
+                "info": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 412,
+                      "description": "Http Code"
+                    }
+                  }
+                },
+                "error": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "Error Type : unique identifier of error type",
+                        "example": "errors:3dx:preconditionFailed"
+                      },
+                      "title": {
+                        "type": "string",
+                        "description": "User understandable error message",
+                        "example": "The precondition specified in the header request has failed."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

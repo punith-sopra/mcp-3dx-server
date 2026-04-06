@@ -1,0 +1,641 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Secure Collections Web Services",
+    "description": "Secure Collections Public REST API.",
+    "summary": "Secure Collections Public REST API.",
+    "version": "1.0.0",
+    "x-ds-copyright": "3DEXPERIENCE R2025x (c) 2025 Dassault Systemes.",
+    "x-ds-service": [
+      "Materials"
+    ]
+  },
+  "servers": [
+    {
+      "url": "{Materials}/resources/v1/seccolmgmt",
+      "variables": {
+        "Materials": {
+          "default": "https://3DEXPERIENCE_Materials",
+          "description": "URL of the Materials Management service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/seccolmgmt/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "Controlled Vocabulary Access",
+      "description": "Retrieve controlled vocabulary items."
+    },
+    {
+      "name": "Secure Collections Management",
+      "description": "Create and Retrieve secure collections."
+    }
+  ],
+  "paths": {
+    "/dictionary/LogicalResponsibilities": {
+      "get": {
+        "tags": [
+          "Controlled Vocabulary Access"
+        ],
+        "summary": "Lists all the supported logical responsibilities",
+        "description": "Retrieves the list of logical responsibilities supported on secure collections.",
+        "operationId": "dictionary/LogicalResponsibilitiesGet",
+        "responses": {
+          "200": {
+            "description": "List of logical responsibilities",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "responsibilities"
+                  ],
+                  "properties": {
+                    "responsibilities": {
+                      "type": "array",
+                      "description": "A list of logical responsibilities",
+                      "uniqueItems": true,
+                      "minItems": 1,
+                      "items": {
+                        "$ref": "#/components/schemas/LogicalResponsibility"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse_403"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse_500"
+          }
+        }
+      }
+    },
+    "/dictionary/LogicalResponsibilities/{responsibilityId}": {
+      "get": {
+        "tags": [
+          "Controlled Vocabulary Access"
+        ],
+        "summary": "Retrieve a logical responsibility",
+        "description": "Retrieve a logical responsibility.\n\n An error is returned if:\n * A logical responsibility that matches the provided identifier is not found.",
+        "operationId": "dictionary/LogicalResponsibilitiesIdGet",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/responsibilityId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved logical responsibility.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogicalResponsibility"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse_400_QueryParam"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse_403"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse_404_Responsibility"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse_500"
+          }
+        }
+      }
+    },
+    "/securecollections": {
+      "post": {
+        "tags": [
+          "Secure Collections Management"
+        ],
+        "summary": "Create a secure collection with members",
+        "description": "Create a secure collection with members.\n\n Nothing is created and an error is returned if:\n * A name is not provided.\n * The name is already used for another secure collection.\n * An agent identifier is not valid.\n * A logical responsibility identifier is not valid.\n * An agent is added with no logical responsibility.",
+        "operationId": "securecollectionsCreate",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/xRequestedWith"
+          }
+        ],
+        "requestBody": {
+          "description": "Secure collection information and logical responsibility assignments.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SecureCollection"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Secure collection created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SecureCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse_400_CollectionName"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse_403"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse_404_ReferenceInBody"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse_500"
+          }
+        }
+      }
+    },
+    "/securecollections/{collectionId}": {
+      "get": {
+        "tags": [
+          "Secure Collections Management"
+        ],
+        "summary": "Retrieve a secure collection with members",
+        "description": "Retrieve a secure collection with members.\n\n An error is returned if:\n * A secure collection that matches the provided identifier is not found.",
+        "operationId": "securecollectionsIdGet",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/collectionId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved secure collection.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SecureCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse_400_QueryParam"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse_403"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse_404_Collection"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse_500"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "collectionId": {
+        "name": "collectionId",
+        "in": "path",
+        "description": "Identifier of the secure collection",
+        "required": true,
+        "schema": {
+          "description": "Secure collection identifier",
+          "type": "string",
+          "format": "uri",
+          "example": "uuid:99ce8e9c-490e-448a-a577-4f5fd1c198ee"
+        }
+      },
+      "responsibilityId": {
+        "name": "responsibilityId",
+        "in": "path",
+        "description": "Identifier of a logical responsibility",
+        "required": true,
+        "schema": {
+          "description": "Responsibility identifier",
+          "type": "string",
+          "format": "uri",
+          "example": "dsbioseccol:LogicalResponsibility.Collaborator"
+        }
+      },
+      "xRequestedWith": {
+        "name": "X-Requested-With",
+        "in": "header",
+        "description": "X-Requested-With header for CSRF.",
+        "required": true,
+        "schema": {
+          "description": "X-Requested-With header. Authorized values: 'XMLHttpRequest' or 'script'.",
+          "type": "string",
+          "enum": [
+            "XMLHttpRequest",
+            "script"
+          ],
+          "example": "XMLHttpRequest"
+        }
+      }
+    },
+    "requestBodies": {},
+    "responses": {
+      "ErrorResponse_400_CollectionName": {
+        "description": "Error: The request is not valid.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Error object",
+              "type": "object",
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error message to display to the user (localized)",
+                  "example": "Secure collections must have a name."
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse_400_QueryParam": {
+        "description": "Error: The request is not valid.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Error object",
+              "type": "object",
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error message to display to the user (localized)",
+                  "example": "Query parameter not valid."
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse_403": {
+        "description": "Error: The user is not authorized to perform the operation.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Error object",
+              "type": "object",
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error message to display to the user (localized)",
+                  "example": "The user is not authorized to call this web-service."
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse_404_Collection": {
+        "description": "Error: The specified secure collection is not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Error object",
+              "type": "object",
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error message to display to the user (localized)",
+                  "example": "The specified secure collection was not found."
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse_404_Responsibility": {
+        "description": "Error: The specified logical responsibility is not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Error object",
+              "type": "object",
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error message to display to the user (localized)",
+                  "example": "The specified logical responsibility was not found."
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse_404_ReferenceInBody": {
+        "description": "Error: A specified user, group or logical responsibility is not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Error object",
+              "type": "object",
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error message to display to the user (localized)",
+                  "example": "The specified user or group was not found."
+                }
+              }
+            }
+          }
+        }
+      },
+      "CAA_ErrorResponse_409": {
+        "description": "Error: The operation cannot be performed because it would generate a conflict.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Error object",
+              "type": "object",
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error message to display to the user (localized)",
+                  "example": "The name provided for the secure collection is already used for another secure collection."
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse_500": {
+        "description": "Error: Internal server error.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Error object",
+              "type": "object",
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error message to display to the user (localized)",
+                  "example": "Unexpected error."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "User": {
+        "description": "A user",
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "source",
+          "relativePath"
+        ],
+        "properties": {
+          "id": {
+            "description": "User identifier",
+            "type": "string",
+            "format": "uri",
+            "example": "uuid:99ce8e9c-490e-448a-a577-4f5fd1c198ee"
+          },
+          "type": {
+            "description": "Object type",
+            "type": "string",
+            "format": "uri",
+            "enum": [
+              "pno:Person"
+            ],
+            "example": "pno:Person"
+          },
+          "source": {
+            "description": "Object source",
+            "readOnly": true,
+            "type": "string",
+            "format": "url",
+            "example": "https://3DEXPERIENCE_3DSwym"
+          },
+          "relativePath": {
+            "description": "Object path on source",
+            "readOnly": true,
+            "type": "string",
+            "format": "uri",
+            "example": "/api/user/find/login/99ce8e9c-490e-448a-a577-4f5fd1c198ee"
+          }
+        }
+      },
+      "Agent": {
+        "description": "An agent that can be a group or a single user.",
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/User"
+          },
+          {
+            "description": "A group",
+            "type": "object",
+            "required": [
+              "id",
+              "type"
+            ],
+            "properties": {
+              "id": {
+                "description": "Group identifier",
+                "type": "string",
+                "format": "uri",
+                "example": "uuid:99ce8e9c-490e-448a-a577-4f5fd1c198ee"
+              },
+              "type": {
+                "description": "Object type",
+                "readOnly": true,
+                "type": "string",
+                "format": "uri",
+                "enum": [
+                  "foaf:Group"
+                ],
+                "example": "foaf:Group"
+              }
+            }
+          }
+        ]
+      },
+      "LogicalResponsibility": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description"
+        ],
+        "properties": {
+          "id": {
+            "description": "Responsibility identifier",
+            "type": "string",
+            "format": "uri",
+            "example": "dsbioseccol:LogicalResponsibility.Collaborator"
+          },
+          "name": {
+            "description": "Responsibility name (localized)",
+            "readOnly": true,
+            "type": "string",
+            "example": "Collaborator"
+          },
+          "description": {
+            "description": "Responsibility description (localized)",
+            "readOnly": true,
+            "type": "string",
+            "example": "Allows to view and edit all the objects in the secure collection."
+          }
+        }
+      },
+      "SecureCollection": {
+        "description": "A secure collection with members",
+        "type": "object",
+        "required": [
+          "id",
+          "etag",
+          "creationDate",
+          "modificationDate",
+          "owner",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "description": "Secure collection identifier",
+            "readOnly": true,
+            "type": "string",
+            "format": "uri",
+            "example": "uuid:3409d2fe-df58-460f-923a-100449809c97"
+          },
+          "etag": {
+            "description": "Secure collection etag.",
+            "readOnly": true,
+            "type": "string",
+            "format": "uuid",
+            "example": "dc3f7b88-40b6-40d9-9bc2-a16207a953d0"
+          },
+          "creationDate": {
+            "description": "Date of creation of the secure collection.",
+            "readOnly": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          "modificationDate": {
+            "description": "Date of the latest modification of the secure collection.",
+            "readOnly": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          "owner": {
+            "allOf": [
+              {
+                "readOnly": true
+              },
+              {
+                "$ref": "#/components/schemas/User"
+              }
+            ]
+          },
+          "name": {
+            "type": "string",
+            "example": "My secure collection"
+          },
+          "description": {
+            "type": "string",
+            "example": "This is a secure collection to easily grant access to all my objects at once."
+          },
+          "members": {
+            "description": "Members of the secure collection",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "description": "An agent with responsibilities",
+              "type": "object",
+              "required": [
+                "agent",
+                "responsibilities"
+              ],
+              "properties": {
+                "agent": {
+                  "$ref": "#/components/schemas/Agent"
+                },
+                "responsibilities": {
+                  "type": "array",
+                  "description": "A list of responsibilities",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "description": "Type info for responsibility objects",
+                    "type": "object",
+                    "required": [
+                      "id"
+                    ],
+                    "properties": {
+                      "id": {
+                        "description": "Responsibility identifier",
+                        "type": "string",
+                        "format": "uri",
+                        "example": "dsbioseccol:LogicalResponsibility.Collaborator"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

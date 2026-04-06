@@ -1,0 +1,4065 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Project Template Web Services",
+    "description": "Web Services for managing the Project Template modeler.",
+    "version": "1.2.0",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3dspace.mydomain:443/3DSpace/",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dspm:projecttemplate/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/projecttemplates/search": {
+      "get": {
+        "summary": "Search Project Templates using the provided input string.",
+        "description": "",
+        "operationId": "searchProjectTemplates",
+        "tags": [
+          "Search"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-projecttemplates"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "searchStr",
+            "description": "Search Criteria; 2 or more characters required.",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "description": "The number of objects to return; default 50; max 1000",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "description": "The number of objects to skip in case of paginating through the serach results; default 0",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]ownerInfo, [!]originatorInfo, [!]tasks, [!]members, [!]subTypesInfo, [!]subTypesAndPolicies, [!]folders, [!]questions, [!]calendar, [!]predecessors, [!]references, [!]deliverables, [!]route, [!]contents, [!]assignees, [!]candidateAssignees, [!]checklistReferences, [!]content, [!]sovaccess, [!]questionTasks</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projecttemplates/{projecttemplateId}": {
+      "get": {
+        "summary": "Get a specific Project Template detail and related data.",
+        "description": "",
+        "operationId": "getProjectTemplateInfo",
+        "tags": [
+          "Project Template"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-projecttemplates"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "projecttemplateId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]ownerInfo, [!]originatorInfo, [!]tasks, [!]members, [!]subTypesInfo, [!]subTypesAndPolicies, [!]folders, [!]questions, [!]calendar, [!]predecessors, [!]references, [!]deliverables, [!]route, [!]contents, [!]assignees, [!]candidateAssignees, [!]checklistReferences, [!]content, [!]sovaccess, [!]questionTasks</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update Project Templates and related data.",
+        "description": "",
+        "operationId": "updateProjectTemplateInfo",
+        "tags": [
+          "Project Template"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-projecttemplates"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/projecttemplates"
+        },
+        "parameters": [
+          {
+            "name": "projecttemplateId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]ownerInfo, [!]originatorInfo, [!]tasks, [!]members, [!]subTypesInfo, [!]subTypesAndPolicies, [!]folders, [!]questions, [!]calendar, [!]predecessors, [!]references, [!]deliverables, [!]route, [!]contents, [!]assignees, [!]candidateAssignees, [!]checklistReferences, [!]content, [!]sovaccess, [!]questionTasks</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete the given Project Template.",
+        "description": "",
+        "operationId": "deleteProjectTemplate",
+        "tags": [
+          "Project Template"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "projecttemplateId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/projecttemplates": {
+      "post": {
+        "summary": "Create Project Templates and related data.",
+        "description": "",
+        "operationId": "createProjectTemplates",
+        "tags": [
+          "Project Template"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200-projecttemplates"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/projecttemplates"
+        },
+        "parameters": [
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]ownerInfo, [!]originatorInfo, [!]tasks, [!]members, [!]subTypesInfo, [!]subTypesAndPolicies, [!]folders, [!]questions, [!]calendar, [!]predecessors, [!]references, [!]deliverables, [!]route, [!]contents, [!]assignees, [!]candidateAssignees, [!]checklistReferences, [!]content, [!]sovaccess, [!]questionTasks</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "projecttemplates": {
+        "$ref": "#/components/x-schemas/projecttemplates"
+      }
+    },
+    "x-schemas": {
+      "checklists": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "checklistReferences": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/checklistReferences"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "preview": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {}
+        ]
+      },
+      "predecessors": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "PALId": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "lagTime": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "dependencyType": {
+                    "default": "FS",
+                    "type": "string",
+                    "enum": [
+                      "FS",
+                      "SF",
+                      "FF",
+                      "SS"
+                    ]
+                  },
+                  "lagTimeInputUnit": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "lagTimeInputValue": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "From": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "predTaskSeqNumber": {
+                    "description": "the predecessor task sequence id.",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "To": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "predProjectName": {
+                    "default": "",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "predProjectId": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "folders": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "accessType": {
+                    "description": "can only be specified during create",
+                    "default": "Inherited",
+                    "type": "string",
+                    "enum": [
+                      "Inherited",
+                      "Specific"
+                    ]
+                  },
+                  "folderClassification": {
+                    "description": "can only be specified during create",
+                    "default": "Shared",
+                    "type": "string",
+                    "enum": [
+                      "Shared",
+                      "Personal",
+                      "Bookmark"
+                    ]
+                  },
+                  "title": {
+                    "description": "can only be specified during create",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "originated": {
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  "modifyAccess": {
+                    "type": "string"
+                  },
+                  "addAccess": {
+                    "type": "string"
+                  },
+                  "removeAccess": {
+                    "type": "string"
+                  },
+                  "deleteAccess": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string",
+                    "enum": [
+                      "Create",
+                      "Active",
+                      "Review",
+                      "Complete",
+                      "Archive"
+                    ]
+                  },
+                  "project": {
+                    "type": "string"
+                  },
+                  "organization": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/content"
+                    }
+                  },
+                  "sovaccess": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/sovaccess"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "locate": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "tasks": {
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "$ref": "#/components/x-schemas/locateTasks"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "description": "Retrieve tasks for upto 100 Deliverables or References or both.",
+            "readOnly": true
+          }
+        ]
+      },
+      "references": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "created": {
+                    "format": "date-time",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "format": "date-time",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "firstname": {
+                    "description": "the person's first name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "lastname": {
+                    "description": "the person's last name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "fullname": {
+                    "description": "the person's full name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "policy": {
+                    "description": "required to support state NLS",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "stateNLS": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "typeNLS": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "collabSpace": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "collabSpaceTitle": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "organization": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "organizationTitle": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "ownerFullname": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "linkURL": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "hasfiles": {
+                    "description": "determines whether the object has a file checked in any format",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "type": "string",
+                      "readOnly": true
+                    }
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "type": "string",
+                      "readOnly": true
+                    }
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "isKindOfDOCUMENTS": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "isKindOfURL": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "isVersionObject": {
+                    "default": "False",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "True",
+                      "False"
+                    ]
+                  },
+                  "ObjectId": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "classes": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "default": "",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "successors": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "PALId": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "lagTime": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "dependencyType": {
+                    "default": "FS",
+                    "type": "string",
+                    "enum": [
+                      "FS",
+                      "SF",
+                      "FF",
+                      "SS"
+                    ]
+                  },
+                  "lagTimeInputUnit": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "lagTimeInputValue": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "From": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "predTaskSeqNumber": {
+                    "description": "the predecessor task sequence id.",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "To": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "predProjectName": {
+                    "default": "",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "predProjectId": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "Assignments": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "TaskId": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "icon": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "TaskProjectId": {
+                    "type": "string"
+                  },
+                  "Name": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "percentComplete": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "estimatedStartDate": {
+                    "example": "2025-05-09T12:43:00.000",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "dueDate": {
+                    "example": "2025-05-09T12:43:00.000",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "estimatedDurationInputValue": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "owner": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "allocation": {
+                    "default": "100.0",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "assigneeRole": {
+                    "default": "Task Assignee",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "Task Assignee",
+                      "Task Owner",
+                      "Task Reviewer"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "questions": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "comment": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "expectedResponse": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "questionResponse": {
+                    "description": "This field is just to capture question response.",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "questionTasks": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/questionTasks"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "ownerInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "fullname": {
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "name": {
+                    "description": "The user account name",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "firstname": {
+                    "description": "The user's first name",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "lastname": {
+                    "description": "The user's last name",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "email": {
+                    "description": "The user's email address",
+                    "default": "Unknown",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "calendar": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/calendar"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "assignees": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The user account name",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "firstname": {
+                    "description": "The user's first name",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "lastname": {
+                    "description": "The user's last name",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "email": {
+                    "description": "The user's email address",
+                    "default": "Unknown",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "calendar": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/calendar"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "locateTasks": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "readOnly": true
+          }
+        ]
+      },
+      "sendNotification": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {}
+        ]
+      },
+      "subTypesAndPolicies": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {}
+        ]
+      },
+      "issues": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "(unique discriminator only, Projects and Tasks are not revisioned)",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "description": "Description of the object.",
+                    "type": "string"
+                  },
+                  "state": {
+                    "description": "Current lifecycle state",
+                    "type": "string",
+                    "enum": [
+                      "Create",
+                      "Assign",
+                      "Active",
+                      "Review",
+                      "Complete",
+                      "Archive",
+                      "Hold",
+                      "Cancel"
+                    ],
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "format": "date-time",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "format": "date-time",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "estimatedStartDate": {
+                    "description": "Object start date target",
+                    "example": "2025-05-09T12:43:00.000",
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "estimatedFinishDate": {
+                    "description": "Object completion date target",
+                    "example": "2025-05-09T12:43:00.000",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "problemType": {
+                    "description": "Classification of problem or issue source.",
+                    "default": "Not Determined",
+                    "type": "string",
+                    "enum": [
+                      "Not Determined",
+                      "3rd Party",
+                      "Defect",
+                      "Ease of Use",
+                      "Functionality",
+                      "Licensing",
+                      "Installation",
+                      "Mistake",
+                      "Performance",
+                      "Platform",
+                      "Training",
+                      "Usage Model"
+                    ]
+                  },
+                  "priority": {
+                    "description": "Relative severity of the issue.",
+                    "default": "Low",
+                    "type": "string",
+                    "enum": [
+                      "Pre-assigned",
+                      "Low",
+                      "Medium",
+                      "High",
+                      "Urgent"
+                    ]
+                  },
+                  "priorityInternal": {
+                    "description": "Internal priority ranking.",
+                    "default": "Unassigned",
+                    "type": "string",
+                    "enum": [
+                      "Unassigned",
+                      "P0",
+                      "P1",
+                      "P2",
+                      "P3"
+                    ]
+                  },
+                  "actionTaken": {
+                    "description": "Description of the action taken.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "resolution": {
+                    "description": "Description of the resolution status.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "steps": {
+                    "description": "Description of the steps needed to reproduce.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "policy": {
+                    "description": "The policy of the object.",
+                    "type": "string",
+                    "readOnly": true,
+                    "enum": [
+                      "Project Space"
+                    ]
+                  },
+                  "modifyAccess": {
+                    "description": "Whether the user has modify access to the Project.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "deleteAccess": {
+                    "description": "Whether the user has delete access to the Project.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "project": {
+                    "description": "Collaborative Space (project) the Project was created in.",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "assignees": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/assignees"
+                    }
+                  },
+                  "ownerInfo": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  },
+                  "originatorInfo": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/originatorInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "description": "provides issues linked to a task"
+          }
+        ]
+      },
+      "deliverables": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "created": {
+                    "format": "date-time",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "format": "date-time",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "firstname": {
+                    "description": "the person's first name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "lastname": {
+                    "description": "the person's last name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "fullname": {
+                    "description": "the person's full name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "policy": {
+                    "description": "required to support state NLS",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "stateNLS": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "typeNLS": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "collabSpace": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "collabSpaceTitle": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "organization": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "organizationTitle": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "ownerFullname": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "linkURL": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "hasfiles": {
+                    "description": "determines whether the object has a file checked in any format",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "type": "string",
+                      "readOnly": true
+                    }
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "type": "string",
+                      "readOnly": true
+                    }
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "isKindOfDOCUMENTS": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "isKindOfURL": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "isVersionObject": {
+                    "default": "False",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "True",
+                      "False"
+                    ]
+                  },
+                  "ObjectId": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "referenceId": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {}
+        ]
+      },
+      "content": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "title": {
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "created": {
+                    "format": "date-time",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "format": "date-time",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "firstname": {
+                    "description": "the person's first name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "lastname": {
+                    "description": "the person's last name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "fullname": {
+                    "description": "the person's full name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "policy": {
+                    "description": "required to support state NLS",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "stateNLS": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "typeNLS": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "collabSpace": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "collabSpaceTitle": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "organization": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "organizationTitle": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "ownerFullname": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "linkURL": {
+                    "description": "Conditional - applies to links/favorites",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "hasfiles": {
+                    "description": "determines whether the object has a file checked in any format",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "type": "string",
+                      "readOnly": true
+                    }
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "type": "string",
+                      "readOnly": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "linkURLs": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "policy": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "linkURL": {
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "search": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "state": {
+                    "description": "Current lifecycle state",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "format": "date-time",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "format": "date-time",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "members": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The user account name",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "firstname": {
+                    "description": "The user's first name",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "lastname": {
+                    "description": "The user's last name",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "email": {
+                    "description": "The user's email address",
+                    "default": "Unknown",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "projectAccess": {
+                    "default": "Project Member",
+                    "type": "string",
+                    "readOnly": true,
+                    "enum": [
+                      "Project Lead",
+                      "Project Member",
+                      "Financial Reviewer",
+                      "Project Owner",
+                      "Project Assessor"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "calendar": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/calendar"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "sovaccess": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "orgnization": {
+                    "type": "string"
+                  },
+                  "project": {
+                    "type": "string"
+                  },
+                  "person": {
+                    "type": "string"
+                  },
+                  "access": {
+                    "type": "string"
+                  },
+                  "comment": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "copy": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {}
+        ]
+      },
+      "co-owners": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "default": "Unknown",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "projecttemplates": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "description": "(unique discriminator only, Projects and Tasks are not revisioned)",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "description": "Description of the object.",
+                    "type": "string"
+                  },
+                  "state": {
+                    "description": "Current lifecycle state",
+                    "type": "string",
+                    "enum": [
+                      "Create",
+                      "Assign",
+                      "Active",
+                      "Review",
+                      "Complete",
+                      "Archive",
+                      "Hold",
+                      "Cancel"
+                    ],
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "originated": {
+                    "description": "The creation date of the object.",
+                    "format": "date-time",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "description": "Date of last modification to any object information.",
+                    "format": "date-time",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "nlsType": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "estimatedDurationInputValue": {
+                    "description": "Duration value",
+                    "default": "0.0",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "estimatedDurationInputUnit": {
+                    "description": "Duration unit",
+                    "default": "0.0",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "estimatedDuration": {
+                    "description": "Estimated duration",
+                    "default": "0.0",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (No), Read (Yes), Modify (Yes)"
+                  },
+                  "constraintType": {
+                    "description": "Reflects ASAP or ALAP depending on schedule from.",
+                    "default": "Project Start Date",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "Project Finish Date",
+                      "Project Start Date"
+                    ],
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "defaultConstraintType": {
+                    "description": "Constraint type",
+                    "default": "As Soon As Possible",
+                    "type": "string",
+                    "enum": [
+                      "As Soon As Possible",
+                      "As Late As Possible"
+                    ]
+                  },
+                  "scheduleFrom": {
+                    "description": "Scheduling type",
+                    "default": "Project Start Date",
+                    "type": "string",
+                    "enum": [
+                      "Project Finish Date",
+                      "Project Start Date"
+                    ]
+                  },
+                  "currency": {
+                    "description": "Currency type",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "AED-UAE Dirham-UNITED ARAB EMIRATES (THE)",
+                      "AFN-Afghani-AFGHANISTAN",
+                      "ALL-Lek-ALBANIA",
+                      "AMD-Armenian Dram-ARMENIA",
+                      "ANG-Netherlands Antillean Guilder-SINT MAARTEN (DUTCH PART)",
+                      "AOA-Kwanza-ANGOLA",
+                      "ARS-Argentine Peso-ARGENTINA",
+                      "AUD-Australian Dollar-AUSTRALIA",
+                      "AWG-Aruban Florin-ARUBA",
+                      "AZN-Azerbaijan Manat-AZERBAIJAN",
+                      "BAM-Convertible Mark-BOSNIA AND HERZEGOVINA",
+                      "BBD-Barbados Dollar-BARBADOS",
+                      "BDT-Taka-BANGLADESH",
+                      "BGN-Bulgarian Lev-BULGARIA",
+                      "BHD-Bahraini Dinar-BAHRAIN",
+                      "BIF-Burundi Franc-BURUNDI",
+                      "BMD-Bermudian Dollar-BERMUDA",
+                      "BND-Brunei Dollar-BRUNEI DARUSSALAM",
+                      "BOB-Boliviano-BOLIVIA (PLURINATIONAL STATE OF)",
+                      "BOV-Mvdol-BOLIVIA (PLURINATIONAL STATE OF)",
+                      "BRL-Brazilian Real-BRAZIL",
+                      "BSD-Bahamian Dollar-BAHAMAS (THE)",
+                      "BTN-Ngultrum-BHUTAN",
+                      "BWP-Pula-BOTSWANA",
+                      "BYN-Belarusian Ruble-BELARUS",
+                      "BZD-Belize Dollar-BELIZE",
+                      "CAD-Canadian Dollar-CANADA",
+                      "CDF-Congolese Franc-CONGO (THE DEMOCRATIC REPUBLIC OF THE)",
+                      "CHE-WIR Euro-SWITZERLAND",
+                      "CHF-Swiss Franc-SWITZERLAND",
+                      "CHW-WIR Franc-SWITZERLAND",
+                      "CLF-Unidad de Fomento-CHILE",
+                      "CLP-Chilean Peso-CHILE",
+                      "COP-Colombian Peso-COLOMBIA",
+                      "COU-Unidad de Valor Real-COLOMBIA",
+                      "CRC-Costa Rican Colon-COSTA RICA",
+                      "CUC-Peso Convertible-CUBA",
+                      "CUP-Cuban Peso-CUBA",
+                      "CVE-Cabo Verde Escudo-CABO VERDE",
+                      "CZK-Czech Koruna-CZECHIA",
+                      "DJF-Djibouti Franc-DJIBOUTI",
+                      "DKK-Danish Krone-DENMARK",
+                      "DOP-Dominican Peso-DOMINICAN REPUBLIC (THE)",
+                      "DZD-Algerian Dinar-ALGERIA",
+                      "Dollar",
+                      "EGP-Egyptian Pound-EGYPT",
+                      "ERN-Nakfa-ERITREA",
+                      "ETB-Ethiopian Birr-ETHIOPIA",
+                      "Euro",
+                      "FJD-Fiji Dollar-FIJI",
+                      "FKP-Falkland Islands Pound-FALKLAND ISLANDS (THE)",
+                      "GEL-Lari-GEORGIA",
+                      "GHS-Ghana Cedi-GHANA",
+                      "GIP-Gibraltar Pound-GIBRALTAR",
+                      "GMD-Dalasi-GAMBIA (THE)",
+                      "GNF-Guinean Franc-GUINEA",
+                      "GTQ-Quetzal-GUATEMALA",
+                      "GYD-Guyana Dollar-GUYANA",
+                      "HKD-Hong Kong Dollar-HONG KONG",
+                      "HNL-Lempira-HONDURAS",
+                      "HRK-Kuna-CROATIA",
+                      "HTG-Gourde-HAITI",
+                      "HUF-Forint-HUNGARY",
+                      "IDR-Rupiah-INDONESIA",
+                      "ILS-New Israeli Sheqel-ISRAEL",
+                      "INR-Indian Rupee-INDIA",
+                      "IQD-Iraqi Dinar-IRAQ",
+                      "IRR-Iranian Rial-IRAN (ISLAMIC REPUBLIC OF)",
+                      "ISK-Iceland Krona-ICELAND",
+                      "JMD-Jamaican Dollar-JAMAICA",
+                      "JOD-Jordanian Dinar-JORDAN",
+                      "KES-Kenyan Shilling-KENYA",
+                      "KGS-Som-KYRGYZSTAN",
+                      "KHR-Riel-CAMBODIA",
+                      "KMF-Comorian Franc-COMOROS (THE)",
+                      "KPW-North Korean Won-KOREA (THE DEMOCRATIC PEOPLES REPUBLIC OF)",
+                      "KWD-Kuwaiti Dinar-KUWAIT",
+                      "KYD-Cayman Islands Dollar-CAYMAN ISLANDS (THE)",
+                      "KZT-Tenge-KAZAKHSTAN",
+                      "LAK-Lao Kip-LAO PEOPLES DEMOCRATIC REPUBLIC (THE)",
+                      "LBP-Lebanese Pound-LEBANON",
+                      "LKR-Sri Lanka Rupee-SRI LANKA",
+                      "LRD-Liberian Dollar-LIBERIA",
+                      "LSL-Loti-LESOTHO",
+                      "LYD-Libyan Dinar-LIBYA",
+                      "MAD-Moroccan Dirham-MOROCCO",
+                      "MDL-Moldovan Leu-MOLDOVA (THE REPUBLIC OF)",
+                      "MGA-Malagasy Ariary-MADAGASCAR",
+                      "MKD-Denar-MACEDONIA (THE FORMER YUGOSLAV REPUBLIC OF)",
+                      "MMK-Kyat-MYANMAR",
+                      "MNT-Tugrik-MONGOLIA",
+                      "MOP-Pataca-MACAO",
+                      "MRU-Ouguiya-MAURITANIA",
+                      "MUR-Mauritius Rupee-MAURITIUS",
+                      "MVR-Rufiyaa-MALDIVES",
+                      "MWK-Malawi Kwacha-MALAWI",
+                      "MXN-Mexican Peso-MEXICO",
+                      "MXV-Mexican Unidad de Inversion (UDI)-MEXICO",
+                      "MYR-Malaysian Ringgit-MALAYSIA",
+                      "MZN-Mozambique Metical-MOZAMBIQUE",
+                      "NAD-Namibia Dollar-NAMIBIA",
+                      "NGN-Naira-NIGERIA",
+                      "NIO-Cordoba Oro-NICARAGUA",
+                      "NOK-Norwegian Krone-NORWAY",
+                      "NPR-Nepalese Rupee-NEPAL",
+                      "NZD-New Zealand Dollar-NEW ZEALAND",
+                      "OMR-Rial Omani-OMAN",
+                      "PAB-Balboa-PANAMA",
+                      "PEN-Sol-PERU",
+                      "PGK-Kina-PAPUA NEW GUINEA",
+                      "PHP-Philippine Peso-PHILIPPINES (THE)",
+                      "PKR-Pakistan Rupee-PAKISTAN",
+                      "PLN-Zloty-POLAND",
+                      "PYG-Guarani-PARAGUAY",
+                      "Pound",
+                      "QAR-Qatari Rial-QATAR",
+                      "RON-Romanian Leu-ROMANIA",
+                      "RSD-Serbian Dinar-SERBIA",
+                      "RUB-Russian Ruble-RUSSIAN FEDERATION (THE)",
+                      "RWF-Rwanda Franc-RWANDA",
+                      "SAR-Saudi Riyal-SAUDI ARABIA",
+                      "SBD-Solomon Islands Dollar-SOLOMON ISLANDS",
+                      "SCR-Seychelles Rupee-SEYCHELLES",
+                      "SDG-Sudanese Pound-SUDAN (THE)",
+                      "SEK-Swedish Krona-SWEDEN",
+                      "SGD-Singapore Dollar-SINGAPORE",
+                      "SHP-Saint Helena Pound-SAINT HELENA ASCENSION AND TRISTAN DA CUNHA",
+                      "SLL-Leone-SIERRA LEONE",
+                      "SOS-Somali Shilling-SOMALIA",
+                      "SRD-Surinam Dollar-SURINAME",
+                      "SSP-South Sudanese Pound-SOUTH SUDAN",
+                      "STN-Dobra-SAO TOME AND PRINCIPE",
+                      "SVC-El Salvador Colon-EL SALVADOR",
+                      "SYP-Syrian Pound-SYRIAN ARAB REPUBLIC",
+                      "SZL-Lilangeni-ESWATINI",
+                      "THB-Baht-THAILAND",
+                      "TJS-Somoni-TAJIKISTAN",
+                      "TMT-Turkmenistan New Manat-TURKMENISTAN",
+                      "TND-Tunisian Dinar-TUNISIA",
+                      "TOP-Paanga-TONGA",
+                      "TRY-Turkish Lira-TURKEY",
+                      "TTD-Trinidad and Tobago Dollar-TRINIDAD AND TOBAGO",
+                      "TWD-New Taiwan Dollar-TAIWAN (PROVINCE OF CHINA)",
+                      "TZS-Tanzanian Shilling-TANZANIA UNITED REPUBLIC OF",
+                      "UAH-Hryvnia-UKRAINE",
+                      "UGX-Uganda Shilling-UGANDA",
+                      "USN-US Dollar (Next day)-UNITED STATES OF AMERICA (THE)",
+                      "UYI-Uruguay Peso en Unidades Indexadas (UI)-URUGUAY",
+                      "UYU-Peso Uruguayo-URUGUAY",
+                      "UYW-Unidad Previsional-URUGUAY",
+                      "UZS-Uzbekistan Sum-UZBEKISTAN",
+                      "Unassigned",
+                      "VES-Bolivar Soberano-VENEZUELA (BOLIVARIAN REPUBLIC OF)",
+                      "VND-Dong-VIET NAM",
+                      "VUV-Vatu-VANUATU",
+                      "WST-Tala-SAMOA",
+                      "Won",
+                      "XAF-CFA Franc BEAC-CENTRAL AFRICAN REPUBLIC (THE)",
+                      "XCD-East Caribbean Dollar-ANTIGUA AND BARBUDA",
+                      "XDR-SDR (Special Drawing Right)-INTERNATIONAL MONETARY FUND (IMF)",
+                      "XOF-CFA Franc BCEAO-BENIN",
+                      "XPF-CFP Franc-FRENCH POLYNESIA",
+                      "XSU-Sucre-SISTEMA UNITARIO DE COMPENSACION REGIONAL DE PAGOS SUCRE",
+                      "XUA-ADB Unit of Account-MEMBER COUNTRIES OF THE AFRICAN DEVELOPMENT BANK GROUP",
+                      "YER-Yemeni Rial-YEMEN",
+                      "Yen",
+                      "Yuan Renminbi",
+                      "ZAR-Rand-SOUTH AFRICA",
+                      "ZMW-Zambian Kwacha-ZAMBIA",
+                      "ZWL-Zimbabwe Dollar-ZIMBABWE"
+                    ]
+                  },
+                  "notes": {
+                    "description": "Notes",
+                    "default": "",
+                    "type": "string",
+                    "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+                  },
+                  "PALId": {
+                    "description": "The Project Access List object (used for some navigation)",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "objectId": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "sourceId": {
+                    "default": "",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "sequenceOrder": {
+                    "description": "the task sequence id within a project.",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "ownerInfo": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  },
+                  "originatorInfo": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/originatorInfo"
+                    }
+                  },
+                  "tasks": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/tasks"
+                    }
+                  },
+                  "members": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/members"
+                    }
+                  },
+                  "subTypesInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/subTypesInfo"
+                    }
+                  },
+                  "subTypesAndPolicies": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/subTypesAndPolicies"
+                    }
+                  },
+                  "folders": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/folders"
+                    }
+                  },
+                  "questions": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/questions"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "tasks": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "The name/title of the task.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "revision": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "originated": {
+                    "description": "The originated date of the task.",
+                    "format": "date-time",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modifyAccess": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "deleteAccess": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "changeSOVAccess": {
+                    "description": "Whether the user has change secondary Ownership access to the Task.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "description": "The current maturity of the object.",
+                    "type": "string",
+                    "enum": [
+                      "Create",
+                      "Assign",
+                      "Active",
+                      "Review",
+                      "Complete",
+                      "Create",
+                      "Review",
+                      "Complete"
+                    ]
+                  },
+                  "project": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "format": "date-time",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "hasProject": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "taskRequirement": {
+                    "type": "string",
+                    "enum": [
+                      "Optional",
+                      "Mandatory"
+                    ]
+                  },
+                  "taskWeightage": {
+                    "description": "the task Weightage within a project.",
+                    "default": "0",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "notes": {
+                    "description": "Additional notes associated to the task",
+                    "default": "",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "needsReview": {
+                    "default": "No",
+                    "type": "string",
+                    "enum": [
+                      "No",
+                      "Yes"
+                    ]
+                  },
+                  "percentComplete": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "estimatedStartDate": {
+                    "example": "2025-05-09T12:43:00.000",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "dueDate": {
+                    "example": "2025-05-09T12:43:00.000",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "estimatedDurationInputValue": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "estimatedDurationInputUnit": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "estimatedDuration": {
+                    "default": "0.0",
+                    "type": "string"
+                  },
+                  "actualStartDate": {
+                    "example": "2025-05-09T12:43:00.000",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "actualFinishDate": {
+                    "example": "2025-05-09T12:43:00.000",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "actualDuration": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "forecastStartDate": {
+                    "example": "2025-05-09T12:43:00.000",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "forecastFinishDate": {
+                    "example": "2025-05-09T12:43:00.000",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "forecastDuration": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "constraintType": {
+                    "default": "",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "As Soon As Possible",
+                      "As Late As Possible",
+                      "Finish No Earlier Than",
+                      "Finish No Later Than",
+                      "Must Finish On",
+                      "Must Start On",
+                      "Start No Earlier Than",
+                      "Start No Later Than"
+                    ]
+                  },
+                  "constraintDate": {
+                    "example": "2025-05-09T12:43:00.000",
+                    "default": "",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "scheduleFrom": {
+                    "default": "Project Start Date",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "Project Finish Date",
+                      "Project Start Date"
+                    ]
+                  },
+                  "scheduleBasedOn": {
+                    "default": "Estimated",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "Forecast",
+                      "Actual",
+                      "Estimated"
+                    ]
+                  },
+                  "projectVisibility": {
+                    "default": "Members",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "Company",
+                      "Members"
+                    ]
+                  },
+                  "routeTaskRouteId": {
+                    "type": "string"
+                  },
+                  "routeTaskInstructions": {
+                    "description": "Route Task Instructions for route-based tasks.",
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "routeTaskAction": {
+                    "default": "Comment",
+                    "type": "string",
+                    "readOnly": true,
+                    "enum": [
+                      "Comment",
+                      "Approve",
+                      "Information Only",
+                      "Notify Only",
+                      "Investigate"
+                    ]
+                  },
+                  "routeTaskDueDate": {
+                    "format": "date-time",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "routeTaskActualFinishDate": {
+                    "format": "date-time",
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "routeTaskDelegationAllowed": {
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true,
+                    "enum": [
+                      "True",
+                      "False"
+                    ]
+                  },
+                  "routeTaskAssigneeSetDueDate": {
+                    "default": "No",
+                    "type": "string",
+                    "readOnly": true,
+                    "enum": [
+                      "Yes",
+                      "No"
+                    ]
+                  },
+                  "routeTaskApprovalAction": {
+                    "type": "string",
+                    "enum": [
+                      "Approve",
+                      "Reject",
+                      "Abstain",
+                      "None",
+                      "Auto Complete"
+                    ]
+                  },
+                  "routeTaskApprovalComments": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "routeTaskReviewerComments": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "routeTaskRequiresESign": {
+                    "default": "False",
+                    "type": "string",
+                    "enum": [
+                      "False",
+                      "True"
+                    ]
+                  },
+                  "restrictMember": {
+                    "default": "All",
+                    "type": "string"
+                  },
+                  "userGroupMember": {
+                    "type": "string"
+                  },
+                  "assigneeId": {
+                    "type": "string"
+                  },
+                  "assigneeType": {
+                    "type": "string"
+                  },
+                  "assigneePID": {
+                    "type": "string"
+                  },
+                  "taskAssigneeUsername": {
+                    "type": "string"
+                  },
+                  "routeOwner": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "policy": {
+                    "type": "string",
+                    "readOnly": true,
+                    "enum": [
+                      "Project Task",
+                      "Project Task",
+                      "Project Review",
+                      "Project Review"
+                    ]
+                  },
+                  "freeFloat": {
+                    "description": "Free Float value",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "totalFloat": {
+                    "description": "Total Float value",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "isOverallCritical": {
+                    "description": "isOverallCritical",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "False",
+                      "True"
+                    ]
+                  },
+                  "nlsType": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "calculateDuration": {
+                    "default": "No",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "Yes",
+                      "No"
+                    ]
+                  },
+                  "taskCompletionType": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "Cancelled",
+                      "Not Applicable"
+                    ]
+                  },
+                  "expectedEndDate": {
+                    "example": "2025-05-09T12:43:00.000",
+                    "default": "",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "isTypeGate": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "isTypeMilestone": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "sourceId": {
+                    "default": "",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "restrictAssigneeAccess": {
+                    "default": "No",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "Yes",
+                      "No"
+                    ]
+                  },
+                  "passiveSubtask": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "criticalTask": {
+                    "default": "FALSE",
+                    "type": "string",
+                    "enum": [
+                      "TRUE",
+                      "FALSE"
+                    ]
+                  },
+                  "status": {
+                    "description": "It provides scheduling information depending on dates.",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "sequenceOrder": {
+                    "description": "the task sequence id within a project.",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "taskWBS": {
+                    "description": "the task WBS within a project.",
+                    "default": "1",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "predecessors": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/predecessors"
+                    }
+                  },
+                  "ownerInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/ownerInfo"
+                    }
+                  },
+                  "originatorInfo": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/originatorInfo"
+                    }
+                  },
+                  "references": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/references"
+                    }
+                  },
+                  "deliverables": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/deliverables"
+                    }
+                  },
+                  "route": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/route"
+                    }
+                  },
+                  "contents": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/contents"
+                    }
+                  },
+                  "assignees": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/assignees"
+                    }
+                  },
+                  "candidateAssignees": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/candidateAssignees"
+                    }
+                  },
+                  "calendar": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/calendar"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "deliverableId": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {}
+        ]
+      },
+      "calendar": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "Common description for the calendar",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "performRollup": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {}
+        ]
+      },
+      "scopeId": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {}
+        ]
+      },
+      "autoRefresh": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {}
+        ]
+      },
+      "checklistReferences": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "created": {
+                    "format": "date-time",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "format": "date-time",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "firstname": {
+                    "description": "the person's first name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "lastname": {
+                    "description": "the person's last name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "fullname": {
+                    "description": "the person's full name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "policy": {
+                    "description": "required to support state NLS",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "stateNLS": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "typeNLS": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "collabSpace": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "collabSpaceTitle": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "organization": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "organizationTitle": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "ownerFullname": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "linkURL": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "hasfiles": {
+                    "description": "determines whether the object has a file checked in any format",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "type": "string",
+                      "readOnly": true
+                    }
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "type": "string",
+                      "readOnly": true
+                    }
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "isKindOfDOCUMENTS": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "isKindOfURL": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "isVersionObject": {
+                    "default": "False",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "True",
+                      "False"
+                    ]
+                  },
+                  "ObjectId": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "originatorInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The user account name",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "firstname": {
+                    "description": "The user's first name",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "lastname": {
+                    "description": "The user's last name",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "email": {
+                    "description": "The user's email address",
+                    "default": "Unknown",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "calendar": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/calendar"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "folderId": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "accessType": {
+                    "description": "can only be specified during create",
+                    "default": "Inherited",
+                    "type": "string",
+                    "enum": [
+                      "Inherited",
+                      "Specific"
+                    ]
+                  },
+                  "folderClassification": {
+                    "description": "can only be specified during create",
+                    "default": "Shared",
+                    "type": "string",
+                    "enum": [
+                      "Shared",
+                      "Personal",
+                      "Bookmark"
+                    ]
+                  },
+                  "title": {
+                    "description": "can only be specified during create",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "originated": {
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  "modifyAccess": {
+                    "type": "string"
+                  },
+                  "addAccess": {
+                    "type": "string"
+                  },
+                  "removeAccess": {
+                    "type": "string"
+                  },
+                  "deleteAccess": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string",
+                    "enum": [
+                      "Create",
+                      "Active",
+                      "Review",
+                      "Complete",
+                      "Archive"
+                    ]
+                  },
+                  "project": {
+                    "type": "string"
+                  },
+                  "organization": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/content"
+                    }
+                  },
+                  "sovaccess": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/sovaccess"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "route": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "contents": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "revision": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "title": {
+                    "default": "",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "created": {
+                    "format": "date-time",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "modified": {
+                    "format": "date-time",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "firstname": {
+                    "description": "the person's first name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "lastname": {
+                    "description": "the person's last name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "fullname": {
+                    "description": "the person's full name - only applies when the object is a Person",
+                    "default": "Unknown",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "policy": {
+                    "description": "required to support state NLS",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "stateNLS": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "typeNLS": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "collabSpace": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "collabSpaceTitle": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "organization": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "organizationTitle": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "ownerFullname": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "linkURL": {
+                    "description": "Conditional - applies to links/favorites",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "hasfiles": {
+                    "description": "determines whether the object has a file checked in any format",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "type": "string",
+                      "readOnly": true
+                    }
+                  },
+                  "fileExtension": {
+                    "description": "the extension of the file.",
+                    "type": "array",
+                    "readOnly": true,
+                    "items": {
+                      "type": "string",
+                      "readOnly": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "background": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {}
+        ]
+      },
+      "checklistItems": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "policy": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "responseType": {
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "subTypesInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {}
+        ]
+      },
+      "questionTasks": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "title": {
+                    "description": "Title information if used, otherwise the object name.",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "expectedResponse": {
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "resolvedTo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "description": "provides issues linked to a task with Resolved To relationship"
+          }
+        ]
+      },
+      "candidateAssignees": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "$ref": "#/components/x-definitions/PATCH_SUB_RESOURCE_ACTION"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "default": "Unknown",
+                    "type": "string"
+                  },
+                  "groupURI": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "currentState": {
+                    "description": "The user's current state",
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "Title": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "Id": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "WorkTime": {
+                    "default": "480",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "icon": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "fullname": {
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "email": {
+                    "default": "Unknown",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relelements": {
+                "type": "object",
+                "properties": {
+                  "allocation": {
+                    "default": "100.0",
+                    "x-IncludedByDefault": "no",
+                    "type": "string"
+                  },
+                  "assigneeRole": {
+                    "default": "Task Assignee",
+                    "x-IncludedByDefault": "no",
+                    "type": "string",
+                    "enum": [
+                      "Task Assignee",
+                      "Task Owner",
+                      "Task Reviewer"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "relateddata": {
+                "type": "object",
+                "properties": {
+                  "calendar": {
+                    "x-IncludedByDefault": "no",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/x-schemas/calendar"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "resourcePlanTemplates": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "description": {
+                    "default": "",
+                    "type": "string"
+                  },
+                  "state": {
+                    "default": "Active",
+                    "type": "string",
+                    "enum": [
+                      "Active",
+                      "Inactive"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "dpmParent": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "dataelements": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {}
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-projecttemplates": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/projecttemplates"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-EMPTY": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/success"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "csrf": {
+                "$ref": "#/components/x-definitions/csrf"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "BASICS_ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "BASICS": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "description": "The object type.",
+            "type": "string"
+          }
+        }
+      },
+      "CESTAMP": {
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object.",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "CESTAMP_REQUIRED": {
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object; required for modify operations",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string"
+          }
+        }
+      },
+      "PATCH_SUB_RESOURCE_ACTION": {
+        "type": "object",
+        "properties": {
+          "updateAction": {
+            "description": "Specify the sub-resource update action. See 6W Web Service Principles: Data Object Updates",
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "CONNECT",
+              "DISCONNECT"
+            ]
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://3dspace.mydomain:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/samples/000000800000000C0000000000000000",
+            "type": "string"
+          }
+        }
+      },
+      "csrf": {
+        "description": "CSRF object is required to be sent back for update operations and may be provided with read operations.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The CSRF token name.",
+            "example": "ENO_CSRF_TOKEN",
+            "type": "string"
+          },
+          "value": {
+            "description": "The CSRF token value.",
+            "example": "EXAM-PLEW-R1CD-BNF7-G8UC-KT52-MGUA-UBE1",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request.",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-projecttemplates": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-projecttemplates"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "projecttemplates": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/projecttemplates"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "description": "Identifies the locale for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "description": "The ENOVIA CSRF token which is typically required for update operations.  Retrieve using {server}/resources/v1/application/CSRF",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "fields": {
+        "name": "$fields",
+        "description": "Specify resource and sub-resource fields that should be returned by the web request  Fields include keywords none & all plus payload fields - see schema response payload.  For more information, see 6W REST Services Principles - Refinement Section",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Sourcing CSRF token API",
+    "summary": "Technical API to get CSRF tokens for Sourcing services",
+    "description": "Some web APIs located in Sourcing service require a CSRF token. This API allows you to retrieve such tokens. Their own endpoints also usually return the token.",
+    "version": "1.0.1",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "GET_CSRF",
+        "summary": "Returns a CSRF token",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Whether the request is successful",
+                      "example": true
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "csrf": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the CSRF token",
+                          "example": "ENO_CSRF_TOKEN"
+                        },
+                        "value": {
+                          "type": "string",
+                          "description": "Value of the CSRF token",
+                          "example": "PU8D-SW0N-MKKL-GE1U-0CJ6-937Y-0UTN-HSM"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

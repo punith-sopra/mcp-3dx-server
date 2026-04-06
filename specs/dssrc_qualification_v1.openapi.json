@@ -1,0 +1,2442 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "x-ds-copyright": "3DEXPERIENCE R2021x (c) 2020 Dassault Systemes.",
+    "title": "Qualification Web Services",
+    "description": "Web Services for managing the Qualifications.",
+    "version": "1.0.2",
+    "x-ds-service": [
+      "Sourcing"
+    ]
+  },
+  "servers": [
+    {
+      "url": "{Sourcing}/resources/v1/modeler/dssrc",
+      "variables": {
+        "Sourcing": {
+          "default": "https://sourcing.mydomain:443/sourcing",
+          "description": "URL of the Sourcing service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dssrc-qualifications/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/qualifications/targetLocate": {
+      "post": {
+        "summary": "Gets the type of the Qualifications associated with objects/Items passed in payload as Target Items.",
+        "description": "",
+        "operationId": "getQualificationForTarget",
+        "tags": [
+          "Qualifications"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "General Qualification": {
+                    "$ref": "#/components/examples/createGeneralQualification_Response"
+                  },
+                  "Engineering Equivalent Qualification": {
+                    "$ref": "#/components/examples/createEngineeringEquivalentQualification_Response"
+                  },
+                  "Manufacturing Equivalent Qualification": {
+                    "$ref": "#/components/examples/createManufacturingEquivalentQualification_Response"
+                  },
+                  "Context Qualification": {
+                    "$ref": "#/components/examples/createContextQualification_Response"
+                  }
+                },
+                "schema": {
+                  "example": "Response will be returned with oneOf mask available in the Schema Tab.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dssrc.qualifications",
+                      "title": "Based on target items in the payload, qualifications data will be returned."
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/target"
+        },
+        "parameters": [
+          {
+            "name": "type",
+            "description": "input Qualification type to be retrieved. Example- generalQualification or equivalentQualification",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]target, [!]contexts, [!]prerequisite, [!]documents, [!]proof, [!]ownerInfo, [!]context-restrictions</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/qualifications/{id}": {
+      "get": {
+        "summary": "Get Info of Qualification.",
+        "description": "",
+        "operationId": "getQualification",
+        "tags": [
+          "Qualifications"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "General Qualification": {
+                    "$ref": "#/components/examples/createGeneralQualification_Response"
+                  },
+                  "Engineering Equivalent Qualification": {
+                    "$ref": "#/components/examples/createEngineeringEquivalentQualification_Response"
+                  },
+                  "Manufacturing Equivalent Qualification": {
+                    "$ref": "#/components/examples/createManufacturingEquivalentQualification_Response"
+                  },
+                  "Context Qualification": {
+                    "$ref": "#/components/examples/createContextQualification_Response"
+                  }
+                },
+                "schema": {
+                  "example": "Response will be returned with oneOf mask available in the Schema Tab.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dssrc.qualifications",
+                      "title": "Qualification data will be returned."
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]target, [!]contexts, [!]prerequisite, [!]documents, [!]proof, [!]ownerInfo, [!]context-restrictions</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Modify Qualification.",
+        "description": "",
+        "operationId": "modifyQualification",
+        "tags": [
+          "Qualifications"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "General Qualification": {
+                    "$ref": "#/components/examples/createGeneralQualification_Response"
+                  },
+                  "Engineering Equivalent Qualification": {
+                    "$ref": "#/components/examples/createEngineeringEquivalentQualification_Response"
+                  },
+                  "Manufacturing Equivalent Qualification": {
+                    "$ref": "#/components/examples/createManufacturingEquivalentQualification_Response"
+                  },
+                  "Context Qualification": {
+                    "$ref": "#/components/examples/createContextQualification_Response"
+                  }
+                },
+                "schema": {
+                  "example": "Response will be returned with oneOf mask available in the Schema Tab.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dssrc.qualifications",
+                      "title": "Modified qualification data will be returned."
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "General Qualification": {
+                  "$ref": "#/components/examples/patchGeneralQualification"
+                },
+                "Engineering Equivalent Qualification": {
+                  "$ref": "#/components/examples/patchEngineeringEquivalentQualification"
+                },
+                "Manufacturing Equivalent Qualification": {
+                  "$ref": "#/components/examples/patchManufacturingEquivalentQualification"
+                },
+                "Context Qualification": {
+                  "$ref": "#/components/examples/patchContextQualification"
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/dssrc.qualifications"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]target, [!]contexts, [!]prerequisite, [!]documents, [!]proof, [!]ownerInfo, [!]context-restrictions</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete Qualification.",
+        "description": "",
+        "operationId": "deleteQualification",
+        "tags": [
+          "Qualifications"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/qualifications/{id}/updateLatestScope": {
+      "patch": {
+        "summary": "For the given qualification, this API update its connected target,context and context restrictions to latest revision based on the query param setting passed",
+        "description": "",
+        "operationId": "updateLatestScope",
+        "tags": [
+          "Qualifications"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "General Qualification": {
+                    "$ref": "#/components/examples/createGeneralQualification_Response"
+                  },
+                  "Engineering Equivalent Qualification": {
+                    "$ref": "#/components/examples/createEngineeringEquivalentQualification_Response"
+                  },
+                  "Manufacturing Equivalent Qualification": {
+                    "$ref": "#/components/examples/createManufacturingEquivalentQualification_Response"
+                  },
+                  "Context Qualification": {
+                    "$ref": "#/components/examples/createContextQualification_Response"
+                  }
+                },
+                "schema": {
+                  "example": "Response will be returned with oneOf mask available in the Schema Tab.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dssrc.qualifications",
+                      "title": "Based on query parameter passed, qualifications data will be returned."
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "General Qualification": {
+                  "$ref": "#/components/examples/updateTargetOrContext"
+                },
+                "Engineering Equivalent Qualification": {
+                  "$ref": "#/components/examples/updateTargetOrContext"
+                },
+                "Manufacturing Equivalent Qualification": {
+                  "$ref": "#/components/examples/updateTargetOrContext"
+                },
+                "Context Qualification": {
+                  "$ref": "#/components/examples/updateTargetOrContext"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "target",
+            "in": "query",
+            "required": false,
+            "description": "If true, the qualification will be connected with all the latest revision of the target in the same revision branch",
+            "schema": {
+              "type": "boolean",
+              "enum": [
+                true,
+                false
+              ]
+            }
+          },
+          {
+            "name": "context",
+            "in": "query",
+            "required": false,
+            "description": "If true, the qualification will be connected with all the latest revision of the context in the same revision branch",
+            "schema": {
+              "type": "boolean",
+              "enum": [
+                true,
+                false
+              ]
+            }
+          },
+          {
+            "name": "contextrestriction",
+            "in": "query",
+            "required": false,
+            "description": "If true, the qualification will be connected with all the latest revision of the context restrictions in the same revision branch. It is not application for the Context Qualification",
+            "schema": {
+              "type": "boolean",
+              "enum": [
+                true,
+                false
+              ]
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]target, [!]contexts, [!]prerequisite, [!]documents, [!]proof, [!]ownerInfo, [!]context-restrictions</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/qualifications/contextLocate": {
+      "post": {
+        "summary": "Gets the type of Qualifications associated with the objects/Items passed in payload as Context Items.",
+        "description": "",
+        "operationId": "getQualificationForContext",
+        "tags": [
+          "Qualifications"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Engineering Equivalent Qualification": {
+                    "$ref": "#/components/examples/createEngineeringEquivalentQualification_Response"
+                  },
+                  "Manufacturing Equivalent Qualification": {
+                    "$ref": "#/components/examples/createManufacturingEquivalentQualification_Response"
+                  },
+                  "Context Qualification": {
+                    "$ref": "#/components/examples/createContextQualification_Response"
+                  }
+                },
+                "schema": {
+                  "example": "Response will be returned with oneOf mask available in the Schema Tab.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dssrc.qualifications",
+                      "title": "Based on context items in the payload, qualifications data will be returned."
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/contexts"
+        },
+        "parameters": [
+          {
+            "name": "type",
+            "description": "input Qualification type to be retrieved. Example - equivalentQualification",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]target, [!]contexts, [!]prerequisite, [!]documents, [!]proof, [!]ownerInfo, [!]context-restrictions</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/qualifications/search": {
+      "get": {
+        "summary": "Search Qualifications for the provided input string.",
+        "description": "",
+        "operationId": "searchQualifications",
+        "tags": [
+          "Qualifications"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "General Qualification": {
+                    "$ref": "#/components/examples/createGeneralQualification_Response"
+                  },
+                  "Engineering Equivalent Qualification": {
+                    "$ref": "#/components/examples/createEngineeringEquivalentQualification_Response"
+                  },
+                  "Manufacturing Equivalent Qualification": {
+                    "$ref": "#/components/examples/createManufacturingEquivalentQualification_Response"
+                  },
+                  "Context Qualification": {
+                    "$ref": "#/components/examples/createContextQualification_Response"
+                  }
+                },
+                "schema": {
+                  "example": "Response will be returned with oneOf mask available in the Schema Tab.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dssrc.qualifications",
+                      "title": "Returns qualifications data from search"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "parameters": [
+          {
+            "name": "searchStr",
+            "description": "Search Criteria; 2 or more characters required.",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "description": "The number of objects to return; default 50; max 1000",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "description": "The number of objects to skip in case of paginating through the serach results; default 0",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]target, [!]contexts, [!]prerequisite, [!]documents, [!]proof, [!]ownerInfo, [!]context-restrictions</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    },
+    "/qualifications": {
+      "post": {
+        "summary": "Create Qualification.",
+        "description": "",
+        "operationId": "createQualification",
+        "tags": [
+          "Qualifications"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "General Qualification": {
+                    "$ref": "#/components/examples/createGeneralQualification_Response"
+                  },
+                  "Engineering Equivalent Qualification": {
+                    "$ref": "#/components/examples/createEngineeringEquivalentQualification_Response"
+                  },
+                  "Manufacturing Equivalent Qualification": {
+                    "$ref": "#/components/examples/createManufacturingEquivalentQualification_Response"
+                  },
+                  "Context Qualification": {
+                    "$ref": "#/components/examples/createContextQualification_Response"
+                  }
+                },
+                "schema": {
+                  "example": "Response will be returned with oneOf mask available in the Schema Tab.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dssrc.qualifications",
+                      "title": "Returns qualification creation data"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "General Qualification": {
+                  "$ref": "#/components/examples/createGeneralQualification"
+                },
+                "Engineering Equivalent Qualification": {
+                  "$ref": "#/components/examples/createEngineeringEquivalentQualification"
+                },
+                "Manufacturing Equivalent Qualification": {
+                  "$ref": "#/components/examples/createManufacturingEquivalentQualification"
+                },
+                "Context Qualification": {
+                  "$ref": "#/components/examples/createContextQualification"
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/dssrc.qualifications"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "$include",
+            "description": "Specify sub-resources that should be returned by the web request.  Provide combination of comma separated entries including keywords none & all plus payload specific sub-resources: <P><B>[!]target, [!]contexts, [!]prerequisite, [!]documents, [!]proof, [!]ownerInfo, [!]context-restrictions</B></P>  Some entries are enabled by default which are described in the schema section of the response payload.  For more information about refinement, see 6W REST Services Principles - Refinement Section.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/Accept-Language"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "dssrc.qualifications": {
+        "$ref": "#/components/x-schemas/dssrc.qualifications"
+      }
+    },
+    "x-schemas": {
+      "customerAttributes": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {}
+        ]
+      },
+      "documents": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE_DOCUMENT"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "582E8256D21F0000605C71C60000228B"
+              },
+              "type": {
+                "type": "string",
+                "example": "Document",
+                "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+              },
+              "action": {
+                "description": "update action on Document, authorizedValues connect, disconnect",
+                "type": "string",
+                "example": "connect",
+                "x-ApplicableOperations": "Create (No), Read (No), Modify (Yes)"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "dssrc.qualifications": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "CQ-100000",
+                "readOnly": true
+              },
+              "id": {
+                "type": "string",
+                "example": "B01482562C13000063B2ACBB000CEE14",
+                "readOnly": true
+              },
+              "type": {
+                "type": "string",
+                "example": "Context Qualification",
+                "x-ApplicableOperations": "Create (Yes), Read (Yes), Modify (No)"
+              },
+              "revision": {
+                "type": "string",
+                "example": "1",
+                "readOnly": true
+              },
+              "description": {
+                "type": "string",
+                "example": "Some Description"
+              },
+              "originated": {
+                "format": "date-time",
+                "type": "string",
+                "readOnly": true
+              },
+              "modified": {
+                "format": "date-time",
+                "type": "string",
+                "readOnly": true
+              },
+              "owner": {
+                "description": "The owner of the Qualification",
+                "type": "string",
+                "example": "John Doe",
+                "readOnly": true
+              },
+              "modifyAccess": {
+                "type": "string",
+                "example": "TRUE",
+                "readOnly": true
+              },
+              "deleteAccess": {
+                "type": "string",
+                "example": "TRUE",
+                "readOnly": true
+              },
+              "policy": {
+                "description": "required to support state NLS",
+                "x-IncludedByDefault": "no",
+                "type": "string",
+                "example": "SRC Qualification",
+                "readOnly": true
+              },
+              "state": {
+                "type": "string",
+                "example": "In Draft",
+                "readOnly": true
+              },
+              "identifier": {
+                "type": "string",
+                "example": "B01482562C13000063B2ACBB000CEE14",
+                "readOnly": true
+              },
+              "comments": {
+                "description": "Qualification comments.",
+                "default": "",
+                "example": "Some Comments",
+                "type": "string"
+              },
+              "preferred": {
+                "description": "qualification preferred, authorizedValues Yes, No",
+                "default": "No",
+                "example": "No",
+                "type": "string",
+                "enum": [
+                  "No",
+                  "Yes"
+                ]
+              },
+              "approved": {
+                "description": "qualification approved, authorizedValues Yes, No, Empty String",
+                "example": "Yes",
+                "default": "",
+                "type": "string",
+                "enum": [
+                  "",
+                  "No",
+                  "Yes"
+                ]
+              },
+              "orderable": {
+                "description": "Is Orderable from Manufacturer authorizedValues Yes, No, Empty String",
+                "example": "No",
+                "default": "",
+                "type": "string"
+              },
+              "lastTimeBuy": {
+                "description": "Last time Buy from Manufacturer.",
+                "example": "Context Qualification",
+                "format": "date-time",
+                "default": "",
+                "type": "string"
+              },
+              "Effectivity Start Date": {
+                "default": "",
+                "example": "Wed Apr 19 2024",
+                "type": "string"
+              },
+              "Effectivity End Date": {
+                "default": "",
+                "example": "Wed Apr 25 2024",
+                "type": "string"
+              },
+              "restriction": {
+                "description": "Qualification Restriction.",
+                "default": "",
+                "example": "performance should be monitored and restricted to plant ABC",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "target": {
+                "$ref": "#/components/x-schemas/target"
+              },
+              "contexts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/contexts"
+                }
+              },
+              "prereq": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/prerequisite"
+                }
+              },
+              "documents": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/documents"
+                }
+              },
+              "proof": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/proof"
+                }
+              },
+              "ownerInfo": {
+                "$ref": "#/components/x-schemas/ownerInfo"
+              },
+              "context-restrictions": {
+                "x-IncludedByDefault": "no",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/context-restrictions"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "prerequisite": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE_PREREQUISITES"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "B01482563A480000631887B9001D437E"
+              },
+              "type": {
+                "type": "string",
+                "example": "Context Qualification",
+                "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "ownerInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "jde41"
+              },
+              "firstname": {
+                "default": "Unknown",
+                "type": "string",
+                "example": "John"
+              },
+              "lastname": {
+                "default": "Unknown",
+                "type": "string",
+                "example": "DOE"
+              },
+              "email": {
+                "default": "Unknown",
+                "x-IncludedByDefault": "no",
+                "type": "string",
+                "example": "JohnDoe@3ds.com"
+              }
+            }
+          },
+          {
+            "description": "Object Owner Information",
+            "readOnly": true
+          }
+        ]
+      },
+      "contexts": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE_CONTEXTS"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "B0148256D36D000063B7F8020016BCE2"
+              },
+              "type": {
+                "type": "string",
+                "example": "VPMReference",
+                "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "proof": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE_PROOF"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "582E8256D21F0000605d45874584dct2"
+              },
+              "type": {
+                "type": "string",
+                "example": "Document",
+                "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+              },
+              "action": {
+                "description": "update action on proof authorizedValues connect, disconnect",
+                "type": "string",
+                "example": "connect",
+                "x-ApplicableOperations": "Create (No), Read (No), Modify (Yes)"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "interface-details": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/BASICS"
+          },
+          {
+            "$ref": "#/components/x-definitions/CESTAMP"
+          },
+          {}
+        ]
+      },
+      "target": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE_TARGET"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "289C82568F1E3700655C5BB80002F543"
+              },
+              "type": {
+                "type": "string",
+                "example": "Manufacturer Equivalent Item",
+                "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "context-restrictions": {
+        "allOf": [
+          {
+            "$ref": "#/components/x-definitions/PUBLIC_OBJECT_REFERENCE_CONTEXT_RESTRICTIONS"
+          },
+          {
+            "$ref": "#/components/x-definitions/BASICS_ID"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "B01482563A48000063186DCA000734AF"
+              },
+              "type": {
+                "type": "string",
+                "example": "VPMReference",
+                "x-ApplicableOperations": "Create (Yes), Read (No), Modify (No)"
+              }
+            }
+          },
+          {}
+        ]
+      }
+    },
+    "x-definitions": {
+      "RESULTS-dssrc.qualifications": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/x-schemas/dssrc.qualifications"
+                }
+              }
+            }
+          },
+          {}
+        ]
+      },
+      "RESULTS-EMPTY": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {}
+        ]
+      },
+      "BASICS_ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "B01482562C13000063B2ACBB000CEE14",
+            "type": "string"
+          }
+        }
+      },
+      "BASICS": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The unique object identifier.",
+            "example": "000000800000000C0000000000000000",
+            "type": "string"
+          },
+          "type": {
+            "description": "The object type.",
+            "type": "string"
+          }
+        }
+      },
+      "CESTAMP": {
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object.",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "CESTAMP_REQUIRED": {
+        "type": "object",
+        "properties": {
+          "cestamp": {
+            "description": "The Concurrent Engineering (CESTAMP) of the object; required for modify operations",
+            "example": "857FEB80000045FC5994CC0A00000012",
+            "type": "string"
+          }
+        }
+      },
+      "PATCH_SUB_RESOURCE_ACTION": {
+        "type": "object",
+        "properties": {
+          "updateAction": {
+            "description": "Specify the sub-resource update action. See 6W Web Service Principles: Data Object Updates",
+            "type": "string",
+            "writeOnly": true,
+            "enum": [
+              "CONNECT",
+              "DISCONNECT"
+            ]
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE_DOCUMENT": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "582E8256D21F0000605C71C60000228B",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://server_name.dsone.3ds.com:443/3DSpace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/documents/582E8256D21F0000605C71C60000228B",
+            "type": "string"
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE_CONTEXTS": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "B0148256D36D000063B7F8020016BCE2",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://server_name.dsone.3ds.com:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/dseng/dseng:EngItem/B0148256D36D000063B7F8020016BCE2",
+            "type": "string"
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE_PROOF": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "582E8256D21F0000605d45874584dct2",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://server_name.dsone.3ds.com:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/documents/582E8256D21F0000605d45874584dct2",
+            "type": "string"
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE_TARGET": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "289C82568F1E3700655C5BB80002F543",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://server_name.dsone.3ds.com:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/dssrc/dssrc:ManufacturerEquivalentItems/289C82568F1E3700655C5BB80002F543",
+            "type": "string"
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE_CONTEXT_RESTRICTIONS": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "B01482563A48000063186DCA000734AF",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://server_name.dsone.3ds.com:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/dseng/dseng:EngItem/B01482563A48000063186DCA000734AF",
+            "type": "string"
+          }
+        }
+      },
+      "PUBLIC_OBJECT_REFERENCE_PREREQUISITES": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "description": "The unique object identifier when an object is represented by a Public Resource URI.",
+            "example": "B01482563A480000631887B9001D437E",
+            "type": "string"
+          },
+          "source": {
+            "description": "The object server URL when an object is represented by a Public Resource URI.",
+            "example": "https://server_name.dsone.3ds.com:443/3dspace",
+            "type": "string"
+          },
+          "relativePath": {
+            "description": "The object resource path when an object is represented by a Public Resource URI.",
+            "example": "/resources/v1/modeler/dssrc/qualifications/B01482563A480000631887B9001D437E",
+            "type": "string"
+          }
+        }
+      },
+      "csrf": {
+        "description": "CSRF object is required to be sent back for update operations and may be provided with read operations.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The CSRF token name.",
+            "example": "ENO_CSRF_TOKEN",
+            "type": "string"
+          },
+          "value": {
+            "description": "The CSRF token value.",
+            "example": "EXAM-PLEW-R1CD-BNF7-G8UC-KT52-MGUA-UBE1",
+            "type": "string"
+          }
+        }
+      },
+      "success": {
+        "description": "The response data when the request succeeds with 200 status code.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects true to indicate successful request.",
+            "example": true,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 200,
+            "type": "integer"
+          }
+        }
+      },
+      "error-400": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 400,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-401": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 401,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-403": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 403,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      },
+      "error-500": {
+        "description": "The response data when the request fails with 400 or 500 error.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Reflects false to indicate failure.",
+            "example": false,
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "The HTTP response code.",
+            "example": 500,
+            "type": "integer"
+          },
+          "error": {
+            "description": "An NLS error message.  In the case of a 400 error, the message is precise.  In the case of 500 error, the message is generic.",
+            "example": "NLS Error.",
+            "type": "string"
+          },
+          "internalError": {
+            "description": "The technical reason of the failure - usually associated with a 500 error; this is not an NLS message and reflects the MQL or runtime exception.",
+            "example": "Non-NLS Technical Error.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-EMPTY"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-400"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-401"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "CSRF Issue",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-403"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/error-500"
+            }
+          }
+        }
+      },
+      "200-dssrc.qualifications": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/x-definitions/RESULTS-dssrc.qualifications"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "target": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/target"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "dssrc.qualifications": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/dssrc.qualifications"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "contexts": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/x-schemas/contexts"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "description": "The Security Context setting for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "description": "Identifies the locale for the web request.",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "description": "The ENOVIA CSRF token which is typically required for update operations.  Retrieve using {server}/resources/v1/application/CSRF",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "fields": {
+        "name": "$fields",
+        "description": "Specify resource and sub-resource fields that should be returned by the web request  Fields include keywords none & all plus payload fields - see schema response payload.  For more information, see 6W REST Services Principles - Refinement Section",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "examples": {
+      "createGeneralQualification": {
+        "value": {
+          "data": [
+            {
+              "type": "generalQualification",
+              "description": "Some Description",
+              "comments": "Some Comments",
+              "preferred": "No",
+              "approved": "Yes",
+              "orderable": "No",
+              "lastTimeBuy": "Wed Apr 19 2024",
+              "Effectivity Start Date": "Wed Apr 19 2024",
+              "Effectivity End Date": "Wed Apr 25 2024",
+              "restriction": "performance should be monitored and restricted to plant ABC",
+              "target": {
+                "identifier": "289C82568F1E3700655C5BB80002F543",
+                "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                "relativePath": "/resources/v1/modeler/dssrc/dssrc:ManufacturerEquivalentItems/289C82568F1E3700655C5BB80002F543",
+                "id": "289C82568F1E3700655C5BB80002F543",
+                "type": "Manufacturer Equivalent Item"
+              },
+              "documents": [
+                {
+                  "identifier": "582E8256D21F0000605C71C60000228B",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605C71C60000228B",
+                  "id": "582E8256D21F0000605C71C60000228B",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "proof": [
+                {
+                  "identifier": "582E8256D21F0000605d45874584dct2",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605d45874584dct2",
+                  "id": "582E8256D21F0000605d45874584dct2",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "context-restrictions": [
+                {
+                  "identifier": "B01482563A48000063186DCA000734AF",
+                  "source": "https://server_name.dsone.3ds.com:443/3dspace",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/B01482563A48000063186DCA000734AF",
+                  "id": "B01482563A48000063186DCA000734AF",
+                  "type": "VPMReference"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "createEngineeringEquivalentQualification": {
+        "value": {
+          "data": [
+            {
+              "type": "equivalentQualification",
+              "description": "Some Description",
+              "comments": "Some Comments",
+              "preferred": "No",
+              "approved": "Yes",
+              "Effectivity Start Date": "Wed Apr 19 2024",
+              "Effectivity End Date": "Wed Apr 25 2024",
+              "restriction": "performance should be monitored and restricted to plant ABC",
+              "target": {
+                "identifier": "289C82568F1E3700655C5BB80002F543",
+                "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                "relativePath": "/resources/v1/modeler/dssrc/dssrc:ManufacturerEquivalentItems/289C82568F1E3700655C5BB80002F543",
+                "id": "289C82568F1E3700655C5BB80002F543",
+                "type": "Manufacturer Equivalent Item"
+              },
+              "context": [
+                {
+                  "identifier": "B0148256D36D000063B7F8020016BCE2",
+                  "source": "https://server_name.dsone.3ds.com:443/3dspace",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/B0148256D36D000063B7F8020016BCE2",
+                  "id": "B0148256D36D000063B7F8020016BCE2",
+                  "type": "VPMReference"
+                }
+              ],
+              "documents": [
+                {
+                  "identifier": "582E8256D21F0000605C71C60000228B",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605C71C60000228B",
+                  "id": "582E8256D21F0000605C71C60000228B",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "proof": [
+                {
+                  "identifier": "582E8256D21F0000605d45874584dct2",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605d45874584dct2",
+                  "id": "582E8256D21F0000605d45874584dct2",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "context-restrictions": [
+                {
+                  "identifier": "B01482563A48000063186DCA000734AF",
+                  "source": "https://server_name.dsone.3ds.com:443/3dspace",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/B01482563A48000063186DCA000734AF",
+                  "id": "B01482563A48000063186DCA000734AF",
+                  "type": "VPMReference"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "createManufacturingEquivalentQualification": {
+        "value": {
+          "data": [
+            {
+              "type": "manufacturingEquivalentQualification",
+              "description": "Some Description",
+              "comments": "Some Comments",
+              "preferred": "No",
+              "approved": "Yes",
+              "Effectivity Start Date": "Wed Apr 19 2024",
+              "Effectivity End Date": "Wed Apr 25 2024",
+              "restriction": "performance should be monitored and restricted to plant ABC",
+              "target": {
+                "identifier": "289C82568F1E3700655C5BB80002F543",
+                "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                "relativePath": "/resources/v1/modeler/dssrc/dssrc:ManufacturerEquivalentItems/289C82568F1E3700655C5BB80002F543",
+                "id": "289C82568F1E3700655C5BB80002F543",
+                "type": "Manufacturer Equivalent Item"
+              },
+              "context": [
+                {
+                  "identifier": "B0148256D36D000063B7F8020016BCE2",
+                  "source": "https://server_name.dsone.3ds.com:443/3dspace",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/B0148256D36D000063B7F8020016BCE2",
+                  "id": "B0148256D36D000063B7F8020016BCE2",
+                  "type": "VPMReference"
+                }
+              ],
+              "documents": [
+                {
+                  "identifier": "582E8256D21F0000605C71C60000228B",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605C71C60000228B",
+                  "id": "582E8256D21F0000605C71C60000228B",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "proof": [
+                {
+                  "identifier": "582E8256D21F0000605d45874584dct2",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605d45874584dct2",
+                  "id": "582E8256D21F0000605d45874584dct2",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "context-restrictions": [
+                {
+                  "identifier": "B01482563A48000063186DCA000734AF",
+                  "source": "https://server_name.dsone.3ds.com:443/3dspace",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/B01482563A48000063186DCA000734AF",
+                  "id": "B01482563A48000063186DCA000734AF",
+                  "type": "VPMReference"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "createContextQualification": {
+        "value": {
+          "data": [
+            {
+              "type": "contextQualification",
+              "description": "Some Description",
+              "comments": "Some Comments",
+              "preferred": "No",
+              "approved": "Yes",
+              "Effectivity Start Date": "Wed Apr 19 2024",
+              "Effectivity End Date": "Wed Apr 25 2024",
+              "restriction": "performance should be monitored and restricted to plant ABC",
+              "target": {
+                "identifier": "289C82568F1E3700655C5BB80002F543",
+                "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/289C82568F1E3700655C5BB80002F543",
+                "id": "289C82568F1E3700655C5BB80002F543",
+                "type": "VPMReference"
+              },
+              "context": [
+                {
+                  "identifier": "B0148256D36D000063B7F8020016BCE2",
+                  "source": "https://server_name.dsone.3ds.com:443/3dspace",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/B0148256D36D000063B7F8020016BCE2",
+                  "id": "B0148256D36D000063B7F8020016BCE2",
+                  "type": "VPMReference"
+                }
+              ],
+              "prereq": [
+                {
+                  "identifier": "B01482563A480000631887B9001D437E",
+                  "source": "https://server_name.dsone.3ds.com:443/3dspace",
+                  "relativePath": "/resources/v1/modeler/dssrc/qualifications/B01482563A480000631887B9001D437E",
+                  "id": "B01482563A480000631887B9001D437E",
+                  "type": "Context Qualification"
+                }
+              ],
+              "documents": [
+                {
+                  "identifier": "582E8256D21F0000605C71C60000228B",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605C71C60000228B",
+                  "id": "582E8256D21F0000605C71C60000228B",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "proof": [
+                {
+                  "identifier": "582E8256D21F0000605d45874584dct2",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605d45874584dct2",
+                  "id": "582E8256D21F0000605d45874584dct2",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "createGeneralQualification_Response": {
+        "value": {
+          "data": [
+            {
+              "id": "B0148256D36D000063B7F80200122222",
+              "name": "GQ-100000",
+              "type": "General Qualification",
+              "revision": "1",
+              "description": "Some Description",
+              "originated": "2023-01-06T10:29:22.000Z",
+              "modified": "2023-01-06T10:29:22.000Z",
+              "owner": "JOHN_DOE",
+              "modifyAccess": "TRUE",
+              "deleteAccess": "TRUE",
+              "policy": "SRC Qualification",
+              "state": "In Draft",
+              "identifier": "B0148256D36D000063B7F80200122222",
+              "comments": "Some Comments",
+              "preferred": "TRUE",
+              "approved": "Yes",
+              "Restriction": "Some Restriction",
+              "Last Time Buy": "",
+              "orderable": "",
+              "Effectivity Start Date": "",
+              "Effectivity End Date": "",
+              "restriction": "",
+              "target": {
+                "identifier": "289C82568F1E3700655C5BB80002F543",
+                "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                "relativePath": "/resources/v1/modeler/dssrc/dssrc:ManufacturerEquivalentItems/289C82568F1E3700655C5BB80002F543",
+                "id": "289C82568F1E3700655C5BB80002F543",
+                "type": "Manufacturer Equivalent Item"
+              },
+              "documents": [
+                {
+                  "identifier": "582E8256D21F0000605C71C60000228B",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605C71C60000228B",
+                  "id": "582E8256D21F0000605C71C60000228B",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "proof": [
+                {
+                  "identifier": "582E8256D21F0000605d45874584dct2",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605d45874584dct2",
+                  "id": "582E8256D21F0000605d45874584dct2",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "ownerInfo": {
+                "id": "CE60DF9C523E0000659D34000017B0CA",
+                "type": "Person",
+                "cestamp": "857FEB80000045FC5994CC0A00000012",
+                "name": "jde41",
+                "firstname": "John",
+                "lastname": "DOE",
+                "email": "JohnDoe@3ds.com"
+              },
+              "context-restrictions": [
+                {
+                  "identifier": "B01482563A48000063186DCA000734AF",
+                  "source": "https://server_name.dsone.3ds.com:443/3dspace",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/B01482563A48000063186DCA000734AF",
+                  "id": "B01482563A48000063186DCA000734AF",
+                  "type": "VPMReference"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "createEngineeringEquivalentQualification_Response": {
+        "value": {
+          "data": [
+            {
+              "id": "B0148256D36D000063B7F80200111111",
+              "name": "EQ-100000",
+              "type": "Engineering Equivalent Qualification",
+              "revision": "1",
+              "description": "Some Description",
+              "originated": "2023-01-06T10:29:22.000Z",
+              "modified": "2023-01-06T10:29:22.000Z",
+              "owner": "JOHN_DOE",
+              "modifyAccess": "TRUE",
+              "deleteAccess": "TRUE",
+              "policy": "SRC Qualification",
+              "state": "In Draft",
+              "identifier": "B0148256D36D000063B7F80200111111",
+              "comments": "Some Comments",
+              "preferred": "TRUE",
+              "approved": "Yes",
+              "Restriction": "Some Restriction",
+              "Effectivity Start Date": "",
+              "Effectivity End Date": "",
+              "restriction": "",
+              "target": {
+                "identifier": "289C82568F1E3700655C5BB80002F543",
+                "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                "relativePath": "/resources/v1/modeler/dssrc/dssrc:ManufacturerEquivalentItems/289C82568F1E3700655C5BB80002F543",
+                "id": "289C82568F1E3700655C5BB80002F543",
+                "type": "Manufacturer Equivalent Item"
+              },
+              "contexts": [
+                {
+                  "identifier": "B0148256D36D000063B7F8020016BCE2",
+                  "source": "https://server_name.dsone.3ds.com:443/3dspace",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/B0148256D36D000063B7F8020016BCE2",
+                  "id": "B0148256D36D000063B7F8020016BCE2",
+                  "type": "VPMReference"
+                }
+              ],
+              "documents": [
+                {
+                  "identifier": "582E8256D21F0000605C71C60000228B",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605C71C60000228B",
+                  "id": "582E8256D21F0000605C71C60000228B",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "proof": [
+                {
+                  "identifier": "582E8256D21F0000605d45874584dct2",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605d45874584dct2",
+                  "id": "582E8256D21F0000605d45874584dct2",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "ownerInfo": {
+                "id": "CE60DF9C523E0000659D34000017B0CA",
+                "type": "Person",
+                "cestamp": "857FEB80000045FC5994CC0A00000012",
+                "name": "jde41",
+                "firstname": "John",
+                "lastname": "DOE",
+                "email": "JohnDoe@3ds.com"
+              },
+              "context-restrictions": [
+                {
+                  "identifier": "B01482563A48000063186DCA000734AF",
+                  "source": "https://server_name.dsone.3ds.com:443/3dspace",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/B01482563A48000063186DCA000734AF",
+                  "id": "B01482563A48000063186DCA000734AF",
+                  "type": "VPMReference"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "createManufacturingEquivalentQualification_Response": {
+        "value": {
+          "data": [
+            {
+              "id": "B0148256D36D000063B7F80200333333",
+              "name": "MQ-100000",
+              "type": "Manufacturing Equivalent Qualification",
+              "revision": "1",
+              "description": "Some Description",
+              "originated": "2023-01-06T10:29:22.000Z",
+              "modified": "2023-01-06T10:29:22.000Z",
+              "owner": "JOHN_DOE",
+              "modifyAccess": "TRUE",
+              "deleteAccess": "TRUE",
+              "policy": "SRC Qualification",
+              "state": "In Draft",
+              "identifier": "B0148256D36D000063B7F80200333333",
+              "comments": "Some Comments",
+              "preferred": "TRUE",
+              "approved": "Yes",
+              "Restriction": "Some Restriction",
+              "Effectivity Start Date": "",
+              "Effectivity End Date": "",
+              "restriction": "",
+              "target": {
+                "identifier": "289C82568F1E3700655C5BB80002F543",
+                "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                "relativePath": "/resources/v1/modeler/dssrc/dssrc:ManufacturerEquivalentItems/289C82568F1E3700655C5BB80002F543",
+                "id": "289C82568F1E3700655C5BB80002F543",
+                "type": "Manufacturer Equivalent Item"
+              },
+              "contexts": [
+                {
+                  "identifier": "B0148256D36D000063B7F8020016BCE2",
+                  "source": "https://server_name.dsone.3ds.com:443/3dspace",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/B0148256D36D000063B7F8020016BCE2",
+                  "id": "B0148256D36D000063B7F8020016BCE2",
+                  "type": "VPMReference"
+                }
+              ],
+              "documents": [
+                {
+                  "identifier": "582E8256D21F0000605C71C60000228B",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605C71C60000228B",
+                  "id": "582E8256D21F0000605C71C60000228B",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "proof": [
+                {
+                  "identifier": "582E8256D21F0000605d45874584dct2",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605d45874584dct2",
+                  "id": "582E8256D21F0000605d45874584dct2",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "ownerInfo": {
+                "id": "CE60DF9C523E0000659D34000017B0CA",
+                "type": "Person",
+                "cestamp": "857FEB80000045FC5994CC0A00000012",
+                "name": "jde41",
+                "firstname": "John",
+                "lastname": "DOE",
+                "email": "JohnDoe@3ds.com"
+              },
+              "context-restrictions": [
+                {
+                  "identifier": "B01482563A48000063186DCA000734AF",
+                  "source": "https://server_name.dsone.3ds.com:443/3dspace",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/B01482563A48000063186DCA000734AF",
+                  "id": "B01482563A48000063186DCA000734AF",
+                  "type": "VPMReference"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "createContextQualification_Response": {
+        "value": {
+          "data": [
+            {
+              "id": "B0148256D36D000063B7F8020044444",
+              "name": "CQ-100000",
+              "type": "Context Qualification",
+              "revision": "1",
+              "description": "Some Description",
+              "originated": "2023-01-06T10:29:22.000Z",
+              "modified": "2023-01-06T10:29:22.000Z",
+              "owner": "JOHN_DOE",
+              "modifyAccess": "TRUE",
+              "deleteAccess": "TRUE",
+              "policy": "SRC Qualification",
+              "state": "In Draft",
+              "identifier": "B0148256D36D000063B7F8020044444",
+              "comments": "Some Comments",
+              "preferred": "TRUE",
+              "approved": "Yes",
+              "Restriction": "Some Restriction",
+              "Effectivity Start Date": "",
+              "Effectivity End Date": "",
+              "restriction": "",
+              "target": {
+                "identifier": "289C82568F1E3700655C5BB80002F543",
+                "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/289C82568F1E3700655C5BB80002F543",
+                "id": "289C82568F1E3700655C5BB80002F543",
+                "type": "VPMReference"
+              },
+              "contexts": [
+                {
+                  "identifier": "B0148256D36D000063B7F8020016BCE2",
+                  "source": "https://server_name.dsone.3ds.com:443/3dspace",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/B0148256D36D000063B7F8020016BCE2",
+                  "id": "B0148256D36D000063B7F8020016BCE2",
+                  "type": "VPMReference"
+                }
+              ],
+              "prerequisite": [
+                {
+                  "identifier": "B01482563A480000631887B9001D437E",
+                  "source": "https://server_name.dsone.3ds.com:443/3dspace",
+                  "relativePath": "/resources/v1/modeler/dssrc/qualifications/B01482563A480000631887B9001D437E",
+                  "id": "B01482563A480000631887B9001D437E",
+                  "type": "Context Qualification"
+                }
+              ],
+              "documents": [
+                {
+                  "identifier": "582E8256D21F0000605C71C60000228B",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605C71C60000228B",
+                  "id": "582E8256D21F0000605C71C60000228B",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "proof": [
+                {
+                  "identifier": "582E8256D21F0000605d45874584dct2",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605d45874584dct2",
+                  "id": "582E8256D21F0000605d45874584dct2",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "ownerInfo": {
+                "id": "CE60DF9C523E0000659D34000017B0CA",
+                "type": "Person",
+                "cestamp": "857FEB80000045FC5994CC0A00000012",
+                "name": "jde41",
+                "firstname": "John",
+                "lastname": "DOE",
+                "email": "JohnDoe@3ds.com"
+              }
+            }
+          ]
+        }
+      },
+      "updateTargetOrContext": {
+        "value": {}
+      },
+      "patchGeneralQualification": {
+        "value": {
+          "data": [
+            {
+              "description": "Some Description",
+              "comments": "Some Comments",
+              "preferred": "No",
+              "approved": "Yes",
+              "orderable": "No",
+              "lastTimeBuy": "Wed Apr 19 2024",
+              "Effectivity Start Date": "Wed Apr 19 2024",
+              "Effectivity End Date": "Wed Apr 25 2024",
+              "restriction": "performance should be monitored and restricted to plant ABC",
+              "documents": [
+                {
+                  "identifier": "582E8256D21F0000605C71C60000228B",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605C71C60000228B",
+                  "id": "582E8256D21F0000605C71C60000228B",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "proof": [
+                {
+                  "identifier": "582E8256D21F0000605d45874584dct2",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605d45874584dct2",
+                  "id": "582E8256D21F0000605d45874584dct2",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "context-restrictions": [
+                {
+                  "id": "B01482563A48000063186DCA000734AF",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "type": "VPMReference",
+                  "identifier": "B01482563A48000063186DCA000734AF",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/B01482563A48000063186DCA000734AF",
+                  "action": "connect"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "patchEngineeringEquivalentQualification": {
+        "value": {
+          "data": [
+            {
+              "description": "Some Description",
+              "comments": "Some Comments",
+              "preferred": "No",
+              "approved": "Yes",
+              "Effectivity Start Date": "Wed Apr 19 2024",
+              "Effectivity End Date": "Wed Apr 25 2024",
+              "restriction": "performance should be monitored and restricted to plant ABC",
+              "documents": [
+                {
+                  "identifier": "582E8256D21F0000605C71C60000228B",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605C71C60000228B",
+                  "id": "582E8256D21F0000605C71C60000228B",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "proof": [
+                {
+                  "identifier": "582E8256D21F0000605d45874584dct2",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605d45874584dct2",
+                  "id": "582E8256D21F0000605d45874584dct2",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "context-restrictions": [
+                {
+                  "id": "B01482563A48000063186DCA000734AF",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "type": "VPMReference",
+                  "identifier": "B01482563A48000063186DCA000734AF",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/B01482563A48000063186DCA000734AF",
+                  "action": "connect"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "patchManufacturingEquivalentQualification": {
+        "value": {
+          "data": [
+            {
+              "description": "Some Description",
+              "comments": "Some Comments",
+              "preferred": "No",
+              "approved": "Yes",
+              "Effectivity Start Date": "Wed Apr 19 2024",
+              "Effectivity End Date": "Wed Apr 25 2024",
+              "restriction": "performance should be monitored and restricted to plant ABC",
+              "documents": [
+                {
+                  "identifier": "582E8256D21F0000605C71C60000228B",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605C71C60000228B",
+                  "id": "582E8256D21F0000605C71C60000228B",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "proof": [
+                {
+                  "identifier": "582E8256D21F0000605d45874584dct2",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605d45874584dct2",
+                  "id": "582E8256D21F0000605d45874584dct2",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "context-restrictions": [
+                {
+                  "id": "B01482563A48000063186DCA000734AF",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "type": "VPMReference",
+                  "identifier": "B01482563A48000063186DCA000734AF",
+                  "relativePath": "/resources/v1/modeler/dseng/dseng:EngItem/B01482563A48000063186DCA000734AF",
+                  "action": "connect"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "patchContextQualification": {
+        "value": {
+          "data": [
+            {
+              "description": "Some Description",
+              "comments": "Some Comments",
+              "preferred": "No",
+              "approved": "Yes",
+              "Effectivity Start Date": "Wed Apr 19 2024",
+              "Effectivity End Date": "Wed Apr 25 2024",
+              "restriction": "performance should be monitored and restricted to plant ABC",
+              "documents": [
+                {
+                  "identifier": "582E8256D21F0000605C71C60000228B",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605C71C60000228B",
+                  "id": "582E8256D21F0000605C71C60000228B",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ],
+              "proof": [
+                {
+                  "identifier": "582E8256D21F0000605d45874584dct2",
+                  "source": "https://server_name.dsone.3ds.com:443/3DSpace",
+                  "relativePath": "/resources/v1/modeler/documents/582E8256D21F0000605d45874584dct2",
+                  "id": "582E8256D21F0000605d45874584dct2",
+                  "type": "Document",
+                  "action": "connect"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

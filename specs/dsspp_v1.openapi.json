@@ -1,0 +1,2976 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "REST Services provided in 3DSpace for Space Planning objects",
+    "version": "1.1.0",
+    "title": "Space Planning Web Services",
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dsspp",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_3DSpace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsspp/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/dsspp:SpaceAssignment/locate": {
+      "post": {
+        "summary": "Navigates Space Assignments from connected object/space physical IDs",
+        "description": "Navigates Space Assignments from connected object/space physical IDs",
+        "operationId": "dsspp:SpaceAssignment_LOCATE",
+        "tags": [
+          "dsspp:SpaceAssignment"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ENO_CSRF_TOKEN",
+            "in": "header",
+            "description": "csrf token. You can get it from 3DSpace/resources/v1/application/CSRF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/navigateSpaceAssignment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example: GET an entity corresponding to the requested resource is sent in the response; HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body; POST an entity describing or containing the result of the action; TRACE an entity containing the request message as received by the end server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "totalItems": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "7FE982569CE620006544826E000676E9",
+                            "description": "The Physical ID of the dsspp:SpaceAssignment."
+                          },
+                          "object": {
+                            "type": "object",
+                            "properties": {
+                              "source": {
+                                "type": "string",
+                                "example": "3DSpace",
+                                "description": "source."
+                              },
+                              "type": {
+                                "type": "string",
+                                "example": "VPMReference",
+                                "description": "type."
+                              },
+                              "identifier": {
+                                "type": "string",
+                                "example": "649F032E0000355C6542F4480000ED8C",
+                                "description": "The Physical ID of the connected object."
+                              },
+                              "relativePath": {
+                                "type": "string",
+                                "example": "/resources/v1/modeler/dseng/dseng:EngItem/649F032E0000355C6542F4480000ED8C",
+                                "description": "relativePath."
+                              }
+                            }
+                          },
+                          "space": {
+                            "type": "object",
+                            "properties": {
+                              "source": {
+                                "type": "string",
+                                "example": "3DSpace",
+                                "description": "source."
+                              },
+                              "type": {
+                                "type": "string",
+                                "example": "SSM_DesignSpaceRef",
+                                "description": "type."
+                              },
+                              "identifier": {
+                                "type": "string",
+                                "example": "649F032E0000355C6542F4480000EDEF",
+                                "description": "The Physical ID of the connected space."
+                              },
+                              "relativePath": {
+                                "type": "string",
+                                "example": "/dsspp:SpaceReference/649F032E0000355C6542F4480000EE05",
+                                "description": "relativePath."
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsspp:SpaceConceptRoot/search": {
+      "get": {
+        "summary": "Gets a list of Space concept roots from indexed search ",
+        "description": "Gets a list of Space concept roots. By default, returns a total of up to 50 items, can be optionally increased up to 1000 items using $top query parameter. Recommendation: Use $searchStr query parameter for better performances",
+        "operationId": "GETSearch_dsspp:SpaceConceptRoot_Search",
+        "tags": [
+          "dsspp:SpaceConceptRoot"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$searchStr",
+            "in": "query",
+            "description": "Provide a 3DEXPERIENCE search expression with a minimum of two characters. Note that this will run on indexed data only.</br>Example1 searchStr=\"FYD\" OR (modified&gt;\"2021-09-01T00:00:00Z\" AND modified&lt;\"2021-09-23T00:00:00Z\")</br>Example2 searchStr=[ds6wg:XP_VPMReference_Ext.Materiau]:(zinc)</br>Example3 searchStr=\"ARB\" AND modified&lt;\"2019-03-19T08:00:00.000Z\"",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvspp:SpaceConceptRootMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvspp:SpaceConceptRootMask.Default",
+                "dsmvspp:SpaceConceptRootMask.Children"
+              ]
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 1000.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvspp_SpaceConceptRootMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvspp_SpaceConceptRootMask.Children_WithCEStamp"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsspp:SpaceConceptRoot/bulkfetch": {
+      "post": {
+        "summary": "Gets index-based a list of Space concept root",
+        "description": "Gets index-based a list of Space concept root",
+        "operationId": "bulkfetch_dsspp:SpaceConceptRoot_bulkfetch",
+        "tags": [
+          "dsspp:SpaceConceptRoot"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvspp:SpaceConceptRootMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvspp:SpaceConceptRootMask.Default",
+                "dsmvspp:SpaceConceptRootMask.Children"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/POST_BulkFetch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvspp_SpaceConceptRootMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvspp_SpaceConceptRootMask.Children_WithCEStamp"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsspp:SpaceConceptRoot/{ID}": {
+      "get": {
+        "summary": "Gets a Space concept root",
+        "description": "Gets a Space concept root",
+        "operationId": "GET_dsspp:SpaceConceptRoot_ID",
+        "tags": [
+          "dsspp:SpaceConceptRoot"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsspp:SpaceConceptRoot object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvspp:SpaceConceptRootMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvspp:SpaceConceptRootMask.Default",
+                "dsmvspp:SpaceConceptRootMask.Children"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvspp_SpaceConceptRootMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvspp_SpaceConceptRootMask.Children_WithCEStamp"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsspp:SpaceReference/{ID}": {
+      "get": {
+        "summary": "Gets a Space reference",
+        "description": "Gets a Space reference",
+        "operationId": "GET_dsspp:SpaceReference_ID",
+        "tags": [
+          "dsspp:SpaceReference"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsspp:SpaceReference object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvspp:SpaceReferenceMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvspp:SpaceReferenceMask.Default",
+                "dsmvspp:SpaceReferenceMask.Children"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvspp_SpaceReferenceMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvspp_SpaceReferenceMask.Children_WithCEStamp"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsspp:SpaceReference/search": {
+      "get": {
+        "summary": "Gets a list of Space references from indexed search ",
+        "description": "Gets a list of Space references. By default, returns a total of up to 50 items, can be optionally increased up to 1000 items using $top query parameter. Recommendation: Use $searchStr query parameter for better performances",
+        "operationId": "GETSearch_dsspp:SpaceReference_Search",
+        "tags": [
+          "dsspp:SpaceReference"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$searchStr",
+            "in": "query",
+            "description": "Provide a 3DEXPERIENCE search expression with a minimum of two characters. Note that this will run on indexed data only.</br>Example1 searchStr=\"FYD\" OR (modified&gt;\"2021-09-01T00:00:00Z\" AND modified&lt;\"2021-09-23T00:00:00Z\")</br>Example2 searchStr=[ds6wg:XP_VPMReference_Ext.Materiau]:(zinc)</br>Example3 searchStr=\"ARB\" AND modified&lt;\"2019-03-19T08:00:00.000Z\"",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvspp:SpaceReferenceMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvspp:SpaceReferenceMask.Default",
+                "dsmvspp:SpaceReferenceMask.Children"
+              ]
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Represents the total number of items returned from the search, accepts a maximum value of 1000.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Represents the number of items to skip (to be used along with $top query parameter)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvspp_SpaceReferenceMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvspp_SpaceReferenceMask.Children_WithCEStamp"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsspp:SpaceReference/bulkfetch": {
+      "post": {
+        "summary": "Gets index-based a list of Space reference",
+        "description": "Gets index-based a list of Space reference",
+        "operationId": "bulkfetch_dsspp:SpaceReference_bulkfetch",
+        "tags": [
+          "dsspp:SpaceReference"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvspp:SpaceReferenceMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvspp:SpaceReferenceMask.Default",
+                "dsmvspp:SpaceReferenceMask.Children"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/POST_BulkFetch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvspp_SpaceReferenceMask.Default_WithCEStamp"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dsmvspp_SpaceReferenceMask.Children_WithCEStamp"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dsspp:SpaceAssignment/{ID}": {
+      "get": {
+        "summary": "Gets a Space assignment",
+        "description": "Gets a Space assignment",
+        "operationId": "GET_dsspp:SpaceAssignment_ID",
+        "tags": [
+          "dsspp:SpaceAssignment"
+        ],
+        "parameters": [
+          {
+            "name": "SecurityContext",
+            "in": "header",
+            "description": "Role.Organization.CollabSpace value Ex:VPLMProjectLeader.MyCompany.Default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "dsspp:SpaceAssignment object ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "$mask",
+            "description": "Mask defining what will be returned. Default Mask is:dsmvspp:SpaceAssignmentMask.Default",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dsmvspp:SpaceAssignmentMask.Default"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dsmvspp_SpaceAssignmentMask.Default"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD REQUEST. The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED. The request requires user authentication. The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The client MAY repeat the request with a suitable Authorization header field. If the request already included Authorization credentials, then the 401 response indicates that authorization has been refused for those credentials. If the 401 response contains the same challenge as the prior response, and the user agent has already attempted authentication at least once, then the user SHOULD be presented the entity that was given in the response, since that entity might include relevant diagnostic information. HTTP access authentication is explained in \"HTTP Authentication: Basic and Digest Access Authentication\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL SERVER ERROR. A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "My message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "dsspp_SpaceAssignment": {
+        "properties": {
+          "Attribute DB Name": {
+            "$ref": "#/components/schemas/anyValue"
+          }
+        }
+      },
+      "dsspp_SpaceAssignment_PATCH": {
+        "properties": {
+          "Attribute DB Name": {
+            "$ref": "#/components/schemas/anyValue"
+          }
+        }
+      },
+      "dsspp_SpaceConceptRoot": {
+        "properties": {
+          "Attribute DB Name": {
+            "$ref": "#/components/schemas/anyValue"
+          }
+        }
+      },
+      "dsspp_SpaceConceptRoot_PATCH": {
+        "properties": {
+          "Attribute DB Name": {
+            "$ref": "#/components/schemas/anyValue"
+          }
+        }
+      },
+      "dsspp_SpaceReference": {
+        "properties": {
+          "Attribute DB Name": {
+            "$ref": "#/components/schemas/anyValue"
+          }
+        }
+      },
+      "dsspp_SpaceReference_PATCH": {
+        "properties": {
+          "Attribute DB Name": {
+            "$ref": "#/components/schemas/anyValue"
+          }
+        }
+      },
+      "navigateSpaceAssignment": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "example": [
+          "PID1",
+          "PID2",
+          "PID3",
+          "..."
+        ]
+      },
+      "addGetItems": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "example": [
+          "EE512F4A015FE57B4F940A513C63AA77",
+          "EE5211D2015FF9F94F940A513C63AA77"
+        ]
+      },
+      "addEmpty": {},
+      "addLinks": {
+        "properties": {
+          "fromID": {
+            "type": "string",
+            "example": "EE5211D2015FF9F94F940A513C63AA77"
+          },
+          "toID": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "EE562168015FFCF14F940A513C63AA77"
+            }
+          }
+        }
+      },
+      "addVersions": {
+        "properties": {
+          "versionName": {
+            "type": "string",
+            "example": "A.1"
+          },
+          "parents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "parentID": {
+                  "type": "string",
+                  "example": "EE4FBDEA015FEC3D4F940A513C63AA77"
+                },
+                "scemantic": {
+                  "type": "string",
+                  "example": "fix"
+                }
+              }
+            }
+          }
+        }
+      },
+      "POST_BULK_UPDATE": {
+        "type": "array",
+        "items": {
+          "properties": {
+            "id": {
+              "description": "Physical ID",
+              "type": "string",
+              "example": "CF446630000051C46023F7630004F39F"
+            },
+            "attr1": {
+              "description": "Attribute Name1",
+              "type": "string",
+              "example": "Attribute Value"
+            },
+            "attr2": {
+              "description": "Attribute Name2",
+              "type": "string",
+              "example": "Attribute Value"
+            },
+            "cestamp": {
+              "description": "cestamp ID",
+              "type": "string",
+              "example": "CF446630000051C460123453E8123C"
+            },
+            "dsxxx:xxxEnterpriseAttributes": {
+              "properties": {
+                "attr3": {
+                  "description": "Attribute Name3",
+                  "type": "string",
+                  "example": "Attribute Value"
+                },
+                "attr4": {
+                  "description": "Attribute Name4",
+                  "type": "string",
+                  "example": "Attribute Value"
+                }
+              }
+            },
+            "customerAttributes": {
+              "properties": {
+                "attr5": {
+                  "description": "Attribute Name5",
+                  "type": "string",
+                  "example": "Attribute Value"
+                },
+                "attr6": {
+                  "description": "Attribute Name6",
+                  "type": "string",
+                  "example": "Attribute Value"
+                },
+                "customerAttributeGroups": {
+                  "properties": {
+                    "attr7": {
+                      "description": "Attribute Name7",
+                      "type": "string",
+                      "example": "Attribute Value"
+                    },
+                    "attr8": {
+                      "description": "Attribute Name8",
+                      "type": "string",
+                      "example": "Attribute Value"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "POST_BulkFetch": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "example": [
+          "EE512F4A015FE57B4F940A513C63AA77",
+          "EE5211D2015FF9F94F940A513C63AA77"
+        ]
+      },
+      "dsmvspp_SpaceAssignmentMask.Default": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "object": {
+                  "properties": {
+                    "source": {
+                      "type": "string",
+                      "example": "3DSpace",
+                      "description": "source."
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "VPMReference",
+                      "description": "type."
+                    },
+                    "identifier": {
+                      "type": "string",
+                      "example": "649F032E0000355C6542F4480000ED8C",
+                      "description": "The Physical ID of the dseng:EngItem."
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "example": "/resources/v1/modeler/dseng/dseng:EngItem/649F032E0000355C6542F4480000ED8C",
+                      "description": "relativePath."
+                    }
+                  }
+                },
+                "space": {
+                  "properties": {
+                    "source": {
+                      "type": "string",
+                      "example": "3DSpace",
+                      "description": "source."
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "SSM_DesignSpaceRef",
+                      "description": "type."
+                    },
+                    "identifier": {
+                      "type": "string",
+                      "example": "649F032E0000355C6542F4480000EDEF",
+                      "description": "The Physical ID of the dsspp:SpaceReference."
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "example": "/dsspp:SpaceReference/649F032E0000355C6542F4480000EE05",
+                      "description": "relativePath."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "object": {
+                "type": "string",
+                "example": "My object translated value"
+              },
+              "space": {
+                "type": "string",
+                "example": "My space translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvspp_SpaceAssignmentMask.Default_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "object": {
+                  "properties": {
+                    "source": {
+                      "type": "string",
+                      "example": "3DSpace",
+                      "description": "source."
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "VPMReference",
+                      "description": "type."
+                    },
+                    "identifier": {
+                      "type": "string",
+                      "example": "649F032E0000355C6542F4480000ED8C",
+                      "description": "The Physical ID of the dseng:EngItem."
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "example": "/resources/v1/modeler/dseng/dseng:EngItem/649F032E0000355C6542F4480000ED8C",
+                      "description": "relativePath."
+                    }
+                  }
+                },
+                "space": {
+                  "properties": {
+                    "source": {
+                      "type": "string",
+                      "example": "3DSpace",
+                      "description": "source."
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "SSM_DesignSpaceRef",
+                      "description": "type."
+                    },
+                    "identifier": {
+                      "type": "string",
+                      "example": "649F032E0000355C6542F4480000EDEF",
+                      "description": "The Physical ID of the dsspp:SpaceReference."
+                    },
+                    "relativePath": {
+                      "type": "string",
+                      "example": "/dsspp:SpaceReference/649F032E0000355C6542F4480000EE05",
+                      "description": "relativePath."
+                    }
+                  }
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "object": {
+                "type": "string",
+                "example": "My object translated value"
+              },
+              "space": {
+                "type": "string",
+                "example": "My space translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvspp_SpaceConceptRootMask.Default": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvspp_SpaceConceptRootMask.Default_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvspp_SpaceReferenceMask.Children": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "children": {
+                  "properties": {
+                    "totalItems": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "source": {
+                            "type": "string",
+                            "example": "3DSpace",
+                            "description": "source."
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "SSM_DesignSpaceRef",
+                            "description": "type."
+                          },
+                          "identifier": {
+                            "type": "string",
+                            "example": "649F032E0000355C6542F4480000EDEF",
+                            "description": "The Physical ID of the child space."
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "example": "/dsspp:SpaceReference/649F032E0000355C6542F4480000EE05",
+                            "description": "relativePath."
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              },
+              "children": {
+                "type": "string",
+                "example": "My children translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvspp_SpaceReferenceMask.Children_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "children": {
+                  "properties": {
+                    "totalItems": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "source": {
+                            "type": "string",
+                            "example": "3DSpace",
+                            "description": "source."
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "SSM_DesignSpaceRef",
+                            "description": "type."
+                          },
+                          "identifier": {
+                            "type": "string",
+                            "example": "649F032E0000355C6542F4480000EDEF",
+                            "description": "The Physical ID of the child space."
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "example": "/dsspp:SpaceReference/649F032E0000355C6542F4480000EE05",
+                            "description": "relativePath."
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              },
+              "children": {
+                "type": "string",
+                "example": "My children translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvspp_SpaceReferenceMask.Default": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvspp_SpaceReferenceMask.Default_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvspp_SpaceConceptRootMask.Children": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "children": {
+                  "properties": {
+                    "totalItems": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "source": {
+                            "type": "string",
+                            "example": "3DSpace",
+                            "description": "source."
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "SSM_DesignSpaceRef",
+                            "description": "type."
+                          },
+                          "identifier": {
+                            "type": "string",
+                            "example": "649F032E0000355C6542F4480000EDEF",
+                            "description": "The Physical ID of the child space."
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "example": "/dsspp:SpaceReference/649F032E0000355C6542F4480000EE05",
+                            "description": "relativePath."
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              },
+              "children": {
+                "type": "string",
+                "example": "My children translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmvspp_SpaceConceptRootMask.Children_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "2022-01-31T09:48:10Z"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "children": {
+                  "properties": {
+                    "totalItems": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "source": {
+                            "type": "string",
+                            "example": "3DSpace",
+                            "description": "source."
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "SSM_DesignSpaceRef",
+                            "description": "type."
+                          },
+                          "identifier": {
+                            "type": "string",
+                            "example": "649F032E0000355C6542F4480000EDEF",
+                            "description": "The Physical ID of the child space."
+                          },
+                          "relativePath": {
+                            "type": "string",
+                            "example": "/dsspp:SpaceReference/649F032E0000355C6542F4480000EE05",
+                            "description": "relativePath."
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              },
+              "children": {
+                "type": "string",
+                "example": "My children translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultBusMask.public": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultBusMask.public_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Reference name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "title": {
+                  "description": "Reference object title value",
+                  "type": "string",
+                  "example": "My title"
+                },
+                "description": {
+                  "description": "Reference description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "revision": {
+                  "description": "Object revision value",
+                  "type": "string",
+                  "example": "A.1"
+                },
+                "state": {
+                  "description": "Object current state value",
+                  "type": "string",
+                  "example": "IN_WORK"
+                },
+                "owner": {
+                  "description": "Object owner value",
+                  "type": "string",
+                  "example": "DB Owner"
+                },
+                "organization": {
+                  "description": "Object organization value",
+                  "type": "string",
+                  "example": "MyCompany"
+                },
+                "collabspace": {
+                  "description": "Object collabspace value",
+                  "type": "string",
+                  "example": "Default"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              },
+              "revision": {
+                "type": "string",
+                "example": "My Revision translated value"
+              },
+              "state": {
+                "type": "string",
+                "example": "My State translated value"
+              },
+              "owner": {
+                "type": "string",
+                "example": "My Owner translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultRelMask.public": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "name": {
+                  "description": "Instance name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "description": {
+                  "description": "Instance description value",
+                  "type": "string",
+                  "example": "My description"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultRelMask.public_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Entity physical id",
+                  "type": "string",
+                  "example": "EE562168015FFCF14F940A513C63AA77"
+                },
+                "type": {
+                  "description": "Basic type value",
+                  "type": "string",
+                  "example": "DBType"
+                },
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "name": {
+                  "description": "Instance name",
+                  "type": "string",
+                  "example": "My name"
+                },
+                "description": {
+                  "description": "Instance description value",
+                  "type": "string",
+                  "example": "My description"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "My Id translated value"
+              },
+              "type": {
+                "type": "string",
+                "example": "My Type translated value"
+              },
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultExtensionMask.public": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              }
+            }
+          }
+        }
+      },
+      "dsmveno_DefaultExtensionMask.public_WithCEStamp": {
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "example": 1
+          },
+          "member": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "modified": {
+                  "description": "Basic modified value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "created": {
+                  "description": "Object created value",
+                  "type": "string",
+                  "example": "10/19/2021 10:58:01 PM"
+                },
+                "cestamp": {
+                  "description": "Object cestamp value",
+                  "type": "string",
+                  "example": "2D70169432D84866A200F907881AC9B1"
+                }
+              }
+            }
+          },
+          "nlsLabel": {
+            "type": "object",
+            "properties": {
+              "modified": {
+                "type": "string",
+                "example": "My Modification Date translated value"
+              },
+              "created": {
+                "type": "string",
+                "example": "My Creation Date translated value"
+              }
+            }
+          }
+        }
+      },
+      "anyValue": {
+        "example": "My Value, true, 3.14, [My value 1, My value 2], [12,45,85]",
+        "description": "The value for the attributes (Expand to review type specifications)",
+        "oneOf": [
+          {
+            "type": "string",
+            "example": "my value"
+          },
+          {
+            "type": "integer",
+            "example": "36352"
+          },
+          {
+            "type": "number",
+            "example": "3.14"
+          },
+          {
+            "type": "boolean",
+            "example": "true"
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "[my value 1,my value 2,my value 3]"
+            }
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "example": "[36352,475,6719]"
+            }
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "example": "[3.14,6.28,12.56]"
+            }
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "boolean",
+              "example": "[true,false,false]"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

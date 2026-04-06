@@ -1,0 +1,600 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "x-ds-copyright": "3DEXPERIENCE R2025x (c) 2025 Dassault Systemes.",
+    "title": "RAMS Web Services",
+    "summary": "REST Services for managing RAMS and APQP core tools objects (dsrams).",
+    "description": "dsrams: RAMS corpus REST Services for managing RAMS and APQP core tools objects.",
+    "version": "1.0.0",
+    "x-ds-service": [
+      "3DSpace"
+    ]
+  },
+  "tags": [
+    {
+      "name": "FailureModesEffectsAnalysis",
+      "description": "Failure Modes Effects Analysis"
+    },
+    {
+      "name": "RAMS",
+      "description": "Reliability, Availability, Maintainability and Safety"
+    },
+    {
+      "name": "APQP",
+      "description": "Advanced Product Quality Planning (and Control Plan)"
+    }
+  ],
+  "servers": [
+    {
+      "url": "{3DSpace}/resources/v1/modeler/dsrams",
+      "variables": {
+        "3DSpace": {
+          "default": "https://3DEXPERIENCE_3DSpace",
+          "description": "URL of the 3DSpace service"
+        }
+      }
+    },
+    {
+      "url": "{APIGateway}/api/dsrams/v1",
+      "description": "Cloud API Gateway",
+      "variables": {
+        "APIGateway": {
+          "default": "https://my3DEXPERIENCE-APIGateway"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/FailureModesEffectsAnalysis/{pid}": {
+      "get": {
+        "summary": "Gets FailureModesEffectsAnalysis.",
+        "description": "Gets FailureModesEffectsAnalysis.",
+        "operationId": "dsrams:FailureModesEffectsAnalysis_GET",
+        "tags": [
+          "FailureModesEffectsAnalysis"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          },
+          {
+            "in": "path",
+            "name": "pid",
+            "required": true,
+            "description": "FailureModesEffectsAnalysis physicalid",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/FMEA"
+                      }
+                    },
+                    "info": {
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "statusCode": {
+                          "type": "integer",
+                          "example": 200
+                        }
+                      },
+                      "required": [
+                        "success",
+                        "statusCode"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "data": [],
+                  "info": {
+                    "success": true,
+                    "statusCode": 401
+                  },
+                  "error": [
+                    {
+                      "type": "errors:3dx:authenticationGenericError",
+                      "title": "Unauthorized",
+                      "status": 401,
+                      "detail": "CSRF token validation failed"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "data": [],
+                  "info": {
+                    "success": true,
+                    "statusCode": 404
+                  },
+                  "error": [
+                    {
+                      "type": "errors:3dx:resourceNotFound",
+                      "title": "Not Found",
+                      "status": 404,
+                      "detail": "FailureModesEffectsAnalysis not found"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "data": [],
+                  "info": {
+                    "success": true,
+                    "statusCode": 500
+                  },
+                  "error": [
+                    {
+                      "type": "errors:3dx:internalServerError",
+                      "title": "Internal Server Error",
+                      "status": 500,
+                      "detail": "A detailed message"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/FailureModesEffectsAnalysis/locate": {
+      "post": {
+        "summary": "Gets FailureModesEffectsAnalysis analyzing input items.",
+        "description": "Gets FailureModesEffectsAnalysis from analyzed items. An item could be:\n* an Architecture element (RFLVPMLogicalReference, RFLPLMFunctionalReference, VPMReference...)\n* an element from PPR data-model (PQA analyses). Maximum of 50 analyzed items can be requested in payload.",
+        "operationId": "dsrams:FailureModesEffectsAnalysis_LOCATE",
+        "tags": [
+          "FailureModesEffectsAnalysis"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SecurityContext"
+          },
+          {
+            "$ref": "#/components/parameters/ENO_CSRF_TOKEN"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "FailureModesEffectsAnalysis locate query",
+                "type": "object",
+                "properties": {
+                  "analyzedItems": {
+                    "description": "FailureModesEffectsAnalysis analyzed items",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ObjectIdentification"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "analyzedItem": {
+                            "type": "object",
+                            "properties": {
+                              "identifier": {
+                                "type": "string",
+                                "example": "11223344556677889900AABBCCDDEEFF"
+                              }
+                            }
+                          },
+                          "fmeas": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/FMEA"
+                            }
+                          },
+                          "required": [
+                            "analyzedItem",
+                            "fmeas"
+                          ]
+                        }
+                      }
+                    },
+                    "info": {
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "statusCode": {
+                          "type": "integer",
+                          "example": 200
+                        }
+                      },
+                      "required": [
+                        "success",
+                        "statusCode"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "data": [],
+                  "info": {
+                    "success": true,
+                    "statusCode": 400
+                  },
+                  "error": [
+                    {
+                      "type": "errors:3dx:invalidRequest",
+                      "title": "Bad Request",
+                      "status": 400,
+                      "detail": "Payload is not of the expected format."
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication Issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "data": [],
+                  "info": {
+                    "success": true,
+                    "statusCode": 401
+                  },
+                  "error": [
+                    {
+                      "type": "errors:3dx:authenticationGenericError",
+                      "title": "Unauthorized",
+                      "status": 401,
+                      "detail": "CSRF token validation failed"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "data": [],
+                  "info": {
+                    "success": true,
+                    "statusCode": 500
+                  },
+                  "error": [
+                    {
+                      "type": "errors:3dx:internalServerError",
+                      "title": "Internal Server Error",
+                      "status": 500,
+                      "detail": "A detailed message"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "parameters": {
+      "SecurityContext": {
+        "name": "SecurityContext",
+        "in": "header",
+        "description": "the Security Context to be used for this request.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "ctx::VPLMProjectLeader.MyCompany.MyCollabSpace",
+        "required": true
+      },
+      "ENO_CSRF_TOKEN": {
+        "name": "ENO_CSRF_TOKEN",
+        "in": "header",
+        "description": "the CSRF Token to be used for this request.\nToken can be generated at URL {3DSpace}/resources/v1/application/CSRF",
+        "schema": {
+          "type": "string"
+        },
+        "example": "D3KG-QXIU-MTS9-6490-STAL-9WTZ-BQBU-E5Y1",
+        "required": true
+      }
+    },
+    "schemas": {
+      "FMEA": {
+        "title": "FailureModesEffectsAnalysis",
+        "description": "FailureModesEffectsAnalysis definition",
+        "type": "object",
+        "properties": {
+          "physicalid": {
+            "type": "string",
+            "example": "11223344556644778899AABBCCDDEEFF"
+          },
+          "type": {
+            "type": "string",
+            "example": "FailureModesEffectsAnalysis"
+          },
+          "name": {
+            "type": "string",
+            "example": "fmea-12345678-00000001"
+          },
+          "revision": {
+            "type": "string",
+            "example": "A"
+          },
+          "state": {
+            "type": "string",
+            "example": "RELEASED"
+          },
+          "policy": {
+            "type": "string",
+            "example": "VPLM_SMB_Definition"
+          },
+          "logicalid": {
+            "type": "string",
+            "example": "11223344556644778899AABBCCDDEEFF"
+          },
+          "cestamp": {
+            "type": "string",
+            "example": "11223344556644778899AABBCCDDEEFF"
+          },
+          "organization": {
+            "type": "string",
+            "example": "My Company"
+          },
+          "created": {
+            "type": "string",
+            "example": "12/25/2024 11:22:33 AM"
+          },
+          "modified": {
+            "type": "string",
+            "example": "12/25/2024 11:22:33 AM"
+          },
+          "owner": {
+            "type": "string",
+            "example": "Owner"
+          },
+          "title": {
+            "type": "string",
+            "example": "My FailureModesEffectsAnalysis"
+          },
+          "plmExternalid": {
+            "type": "string",
+            "example": "fmea-12345678-00000001"
+          },
+          "description": {
+            "type": "string",
+            "example": "My description"
+          },
+          "flattenedtaxonomies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "types/PLMEntity",
+              "types/PLMReference",
+              "types/PLMCoreReference",
+              "types/FailureModesEffectsAnalysis"
+            ]
+          }
+        }
+      },
+      "ObjectIdentification": {
+        "title": "Object Identification",
+        "oneOf": [
+          {
+            "title": "Object Reference",
+            "description": "Identification of an object using its physicalid",
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "example": "11223344556677889900AABBCCDDEEFF"
+              }
+            },
+            "required": [
+              "identifier"
+            ]
+          },
+          {
+            "title": "Type Name Revision",
+            "description": "Identification of an object using its Type Name Revision",
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "example": "RFLVPMLogicalReference"
+              },
+              "name": {
+                "type": "string",
+                "example": "log-12345678-00000001"
+              },
+              "revision": {
+                "type": "string",
+                "example": "A"
+              }
+            },
+            "required": [
+              "type",
+              "name",
+              "revision"
+            ]
+          }
+        ],
+        "description": "Id Description"
+      },
+      "ErrorResponse": {
+        "title": "Error Response",
+        "type": "object",
+        "description": "Object that contains information about error",
+        "properties": {
+          "data": {
+            "type": "array",
+            "example": []
+          },
+          "info": {
+            "type": "object",
+            "properties": {
+              "success": {
+                "type": "boolean",
+                "example": true
+              },
+              "statusCode": {
+                "type": "integer",
+                "example": 400
+              }
+            },
+            "required": [
+              "success",
+              "statusCode"
+            ]
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "$ref": "#/components/schemas/ErrorType",
+                "example": "errors:3dx:invalidRequest"
+              },
+              "title": {
+                "type": "string",
+                "example": "Bad Request"
+              },
+              "status": {
+                "type": "integer",
+                "example": 400
+              },
+              "detail": {
+                "type": "string",
+                "example": "A detailed message"
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "status",
+              "detail"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "info",
+          "error"
+        ]
+      },
+      "ErrorType": {
+        "type": "string",
+        "enum": [
+          "errors:3dx:invalidRequest",
+          "errors:3dx:invalidBusinessType",
+          "errors:3dx:authMissing",
+          "errors:3dx:authFormat",
+          "errors:3dx:authenticationGenericError",
+          "errors:3dx:accessForbidden",
+          "errors:3dx:resourceNotFound",
+          "errors:3dx:invalidMethod",
+          "errors:3dx:notAcceptable",
+          "errors:3dx:timeOut",
+          "errors:3dx:preconditionFailed",
+          "errors:3dx:unsupportedMediaType",
+          "errors:3dx:tooManyRequests",
+          "errors:3dx:internalServerError",
+          "errors:3dx:internalServerUnresponsiveProcess",
+          "errors:3dx:internalServerUnavailable",
+          "errors:3dx:internalServerFailedAfterAllottedTime"
+        ]
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ]
+}

@@ -1,0 +1,3042 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "version": "1.0.0",
+    "title": "User Groups Web Services",
+    "description": "This documentation details the REST web services for managing group of users. \n\nA user group has the following properties:\n\n\n - <b>URI:</b> This is the unique and non-modifiable identifier of a user group. It may be provided as input, or automatically generated at creation time.\n\n\n - <b>Title:</b> This information is the minimal one to provide for creating a user group.\n\n\n - <b>Description:</b> This is a text for describing the user group.\n\n\n - <b>Visibility:</b> The visibility can be public or private. A public group is visible (read access) for any users of the platform while for a private group its access is limited. A private group is always visible for its owner and to any platform administrator. A platform member may be authorized to read a private group, if the person has for this group an access control responsibility of at least viewer.The group visibility can be changed from private to public, the reverse direction is only possible if the user has the reponsibility of Visibility Switch.\n\n\n - <b>Owner:</b> As owner  of a group, the person has all capabilities listed in the array below. An owner is referenced by an email.\n\n\n - <b>Members:</b> It is a list of people having a 3DPassport account. They can be in pending or active state. In all cases they are referenced by their email addresses.\n\n\n - <b>Pending members:</b> It is a list of  emails representing people without 3DPassport accounts yet. Once connected to the platform, the person behind the email is automatically passed member of the group.\n\n\n\n\n\nAs group owner, the person is granted for all the operations. For more information, read the technical article \"Understanding Group Access Control\". Otherwise, it depends on the responsibilities he/she has been granted for. Find table of responsibilities access rights in the technical article \"About Users Group Access Control\".\n\n Constraints are defined in the dimension of some input parameters detailed in web services. If those constraints are not respected, only the first authorized elements will be taken into consideration and the remaining will be ignored.\n\nAbout the query parameter names, they must be case sensitive. Otherwise, they are ignored.",
+    "x-ds-service": [
+      "UsersGroup"
+    ],
+    "x-ds-copyright": "Copyright Dassault Systemes 2024"
+  },
+  "servers": [
+    {
+      "url": "{UsersGroup}",
+      "variables": {
+        "UsersGroup": {
+          "default": "https://3DEXPERIENCE_UsersGroup"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "Create",
+      "description": "Group creation web service"
+    },
+    {
+      "name": "Read",
+      "description": "Group retrieval web services"
+    },
+    {
+      "name": "Update",
+      "description": "Group modification web service"
+    },
+    {
+      "name": "Delete",
+      "description": "Group deletion web service"
+    },
+    {
+      "name": "Access Control By Sharing",
+      "description": "Group access control management web services"
+    }
+  ],
+  "paths": {
+    "/3drdfpersist/resources/v1/usersgroup/{uri}": {
+      "delete": {
+        "tags": [
+          "Delete"
+        ],
+        "summary": "Delete a group",
+        "description": "This web service deletes a group of users with a given uri.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/uri"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid given parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/invalidURI"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the connected person is not granted to read the group, see the table of responsibilities access rights in the technical article \"About Users Group Access Control\" , or the group does not really exist in database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/invalidGroup"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated user."
+          },
+          "403": {
+            "description": "If the connected person is  granted to read the group, but not for the operation. See the table of responsibilities access rights in the technical article \"About Users Group Access Control\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedGroupDelete"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Update"
+        ],
+        "summary": "Update a group",
+        "description": "This web service updates a group of users with a given uri and parameters.\n\nThis operation is atomic. It means if at least one  requested change is invalid, no change at all are applied.\n\nThe updatable properties are title, description, owner (transfer ownership to either pending or active user), members, pending members, and visibility. They are updatable according to the rights of the authenticated user, as detailed in the table of responsibilities and access rights in the technical article \"About Users Group Access Control\".\n\nNote that transfering ownership, changing visibility and updating properties require different responsibilities.\n\nEmail format is expected for both members and pending_members properties in request and response body.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/uri"
+          },
+          {
+            "$ref": "#/components/parameters/content-type"
+          },
+          {
+            "$ref": "#/components/parameters/accept-language_output"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/patchGroupUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK\n\nThe response body only contains the modified properties.\n\nFor the add/remove members operation, the list of user's emails added, removed or invalid can be found in the response with the keys members, removed_members and not_members respectively.\n\nFor the add/remove pending members operation, the list of user's emails added or removed can be found in the response with the keys pending_members and removed_pending_members respectively. Note that: if the user's email represents a person who has a 3DPassport account, then this email will be handled as an add/remove members operation. If the email is not valid, it will be returned in the response with the key: not_emails.\n\nNo global error is raised for an incorrect member format. A member with an incorrect identifier format is not added to the group. Instead, the member is inserted in the not_members property.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responsePatchGroupUpdate"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the connected person is not granted to read the group, see the table of responsibilities access rights in the technical article \"About Users Group Access Control\", or the group does not really exist in database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/invalidGroup"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated user."
+          },
+          "403": {
+            "description": "If the connected person is  granted to read the group, but not for the operation. See the table of responsibilities access rights in the technical article \"About Users Group Access Control\".",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/unauthorizedGroupModify"
+                    },
+                    {
+                      "$ref": "#/components/schemas/unauthorizedGroupTransferOwnership"
+                    },
+                    {
+                      "$ref": "#/components/schemas/unauthorizedGroupChangeVisibility"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid given parameters. \n\nFor owner of a group: If the format of the input data does not comply with the query parameter value, it will be considered an error. We will get an error message saying the owner is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/unsupportedOperation"
+                    },
+                    {
+                      "$ref": "#/components/schemas/unsupportedField"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidURI"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidTitleSize"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidCommentSize"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidOwner"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidGroupVisibility"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidTransaction"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidRequest"
+                    },
+                    {
+                      "$ref": "#/components/schemas/missingOperation"
+                    },
+                    {
+                      "$ref": "#/components/schemas/missingField"
+                    },
+                    {
+                      "$ref": "#/components/schemas/missingValue"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidEmailOwnerFormat"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidUriOwnerFormat"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/v1/usersgroup": {
+      "post": {
+        "tags": [
+          "Create"
+        ],
+        "summary": "Create groups",
+        "description": "This web service creates groups according to given definitions. Each definition may contain or not the group URI. If the latter is not provided one is automatically generated.\n\nMoreover, when <b>a user group is created</b>, it is not immediately consumable by other services: it first need to be indexed, which may take some time. Once the group is visible from 3DSearch it is fully consumable.\n\nThe creator of the group is owner of the group. It can be changed by transfer ownership (apply update web service). Take care, the owner is by default not member of the group.\n\nEmail format is expected for both members and pending_members properties in request and response body.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/content-type"
+          },
+          {
+            "$ref": "#/components/parameters/accept-language_input_output"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/postMultipleGroupCreation"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK\n\nThe response body contains an array of objects. There are as many elements in the array as in the request payload, and in the same order. The response object for a group creation request is either a list of properties - with input values only - or a string message explaining the issue. The property total_groups_failed helps you to know, without parsing the response, if there is at least one issue.\n\nNo global error is raised for an incorrect member format. A member with an incorrect identifier format is not added to the group. Instead, the member is inserted in the not_members property.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responsePostMultipleGroupCreation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid given request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/invalidRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated user"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Read"
+        ],
+        "summary": "Search groups",
+        "description": "This web service retrieves information either for the groups having a given pattern in their title or description, or for all groups in the database without a pattern. The returned list may be limited by providing a skip parameter, and a max total elements.\n\nFor each returned group, the response contains:\n\n- With a given pattern, the uri, title , description and other requested properties.\n\n- Without a pattern the response contains the uri and the requested properties.\n\nThe returned list only contains the groups the connected user is granted to read. See the control access rights at the top of the HTML page.\n\nIf members and pending_members are included in the response body, email format is expected for both properties.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/content-type"
+          },
+          {
+            "$ref": "#/components/parameters/accept-language_output"
+          },
+          {
+            "$ref": "#/components/parameters/select"
+          },
+          {
+            "$ref": "#/components/parameters/pattern"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/top"
+          },
+          {
+            "$ref": "#/components/parameters/skipPersons"
+          },
+          {
+            "$ref": "#/components/parameters/topPersons"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "$ref": "#/components/parameters/orderBy"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK\n\nThe response is a list of groups definitions (the properties defined in the select query parameter).\n\nIf a pattern is given, the response is a list of groups whose title/description matches the pattern value.\n\nIf sort and orderBy are provided, the response is a sorted list of groups based on orderBy value.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseListGroups"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated user"
+          },
+          "400": {
+            "description": "Invalid given parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/invalidOrderBy"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidSort"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidPattern"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/v1/usersgroup/groups": {
+      "post": {
+        "tags": [
+          "Read"
+        ],
+        "summary": "List groups with specified URIs",
+        "description": "This web service retrieves information for the groups of users specified in the request payload. In the response are excluded the groups for which: <ul><li>The title or the description do not contain a given pattern (if pattern is specified).<li>The connected person does not have the visibility right as specified at the top of the HTML page.</li></ul>.For each excluded group the response payload specifies the issue.\n\nIf members and pending_members are included in the response body, email format is expected for both properties.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/content-type"
+          },
+          {
+            "$ref": "#/components/parameters/accept-language_output"
+          },
+          {
+            "$ref": "#/components/parameters/select"
+          },
+          {
+            "$ref": "#/components/parameters/skipPersons"
+          },
+          {
+            "$ref": "#/components/parameters/topPersons"
+          },
+          {
+            "$ref": "#/components/parameters/pattern"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/postListGroupWithURIs"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK\n\nThe response body contains an array of objects. There are as many elements in the array as the request payload, and in the same order. The response object for a requested group request is either a list of properties -  uri  + select values + title and description if there is a pattern - or a string message explaining the issue. The property total_groups_failed helps you to know, without parsing the response, if there is at least one issue.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseListGroupsWithURIs"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated user"
+          },
+          "400": {
+            "description": "Invalid given parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/invalidPattern"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidRequest"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidEmailOwnerFormat"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidUriOwnerFormat"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/v1/usersgroup/users/locate": {
+      "post": {
+        "tags": [
+          "Read"
+        ],
+        "summary": "Retrieve groups that each user is member of",
+        "description": "For a list of users provided in the input array, the web service returns the groups each user is a member of.\n\nUsers may be referenced by emails or usernames. The format is specified by a <b>mandatory</b> query parameter named person_ident. If the input array contains an invalid user, the service returns an error.\n\nIn the request body, the array of users contains a maximum of 20 users. If the input array contains more than 20 users, the service returns an error. Note that the order of users in the input is not the same as the order of users in the output. The output object is a list of alphabetically sorted users.\n\nA maximum of <b>5000</b> groups can be retrieved across all provided users. The top query parameter is controlling how many groups are retrieved in each request. If top is greater than 5000, the service returns an error.\n\n The <b>skip</b> and <b>top</b> parameters are applied to the total number of groups retrieved from the provided array of users, and not for each individual user. As a result, the response is paginated by groups, and fewer users may appear in the response than what has been provided in the input array.\n\nTo retrieve all groups for all provided users in the input array, you may need to loop through the results, increasing <b>skip</b> until <b>groups_browsed</b> matches the total number of groups.\n\nThe <b>groups_browsed</b> property tracks the number of processed groups. The count of processed groups is the sum of all groups retrieved and skipped. When this value equals the total number of groups, all groups for all provided users in the input array have been retrieved.\n\nThe groups returned by the web service depend on the authenticated user responsibilities. They can only retrieve groups where they are granted on with responsibilities. For instance: if user is globally granted on groups with Public Viewer responsibility, the user can only retrieve public groups. Note that if authenticated user retrieves groups where the user is member of, only granted groups with responsibilities will be returned.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/content-type"
+          },
+          {
+            "$ref": "#/components/parameters/accept-language_output"
+          },
+          {
+            "$ref": "#/components/parameters/person_ident_usersgroups"
+          },
+          {
+            "$ref": "#/components/parameters/skipGroups"
+          },
+          {
+            "$ref": "#/components/parameters/topGroups"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/postListUsersGroups"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK\n\nThe response body contains an array of objects. The number of objects in the array depends on skip and top query parameters, which control how many results are returned. The users are sorted alphabetically by their identifiers.\n\nThe response object for a requested user request is a list of groups and the number of groups in the list.\n\nThe property <b>total_groups</b> is the total number of groups of the specified list of users defined in the request payload, with duplicate users not counted.\n\nThe property <b>groups_browsed</b> is the sum of groups retrieved and skipped.\n\nDepending on person_ident value, users are referenced either by email (person_ident is email) or username (person_ident is loginid).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseListUsersGroups"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated user"
+          },
+          "400": {
+            "description": "Invalid given parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/invalidRequest"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidSkipRange"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidURI"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidPersonIdent"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/v1/usersgroup/groups/delete": {
+      "post": {
+        "tags": [
+          "Delete"
+        ],
+        "summary": "Delete multiple groups",
+        "description": "This web service deletes a list of groups specified by authenticated user in body request. A group given must be identified by his URI in format uuid:{UUIDV4}. It is important to note that <b>only groups in which the authenticated user is main owner are deleted</b>.\n\nA maximum of <b>100</b> groups can be deleted in request body",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/content-type"
+          },
+          {
+            "$ref": "#/components/parameters/accept-language_output"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/postBulkDeleteGroups"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK, even if some or all delete operations fail. It does not imply all groups were deleted successfully. The response body includes 'total_groups_to_delete_failed' property that serves as an indicator to know if some operations failed.\n\nThe response body contains an array of objects. There are as many elements in the array as the request payload. The response object for a deleted group is identified by the property 'uri' or a string message explaining the issue + a status code that identifies the issue. The property 'total_groups_to_delete_failed' helps you to know, without parsing the response, if there is at least one issue.\n\nConcerning the status code added when an issue is identified with a group to delete, a map can be established to label an issue. The status code 'ERROR_UG040' corresponds to an invalid uri, 'ERROR_UG044' corresponds to an invalid group, and 'ERROR_UG043' corresponds to an unauthorized group",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseBulkDeleteGroups"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid given parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/invalidRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated user."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/v1/usersgroup/users/checkMembership": {
+      "post": {
+        "tags": [
+          "Read"
+        ],
+        "summary": "Check memberships",
+        "description": "The web service checks the memberships between a list of users and a list of groups, provided in the request body. Note that the <b>manipulated groups are subject to access control</b>. By default, for a given list of provided users, the web service returns the groups to which each user belongs. If <b>mode</b> parameter is set to group, for a given list of provided groups, the web service returns the users who are members of each group.\n\nUsers may be referenced by their emails, or usernames. The format is specified by a <b>mandatory</b> query parameter named person_ident. If the users input array contains an invalid user, the service does not take into account the invalid user in the response body.\n\nGroups are referenced by their URIs. If the groups input array contains an invalid group, the service does not take into account the invalid group in the response body.\n\nIn the request body, the array of users can contain from 0 user to a maximum of 50 users and the array of groups can contain from 0 group to a maximum of 50 groups. If the users input array contains more than 50 users or the groups input array contains more than 50 groups, the service returns an error. Note that the order of users in the input is not the same as the order of users in the output. Note also that the order of groups in the input is not the same as the order of groups in the output\n\nThe <b>mode</b> parameter modifies the expected response body. If the parameter is not specified, the expected results in response body are grouped by user. In this case, the web service shows for each specified existing user in which specified existing groups they belong to. If the value of <b>mode</b> parameter is equal to 'group', the expected results in response body are grouped by group. In this case, the web service shows for each specified existing group which specified existing users are members.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/content-type"
+          },
+          {
+            "$ref": "#/components/parameters/accept-language_output"
+          },
+          {
+            "$ref": "#/components/parameters/person_ident_usersgroups"
+          },
+          {
+            "$ref": "#/components/parameters/mode_check_membership"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/postCheckMemberships"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK\n\nThe response body contains an array of objects.\n\nIn case the query parameter <b>mode</b> is not specified, the response object for a requested existing user is a list of existing groups the user belongs to.\n\nIn case the query parameter <b>mode</b> is specified to group value, the response object for a requested existing group is a list of existing users which are members of this group.\n\nDepending on <b>person_ident</b> value, users are referenced either by email (person_ident is email) or username (person_ident is loginid).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseCheckMemberships"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated user"
+          },
+          "400": {
+            "description": "Invalid given parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/invalidRequest"
+                    },
+                    {
+                      "$ref": "#/components/schemas/invalidPersonIdent"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/v1/usersgroup/sharing": {
+      "patch": {
+        "tags": [
+          "Access Control By Sharing"
+        ],
+        "summary": "Change access controls for several groups.",
+        "description": "This web service manages access controls for one or several groups. An access  contrôl is a person or a group (named agent in the API) associated with one or more kind of responsabilities.   For a given group you can\n\n-Add or remove  a list of agents with multiple responsabilties  applied for each of them.\n\n- Set or add (i.e replace) on agent with a unique responsability for it\n\nThe request payload is an array of changes to execute. Each change is a triplet ( the kind of operation, the identifier of a group, the data for the operation ).\n\n The web service execution is atomic. It means that if at least one requested change is invalid, no change at all are applied.\n\nEmail format is expected for user agents property in request and response body.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/content-type"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/multipleGroupsSharingWithAddRemove"
+                  },
+                  {
+                    "$ref": "#/components/schemas/multipleGroupsSharingWithReplace"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseMultipleGroupsSharing"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid given parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/unableToShareNotShareableData"
+                    },
+                    {
+                      "$ref": "#/components/schemas/unableToShareWithNotUserOrGroup"
+                    },
+                    {
+                      "$ref": "#/components/schemas/unableToShareWithNotResponsibility"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated user"
+          },
+          "403": {
+            "description": "If the connected person is granted to read the group, but not for the operation. See the table of responsibilities access rights in the technical article \"About Users Group Access Control\" .",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizeToGrantResource"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Access Control By Sharing"
+        ],
+        "summary": "List people and groups having access control for several groups.",
+        "description": "This web service retrieves for each group of the input list people and groups  having an access control for the group with their respective  kind of responsabilities. If the connected person does not have a read access on a given group, the response associated with this group is a text message.\n\nEmail format is expected for user agents property in response body.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/content-type"
+          },
+          {
+            "$ref": "#/components/parameters/skip_agent"
+          },
+          {
+            "$ref": "#/components/parameters/top_agent"
+          },
+          {
+            "$ref": "#/components/parameters/sort_agent"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/getSharingsOnMultipleResources"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK\n\nThe response body contains an array of objects. There are as many elements in the shareables array as in the request payload, and in the same order. The response object for a group is either the sharing elements or a string message explaining the issue. The property total_resources_failed helps you to know, without parsing the response, if there is at least one issue.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseGetSharingsOnMultipleResources"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated user"
+          },
+          "400": {
+            "description": "Invalid given request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/invalidRequest"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/3drdfpersist/resources/v1/usersgroup/{uri}/sharing": {
+      "patch": {
+        "tags": [
+          "Access Control By Sharing"
+        ],
+        "summary": "Change access controls for a group.",
+        "description": "This web service manages the access controls for the input group. An access control is a person or a group ( named agent in the API) associated with one or more kind of responsabilities.  For the group you can:\n\n- Add or remove  a list of agents with multiple responsabilties  applied for each of them.\n\n-Set or add (i.e replace)  on agent  with a unique responsability for it.\n\nThe request payload is an array of changes to execute. Each change is a triplet ( the kind of operation, a hard coded value /sharing, the data for the operation ).\n\nThe web service execution is atomic. It means that if at least one requested change is invalid, no change at all are applied.\n\nEmail format is expected for user agents property in request and response body.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/content-type"
+          },
+          {
+            "$ref": "#/components/parameters/uri"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/singleGroupSharingWithAddRemove"
+                  },
+                  {
+                    "$ref": "#/components/schemas/singleGroupSharingWithReplace"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK. Return users and groups granted to group with their responsibilities.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseSingleGroupSharing"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid given parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/unableToShareWithNotUserOrGroup"
+                    },
+                    {
+                      "$ref": "#/components/schemas/unableToShareWithNotResponsibility"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated user"
+          },
+          "403": {
+            "description": "If the connected person is granted to read the group, but not for the operation. See the table of responsibilities access rights in the technical article \"About Users Group Access Control\" .",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizeToGrantResource"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the connected person is not granted to read the group, see the table of responsibilities access rights in the technical article \"About Users Group Access Control\" , or the group does not really exist in database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unableToShareNotShareableData"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Access Control By Sharing"
+        ],
+        "summary": "List people and groups having access control for a group.",
+        "description": "This web service retrieves for the input group people and groups having an access control for the group with their respective  kind of responsibilities.\n\n\n\nEmail format is expected for user agents property in response body.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/content-type"
+          },
+          {
+            "$ref": "#/components/parameters/uri"
+          },
+          {
+            "$ref": "#/components/parameters/skip_agent"
+          },
+          {
+            "$ref": "#/components/parameters/top_agent"
+          },
+          {
+            "$ref": "#/components/parameters/sort_agent"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseGetSharingsOnSingleResource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid given parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/invalidRequest"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated user"
+          },
+          "404": {
+            "description": "If the connected person is not granted to read the group, see the table of responsibilities access rights in the technical article \"About Users Group Access Control\" , or the group does not really exist in database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/invalidShareableResource"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "postMultipleGroupCreation": {
+        "type": "object",
+        "properties": {
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "Title of the group. The group title must be at least 3 characters and cannot exceed 128.",
+                  "minLength": 3,
+                  "maxLength": 128,
+                  "example": "new group"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Description  of the group. The group description cannot exceed 512 characters.",
+                  "maxLength": 512,
+                  "example": "group created by web service"
+                },
+                "members": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "maxItems": 100,
+                  "description": "List of people (referenced by email) to add as members of the group. Each person of the list may have the status pending or active, and the person may be an administrator  or a simple member in the 3DEXPERIENCE platform. If it is an email unknown to 3DPassport, the person is not added as member of the group. Those excluded people are in the not_members list.",
+                  "anyOf": [
+                    {
+                      "example": [
+                        "user_m_0@email.com",
+                        "user_m_1@email.com",
+                        "user_not_real@email.com",
+                        "user_not_email",
+                        "<uuid:90e9024a-21e4-4487-8b2a-a586a6d6f0ba>"
+                      ]
+                    },
+                    {
+                      "example": [
+                        "<uuid:90e9024a-21e4-4487-8b2a-a586a6d6f0ba>",
+                        "<uuid:d65691ce-326b-4ca8-ab1f-33611b9ea45b>",
+                        "<uuid:a3ddc018-2039-4bbf-8098-69bbf7aa373z>"
+                      ]
+                    }
+                  ]
+                },
+                "pending_members": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "maxItems": 100,
+                  "description": "List of people (referenced by email) to add as pending members of the group. Only emails unknown to 3DPassport are added  as pending members, otherwise emails are  added  as group members. The excluded strings (those with an invalid email format) are in the not_emails list.",
+                  "example": [
+                    "user_p_0@email.com",
+                    "user_p_1@email.com"
+                  ]
+                },
+                "sharing": {
+                  "type": "string",
+                  "description": "Grant a control access responsability for the members of the group for the newly created group. The responsability value may be a name (owner/manager/viewer) or  an URI (see at the top of the HTML page). A name is case insensitive unlike URI. Each responsibility has its authorized rights detailed in the table of responsibilities access rights in the technical article \"About Users Group Access Control\".",
+                  "example": "viewer"
+                },
+                "visibility": {
+                  "type": "string",
+                  "enum": [
+                    "public",
+                    "private"
+                  ],
+                  "description": "Visibility of the group in insensitive case. The visibility has only two values possible: private and public.",
+                  "example": "private",
+                  "default": "private"
+                },
+                "uri": {
+                  "type": "string",
+                  "description": "URI of the group to create in the format uuid:UUIDV4.",
+                  "example": "uuid:83fb0465-ac4a-4972-bf20-88741f7840d2"
+                }
+              },
+              "required": [
+                "title"
+              ]
+            },
+            "description": "list of group definitons",
+            "maxItems": 50
+          }
+        },
+        "required": [
+          "groups"
+        ],
+        "title": "Multiple groups creation body request"
+      },
+      "responsePostMultipleGroupCreation": {
+        "title": "Multiple groups creation response",
+        "type": "object",
+        "properties": {
+          "groups": {
+            "type": "array",
+            "description": "List of group definitions taken into consideration at the creation",
+            "items": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "Title of the group",
+                      "minLength": 3,
+                      "maxLength": 128,
+                      "example": "new group"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Description  of the group",
+                      "maxLength": 512,
+                      "example": "group created by web service"
+                    },
+                    "members": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "List of emails to add members",
+                      "anyOf": [
+                        {
+                          "example": [
+                            "user_m_0@email.com",
+                            "user_m_1@email.com"
+                          ]
+                        },
+                        {
+                          "example": [
+                            "<uuid:90e9024a-21e4-4487-8b2a-a586a6d6f0ba>",
+                            "<uuid:d65691ce-326b-4ca8-ab1f-33611b9ea45b>"
+                          ]
+                        }
+                      ]
+                    },
+                    "pending_members": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "List of users (emails) to add as pending members. If the user is already present in the service, it will be added as member",
+                      "example": [
+                        "user_p_0@email.com",
+                        "user_p_1@email.com"
+                      ]
+                    },
+                    "not_members": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "List of users that are not added as members of the group",
+                      "anyOf": [
+                        {
+                          "example": [
+                            "user_not_real@email.com",
+                            "<uuid:90e9024a-21e4-4487-8b2a-a586a6d6f0ba>"
+                          ]
+                        },
+                        {
+                          "example": [
+                            "<uuid:a3ddc018-2039-4bbf-8098-69bbf7aa373z>"
+                          ]
+                        }
+                      ]
+                    },
+                    "not_emails": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "List of given emails that are not compliant from pending members",
+                      "example": [
+                        "user_not_email"
+                      ]
+                    },
+                    "sharing": {
+                      "type": "string",
+                      "description": "Sharing group with itself with specified responsibility. Note that syntax viewer, manager and owner for default UsersGroup responsibilities are acceptable",
+                      "example": "viewer"
+                    },
+                    "visibility": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "private"
+                      ],
+                      "description": "Visibility of the group. By default, private.",
+                      "example": "private"
+                    },
+                    "uri": {
+                      "type": "string",
+                      "description": "URI of the created group in the format uid:{uid} where {uid} is a UUIDv4 ",
+                      "example": "uuid:b646fbd5-dcf6-41e2-8c2e-83cafe1a2064"
+                    }
+                  },
+                  "required": [
+                    "uri",
+                    "title"
+                  ],
+                  "title": "Group successuffly created"
+                },
+                {
+                  "$ref": "#/components/schemas/invalidGroupVisibility"
+                },
+                {
+                  "$ref": "#/components/schemas/missingTitle"
+                },
+                {
+                  "$ref": "#/components/schemas/invalidTitleSize"
+                },
+                {
+                  "$ref": "#/components/schemas/invalidCommentSize"
+                },
+                {
+                  "$ref": "#/components/schemas/invalidURI"
+                },
+                {
+                  "$ref": "#/components/schemas/invalidUUIDV4"
+                },
+                {
+                  "$ref": "#/components/schemas/takenUID"
+                },
+                {
+                  "$ref": "#/components/schemas/invalidRequest"
+                }
+              ]
+            }
+          },
+          "total_groups_created": {
+            "type": "integer",
+            "description": "Total number of groups successfully created",
+            "example": "5"
+          },
+          "total_groups_failed": {
+            "type": "integer",
+            "description": "Total number of groups failed",
+            "example": "0"
+          },
+          "total_groups": {
+            "type": "integer",
+            "description": "Total number of groups to create",
+            "example": "5"
+          }
+        },
+        "required": [
+          "groups",
+          "total_groups_created",
+          "total_groups_failed",
+          "total_groups"
+        ]
+      },
+      "responseListGroups": {
+        "title": "List groups response",
+        "type": "object",
+        "properties": {
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "uri": {
+                  "type": "string",
+                  "description": "URI of the group in the format uuid:UUIDV4",
+                  "example": "uuid:83fb0465-ac4a-4972-bf20-88741f7840d2"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Title of the group",
+                  "minLength": 3,
+                  "maxLength": 128,
+                  "example": "Group Title 1"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Description of the group",
+                  "maxLength": 512,
+                  "example": "group created by web service"
+                },
+                "owner": {
+                  "type": "string",
+                  "anyOf": [
+                    {
+                      "example": "user_o_0@email.com"
+                    },
+                    {
+                      "example": "<uuid:90e9024a-21e4-4487-8b2a-a586a6d6f0ba>"
+                    }
+                  ],
+                  "description": "The owner email of the group."
+                },
+                "members": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "anyOf": [
+                    {
+                      "example": [
+                        "user_m_0@email.com",
+                        "user_m_1@email.com"
+                      ]
+                    },
+                    {
+                      "example": [
+                        "<uuid:90e9024a-21e4-4487-8b2a-a586a6d6f0ba>",
+                        "<uuid:d65691ce-326b-4ca8-ab1f-33611b9ea45b>"
+                      ]
+                    }
+                  ],
+                  "description": "List of members emails"
+                },
+                "pending_members": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of users (emails) as pending members.",
+                  "example": [
+                    "user_p_0@email.com",
+                    "user_p_1@email.com"
+                  ]
+                },
+                "visibility": {
+                  "type": "string",
+                  "enum": [
+                    "public",
+                    "private"
+                  ],
+                  "description": "Visibility of the group",
+                  "example": "private"
+                },
+                "creation_date": {
+                  "type": "string",
+                  "description": "Creation date of the group",
+                  "example": "2021-11-26T09:45:35.635Z"
+                },
+                "modification_date": {
+                  "type": "string",
+                  "description": "Modification date of the group",
+                  "example": "2021-11-26T09:46:35.635Z"
+                }
+              },
+              "required": [
+                "uri"
+              ],
+              "title": "List of group definitons"
+            }
+          }
+        },
+        "required": [
+          "groups"
+        ]
+      },
+      "responseListGroupsWithURIs": {
+        "title": "List groups with given URIs response",
+        "type": "object",
+        "properties": {
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "properties": {
+                    "uri": {
+                      "type": "string",
+                      "description": "URI of the group in the format uuid:UUIDV4",
+                      "example": "uuid:83fb0465-ac4a-4972-bf20-88741f7840d2"
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "Title of the group",
+                      "minLength": 3,
+                      "maxLength": 128,
+                      "example": "Group Title 1"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Description of the group",
+                      "maxLength": 512,
+                      "example": "group created by web service"
+                    },
+                    "owner": {
+                      "type": "string",
+                      "anyOf": [
+                        {
+                          "example": "user_o_0@email.com"
+                        },
+                        {
+                          "example": "<uuid:90e9024a-21e4-4487-8b2a-a586a6d6f0ba>"
+                        }
+                      ],
+                      "description": "The owner email of the group."
+                    },
+                    "members": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "anyOf": [
+                        {
+                          "example": [
+                            "user_m_0@email.com",
+                            "user_m_1@email.com"
+                          ]
+                        },
+                        {
+                          "description": "List of members URIs",
+                          "example": [
+                            "<uuid:90e9024a-21e4-4487-8b2a-a586a6d6f0ba>",
+                            "<uuid:d65691ce-326b-4ca8-ab1f-33611b9ea45b>"
+                          ]
+                        }
+                      ],
+                      "description": "List of members email"
+                    },
+                    "pending_members": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "List of users (emails) as pending members.",
+                      "example": [
+                        "user_p_0@email.com",
+                        "user_p_1@email.com"
+                      ]
+                    },
+                    "visibility": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "private"
+                      ],
+                      "description": "Visibility of the group",
+                      "example": "private"
+                    },
+                    "creation_date": {
+                      "type": "string",
+                      "description": "Creation date of the group",
+                      "example": "2021-11-26T09:45:35.635Z"
+                    },
+                    "modification_date": {
+                      "type": "string",
+                      "description": "Modification date of the group",
+                      "example": "2021-11-26T09:46:35.635Z"
+                    }
+                  },
+                  "required": [
+                    "uri"
+                  ],
+                  "title": "List of group definitons"
+                },
+                {
+                  "$ref": "#/components/schemas/invalidGroup"
+                },
+                {
+                  "$ref": "#/components/schemas/invalidURI"
+                },
+                {
+                  "$ref": "#/components/schemas/missingURI"
+                },
+                {
+                  "$ref": "#/components/schemas/unmatchedPattern"
+                }
+              ]
+            }
+          },
+          "total_groups": {
+            "type": "integer",
+            "description": "The total number of groups",
+            "example": "3"
+          },
+          "total_groups_listed": {
+            "type": "integer",
+            "description": "The number of groups are successfully listed",
+            "example": "1"
+          },
+          "total_groups_failed": {
+            "type": "integer",
+            "description": "The number of groups are unsuccessfully listed",
+            "example": "2"
+          }
+        },
+        "required": [
+          "groups",
+          "total_groups",
+          "total_groups_listed",
+          "total_groups_failed"
+        ]
+      },
+      "responseListUsersGroups": {
+        "title": "List groups a specified list of users belongs response",
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "properties": {
+                    "user": {
+                      "type": "string",
+                      "description": "User either in the format email or username",
+                      "example": "user1"
+                    },
+                    "groups": {
+                      "type": "array",
+                      "description": "List of user groups",
+                      "items": {
+                        "example": [
+                          "uuid:83fb0465-ac4a-4972-bf20-88741f7840d2",
+                          "uuid:83fb0465-ac4a-4972-bf20-88741f7840d3",
+                          "uuid:83fb0465-ac4a-4972-bf20-88741f7840d4"
+                        ]
+                      }
+                    },
+                    "locatedGroupsCount": {
+                      "type": "integer",
+                      "description": "Number of located groups for a specific user",
+                      "example": 3
+                    }
+                  },
+                  "required": [
+                    "user",
+                    "groups",
+                    "locatedGroupsCount"
+                  ],
+                  "title": "List of users groups"
+                }
+              ]
+            }
+          },
+          "groups_browsed": {
+            "type": "integer",
+            "description": "The sum of all skipped and retrieved groups",
+            "example": "3"
+          },
+          "total_groups": {
+            "type": "integer",
+            "description": "The total number of groups",
+            "example": "3"
+          }
+        },
+        "required": [
+          "users",
+          "groups_browsed",
+          "total_groups"
+        ]
+      },
+      "responseCheckMemberships": {
+        "title": "Check memberships of a specified list of users in the list of specified groups response",
+        "type": "object",
+        "properties": {
+          "memberships": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "properties": {
+                    "user": {
+                      "type": "string",
+                      "description": "User either in the format email (ex: user1@mail.com), or username (ex: user1)",
+                      "example": "user1"
+                    },
+                    "membership": {
+                      "type": "array",
+                      "description": "List of user groups displayed in long URI format",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "<uuid:83fb0465-ac4a-4972-bf20-88741f7840d2>",
+                        "<uuid:83fb0465-ac4a-4972-bf20-88741f7840d3>"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "user",
+                    "membership"
+                  ],
+                  "title": "List of memberships without specified mode (default) query parameter response"
+                },
+                {
+                  "properties": {
+                    "group": {
+                      "type": "string",
+                      "description": "Group displayed in long URI format",
+                      "example": "<uuid:83fb0465-ac4a-4972-bf20-88741f7840d2>"
+                    },
+                    "members": {
+                      "type": "array",
+                      "description": "List of users displayed either in email (ex: user1@mail.com), or username (ex: user1) format",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "<uuid:83fb0465-ac4a-4972-bf20-88741f7840d2>"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "group",
+                    "members"
+                  ],
+                  "title": "List of memberships with specified mode (value parameter set is 'group') query parameter response"
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "memberships"
+        ]
+      },
+      "responseBulkDeleteGroups": {
+        "title": "Delete groups from a specified list of groups given by authenticated user",
+        "type": "object",
+        "properties": {
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "anyOf": [
+                {
+                  "properties": {
+                    "uri": {
+                      "type": "string",
+                      "description": "Group URI",
+                      "example": "<uuid:83fb0465-ac4a-4972-bf20-88741f7840d2>"
+                    }
+                  },
+                  "required": [
+                    "uri"
+                  ],
+                  "title": "Deleted group in response object"
+                },
+                {
+                  "properties": {
+                    "uri": {
+                      "type": "string",
+                      "description": "Group URI",
+                      "example": "<uuid:83fb0465-ac4a-4972-bf20-88741f7840d2>"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Invalid group to delete",
+                      "example": "Invalid group"
+                    },
+                    "statusCode": {
+                      "type": "string",
+                      "description": "Status code identifying issue.",
+                      "anyOf": [
+                        {
+                          "example": "ERROR_UG040",
+                          "description": "Invalid URI"
+                        },
+                        {
+                          "example": "ERROR_UG043",
+                          "description": "Unauthorized group to delete"
+                        },
+                        {
+                          "example": "ERROR_UG044",
+                          "description": "Invalid group"
+                        }
+                      ],
+                      "example": "ERROR_UG044"
+                    }
+                  },
+                  "required": [
+                    "uri",
+                    "message",
+                    "statusCode"
+                  ],
+                  "title": "Undeleted group in response object (case of failure)"
+                }
+              ]
+            }
+          },
+          "total_groups_to_delete": {
+            "type": "integer",
+            "title": "All specified groups to delete in request body",
+            "example": 2
+          },
+          "total_groups_to_delete_successful": {
+            "type": "integer",
+            "title": "Successful deleted groups",
+            "description": "Groups have been deleted successfully",
+            "example": 1
+          },
+          "total_groups_to_delete_failed": {
+            "type": "integer",
+            "title": "Failed deleted groups",
+            "description": "Groups have failed to be deleted",
+            "example": 1
+          }
+        },
+        "required": [
+          "groups",
+          "total_groups_to_delete",
+          "total_groups_to_delete_successful",
+          "total_groups_to_delete_failed"
+        ]
+      },
+      "postListGroupWithURIs": {
+        "type": "object",
+        "properties": {
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "uri": {
+                  "type": "string",
+                  "description": "URI of the group to get in the format uuid:UUIDV4",
+                  "example": "uuid:83fb0465-ac4a-4972-bf20-88741f7840d2"
+                }
+              },
+              "required": [
+                "uri"
+              ]
+            },
+            "description": "list of groups URIs",
+            "maximum": 100
+          }
+        },
+        "required": [
+          "groups"
+        ],
+        "title": "List groups with specified URIs body request."
+      },
+      "postListUsersGroups": {
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "example": "user1"
+            },
+            "description": "array of users",
+            "maximum": 20
+          }
+        },
+        "required": [
+          "users"
+        ],
+        "title": "List groups a specified list of users belongs in the body request."
+      },
+      "postCheckMemberships": {
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "example": "user1"
+            },
+            "description": "array of users displayed either email (ex: user1@mail.com), or username (ex: user1) format, depending of person_ident parameter value",
+            "minimum": 0,
+            "maximum": 50
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "example": "<uuid:371d3bba-2ce0-435b-b8fd-d67e29b053df>"
+            },
+            "description": "array of groups displayed in long URI format",
+            "minimum": 0,
+            "maximum": 50
+          }
+        },
+        "required": [
+          "users",
+          "groups"
+        ],
+        "title": "Check memberships of a specified list of users in the list of specified groups, provided in the request body."
+      },
+      "postBulkDeleteGroups": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "description": "Group URI in format <uuid:{UUIDV4}>",
+          "example": "uuid:42b082d6-4b11-48be-8603-849e8a69bdfb"
+        },
+        "oneOf": [
+          {
+            "minItems": 0,
+            "maxItems": 100,
+            "title": "Delete groups specified in body request"
+          }
+        ]
+      },
+      "patchGroupUpdate": {
+        "title": "Update group body request",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "op": {
+              "type": "string",
+              "description": "The name of the operation. Three possible values: 'add' and 'remove' operation are only valid for members and pending members. 'replace' operation is only valid for title, description, owner or visibility.\n\n This parameter is case insensitive.\n\nPlease refer to the table of responsibilities access rights in the technical article \"About Users Group Access Control\" to know the required responsibilities for this web service.",
+              "example": "add",
+              "enum": [
+                "add",
+                "remove",
+                "replace"
+              ]
+            },
+            "field": {
+              "type": "string",
+              "description": "The group data to modify. The possible values are: members, pending_members, title, description, owner and visibility. Email format is expected for both members and pending_members properties.\n\n This parameter is case insensitive.",
+              "example": "members",
+              "enum": [
+                "members",
+                "pending_members",
+                "title",
+                "description",
+                "owner",
+                "visibility"
+              ]
+            },
+            "value": {
+              "oneOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "maxItems": 100,
+                  "description": "The list of emails to add/remove members.",
+                  "anyOf": [
+                    {
+                      "example": [
+                        "user_m_3@email.com"
+                      ]
+                    },
+                    {
+                      "example": [
+                        "<uuid:90e9024a-21e4-4487-8b2a-a586a6d6f0ba>"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "string",
+                  "description": "The new title/description/owner/visibility of group.\n\nThe group title must be at least 3 characters and cannot exceed 128 characters.\n\nThe group description cannot exceed 512 characters.\n\nThe owner can be identified by email address.\n\nCannot change group visibility from public to private.",
+                  "example": "New title of group"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "responsePatchGroupUpdate": {
+        "title": "Update group response",
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The new title of the group.",
+            "minLength": 3,
+            "maxLength": 128,
+            "example": "Title updated"
+          },
+          "description": {
+            "type": "string",
+            "description": "The new description of the group.",
+            "maxLength": 512,
+            "example": "Description updated"
+          },
+          "owner": {
+            "type": "string",
+            "description": "The new owner's email of the group.",
+            "anyOf": [
+              {
+                "example": "user1@email.com"
+              },
+              {
+                "example": "<uuid:90e9024a-21e4-4487-8b2a-a586a6d6f0ba>"
+              }
+            ]
+          },
+          "visibility": {
+            "type": "string",
+            "description": "The new visibility of group.",
+            "enum": [
+              "public",
+              "private"
+            ],
+            "example": "public"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of users (referenced by email) added members.",
+            "anyOf": [
+              {
+                "example": [
+                  "user_m_3@email.com"
+                ]
+              },
+              {
+                "example": [
+                  "<uuid:90e9024a-21e4-4487-8b2a-a586a6d6f0ba>"
+                ]
+              }
+            ]
+          },
+          "removed_members": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of users (referenced by email) removed members.",
+            "anyOf": [
+              {
+                "example": [
+                  "user_m_3@email.com"
+                ]
+              },
+              {
+                "example": [
+                  "<uuid:a3ddc018-2039-4bbf-8098-69bbf7aa373e>"
+                ]
+              }
+            ]
+          },
+          "not_members": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of users referenced by an invalid format email/URI or without an 3DPassport account.",
+            "anyOf": [
+              {
+                "example": [
+                  "unknownuser@email",
+                  "wrongemail"
+                ]
+              },
+              {
+                "example": [
+                  "<uuid:a3ddc018-2039-4bbf-8098-69bbf7aa373z>"
+                ]
+              }
+            ]
+          },
+          "pending_members": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of added pending members (referenced by email).",
+            "example": [
+              "pendinguser1@email.com"
+            ]
+          },
+          "removed_pending_members": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of removed pending members (referenced by email).",
+            "example": [
+              "pendinguser2@email.com"
+            ]
+          },
+          "not_emails": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of given emails that are not compliant from pending members",
+            "example": [
+              "user_not_email"
+            ]
+          }
+        }
+      },
+      "multipleGroupsSharingWithAddRemove": {
+        "title": "Change access controls (add/remove) for several groups body request",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "op": {
+              "type": "string",
+              "enum": [
+                "add",
+                "remove"
+              ],
+              "description": "Operations to manage sharing on data;\n\n- add: to grant user or group responsibility on group (i.e share).\n\n- remove: to revoke user or group responsibility on group (i.e unshare)",
+              "example": "add"
+            },
+            "path": {
+              "type": "string",
+              "description": "Indicate the group to grant responsibility. Value is in the format /uuid:{UUIV4}/sharing where {UUIDV4} is a group's uuid",
+              "example": "/uuid:42b082d6-4b11-48be-8603-849e8a69bdfb/sharing"
+            },
+            "value": {
+              "type": "object",
+              "properties": {
+                "agents": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "User's email or group URI (encloded by &lt; &gt;) to grant and/or revoke responsibility on given group"
+                  },
+                  "maxItems": 100,
+                  "description": "List of emails or groups' URIs (encloded by &lt; &gt;) to grant and/or revoke responsibility on given group.",
+                  "anyOf": [
+                    {
+                      "example": [
+                        "",
+                        "user_test@test.com"
+                      ]
+                    },
+                    {
+                      "example": [
+                        "&ltuuid:90e9024a-21e4-4487-8b2a-a586a6d6f0ba&gt;"
+                      ]
+                    }
+                  ]
+                },
+                "responsibilities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "Responsibility URI to grant or revoke. Supported responsibilities URIs are defined at the table of responsibilities access rights in the technical article \"About Users Group Access Control\"."
+                  },
+                  "description": "List of responsibilities URIs to grant or revoke. Supported responsibilities URIs are defined in the technical article \"About Users Group Access Control\".",
+                  "example": [
+                    "dsaccess:Responsibility.Group.Author"
+                  ]
+                }
+              }
+            }
+          },
+          "required": [
+            "op",
+            "path",
+            "value"
+          ]
+        },
+        "maxItems": 10
+      },
+      "multipleGroupsSharingWithReplace": {
+        "title": "Change access controls (replace) for several groups body request",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "op": {
+              "type": "string",
+              "enum": [
+                "replace"
+              ],
+              "description": "Operations to manage sharing on data:\n\n-replace: to update user or group's existing responsility on group. If no existing responsibility, responsibility will be granted.",
+              "example": "replace"
+            },
+            "path": {
+              "type": "string",
+              "description": "Indicate the group to grant responsibility. Value is in the format /uuid:{UUIV4}/sharing where {UUIDV4} is a group's uuid",
+              "example": "/uuid:42b082d6-4b11-48be-8603-849e8a69bdfb/sharing"
+            },
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "agent": {
+                    "type": "string",
+                    "description": "User's email or group URI (enclosed by &lt; &gt;) to grant and/or revoke responsibility on given group.",
+                    "anyOf": [
+                      {
+                        "example": "&lt;uuid:42b082d6-4b11-48be-8603-849e8a69bdfb&gt;"
+                      },
+                      {
+                        "example": "&lt;uuid:90e9024a-21e4-4487-8b2a-a586a6d6f0ba&gt;"
+                      }
+                    ]
+                  },
+                  "responsibility": {
+                    "type": "string",
+                    "description": "Responsibility URI to grant. In addition, it will revoke user's granted responsibilities before granting the new responsibility. Supported responsibilities URIs for group data are defined at the table of responsibilities access rights in the technical article \"About Users Group Access Control\".",
+                    "example": "dsaccess:Responsibility.Group.Author"
+                  }
+                }
+              },
+              "maxItems": 100
+            }
+          },
+          "required": [
+            "op",
+            "path",
+            "value"
+          ]
+        },
+        "maxItems": 10
+      },
+      "singleGroupSharingWithAddRemove": {
+        "title": "Change access controls (add/remove) for a group body request",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "op": {
+              "type": "string",
+              "enum": [
+                "add",
+                "remove"
+              ],
+              "description": "Operations to manage sharing on data;\n\n- add: to grant user or group responsibility on group (i.e share).\n\n- remove: to revoke user or group responsibility on group (i.e unshare)",
+              "example": "add"
+            },
+            "path": {
+              "type": "string",
+              "description": "Indicate the property path to grant or revoke one or multiple responsibilities . Value is in the format /sharing.",
+              "example": "/sharing"
+            },
+            "value": {
+              "type": "object",
+              "properties": {
+                "agents": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "User's email or group URI (enclosed by &lt &gt;) to grant and/or revoke responsibility on given group."
+                  },
+                  "maxItems": 100,
+                  "description": "List of emails or groups' URIs (enclosed by &lt &gt;) to grant and/or revoke responsibility on given group.",
+                  "anyOf": [
+                    {
+                      "example": [
+                        "",
+                        "user_test@test.com"
+                      ]
+                    },
+                    {
+                      "example": [
+                        "&lt;uuid:90e9024a-21e4-4487-8b2a-a586a6d6f0ba&gt;"
+                      ]
+                    }
+                  ]
+                },
+                "responsibilities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "Responsibility to grant or revoke. Supported responsibilities for group data are defined at the table of responsibilities access rights in the technical article \"About Users Group Access Control\" 'viewer','manager','owner'."
+                  },
+                  "description": "List of responsibilities to grant or revoke. Supported responsibilities URIs are defined at the table of responsibilities access rights in the technical article \"About Users Group Access Control\".",
+                  "example": [
+                    "dsaccess:Responsibility.Group.Author"
+                  ]
+                }
+              }
+            }
+          },
+          "required": [
+            "op",
+            "path",
+            "value"
+          ]
+        },
+        "maxItems": 10
+      },
+      "singleGroupSharingWithReplace": {
+        "title": "Change access controls (replace) for a group body request",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "op": {
+              "type": "string",
+              "enum": [
+                "replace"
+              ],
+              "description": "Operations to manage sharing on data:\n\n-replace: to update user or group's existing responsility on group. If no existing responsibility, responsibility will be granted.",
+              "example": "replace"
+            },
+            "path": {
+              "type": "string",
+              "description": "Indicate the property path to grant or revoke one or multiple responsibilities . Value is in the format /sharing.",
+              "example": "/sharing"
+            },
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "agent": {
+                    "type": "string",
+                    "description": "User's email or group URI (enclosed by &lt &gt;) to grant and/or revoke responsibility on given group.",
+                    "anyOf": [
+                      {
+                        "example": "&lt;uuid:42b082d6-4b11-48be-8603-849e8a69bdfb&gt;"
+                      },
+                      {
+                        "example": "&lt;uuid:90e9024a-21e4-4487-8b2a-a586a6d6f0ba&gt;"
+                      }
+                    ]
+                  },
+                  "responsibility": {
+                    "type": "string",
+                    "description": "Responsibility URI to grant. In addition, it will revoke user's granted responsibilities before granting the new responsibility. Supported responsibility URI is defined at the table of responsibilities access rights in the technical article \"About Users Group Access Control\".",
+                    "example": "dsaccess:Responsibility.Group.Author"
+                  }
+                }
+              },
+              "maxItems": 100
+            }
+          },
+          "required": [
+            "op",
+            "path",
+            "value"
+          ]
+        },
+        "maxItems": 10
+      },
+      "getSharingsOnMultipleResources": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "description": "Group URI in format <uuid:{UUIDV4}>",
+          "example": "&lt;uuid:42b082d6-4b11-48be-8603-849e8a69bdfb>&gt;"
+        },
+        "oneOf": [
+          {
+            "maxItems": 100,
+            "title": "List people and groups having access control for several groups body request"
+          },
+          {
+            "maxItems": 10,
+            "title": "List people and groups having access control for several groups body request with skip_agent/top_agent usage"
+          }
+        ]
+      },
+      "responseMultipleGroupsSharing": {
+        "title": "Change access controls for several groups response",
+        "type": "object",
+        "properties": {
+          "shareables": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/responseSingleGroupSharing"
+            }
+          }
+        }
+      },
+      "responseSingleGroupSharing": {
+        "title": "Change access controls for one group response",
+        "type": "object",
+        "anyOf": [
+          {
+            "properties": {
+              "@id": {
+                "type": "string",
+                "description": "Group to manage sharing.",
+                "example": "&lt;uuid:42b082d6-4b11-48be-8603-849e8a69bdfb>&gt;"
+              },
+              "sharing": {
+                "type": "array",
+                "items": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "agent": {
+                          "type": "string",
+                          "description": "",
+                          "example": "user0@email.com"
+                        },
+                        "responsibilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "description": "URIs of responsibilys granted",
+                            "example": "dsaccess:Responsibility.Group.Author"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "agent": {
+                          "type": "string",
+                          "description": "",
+                          "example": "&lt;uuid:42b082d6-4b11-48be-8603-849e8a69bdfb&gt;"
+                        },
+                        "responsibilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "description": "URIs of responsibilys granted",
+                            "example": "dsaccess:Responsibility.Group.Author"
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "description": "Object describing user or group's granted responsibilities"
+                },
+                "description": "ONLY for add/remove operations. List of group URIs (<uuid:UUIDV4> format) and persons's emails or login IDs to grant and/or revoke responsibilities. REQUIRED 'responsibilities' field "
+              }
+            }
+          }
+        ]
+      },
+      "responseGetSharingsOnSingleResource": {
+        "title": "List persons and/or groups granted to provided group response",
+        "type": "object",
+        "properties": {
+          "@id": {
+            "type": "string",
+            "description": "Group's URI to retrieve sharing",
+            "example": "&lt;uuid:f896cef2-478f-447b-82ff-3145971f192d&gt;"
+          },
+          "sharing": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "agent": {
+                  "type": "string",
+                  "description": "agent is a group's URI or user's email.",
+                  "example": "&lt;uuid:f896cef2-478f-447b-82ff-3145971f192d&gt;"
+                },
+                "responsibilities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "user/group 's granted responsibility",
+                    "example": "dsaccess:Responsibility.Group.Author"
+                  },
+                  "description": "List of users and/or groups' granted responsbility"
+                }
+              }
+            },
+            "description": "Group to manage sharing. Value is in the format /uuid:{UUIV4}/sharing where {UUIDV4} is a groups's uuid"
+          }
+        }
+      },
+      "responseGetSharingsOnMultipleResources": {
+        "title": "List persons and/or groups granted to provided groups response",
+        "type": "object",
+        "properties": {
+          "shareables": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/responseGetSharingsOnSingleResource"
+                },
+                {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "The group is invalid, or the connected person does not read access."
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "total_resources": {
+            "type": "integer",
+            "description": "The total number of groups"
+          },
+          "total_resources_succeeded": {
+            "type": "integer",
+            "description": "The number of groups are successfully listed."
+          },
+          "total_resources_failed": {
+            "type": "integer",
+            "description": "The number of groups are unsuccessfully listed"
+          }
+        }
+      },
+      "unauthorizedGroupModify": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Unauthorized to modify group.",
+            "example": "Unauthorized to modify group."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Unauthorized to modify group"
+      },
+      "unauthorizedGroupDelete": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Unauthorized to delete the group.",
+            "example": "Unauthorized to delete the group."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Unauthorized to delete group"
+      },
+      "unauthorizedGroupTransferOwnership": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Unauthorized to transfer ownership of group.",
+            "example": "Unauthorized to transfer ownership of group."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Unauthorized to transfer ownership of group"
+      },
+      "unauthorizedGroupChangeVisibility": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Unauthorized to change visibility of group.",
+            "example": "Unauthorized to change visibility of group."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Unauthorized to change visibility of group"
+      },
+      "invalidGroup": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Invalid group.",
+            "example": "Invalid group."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid group"
+      },
+      "invalidRequest": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Invalid request.",
+            "example": "Invalid request."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid given request"
+      },
+      "invalidShareableResource": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Invalid shareable resource.",
+            "example": "Invalid shareable resource &lt;uuid:0fd165a6-85cb-4c34-bbb0-f37529e285f5&gt;."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid given shareable resource"
+      },
+      "invalidGroupVisibility": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Invalid group visibility.",
+            "example": "Invalid group visibility."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid group visibility"
+      },
+      "invalidPattern": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Invalid given pattern.",
+            "example": "Invalid given pattern."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid pattern"
+      },
+      "invalidSort": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Invalid given sort.",
+            "example": "Invalid given sort. To sort the records: in descending order, use 'desc' keyword and for ascending order, use 'asc' keyword."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid sort."
+      },
+      "invalidOrderBy": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Invalid given orderBy.",
+            "example": "Invalid given orderBy. Order by parameter must be one of the selected properties and cannot sort by 'members' or 'pending members' property."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid orderBy"
+      },
+      "invalidSkipRange": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Invalid skip range value. Value is higher than total number of groups.",
+            "example": "Invalid skip range value: 5000. Value is higher than total number of groups."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid given skip range"
+      },
+      "invalidPersonIdent": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "person_ident is mandatory"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid person ident"
+      },
+      "missingTitle": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "No group title provided",
+            "example": "No group title provided"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "No group title provided"
+      },
+      "missingURI": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Missing uri",
+            "example": "Missing uri"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Missing uri"
+      },
+      "missingOperation": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Missing operation",
+            "example": "Missing operation"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Missing operation"
+      },
+      "missingField": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Missing field",
+            "example": "Missing field"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Missing field"
+      },
+      "missingValue": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Missing value",
+            "example": "Missing value"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Missing value"
+      },
+      "invalidTitleSize": {
+        "type": "object",
+        "anyOf": [
+          {
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "Title size not respecting constraints [3, 128].",
+                "example": "The group title must be at least 3 characters."
+              }
+            }
+          },
+          {
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "Title size not respecting constraints [3, 128].",
+                "example": "The group title cannot exceed 128 characters."
+              }
+            }
+          }
+        ],
+        "required": [
+          "message"
+        ],
+        "title": "Title size not respecting constraints [3, 128]"
+      },
+      "invalidCommentSize": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Description size not respecting constraints [0, 512].",
+            "example": "The group description cannot exceed 512 characters."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Description size not respecting constraints [0, 512]"
+      },
+      "invalidURI": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "URI provided is invalid",
+            "example": "Invalid URI"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "URI provided is invalid"
+      },
+      "invalidUUIDV4": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "UUIDV4 given is invalid",
+            "example": "UUIDV4 given is invalid"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "UUIDV4 given is invalid"
+      },
+      "takenUID": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "UUIDV4 is already taken",
+            "example": "UUIDV4 is already taken"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "UUIDV4 is already taken"
+      },
+      "unmatchedPattern": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The group does not respect the pattern.",
+            "example": "The group does not respect the pattern."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Unmatched pattern"
+      },
+      "unsupportedOperation": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Unsupported operation. Support only 'add', 'remove' and 'replace' operation",
+            "example": "Unsupported operation. Support only 'add', 'remove' and 'replace' operation"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Unsupported operation"
+      },
+      "unsupportedField": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Unsupported field.",
+            "example": "Unsupported field."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Unsupported field"
+      },
+      "invalidTransaction": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Cannot change visibility of group from public to private.",
+            "example": "Invalid transition. Cannot change visibility of group from public to private."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid transaction"
+      },
+      "invalidOwner": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Invalid owner.",
+            "example": "Invalid owner."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid owner"
+      },
+      "invalidEmailOwnerFormat": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Invalid owner format. An email is expected.",
+            "example": "Invalid owner format. An email is expected"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid email owner format"
+      },
+      "invalidUriOwnerFormat": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Invalid owner format. An uri is expected.",
+            "example": "Invalid owner format. An uri is expected"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid uri owner format"
+      },
+      "unauthorizeToGrantResource": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Unauthorized to share/unshare resource ",
+            "example": "You don't have rights to grant users on the resource"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Unauthorize to grant resource"
+      },
+      "unableToShareNotShareableData": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Cannot share or unshare not groups: {URI} where {URI} is the resource to grant or revoke responsibility.",
+            "example": "Cannot share or unshare not groups: &lt;uuid:f56af551-9d20-4893-b7b4-fc00d84ad18c&gt;"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid shareable group"
+      },
+      "unableToShareWithNotUserOrGroup": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Cannot share with the following agents because they are not person nor group data type: {x} where {x} is either group URI or users' emails, login IDs.",
+            "example": "Cannot share with the following agents because they are not person nor group data type: not_user@email.com,&lt;uuid:f56af551-9d20-4893-b7b4-fc00d84ad18c&gt;."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid users and or groups"
+      },
+      "unableToShareWithNotResponsibility": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Cannot share with the following responsibilities because they are not responsibility data type: {URI} where {URI} is a set of responsibilities",
+            "example": "Cannot share with the following responsibilities because they are not responsibility data type: %s"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Invalid responsibilities"
+      }
+    },
+    "parameters": {
+      "content-type": {
+        "in": "header",
+        "name": "Content-Type",
+        "schema": {
+          "type": "string"
+        },
+        "example": "application/json"
+      },
+      "accept-language_input_output": {
+        "in": "header",
+        "name": "Accept-Language",
+        "schema": {
+          "type": "string"
+        },
+        "description": "The language for title/description in the request and response body. Supported value follows ISO 639-1 standard. Note that if language is different than 'en', title and description will be set to the language accordingly but also in 'en'. If value is unknown or not provided,  it will be set in 'en'.",
+        "example": "en"
+      },
+      "accept-language_output": {
+        "in": "header",
+        "name": "Accept-Language",
+        "schema": {
+          "type": "string"
+        },
+        "description": "The language for title/description in the request and  response body. Supported value follows ISO 639-1 standard. If value is unknown or not given, 'en' is considered.",
+        "example": "en"
+      },
+      "uri": {
+        "in": "path",
+        "name": "uri",
+        "schema": {
+          "type": "string"
+        },
+        "description": "URI (in the format uuid:UUIDV4) of the group to manipulate.",
+        "example": "uuid:f896cef2-478f-447b-82ff-3145971f192d",
+        "required": true
+      },
+      "description": {
+        "in": "query",
+        "name": "description",
+        "schema": {
+          "type": "string"
+        },
+        "description": "The description of the group",
+        "required": true
+      },
+      "userName": {
+        "in": "query",
+        "name": "userName",
+        "schema": {
+          "type": "string"
+        },
+        "description": "The URI of the user to impersonate (debug ONLY)"
+      },
+      "select": {
+        "in": "query",
+        "name": "select",
+        "description": "It defines the information to return for each group. By default, the response for a group contains the uri.\n\nThe select parameter is case insensitive.\n\nThis parameter can take several values, these values are separated by commas.\n\nIf the given value is not valid, it will be ignored.\n\nNote that this web service does not support having multi-select parameters such as select=property1&select=property2.",
+        "schema": {
+          "type": "string",
+          "default": "uri",
+          "enum": [
+            "uri",
+            "title",
+            "description",
+            "owner",
+            "members",
+            "pending_members",
+            "creation_date",
+            "modification_date",
+            "visibility"
+          ]
+        }
+      },
+      "pattern": {
+        "in": "query",
+        "name": "pattern",
+        "description": "The value is case insensitive and compared against the title or the description attribute of the group. The pattern string must be URL encoded. For example a space is %20.\n\nThis parameter can take several values separated by commas. In this case, the title or the description of the returned groups  must contain at least one of the given values in the language from Accept-Language.\n\nNote that this web service does not support having multi-pattern parameters such as pattern=pattern1&pattern=pattern2.\n\nIf there is no value for the pattern parameter the web service does not make a filtering.\n\nIf a pattern is given, the web service always returns the uri, title and description properties of the group regardless select value. ",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "skip": {
+        "in": "query",
+        "name": "skip",
+        "description": "Index of the first group to fetch. If skip is negative, the retained value is 0. If the skip value is greater than the total number of groups in the database, then the response is an empty array.",
+        "schema": {
+          "type": "integer",
+          "example": 0,
+          "minimum": 0,
+          "default": 0
+        }
+      },
+      "top": {
+        "in": "query",
+        "name": "top",
+        "description": "Number of groups to fetch. If top value is negative, the retained value is 50. If top is greater than the total number of groups, then the web service returns the possible groups from the skip. If there is no group, the response is an empty array.",
+        "schema": {
+          "type": "integer",
+          "example": 15,
+          "default": 50,
+          "maximum": 100
+        }
+      },
+      "skipPersons": {
+        "in": "query",
+        "name": "skip_persons",
+        "description": "This parameter is for the members and the pending members. This parameter represents the index of the first members/pending members to fetch. If skip is negative, the retained value is 0. If the skip value is greater than the total number of members/pending members in the groups, then the response is an empty array.",
+        "schema": {
+          "type": "integer",
+          "example": 0,
+          "minimum": 0,
+          "default": 0
+        }
+      },
+      "topPersons": {
+        "in": "query",
+        "name": "top_persons",
+        "description": "This parameter is for the members and the pending members. This parameter represents the number of members/pending members to fetch. If the value of top is negative, it is ignored. If top is greater than the total number of  members/pending members, then the web service returns the possible  members/pending members from the skip index.\n\n For the best user experience, if the number of groups returned is less than 50, we recommend using the value less than or equal to 200. If the number of groups returned is greater than 50, the appropriate value for this parameter is 50.",
+        "schema": {
+          "type": "integer",
+          "example": 15
+        }
+      },
+      "skipGroups": {
+        "in": "query",
+        "name": "skip",
+        "description": "Index of the first group to fetch. Pagination is based on groups, and not users. If skip is negative, the retained value is 0. If the skip value is greater than the total number of groups retrieved, then the service returns an error. Use this parameter with top to loop through all retrieved groups for provided users in the input array.",
+        "schema": {
+          "type": "integer",
+          "example": 0,
+          "minimum": 0,
+          "default": 0
+        }
+      },
+      "topGroups": {
+        "in": "query",
+        "name": "top",
+        "description": "Number of groups to fetch. Pagination is based on groups, and not users. If top value is negative, the retained value is 50. If top is greater than the total number of groups across all users, then the web service returns the retrieved groups starting from the skip. If there is no group, the response is an empty array.",
+        "schema": {
+          "type": "integer",
+          "example": 15,
+          "default": 50,
+          "maximum": 100
+        }
+      },
+      "sort": {
+        "in": "query",
+        "name": "sort",
+        "schema": {
+          "type": "string",
+          "default": "asc",
+          "enum": [
+            "asc",
+            "desc"
+          ]
+        },
+        "description": "Sort the result in ascending (asc) or descending (desc) order. The value is case insensitive."
+      },
+      "orderBy": {
+        "in": "query",
+        "name": "orderBy",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Name of the property for the sort. The possible values are:\n\n- With pattern : uri, or  title , or description or one among the select values (except members and pending_members).\n\n- Without pattern : uri or one among the select values (except members and pending_members)."
+      },
+      "skip_agent": {
+        "in": "query",
+        "name": "skip_agent",
+        "description": "Index of the granted people or group to fetch. If skip_agent is negative, the retained value is 0. If the skip value is greater than the total granted people or person  in the database, then the response is an empty array.",
+        "schema": {
+          "type": "integer",
+          "example": 0,
+          "minimum": 0
+        }
+      },
+      "top_agent": {
+        "in": "query",
+        "name": "top_agent",
+        "description": "Number of granted people or group to fetch. If top_agent value does not respect the boundaries, the retained value is 50. If the top value is greater than the total number of granted people or group, then the web service returns the possible granted people or group from the skip. If there is no granted people or group, the response is an empty array.",
+        "schema": {
+          "type": "integer",
+          "example": 15,
+          "minimum": 1,
+          "maximum": 50,
+          "default": 50
+        }
+      },
+      "sort_agent": {
+        "in": "query",
+        "name": "sort_agent",
+        "description": "Sort the result in ascending or descending order. Effective only with skip_agent and/or top_agent provided. The value is case insensitive.",
+        "schema": {
+          "type": "string",
+          "example": "desc",
+          "default": "asc",
+          "enum": [
+            "asc",
+            "desc"
+          ]
+        }
+      },
+      "person_ident_usersgroups": {
+        "in": "query",
+        "name": "person_ident",
+        "description": "This <b>mandatory</b> parameter determines the format, input, and output referencing a person: a user is a person who may or may not belong to a group.\nThe query parameter supported values are \"email\", and \"loginid\", for any other value, the APIs will return an error. The person_ident parameter value is case insensitive.",
+        "schema": {
+          "type": "string",
+          "example": "loginid",
+          "enum": [
+            "email",
+            "loginid"
+          ]
+        },
+        "required": true
+      },
+      "mode_check_membership": {
+        "in": "query",
+        "name": "mode",
+        "description": "This optional parameter determines the expected response body, either if the results returned are grouped by user (default) or grouped by group. Note that value set is case insensitive.",
+        "schema": {
+          "type": "string",
+          "example": "group"
+        }
+      }
+    }
+  }
+}
