@@ -50,6 +50,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'mcp-3dx-server'
-          slot-name: 'Production'
+          #slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A6BF7EAF8C104C978298E10352F0B4C9 }}
