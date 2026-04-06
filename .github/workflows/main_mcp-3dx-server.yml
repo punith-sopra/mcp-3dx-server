@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read # Required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
@@ -49,6 +49,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'mcp-3dx-server'
+          app-name: 'mcp-3dx-server-grcrgegehhe6hyhz'  # <-- must match the publish profile exactly
+          slot-name: 'Production'                       # <-- correct case for default slot
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A6BF7EAF8C104C978298E10352F0B4C9 }}
