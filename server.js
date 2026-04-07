@@ -24,6 +24,7 @@ const client = new OpenAI({
 
 // ===== EXPRESS APP =====
 const app = express();
+app.set('trust proxy', 1);
 app.use(express.json({ limit: '10mb' }));
 
 app.use(
